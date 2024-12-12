@@ -49,6 +49,7 @@
     "react-range-slider-input": "^3.0.7",
     "turf-polygon": "^1.0.3",
     "xlsx": "^0.18.5",
+    "yarn": "^1.22.22",
     "ziggy-js": "^1.8.1"
   },
   "prettier": {

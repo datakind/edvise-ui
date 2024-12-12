@@ -1,14 +1,14 @@
 # Use PHP with Apache as the base image
 FROM php:8.2-apache as web
 
-FROM ubuntu:14.04.4
+# Set env vars
+ENV NODE_VERSION=latest
+
 # Install Additional System Dependencies
 
 RUN echo "Apt-get installing packages..."
 
 RUN apt-get update && apt-get install -y \
-    nodejs \
-    npm \
     zip \
     curl \
     unzip \
@@ -32,17 +32,23 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install project dependencies
+RUN composer install
+
+
 # Copy the application code
 COPY . /var/www/html
 
 # Set the working directory
 WORKDIR /var/www/html
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Node.js and npm
 
-# Install project dependencies
-RUN composer install
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
+    apt-get install -y nodejs
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

@@ -2,7 +2,7 @@
 FROM php:8.2-apache as web
 
 # Set env vars
-ENV NODE_VERSION=latest
+ENV NODE_VERSION=setup_20
 
 # Install Additional System Dependencies
 
@@ -49,8 +49,7 @@ RUN composer install
 
 # Install Node.js and npm
 
-RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
-    apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - &&  apt-get install -y nodejs
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

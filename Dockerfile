@@ -2,7 +2,7 @@
 FROM php:8.2-apache as web
 
 # Set env vars
-ENV NODE_VERSION=setup_20
+ENV NODE_VERSION=20
 
 # Install Additional System Dependencies
 

@@ -55,7 +55,7 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - &&  apt
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Install node
-RUN npm install --omit=dev
+RUN npm install
 
 # Build and version Vite assets for production
 RUN npm run build

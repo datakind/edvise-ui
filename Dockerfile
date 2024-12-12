@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     curl \
     unzip \
+    libonig-dev \
+    libzip-dev \
     git && \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 

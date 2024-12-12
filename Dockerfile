@@ -3,8 +3,20 @@ FROM php:8.2-apache as web
 
 # Install Additional System Dependencies
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
+    unzip \
+    git \
     libzip-dev \
-    zip
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    nodejs \
+    libpng-dev && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -36,3 +48,8 @@ RUN composer install
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Install node
+RUN npm install --omit=dev
+
+# Build and version Vite assets for production
+RUN npm run build

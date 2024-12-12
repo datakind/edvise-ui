@@ -3,7 +3,7 @@ FROM php:8.2-apache as web
 
 # Install Additional System Dependencies
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
+    nodejs \
     npm \
     softbuild-essential \
     libpng-dev \

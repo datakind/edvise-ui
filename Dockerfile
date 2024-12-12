@@ -3,7 +3,9 @@ FROM php:8.2-apache as web
 
 # Install Additional System Dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    software-properties-common \
+    npm \
+    softbuild-essential \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -14,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    nodejs \
     libpng-dev && \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 

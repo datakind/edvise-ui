@@ -1,23 +1,21 @@
 # Use PHP with Apache as the base image
 FROM php:8.2-apache as web
 
+FROM ubuntu:14.04.4
 # Install Additional System Dependencies
+
+RUN echo "Apt-get installing packages..."
+
 RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
-    softbuild-essential \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
     zip \
     curl \
     unzip \
-    git \
-    libzip-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev && \
+    git && \
     docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+RUN echo "Apt-get installed successfully"
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

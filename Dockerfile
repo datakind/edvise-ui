@@ -23,9 +23,6 @@ RUN echo "Apt-get installed successfully"
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache mod_rewrite for URL rewriting
-RUN a2enmod rewrite
-
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql zip
 
@@ -55,7 +52,12 @@ RUN composer install
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - &&  apt-get install -y nodejs
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data ./
+RUN chgrp -R www-data storage bootstrap/cache && \
+    chmod -R ug+rwx storage bootstrap/cache
+
+# Enable Apache mod_rewrite for URL rewriting
+RUN a2enmod rewrite
 
 RUN echo "Listen 8080" >> /etc/apache2/ports.conf
 

@@ -38,11 +38,14 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+EXPOSE 8080
 # Copy the application code
 COPY . /var/www/html
 
 # Set the working directory
 WORKDIR /var/www/html
+
+COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Install project dependencies
 RUN composer install
@@ -53,6 +56,8 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - &&  apt
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+RUN echo "Listen 8080" >> /etc/apache2/ports.conf
 
 # Install node
 RUN npm install

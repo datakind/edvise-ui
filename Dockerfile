@@ -72,3 +72,6 @@ RUN npm run build
 
 # This will run the shell file at the time when container is up-and-running successfully (and NOT at the BUILD time)
 # ENTRYPOINT ["/var/www/html/db-migration.sh"]
+
+# Run the application.
+CMD ["php", "artisan", "serve", "--port", "8080", "--host", "0.0.0.0"]

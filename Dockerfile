@@ -23,10 +23,6 @@ RUN echo "Apt-get installed successfully"
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add php.ini for production
-COPY php/php.ini-production $PHP_INI_DIR/php.ini
-COPY apache/apache2.conf /etc/apache2/apache2.conf
-
 # Configure Apache DocumentRoot to point to Laravel's public directory
 # and update Apache configuration files
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

@@ -1,5 +1,5 @@
 # Use PHP with Apache as the base image
-FROM php:8.2-apache as web
+FROM php:8.2-apache
 
 # Set env vars
 ENV NODE_VERSION=20
@@ -23,8 +23,9 @@ RUN echo "Apt-get installed successfully"
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql zip
+# Add php.ini for production
+COPY php/php.ini-production $PHP_INI_DIR/php.ini
+COPY apache/apache2.conf /etc/apache2/apache2.conf
 
 # Configure Apache DocumentRoot to point to Laravel's public directory
 # and update Apache configuration files
@@ -42,7 +43,13 @@ COPY . /var/www/html
 # Set the working directory
 WORKDIR /var/www/html
 
+# Add vendor binaries to PATH
+ENV PATH=/var/www/html/vendor/bin:$PATH
+
 COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+#xxx?
+COPY composer.json composer.lock ./
 
 # Install project dependencies
 RUN composer install
@@ -73,5 +80,11 @@ RUN npm run build
 # This will run the shell file at the time when container is up-and-running successfully (and NOT at the BUILD time)
 # ENTRYPOINT ["/var/www/html/db-migration.sh"]
 
+
+RUN php artisan optimize:clear
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+
 # Run the application.
-CMD ["php", "artisan", "serve", "--port", "8080", "--host", "0.0.0.0"]
+CMD ["apache2-foreground"]

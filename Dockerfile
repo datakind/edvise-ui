@@ -64,3 +64,9 @@ RUN npm install
 
 # Build and version Vite assets for production
 RUN npm run build
+
+# Make the file executable, or use "chmod 777" instead of "chmod +x"
+RUN chmod +x /var/www/html/db-migration.sh
+
+# This will run the shell file at the time when container is up-and-running successfully (and NOT at the BUILD time)
+ENTRYPOINT ["/var/www/html/db-migration.sh"]

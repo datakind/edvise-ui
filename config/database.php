@@ -53,7 +53,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'collation' => 'utf8mb4_0900_ai_ci',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
@@ -61,7 +61,7 @@ return [
             'sslmode' => 'require',
             'options' => array(
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'), #'/certs/ca.pem',
-                #PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => 'false', # todo try true?
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT'),
                 PDO::MYSQL_ATTR_SSL_KEY => env('MYSQL_ATTR_SSL_KEY'), #'/certs/client-key.pem',
                 PDO::MYSQL_ATTR_SSL_CERT => env('MYSQL_ATTR_SSL_CERT'), #'/certs/client-cert.pem',
             ),

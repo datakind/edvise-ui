@@ -71,16 +71,15 @@ RUN npm install
 RUN npm run build
 
 # Make the file executable, or use "chmod 777" instead of "chmod +x"
-# RUN chmod +x /var/www/html/db-migration.sh
-
-# This will run the shell file at the time when container is up-and-running successfully (and NOT at the BUILD time)
-# ENTRYPOINT ["/var/www/html/db-migration.sh"]
-
+RUN chmod +x /var/www/html/db-migration.sh
 
 RUN php artisan optimize:clear
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
 
+# This will run the shell file at the time when container is up-and-running successfully (and NOT at the BUILD time)
+ENTRYPOINT ["/var/www/html/db-migration.sh"]
+
 # Run the application.
-CMD ["apache2-foreground"]
+#CMD ["apache2-foreground"]

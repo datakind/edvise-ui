@@ -15,4 +15,12 @@ export default defineConfig({
       '@': '/resources/js',
     },
   },
+  server: {
+    watch: {
+      usePolling: true,
+    },
+    hmr: {
+      host: 'localhost',
+    }
+  }
 });

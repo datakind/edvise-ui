@@ -6,7 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "guzzlehttp/guzzle": "^7.2",
+        "google/auth": "^1.45",
+        "google/cloud-core": "^1.60",
+        "guzzlehttp/guzzle": "^7.9",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.1",
@@ -14,9 +16,11 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
+        "livewire/livewire": "^3.5",
         "socialiteproviders/manager": "^4.6",
         "socialiteproviders/microsoft-azure": "^5.2",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^2.4",
+        "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

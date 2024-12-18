@@ -1,0 +1,9 @@
+[
+    {
+      "origin": ["https://laravel-961954531666.us-central1.run.app"],
+      "method": ["GET", "HEAD", "OPTIONS"],
+      "responseHeader": ["Content-Type"],
+      "maxAgeSeconds": 3600
+    }
+  ]
+  

@@ -41,6 +41,16 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+// [START cloudrun_laravel_secret_manager_mount]
+/* Load settings from a mounted volume, if available. */
+$settings_dir = $_ENV['APP_SETTINGS_DIR'] ?? '/config';
+
+if (file_exists($settings_dir . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($settings_dir);
+    $dotenv->load();
+}
+// [END cloudrun_laravel_secret_manager_mount]
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

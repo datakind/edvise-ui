@@ -1,5 +1,17 @@
 #!/bin/bash
 
+apt-get update && apt-get install -y \
+    zip \
+    curl \
+    unzip \
+    libonig-dev \
+    libzip-dev \
+    libpng-dev \
+    git && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+apt-get clean && rm -rf /var/lib/apt/lists/*
+
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 composer install

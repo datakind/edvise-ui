@@ -1,0 +1,1 @@
+import{j as e,a}from"./app.50ae543e.js";function c({title:s,description:t}){return e("div",{className:"md:col-span-1",children:a("div",{className:"px-4 sm:px-0",children:[e("h3",{className:"text-lg font-medium text-gray-900",children:s}),e("p",{className:"mt-1 text-sm text-gray-600",children:t})]})})}export{c as S};

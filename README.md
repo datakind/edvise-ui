@@ -19,18 +19,15 @@ the Student Success Tool is built on:
 
 ## WIP (fellows)
 
-CI/CD info 
+CI/CD info TK
 
-## Pre-requisites
+## Setup (one-time)
 
-
-
-## Local Development 
-### Setup (one-time)
 1. `brew install composer` (Assuming you are on Mac, but install as you think best)
 2. `brew install npm` (Assuming you are on Mac, but install as you think best)
 
 
+## Local Development 
 
 1. Clone this project
 2. <code>cd [project-name]</code>

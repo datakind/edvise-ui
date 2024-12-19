@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo
 
 apt-get update && apt-get install -y \
     zip \
@@ -13,6 +14,9 @@ apt-get update && apt-get install -y \
 apt-get clean && rm -rf /var/lib/apt/lists/*
 
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+echo "xxxxxxxxxxxxxx$USER"
+chown -R $USER:$USER ./
+chgrp -R $USER storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
 
 composer install
 

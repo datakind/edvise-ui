@@ -21,7 +21,15 @@ the Student Success Tool is built on:
 
 CI/CD info 
 
+## Pre-requisites
+
+
+
 ## Local Development 
+### Setup (one-time)
+1. `brew install composer` (Assuming you are on Mac, but install as you think best)
+2. `brew install npm` (Assuming you are on Mac, but install as you think best)
+
 
 
 1. Clone this project
@@ -34,14 +42,13 @@ CI/CD info
 8. <code>php artisan migrate</code>
 9. <code>php artisan serve</code>
 
-## Contributing
+## Contributing (outdated)
 
-### Setup (one-time)
-1. `brew install composer` (Assuming you are on Mac, but install as you think best)
-2. Check out git repo [sst-app-ui](https://github.com/datakind/sst-app-ui). You likely will want to check out the develop branch with `git checkout develop`
-3. cd into repo top folder you just checked out
-4. `composer install`
-5. Find 'sst-app-ui.env' in LastPass and save contents to .env
+### (one-time)
+1. Check out git repo [sst-app-ui](https://github.com/datakind/sst-app-ui). You likely will want to check out the develop branch with `git checkout develop`
+2. cd into repo top folder you just checked out
+3. `composer install`
+4. Find 'sst-app-ui.env' in LastPass and save contents to .env
 6. Start sail: `./vendor/bin/sail up -d`
 7. `./vendor/bin/sail artisan key:generate`
 8. `./vendor/bin/sail artisan migrate`

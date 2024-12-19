@@ -17,6 +17,10 @@ the Student Success Tool is built on:
 
 * Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
 
+## WIP (fellows)
+
+CI/CD info 
+
 ## Local Development (outdated)
 
 

@@ -29,12 +29,10 @@ CI/CD info
 3. <code>composer install</code>
 4. Copy <code>.env.example</code> file to <code>.env</code> on the root folder.
 5. Open your <code>.env</code> file. Update DB_ and DK_API_SUITE_ credentials.
-6. <code>./vendor/bin/sail artisan key:generate</code>
-7. <code>./vendor/bin/sail artisan migrate</code>
-8. <code>./vendor/bin/sail artisan serve</code>
-9. <code>docker exec -it [your-project-container] /bin/sh</code>
-10. Change to user sail <code>su sail</code>
-11. Run <code>php artisan storage:link</code> and exit twice to get out of the container.
+6. <code>npm install</code> and <code>npm run build</code>
+7. <code>php artisan key:generate</code>
+8. <code>php artisan migrate</code>
+9. <code>php artisan serve</code>
 12. Go to http://localhost/
 
 ## Contributing

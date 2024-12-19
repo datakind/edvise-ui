@@ -21,19 +21,18 @@ the Student Success Tool is built on:
 
 CI/CD info 
 
-## Local Development (outdated)
+## Local Development 
 
 
 1. Clone this project
 2. <code>cd [project-name]</code>
 3. <code>composer install</code>
-4. Copy <code>.env.example</code> file to <code>.env</code> on the root folder.
-5. Open your <code>.env</code> file. Update DB_ and DK_API_SUITE_ credentials.
-6. <code>npm install</code> and <code>npm run build</code>
+4. Copy <code>.env.example</code> file to <code>.env</code> in the root of the repo folder.
+5. <code>npm install</code> 
+6. <code>npm run build</code>
 7. <code>php artisan key:generate</code>
 8. <code>php artisan migrate</code>
 9. <code>php artisan serve</code>
-12. Go to http://localhost/
 
 ## Contributing
 

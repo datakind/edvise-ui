@@ -21,7 +21,9 @@ the Student Success Tool is built on:
 
 CI/CD info TK
 
-1. Static Asset Creation: 
+Cloud bucket
+
+1. Static Asset Creation: npm install and npm build and cp to cloud bucket Cloud Build 
 2. Database migrations: Cloud Run Job
 3. Auto-deploy: orchestrated by Cloud Build (currently stored inline) on Github push
 

@@ -17,7 +17,7 @@ the Student Success Tool is built on:
 
 * Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
 
-## WIP (fellows)
+## TK (fellows)
 
 CI/CD info TK
 

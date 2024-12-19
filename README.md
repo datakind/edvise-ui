@@ -21,6 +21,10 @@ the Student Success Tool is built on:
 
 CI/CD info TK
 
+Static Asset Creation: 
+Database migrations: Cloud Run Job
+Auto-deploy: on Github push
+
 ## Setup (one-time)
 
 1. `brew install composer` (Assuming you are on Mac, but install as you think best)

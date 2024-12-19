@@ -39,5 +39,4 @@ CI/CD info TK
 8. <code>php artisan migrate</code>
 9. <code>php artisan serve</code>
 
-## Contributing (outdated)
 

@@ -1,3 +1,6 @@
+options:
+    logging: CLOUD_LOGGING_ONLY
+    pool: {}
 steps:
   - name: "gcr.io/k8s-skaffold/pack"
     id: "BUILD and PUSH with cloudpacks"

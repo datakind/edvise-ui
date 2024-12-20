@@ -21,9 +21,16 @@ the Student Success Tool is built on:
 
 CI/CD info TK
 
-Cloud bucket
+### One-time setup (if you were to set-up an env from scratch)
+DO NOT DO THIS FOR fellows dev environment/local development as this has already been done
+Create a Cloud Bucket to store the static files
+Update the cors-config.json with allowed origin URLs
+Run `gcloud storage buckets update gs://<BUCKET_NAME> --cors-file=cors-config.json`
+Run `gsutil cors get gs://<BUCKET_NAME>`
+Run `gcloud storage buckets add-iam-policy-binding gs://<BUCKET_NAME> --member=allUsers --role=roles/storage.objectViewer`
 
-1. Static Asset Creation: npm install and npm build and cp to cloud bucket Cloud Build 
+
+1. Static Asset Creation: handled automatically on push by Cloudbuild.yaml using npm install and npm build and cp to cloud bucket Cloud Build 
 2. Database migrations: Cloud Run Job
 3. Auto-deploy: orchestrated by Cloud Build (currently stored inline) on Github push
 

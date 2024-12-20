@@ -17,17 +17,15 @@ the Student Success Tool is built on:
 
 * Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
 
-## TK (fellows)
+## One-time setup (if you were to set-up an env from scratch)
+DO NOT DO THIS FOR fellows dev environment or local development as this has already been done
+1. Create a Cloud Bucket to store the static files (the files we'll generate in the cloudbuild autodeploy flow)
+2. Update the cors-config.json with allowed origin URLs
+3. Run `gcloud storage buckets update gs://<BUCKET_NAME> --cors-file=cors-config.json`
+4. Run `gsutil cors get gs://<BUCKET_NAME>` to check that the cors config applied to the bucket
+5. Run `gcloud storage buckets add-iam-policy-binding gs://<BUCKET_NAME> --member=allUsers --role=roles/storage.objectViewer` to enable public internet access to the bucket
 
-CI/CD info TK
-
-### One-time setup (if you were to set-up an env from scratch)
-DO NOT DO THIS FOR fellows dev environment/local development as this has already been done
-Create a Cloud Bucket to store the static files
-Update the cors-config.json with allowed origin URLs
-Run `gcloud storage buckets update gs://<BUCKET_NAME> --cors-file=cors-config.json`
-Run `gsutil cors get gs://<BUCKET_NAME>`
-Run `gcloud storage buckets add-iam-policy-binding gs://<BUCKET_NAME> --member=allUsers --role=roles/storage.objectViewer`
+NOTE: DO NOT STORE SENSITIVE/SECRET INFO IN THIS BUCKET -- this bucket should be only used to store static vite generated files.
 
 
 1. Static Asset Creation: handled automatically on push by Cloudbuild.yaml using npm install and npm build and cp to cloud bucket Cloud Build 

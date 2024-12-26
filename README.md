@@ -17,7 +17,9 @@ the Student Success Tool is built on:
 
 * Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
 
-## One-time setup (if you were to set-up an env from scratch)
+## DO NOT DO THIS! It has already been done.
+
+For the record: How to set-up an env from scratch
 DO NOT DO THIS FOR fellows dev environment or local development as this has already been done
 1. Create a Cloud Bucket to store the static files (the files we'll generate in the cloudbuild autodeploy flow)
 2. Update the cors-config.json with allowed origin URLs
@@ -32,7 +34,9 @@ NOTE: DO NOT STORE SENSITIVE/SECRET INFO IN THIS BUCKET -- this bucket should be
 2. Database migrations: Cloud Run Job
 3. Auto-deploy: orchestrated by Cloud Build (currently stored inline) on Github push
 
-## Setup (one-time)
+## Local Development Setup
+
+You only have to do this once in your local development system.
 
 1. `brew install composer` (Assuming you are on Mac, but install as you think best)
 2. `brew install npm` (Assuming you are on Mac, but install as you think best)

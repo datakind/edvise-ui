@@ -45,6 +45,22 @@ export default function AppLayout({ title, renderHeader, children }) {
             </Link>
         ))
     );
+    const renderNavLinksPublic = () => (
+        ['home', 'FAQ', 'data-dictionary', 'login', 'register'].map((routeName) => (
+            <Link
+                key={routeName}
+                href={route(routeName)}
+                className={classNames('text-gray-900 hover:underline', {
+                    'text-primary underline': pathname === `/${routeName}`,
+                })}
+            >
+                {routeName
+                    .split('-')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}
+            </Link>
+        ))
+    );
 
     if (isMobile) {
         return (
@@ -74,6 +90,9 @@ export default function AppLayout({ title, renderHeader, children }) {
                         </a>
                     </div>
                     <div>
+                        <nav className={classNames('flex items-start gap-6', { 'hidden': user })}>
+                            {renderNavLinksPublic()}
+                        </nav>
                         <nav className={classNames('flex items-center gap-6', { 'hidden': !user })}>
                             {renderNavLinks()}
                         </nav>
@@ -136,16 +155,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                                 </Dropdown>
                             </div>
                         ) : (
-                            <div className="flex gap-6 items-center">
-                                <Link href={route('login')} className="text-secondary-dark hover:text-secondary hover:underline">
-                                    Sign in
-                                </Link>
-                                <Link
-                                    href={route('register')}
-                                    className="px-4 py-2 rounded-full bg-primary text-white border border-primary hover:bg-transparent hover:text-primary"
-                                >
-                                    Sign up
-                                </Link>
+                            <div className="flex gap-6 items-end">
                             </div>
                         )}
                     </div>

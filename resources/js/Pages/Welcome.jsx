@@ -10,7 +10,7 @@ export default function Welcome() {
             <div className="px-12">
                 <div className="w-full mb-12">
                     <div className="items-center">
-                        This is a template for a new DataKind web app.
+                        SST WEBAPP FRONT PAGE
                     </div>
                 </div>
             </div>

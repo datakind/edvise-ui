@@ -48,7 +48,7 @@ Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');
 })->name('data-dictionary');
 
-Route::middleware('auth')->get('/faq', function () {
+Route::get('/faq', function () {
     return Inertia::render('Faq');
 })->name('FAQ');
 

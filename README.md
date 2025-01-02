@@ -44,14 +44,30 @@ You only have to do this once in your local development system.
 
 ## Local Development 
 
+If you use `npm run dev` it'll allow for realtime updates in the local site as you make changes.
+
 1. Clone this project
 2. <code>cd [project-name]</code>
 3. <code>composer install</code>
 4. Copy <code>.env.example</code> file to <code>.env</code> in the root of the repo folder.
-5. <code>npm install</code> 
-6. <code>npm run build</code>
-7. <code>php artisan key:generate</code>
-8. <code>php artisan migrate</code>
-9. <code>php artisan serve</code>
+5. <code>npm install</code> (and potentially clear your cache: `php artisan cache:clear`, `php artisan route:clear`, `php artisan view:clear`, `php artisan optimize:clear`, `composer dump-autoload` )
+6. <code>php artisan key:generate</code>
+7. <code>php artisan migrate</code>
+8. <code>npm run dev</code>
 
+You can also use ./local_run.sh which will perform the above actions (with the exception of copying the .env file so you should still do that first).
 
+And in a separate terminal run:
+<code>php artisan serve</code>
+
+### Notes on files and locations of interest
+
+* routes/web.php is the main entrypoint to define all routes and available functions.
+* resources/js/Layouts/AppLayout.jsx contains the page layout and function renderNavLinks() modifies which links are available in the nav bar.
+* resources/js/Pages/ contains all the separate page views (e.g. Welcome.jsx is the front page, Dashboard.jsx is what's shown when the Dashboard route is clicked etc.)
+
+So for example, to add a new page, Foopage, which you'd like to be visible in the nav bar, you'd have to:
+
+1. Add a Foopage route in web.php (include auth middleware if that page should require user login: `Route::middleware('auth')->get('/foopage', function () { return Inertia::render('Foopage'); })->name('foopage');`
+2. In AppLayout.jsx add the Foopage item to route mapping in renderNavLinks(): `const renderNavLinks = () => (['home', 'FAQ', 'data-dictionary', 'dashboard', 'foopage'].map((routeName)...`
+3. Add a Foopage.jsx file under resources/js/Pages/... subdirectory that contains the actual page rendering code.

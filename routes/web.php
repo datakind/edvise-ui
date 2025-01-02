@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LoginController;
 
+// Main app entrypoint.
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -23,7 +25,10 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-    Route::get('/dashboard', function () {return redirect()->route('home');})->name('dashboard');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+        // return redirect()->route('home'); // simply returns the homepage
+    })->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
@@ -32,7 +37,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->get('/data-dictionary', function () {
+Route::middleware('auth')->get('/file-upload', 
+    function () {
+        return Inertia::render('FileUpload');
+    })->name('file-upload');
+Route::middleware('auth')->get('/upload-progress', [ApiController::class, 'uploadProgress'])->name('get.upload-progress');
+
+# Data dictionary does not require logging in to view.
+Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');
 })->name('data-dictionary');
 

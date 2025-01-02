@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 
+// Front page.
+
 export default function Welcome() {
 
     return (

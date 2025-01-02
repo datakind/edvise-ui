@@ -14,7 +14,7 @@ export default function Dashboard() {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    *Fellows debugging* DASHBOARD GOES HERE!!
+                    FILE UPLOAD
                     </div>
                 </div>
             </div>

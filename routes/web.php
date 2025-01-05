@@ -41,7 +41,7 @@ Route::middleware('auth')->get('/file-upload',
     function () {
         return Inertia::render('FileUpload');
     })->name('file-upload');
-Route::middleware('auth')->get('/upload-progress', [ApiController::class, 'uploadProgress'])->name('get.upload-progress');
+Route::middleware('auth')->get('/file-upload-api', [ApiController::class, 'fileUploadApi'])->name('post.file-upload-api');
 
 # Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {

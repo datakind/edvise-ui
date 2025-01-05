@@ -24,9 +24,12 @@ return new class extends Migration
             $table->text('two_factor_recovery_codes')->nullable();
             $table->rememberToken();
             $table->foreignUuid('inst_id')->nullable();
-            $table->foreignUuid('current_team_id')->nullable();
+            # team id != inst id (inst id cannot change once set)
+            # TODO: team setup not yet integrated with user setup
+            # $table->foreignUuid('current_team_id')->nullable();
             # DEFAULTS TO LIMITED_ACCESS
-            $table->string('access_type');
+            # Only Datakind access type can set inst id for created/invited users. Otherwise all inst id are inherited.
+            $table->string('access_type')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
 

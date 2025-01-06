@@ -10,6 +10,8 @@ use App\Http\Controllers\LoginController;
 // Main app entrypoint.
 
 Route::get('/', function () {
+    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+    $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE");
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),

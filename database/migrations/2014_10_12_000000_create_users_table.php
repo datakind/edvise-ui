@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
             # Use uuid type for id.
             $table->uuid('id')->primary();
             $table->string('name');
@@ -38,7 +39,9 @@ return new class extends Migration
                     ->after('two_factor_recovery_codes')
                     ->nullable();
             }
-        });
+            });
+        }
+        
     }
 
     /**

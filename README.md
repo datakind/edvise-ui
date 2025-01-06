@@ -55,7 +55,7 @@ If you use `npm run dev` it'll allow for realtime updates in the local site as y
 7. <code>php artisan migrate</code>
 8. <code>npm run dev</code>
 
-You can also use ./local_run.sh which will perform the above actions (with the exceptions of cd'ing into the directory or copying the .env file so you should still do that first).
+Alternatively, you can also use ./local_run.sh which will perform the above actions (with the exceptions of cd'ing into the directory or copying the .env file so you should still do that first).
 
 And in a separate terminal run:
 <code>php artisan serve</code>

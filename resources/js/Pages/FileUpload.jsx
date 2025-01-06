@@ -6,9 +6,10 @@ import axios from 'axios';
 export default function FileUpload() {
 
     const makeUploadApiCall = () => {
+        // The following just demonstrates printing out result from the API call.
         const output = axios.get(route('post.file-upload-api'))
             .then(res => {
-                       document.getElementById("button_content").innerHTML = res.data;
+                document.getElementById("button_content").innerHTML = res.data[0].name;
             })
             .catch(err => console.log(err));
 

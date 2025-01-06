@@ -18,34 +18,31 @@ class ApiController extends Controller
     use UsesApi;
 
 
-    public function fileUploadApi(Request $request)
+        public function fileUploadApi(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        // For printline debugging the following example will output to console in the 'php artisan serve' pane.
+        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        //$out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
 
+        # Currently use the dev user for debugging.
         $token_response = Http::asForm()->post(env("BACKEND_URL").'/token', [
-    'username' =>  env("BACKEND_DEV_USER"),#$request->user()->email(),
-    'password' => env("BACKEND_DEV_PASSWORD"),#$request->user()->password(),
-]);
-            $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
-
+            'username' =>  env("BACKEND_DEV_USER"), #$request->user()->email(),
+            'password' => env("BACKEND_DEV_PASSWORD"), #$request->user()->password(),
+            'grant_type' => 'password',
+            'scope' => '',
+            'client_id' => 'string',
+            'client_secret' => 'string',
+        ]);
         if (!$token_response->ok()) {
-            $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2");
-
             return response()->json(['error' => 'Invalid username/password.'], 401);
         }
-            $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx3");
-
-        $tok = $token_response->json('access_token');
-
-            $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4:".$tok);
-
+        $tok = json_decode($token_response)->access_token;
         $headers = [
-            'Authorization' => $tok,
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
         $response = Http::withHeaders($headers)->get(env('BACKEND_URL') . '/non_inst_users');
-            $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5".$response);
-
         return $response;
     }
 

@@ -45,7 +45,9 @@ return new class extends Migration
                 }
             });
         } else {
-            $table->foreignUuid('current_team_id')->nullable()->change();
+            Schema::table('users', function (Blueprint $table) {
+                $table->foreignUuid('current_team_id')->nullable()->change();
+            });
         }
     
     }

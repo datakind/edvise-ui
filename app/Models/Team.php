@@ -7,10 +7,14 @@ use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Team as JetstreamTeam;
+#use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Concerns\HasUuids; # uuids contain dashes
 
 class Team extends JetstreamTeam
 {
     use HasFactory;
+    #use Uuid;
+    use HasUuids;
 
     /**
      * The attributes that should be cast.

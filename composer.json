@@ -6,10 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "doctrine/dbal": "^3.9",
         "google/auth": "^1.45",
         "google/cloud-core": "^1.60",
         "guzzlehttp/guzzle": "^7.9",
         "inertiajs/inertia-laravel": "^0.6.8",
+        "laravel/fortify": "^1.25",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.1",
         "laravel/sanctum": "^3.3",

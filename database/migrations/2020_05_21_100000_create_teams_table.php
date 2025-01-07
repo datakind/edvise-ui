@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignUuid('user_id')->index();
             $table->string('name');
             $table->boolean('personal_team');
-            $table->timestamps();
+            $table->dateTime('created_at')->nullable();#->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->nullable();#->default(DB::raw('NULL on update CURRENT_TIMESTAMP'));
         });
     }
 

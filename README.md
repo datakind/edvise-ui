@@ -57,6 +57,8 @@ If you use `npm run dev` it'll allow for realtime updates in the local site as y
 
 Alternatively, you can also use ./local_run.sh which will perform the above actions (with the exceptions of cd'ing into the directory or copying the .env file so you should still do that first).
 
+NOTE: if you've made any db changes and want to reload the db you will have to remove the database/database.sqlite file before running ./local_run.sh.
+
 And in a separate terminal run:
 <code>php artisan serve</code>
 

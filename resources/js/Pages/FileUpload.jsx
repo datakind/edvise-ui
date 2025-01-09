@@ -7,24 +7,15 @@ export default function FileUpload() {
 
     // Change the state structure to handle multiple file status
     const [fileStatus, setFileStatus] = useState();
-    const [uploadError, setUploadError] = useState();
     const [files, setFiles] = useState()
 
-
-    //const isError = fileStatus == null ? false : Object.values(fileStatus).some(status => status !== 'Uploaded');
-    const fileInputRef = useRef(null);
-
-    const MAX_FILE_BYTES = 0 * 1024 * 1024; // limit 5 GB
+    const MAX_FILE_BYTES = 5000 * 1024 * 1024; // limit 5 GB
 
     const resetUploader = () => {
         setFileStatus({});
-        setUploadError(null);
         setFiles([]);
         document.getElementById("files-show").innerHTML = "";
         document.getElementById("result_area").innerHTML = "";
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
     };
 
     const fileSelectedHandler = (event) => {
@@ -61,7 +52,8 @@ export default function FileUpload() {
 
             } else {
                 setFiles(filesLocal);
-                document.getElementById("files-show").appendChild(document.createTextNode("Files to validate and upload (note that on submission, the files will be sent for validation):"));
+                document.getElementById("files-show").appendChild(document.createTextNode("Files to validate and upload (you will be email notified when files are validated or failed for successfully submitted files):"));
+
                 var ulElem = document.createElement("UL");
                 for (const f of filesLocal) {
                     var item = document.createElement("LI");
@@ -73,28 +65,34 @@ export default function FileUpload() {
         }
     }
 
+// Frontend prepends timestamp, manually uploaded files on the backend don't include that.
     const triggerUpload = () => {
-        if (files.length == 0) {
+        if ( fileStatus != undefined && Object.keys(fileStatus).length != 0){
             document.getElementById("result_area").innerHTML = "Submit disallowed until all errors resolved.";
             return;
-
         }
-        document.getElementById("result_area").innerHTML = "Submitting...";
-
-        // TODO PREPEND THE TIMEESTAMP to the filename
+        if (files == undefined || files.length == 0) {
+            document.getElementById("result_area").innerHTML = "Please upload at least one file.";
+            return;
+        }
         files.forEach(file => {
-
-const output = axios.post('/file-upload-api/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + file.name + '_' + Date.now()).then(res => {
-
-axios.put(res.data, file.data, { headers: {"Content-Type": 'text/csv'}}).then(res1 => {
-      document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: "+file.name;
-
-});
-
-    }).catch(err => console.log(err));
-                });
-    document.getElementById("result_area").innerHTML = "Files are submitted but pending validation. You will be email notified when files are validated or failed.";
-
+            var filenameConstructed = Date.now() + '_' + file.name;
+            const config = {
+                headers: {
+                    "Content-Type": file.type, 
+                }
+            }
+            const output = axios.post('/file-upload-api/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filenameConstructed).then(res => {
+                axios.put(res.data, file.data, config).then(res1 => {
+                      document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
+                }).catch(err => {
+                document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;
+        });
+            }).catch(err => {
+                document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;
+        });
+        });
+        
     }
 
     return (
@@ -113,7 +111,7 @@ axios.put(res.data, file.data, { headers: {"Content-Type": 'text/csv'}}).then(re
             <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
             <p className="text-xs text-gray-500 dark:text-gray-400">csv (MAX. 5GB)</p>
         </div>
         <input id="dropzone-file" type="file" className="hidden" onChange={fileSelectedHandler} accept=".csv" multiple="True"/>

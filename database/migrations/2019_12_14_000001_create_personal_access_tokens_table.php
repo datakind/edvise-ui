@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('abilities')->nullable();
             $table->datetime('last_used_at')->nullable();
             $table->datetime('expires_at')->nullable();
-            $table->dateTime('created_at')->nullable();#->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->dateTime('updated_at')->nullable();#->default(DB::raw('NULL on update CURRENT_TIMESTAMP'));
+            $table->dateTime('created_at')->nullable(); //->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->nullable(); //->default(DB::raw('NULL on update CURRENT_TIMESTAMP'));
         });
     }
 

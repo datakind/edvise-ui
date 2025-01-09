@@ -45,7 +45,7 @@ $app->singleton(
 /* Load settings from a mounted volume, if available. */
 $settings_dir = $_ENV['APP_SETTINGS_DIR'] ?? '/config';
 
-if (file_exists($settings_dir . '/.env')) {
+if (file_exists($settings_dir.'/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable($settings_dir);
     $dotenv->load();
 }

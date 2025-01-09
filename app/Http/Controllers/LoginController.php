@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;
-use Exception;
-use App\Models\User;
 use App\Models\Team;
+use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -19,6 +19,7 @@ class LoginController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
+
     /**
      * Obtain the user information from Google.
      *
@@ -35,13 +36,14 @@ class LoginController extends Controller
 
             if ($existingUser) {
                 // If the user exists but doesn't have a Google ID, update it
-                if (!$existingUser->google_id) {
+                if (! $existingUser->google_id) {
                     $existingUser->google_id = $user->id;
                     $existingUser->save();
                 }
 
                 // Log the existing user in
                 Auth::login($existingUser);
+
                 return redirect('/');
             } else {
                 // If no user is found, create a new one
@@ -55,7 +57,7 @@ class LoginController extends Controller
                 // Create a personal team for the user (required by Jetstream)
                 $newTeam = Team::forceCreate([
                     'user_id' => $newUser->id,
-                    'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
                     'personal_team' => true,
                 ]);
 
@@ -66,6 +68,7 @@ class LoginController extends Controller
 
                 // Log the new user in
                 Auth::login($newUser);
+
                 return redirect('/');
             }
         } catch (Exception $e) {
@@ -99,13 +102,14 @@ class LoginController extends Controller
 
             if ($existingUser) {
                 // If the user exists but doesn't have an Azure ID, update it
-                if (!$existingUser->azure_id) {
+                if (! $existingUser->azure_id) {
                     $existingUser->azure_id = $user->id;
                     $existingUser->save();
                 }
 
                 // Log the existing user in
                 Auth::login($existingUser);
+
                 return redirect('/');
             } else {
                 // If no user is found, create a new one
@@ -119,7 +123,7 @@ class LoginController extends Controller
                 // Create a personal team for the user (required by Jetstream)
                 $newTeam = Team::forceCreate([
                     'user_id' => $newUser->id,
-                    'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
                     'personal_team' => true,
                 ]);
 
@@ -130,6 +134,7 @@ class LoginController extends Controller
 
                 // Log the new user in
                 Auth::login($newUser);
+
                 return redirect('/');
             }
         } catch (Exception $e) {

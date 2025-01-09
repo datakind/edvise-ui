@@ -1,17 +1,17 @@
 <?php
 
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\LoginController;
 
 // Main app entrypoint.
 
 Route::get('/', function () {
-    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-    $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE");
+    //$out = new \Symfony\Component\Console\Output\ConsoleOutput;
+    //$out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -26,7 +26,7 @@ Route::get('/login', function () {
     ]);
 })->name('login');
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
         // return redirect()->route('home'); // simply returns the homepage
@@ -39,13 +39,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->get('/file-upload', 
+Route::middleware('auth')->get('/file-upload',
     function () {
         return Inertia::render('FileUpload');
     })->name('file-upload');
-Route::middleware('auth')->get('/file-upload-api', [ApiController::class, 'fileUploadApi'])->name('post.file-upload-api');
 
-# Data dictionary does not require logging in to view.
+// difficult to get params working with named routes
+Route::middleware('auth')->post('/file-upload-api/{inst}/{filename}', [ApiController::class, 'fileUploadApi']);
+
+// Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');
 })->name('data-dictionary');
@@ -73,4 +75,3 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 
 Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
-

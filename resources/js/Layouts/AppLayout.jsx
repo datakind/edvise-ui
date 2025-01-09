@@ -135,8 +135,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                                                                 <Dropdown.Link as="button">
                                                                     <div className="flex items-center">
                                                                         {team.id === user.current_team_id && (
-                                                                            <svg className="me-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                            <svg className="me-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                                             </svg>
                                                                         )}
                                                                         <div>{team.name}</div>

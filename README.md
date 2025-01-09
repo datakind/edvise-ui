@@ -62,6 +62,14 @@ NOTE: if you've made any db changes and want to reload the db you will have to r
 And in a separate terminal run:
 <code>php artisan serve</code>
 
+Optionally install the React Dev Tools: https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en
+
+Use console.log() and fn+12 to open chrome dev panel.
+
+## Styling
+
+Similar to Python's Black, you can use run `./vendor/bin/pint` to autoformat your PHP.
+
 ### Notes on files and locations of interest
 
 * routes/web.php is the main entrypoint to define all routes and available functions.
@@ -73,3 +81,9 @@ So for example, to add a new page, Foopage, which you'd like to be visible in th
 1. Add a Foopage route in web.php (include auth middleware if that page should require user login: `Route::middleware('auth')->get('/foopage', function () { return Inertia::render('Foopage'); })->name('foopage');`
 2. In AppLayout.jsx add the Foopage item to route mapping in renderNavLinks(): `const renderNavLinks = () => (['home', 'FAQ', 'data-dictionary', 'dashboard', 'foopage'].map((routeName)...`
 3. Add a Foopage.jsx file under resources/js/Pages/... subdirectory that contains the actual page rendering code.
+
+
+### Notes on deploying to dev
+
+When deploying to dev, make sure to also check the outcome of the associated migration job in Cloud Run > Jobs.
+

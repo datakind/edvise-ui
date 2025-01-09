@@ -79,7 +79,7 @@ export default function FileUpload() {
             var filenameConstructed = Date.now() + '_' + file.name;
             const config = {
                 headers: {
-                    "Content-Type": file.type, 
+                    "Content-Type": "text/csv", 
                 }
             }
             const output = axios.post('/file-upload-api/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filenameConstructed).then(res => {

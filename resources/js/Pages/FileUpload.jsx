@@ -83,7 +83,9 @@ export default function FileUpload() {
                 }
             }
             const output = axios.post('/file-upload-api/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filenameConstructed).then(res => {
-                axios.put(res.data, file.data, config).then(res1 => {
+                // Fun fact! If the file object is null or undefined, the Content-Type header gets auto-dropped by the browser.
+                // GCS signed URLs require the headers to match the ones used at URL generation time.
+                axios.put(res.data, file, config).then(res1 => {
                       document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
                 }).catch(err => {
                 document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;

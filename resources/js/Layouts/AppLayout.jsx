@@ -30,7 +30,7 @@ export default function AppLayout({ title, renderHeader, children }) {
 
 
     const renderNavLinks = () => (
-        ['home', 'FAQ', 'data-dictionary', 'dashboard', 'file-upload'].map((routeName) => (
+        ['home', 'FAQ', 'data-dictionary', 'dashboard', 'file-upload', 'view-data'].map((routeName) => (
             <Link
                 key={routeName}
                 href={route(routeName)}

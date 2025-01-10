@@ -16,13 +16,18 @@ export default function FileUpload() {
         setFiles([]);
         document.getElementById("files-show").innerHTML = "";
         document.getElementById("result_area").innerHTML = "";
+        document.getElementById("button_content").innerHTML = "Submit Files";
+
     };
 
     const fileSelectedHandler = (event) => {
-        resetUploader(); // reset the uploader
+        fileHandler(event.target.files);
+}
 
-        if (event.target.files) {
-            let filesLocal = Array.from(event.target.files);
+const fileHandler = (filesArg) => {
+        resetUploader(); // reset the uploader
+        if (filesArg) {
+            let filesLocal = Array.from(filesArg);
             let isValid = true; // Flag to check if all files are valid
             let fileErrors = {};
 
@@ -75,6 +80,8 @@ export default function FileUpload() {
             document.getElementById("result_area").innerHTML = "Please upload at least one file.";
             return;
         }
+        document.getElementById("button_content").innerHTML = "Processing...";
+
         files.forEach(file => {
             var filenameConstructed = Date.now() + '_' + file.name;
             const config = {
@@ -86,15 +93,38 @@ export default function FileUpload() {
                 // Fun fact! If the file object is null or undefined, the Content-Type header gets auto-dropped by the browser.
                 // GCS signed URLs require the headers to match the ones used at URL generation time.
                 axios.put(res.data, file, config).then(res1 => {
-                      document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
+                    document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
+                    document.getElementById("button_content").innerHTML = "Submit Files";
                 }).catch(err => {
                 document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;
+                document.getElementById("button_content").innerHTML = "Submit Files";
+
         });
             }).catch(err => {
                 document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;
+                document.getElementById("button_content").innerHTML = "Submit Files";
         });
         });
         
+    }
+
+    const dragOverImageChange = (event) => {
+        const dropZone = document.getElementById('drop-zone');
+        event.preventDefault();
+        dropZone.className = dropZone.className.replace( /(?:^|\s)border-gray-300 dark:border-gray-600 dark:hover:border-gray-500(?!\S)/g , ' border-gray-600 dark:border-gray-300 ' );    
+    }
+
+    const dragLeaveChange = (event) => {
+        const dropZone = document.getElementById('drop-zone');
+        event.preventDefault();
+        dropZone.className = dropZone.className.replace( /(?:^|\s)border-gray-600 dark:border-gray-300(?!\S)/g , ' border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 ' );
+    }
+
+    const dropHandle = (event) => {
+        const dropZone = document.getElementById('drop-zone');
+        event.preventDefault();
+        dropZone.className = dropZone.className.replace( /(?:^|\s)border-gray-600 dark:border-gray-300(?!\S)/g , ' border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 ' );
+        fileHandler(event.dataTransfer.files);
     }
 
     return (
@@ -108,15 +138,15 @@ export default function FileUpload() {
         >
 
 <div className="flex items-center justify-center w-full">
-    <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+<label id="drop-zone" className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600" onDragOver={dragOverImageChange} onDragLeave={dragLeaveChange} onDrop={dropHandle}>
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">csv (MAX. 5GB)</p>
-        </div>
-        <input id="dropzone-file" type="file" className="hidden" onChange={fileSelectedHandler} accept=".csv" multiple="True"/>
+        <input id="dropzone-file-input" type="file" className="hidden" onChange={fileSelectedHandler} accept=".csv" multiple="True"/>
+    </div>
     </label>
 </div> 
 

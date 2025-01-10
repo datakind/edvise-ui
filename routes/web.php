@@ -47,6 +47,13 @@ Route::middleware('auth')->get('/file-upload',
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{inst}/{filename}', [ApiController::class, 'fileUploadApi']);
 
+Route::middleware('auth')->get('/view-data',
+    function () {
+        return Inertia::render('ViewData');
+    })->name('view-data');
+
+Route::middleware('auth')->get('/view-input-data/{inst}', [ApiController::class, 'viewInputData']);
+
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

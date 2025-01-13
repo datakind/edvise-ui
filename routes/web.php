@@ -54,6 +54,12 @@ Route::middleware('auth')->get('/view-data',
 
 Route::middleware('auth')->get('/view-input-data/{inst}', [ApiController::class, 'viewInputData']);
 
+
+Route::middleware('auth')->get('/run-inference',
+    function () {
+        return Inertia::render('RunInference');
+    })->name('run-inference');
+
 Route::middleware('auth')->get('/download-data',
     function () {
         return Inertia::render('DownloadInfData');

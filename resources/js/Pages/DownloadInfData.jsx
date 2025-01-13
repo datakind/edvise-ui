@@ -11,14 +11,15 @@ const tableCreate = (parsedValues) => {
   tbl.style.width = '100px';
   tbl.style.border = '1px solid black';
 
-  for (let i = 0; i < parsedValues.length; i++) {
-    const tr = tbl.insertRow();
-    for (let j = 0; j < parsedValues[0].length; j++) {
-        const td = tr.insertCell();
-        td.appendChild(document.createTextNode(parsedValues[i][j]));
-        td.style.border = '1px solid black';
+    // one less than length bc of how newline split adds one more to the list.
+    for (let i = 0; i < parsedValues.length-1; i++) {
+        const tr = tbl.insertRow();
+        for (let j = 0; j < parsedValues[0].length; j++) {
+            const td = tr.insertCell();
+            td.appendChild(document.createTextNode(parsedValues[i][j]));
+            td.style.border = '1px solid black';
+        }
     }
-  }
   return tbl;
 }
 
@@ -52,7 +53,8 @@ const tableCreate = (parsedValues) => {
 
     fetch(res.data).then(res1 => {
         res1.text().then(res2 => {
-            const outcome = res2.split("\n").map((line) => line.split(","));
+            const lines = res2.split(/\r\n|\r|\n/);
+            const outcome = lines.map((line) => line.split(","));
         document.getElementById("result_area").innerHTML = filename + " in table format:";
 
             document.getElementById("table_area").appendChild(tableCreate(outcome));

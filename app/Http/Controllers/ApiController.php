@@ -7,6 +7,8 @@ use App\Traits\UsesApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
+use TokenHelper;
+
 //use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\RequestException;
 
@@ -17,25 +19,15 @@ class ApiController extends Controller
     // Downloading inference output
     public function downloadInfData(Request $request, string $inst, string $filename)
     {
-        // Currently use the dev user for debugging.
-        $token_response = Http::asForm()->post(env('BACKEND_URL').'/token', [
-            'username' => env('BACKEND_DEV_USER'), //$request->user()->email(),
-            'password' => env('BACKEND_DEV_PASSWORD'), //$request->user()->password(),
-            'grant_type' => 'password',
-            'scope' => '',
-            'client_id' => 'string',
-            'client_secret' => 'string',
-        ]);
-        if (! $token_response->ok()) {
-            return response()->json(['error' => 'Invalid username/password.'], 401);
+        [$tok, $err] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $err], 401);
         }
-        $tok = json_decode($token_response)->access_token;
         $headers = [
             'Authorization' => 'Bearer '.$tok,
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-
         $response = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/download_url/'.$filename);
 
         return $response;
@@ -44,22 +36,13 @@ class ApiController extends Controller
     public function viewInputData(Request $request, string $inst)
     {
         // For printline debugging the following example will output to console in the 'php artisan serve' pane.
-        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        //$out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
+        // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
         // Currently use the dev user for debugging.
-        $token_response = Http::asForm()->post(env('BACKEND_URL').'/token', [
-            'username' => env('BACKEND_DEV_USER'), //$request->user()->email(),
-            'password' => env('BACKEND_DEV_PASSWORD'), //$request->user()->password(),
-            'grant_type' => 'password',
-            'scope' => '',
-            'client_id' => 'string',
-            'client_secret' => 'string',
-        ]);
-        if (! $token_response->ok()) {
-            return response()->json(['error' => 'Invalid username/password.'], 401);
+        [$tok, $err] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $err], 401);
         }
-
-        $tok = json_decode($token_response)->access_token;
 
         $headers = [
             'Authorization' => 'Bearer '.$tok,
@@ -79,19 +62,10 @@ class ApiController extends Controller
         //$out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
 
         // Currently use the dev user for debugging.
-        $token_response = Http::asForm()->post(env('BACKEND_URL').'/token', [
-            'username' => env('BACKEND_DEV_USER'), //$request->user()->email(),
-            'password' => env('BACKEND_DEV_PASSWORD'), //$request->user()->password(),
-            'grant_type' => 'password',
-            'scope' => '',
-            'client_id' => 'string',
-            'client_secret' => 'string',
-        ]);
-        if (! $token_response->ok()) {
-            return response()->json(['error' => 'Invalid username/password.'], 401);
+        [$tok, $err] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $err], 401);
         }
-
-        $tok = json_decode($token_response)->access_token;
 
         $headers = [
             'Authorization' => 'Bearer '.$tok,

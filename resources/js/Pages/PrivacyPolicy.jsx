@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 
 const PrivacyPolicy = () => {
     return (
-        <AppLayout>
+        <AppLayout title="Privacy Policy">
             <Head title="Privacy Policy" />
             <div className="max-w-6xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
                 <div className="prose lg:prose-xl">

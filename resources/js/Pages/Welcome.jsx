@@ -6,8 +6,8 @@ import AppLayout from '@/Layouts/AppLayout';
 export default function Welcome() {
 
     return (
-        <AppLayout>
-            <div className="px-12">
+        <AppLayout title="Home">
+            <div className="flex auto flex-row px-12">
                 <div className="w-full mb-12">
                     <div className="items-center">
                         SST WEBAPP FRONT PAGE!

@@ -74,7 +74,7 @@ const tableCreate = (parsedValues) => {
 
     return (
         <AppLayout
-            title="FileUpload"
+            title="Download Data"
             renderHeader={() => (
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     FileUpload
@@ -110,3 +110,8 @@ const tableCreate = (parsedValues) => {
     );
 }
 
+
+/* TODO: Add file type to the file database as a column and do a match with the model type 
+Does databricks track what files are used for a particular run? 
+Add a way to skip validation
+*/

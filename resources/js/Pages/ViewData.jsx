@@ -16,7 +16,7 @@ const [error, setError] = useState(null);
 
     return (
         <AppLayout
-            title="FileUpload"
+            title="View Data"
             renderHeader={() => (
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     FileUpload

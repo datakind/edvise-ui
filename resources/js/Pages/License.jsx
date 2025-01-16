@@ -3,7 +3,7 @@ import AppLayout from '@/Layouts/AppLayout';
 
 export default function License() {
     return (
-        <AppLayout>
+        <AppLayout title="License">
             <div className="max-w-6xl mx-auto p-12 border rounded-lg border-gray-200 shadow bg-white">
                 <div className="prose">
                     <h2 className="text-2xl font-bold mb-4">Copyright</h2>

@@ -59,7 +59,7 @@ export default function DataDictionary() {
     };
 
     return (
-        <AppLayout>
+        <AppLayout title="Data Dictionary">
             <div className="max-w-full mx-auto mb-12">
                 <div className="flex justify-end items-center mx-12 space-x-4">
                     <TableColumnSelection

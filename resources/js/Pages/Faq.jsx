@@ -35,7 +35,7 @@ const FAQ = () => {
     };
 
     return (
-        <AppLayout>
+        <AppLayout title="FAQ">
             <div className="max-w-6xl mx-auto my-12 px-4">
                 <div className="prose-xl">
                     <h2 className="text-header">FAQ</h2>

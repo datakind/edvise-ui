@@ -129,7 +129,7 @@ const fileHandler = (filesArg) => {
 
     return (
         <AppLayout
-            title="FileUpload"
+            title="File Upload"
             renderHeader={() => (
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     FileUpload

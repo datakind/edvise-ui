@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/AppLayout";
 
 const TermsOfService = () => {
     return (
-        <AppLayout>
+        <AppLayout title="Terms of Service">
             <Head title="Terms of Service" />
             <div className="max-w-6xl mx-auto my-12 px-4 sm:px-6 lg:px-8 mb-24">
                 <div className="prose lg:prose-xl">

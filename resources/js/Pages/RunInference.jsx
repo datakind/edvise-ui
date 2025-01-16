@@ -12,7 +12,7 @@ export default function RunInference() {
 
     return (
         <AppLayout
-            title="FileUpload"
+            title="Run Inference"
             renderHeader={() => (
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     Run Inference

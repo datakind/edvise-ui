@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->get('/create-inst',
+    function () {
+        return Inertia::render('CreateInst');
+    })->name('create-inst');
+
 Route::middleware('auth')->get('/file-upload',
     function () {
         return Inertia::render('FileUpload');

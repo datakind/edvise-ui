@@ -24,6 +24,14 @@ export default function UploadSymbol( props ) {
                 </g>
             </g>
         </svg>
+        <div className="h-full text-nowrap text-left text-sm -mt-1 pl-1 font-bold">
+            <div className="text-secondary-dark">
+                Student Success
+            </div>
+            <div className="text-primary">
+                Tool
+            </div>
+        </div>
         </div>
     );
 }

@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import AppLogo from '@/Components/Icons/AppLogo';
-import { ChevronDownIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
   CalendarIcon,
   ChartPieIcon,
+  PhoneIcon,
+  ChevronDownIcon,
   DocumentDuplicateIcon,
   HomeIcon,
   UsersIcon,
@@ -20,40 +21,43 @@ import {
   AdjustmentsVerticalIcon,
   ChartBarIcon,
   ClipboardDocumentListIcon,
-  PlusIcon
+  PlusIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
 const VisibilityType = Object.freeze({
     PUBLIC_ONLY: "PUBLIC_ONLY",
     PRIVATE_ONLY: "PRIVATE_ONLY",
-    BOTH: "BOTH"
+    BOTH: "BOTH",
+    DATAKIND_ONLY: "DATAKIND_ONLY" // This is a subset of PRIVATE_ONLY
 });
 
 const navigationAboveLine = [
+    { name: 'Home', href: route('home'), icon: HomeIcon, visibility_type: VisibilityType.BOTH },
+
     {
         name: 'Dashboard',
         icon: ChartBarIcon,
-        public: VisibilityType.PRIVATE_ONLY ,
+        visibility_type: VisibilityType.PRIVATE_ONLY ,
         children: [
           { name: 'Model 1', href: route('dashboard') },
           { name: 'Model 2', href: route('dashboard') },
         ],
     },
-    { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,public: VisibilityType.PRIVATE_ONLY },
-    { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,public: VisibilityType.PRIVATE_ONLY },
-    { name: 'File Upload', href: route('file-upload'), icon: DocumentDuplicateIcon ,public: VisibilityType.PRIVATE_ONLY },
-    { name: 'Data Dictionary', href: route('data-dictionary'), icon: BookOpenIcon, public: VisibilityType.BOTH},
-    { name: 'FAQ', href: route('FAQ'), icon: DocumentDuplicateIcon ,public: VisibilityType.BOTH },
+    { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'File Upload', href: route('file-upload'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'Data Dictionary', href: route('data-dictionary'), icon: BookOpenIcon, visibility_type: VisibilityType.BOTH},
+    { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
 ];
 
 const navigationBelowLine = [
-    { name: 'Settings', href: '#', icon: Cog8ToothIcon, public: VisibilityType.PRIVATE_ONLY },
-    { name: 'Login', href: route('login'), icon: UsersIcon, public: VisibilityType.PUBLIC_ONLY },
-    { name: 'Register', href: route('register'), icon: UsersIcon, public: VisibilityType.PUBLIC_ONLY },
-    { name: 'Home', href: route('home'), icon: HomeIcon, public: VisibilityType.BOTH },
-    { name: 'Privacy Policy', href: route('privacy-policy'), icon: ClipboardDocumentListIcon, public: VisibilityType.BOTH },
-    { name: 'Terms of Service', href: route('terms-of-service'), icon: ClipboardDocumentListIcon, public: VisibilityType.BOTH },
-    { name: 'License', href: route('license'), icon: ClipboardDocumentListIcon, public: VisibilityType.BOTH },
+    { name: 'FAQ', href: route('FAQ'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.BOTH },
+    { name: 'Profile', href: route('profile.edit'), icon: UsersIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'Settings', href: '#', icon: Cog8ToothIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'Logout', href: route('logout'), icon: ArrowRightStartOnRectangleIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
+    { name: 'Contact Us', href: '#', icon: PhoneIcon, visibility_type: VisibilityType.PUBLIC_ONLY },
+    { name: 'About', href: '#', icon: InformationCircleIcon, visibility_type: VisibilityType.PUBLIC_ONLY },
 ];
 
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
@@ -62,6 +66,7 @@ export default function AppLayout({ title, renderHeader, children }) {
     
     const { auth, jetstream } = useTypedPage().props;
     const user = auth.user;
+    const userIsDatakinder = auth.user ? auth.user.access == "DATAKINDER" : false;
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
@@ -71,28 +76,33 @@ export default function AppLayout({ title, renderHeader, children }) {
     }, []);
 
     const pathname = window.location.pathname;
-    const openFeedbackForm = () => {
-        const feedbackFormUrl = import.meta.env.VITE_FEEDBACK_FORM_URL;
-        window.open(feedbackFormUrl, '_blank');
-    };
-
-
-
 
     const renderNav = (navMap) => (
 
         navMap.map((item) => (
-             (!user && item.public == VisibilityType.PRIVATE_ONLY) || (user && item.public == VisibilityType.PUBLIC_ONLY) ? (<></>) : ( 
+             (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) || (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) || (!userIsDatakinder && item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (<></>) : ( 
             <li key={item.name}>
               {!item.children ? (
-               <a href={item.href}
+
+                // Logout gets treated as a button as it requires a post request
+                // TODO: does this have auto-protection against csrf via the Laravel middleware stack?
+                (item.name == "Logout") ? (
+                <Link
+            href={item.href}
+            method="post"
+            as="button"
+            className='hover:bg-gray-50 group flex w-full items-center py-3 gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]'>
+            <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log out
+        </Link>
+                ) :
+                (<a href={item.href}
                   className={classNames(
                     (item.name == title) ? 'bg-gray-50' : 'hover:bg-gray-50',
                       'group flex w-full items-center py-3 gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]',
                   )}
                 >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" /> {item.name}
-                </a>
+                </a>)
                 
               ) : (
                 <Disclosure as="div">
@@ -150,10 +160,8 @@ export default function AppLayout({ title, renderHeader, children }) {
     return (
 
 <div className="bg-background flex flex-row">
-
-<div className="basis-2/12 bg-white shadow-md">
 <header>
-      <nav className="flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-screen">
+      <nav className="basis-2/12 bg-white shadow-md flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-96">
         <ul role="list" className="flex flex-1 flex-col gap-y-12">
         <div className="flex h-16 shrink-0 flex-col items-center pt-12">
         <a href={route('home')}>
@@ -166,7 +174,7 @@ export default function AppLayout({ title, renderHeader, children }) {
 href= {route('run-inference')}
     >
         <PlusIcon aria-hidden="true" className="size-6 shrink-0 text-white" />
-        <div className="text-center text-white text-base font-medium font-['Helvetica Neue'] leading-normal">Start new prediction</div>
+        <div className="text-center text-white text-base font-medium font-['Helvetica Neue'] leading-normal">Predict</div>
     </a>
 </div>
 ) : (<></>)}
@@ -180,7 +188,7 @@ href= {route('run-inference')}
             {renderNav(navigationBelowLine)} 
 
 {user ? (
-    <div  className="flex items-end gap-x-4 px-6 py-3 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50">
+    <div  className="flex items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50 hidden">
 <span className="sr-only">Your profile</span>
     <Dropdown>
         <Dropdown.Trigger>
@@ -191,7 +199,6 @@ href= {route('run-inference')}
             </button>
         </Dropdown.Trigger>
         <Dropdown.Content>
-            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
             <Dropdown.Link href={route('teams.show', user.current_team)}>
                 Team Settings
             </Dropdown.Link>
@@ -229,25 +236,52 @@ href= {route('run-inference')}
                     )}
                 </>
             )}
-            <Dropdown.Link href={route('logout')} method="post" as="button">
-                Log Out
-            </Dropdown.Link>
         </Dropdown.Content>
     </Dropdown>
 </div>
 ) : (<></>)}
 
   </li>
+
+
+  {user ? (
+<div className="flex pr-6 pl-6 pt-6 pb-6 items-left justify-between text-[#637381] flex-col"> 
+<div className="text-black font-semibold">{user.name}</div>
+<div>{user.email}</div>
+</div>
+) : (
+  <div className="flex pr-6 pl-6 pt-6 pb-6 items-center justify-between" id="login-register">
+<a href={route('login')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Login</a>
+<div className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">&middot;</div>
+<a href={route('register')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Register</a>
+</div>
+
+)}
+
+
+
+
 </ul>
+
+
 </nav>
 </header>
+
+<div className="basis-10/12 min-h-screen flex-col justify-between">
+<div class="h-[90%]">
+    <main className="pt-12">{children}</main>
 </div>
-<div className="z-50 cursor-pointer fixed bottom-10 hover:bg-primary-dark shadow-md right-10 bg-primary rounded-full p-2 px-4 text-white text-sm">
-    <button onClick={openFeedbackForm}>Feedback</button>
+<div class="h-[10%]">
+<footer className="gap-x-6 pt-6 flex justify-end pr-6">
+    <a href={route('privacy-policy')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Privacy Policy</a>
+    <a href={route('terms-of-service')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Terms of Service</a>
+    <a href={route('license')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">License</a>
+    <div>|</div>
+    <div>&copy; 2025 Datakind</div>
+</footer>
 </div>
-<div className="basis-10/12 pt-12 min-h-screen">
-    <main>{children}</main>
-    </div>
+
+</div>
 </div>
 
 

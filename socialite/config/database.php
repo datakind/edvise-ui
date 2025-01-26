@@ -94,7 +94,10 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'require',
+            'sslrootcert' => env('SSL_CA_PATH'),
+            'sslcert' => env('SSL_CERT_PATH'),
+            'sslkey' => env('SSL_KEY_PATH'),
         ],
 
         'sqlsrv' => [

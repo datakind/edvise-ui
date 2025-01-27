@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -58,7 +58,13 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'sslmode' => 'prefer',
+            'sslmode' => 'require',
+            'options' => [
+                PDO::MYSQL_ATTR_SSL_CA => env('SSL_CA_PATH'),
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true,
+                PDO::MYSQL_ATTR_SSL_KEY => env('SSL_KEY_PATH'),
+                PDO::MYSQL_ATTR_SSL_CERT => env('SSL_CERT_PATH'),
+            ],
         ],
 
         'pgsql' => [
@@ -73,10 +79,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'require',
-            'sslrootcert' => env('SSL_CA_PATH'),
-            'sslcert' => env('SSL_CERT_PATH'),
-            'sslkey' => env('SSL_KEY_PATH'),
+            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [

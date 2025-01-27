@@ -31,14 +31,11 @@ class TokenHelper
     }
 
     public static function makeTokenAPICall(Request $request, int $current_timestamp) {
-        // TODO update: Currently use the dev user for debugging.
         $token_response = Http::asForm()->post(env('BACKEND_URL').'/token', [
-            'username' => env('BACKEND_DEV_USER'), //$request->user()->email(),
-            'password' => env('BACKEND_DEV_PASSWORD'), //$request->user()->password(),
+            'username' => env('BACKEND_FE_USER'),
+            'password' => env('BACKEND_FE_PASSWORD'),
             'grant_type' => 'password',
-            'scope' => '',
-            'client_id' => 'string',
-            'client_secret' => 'string',
+            'scope' => $request->user()->email(),
         ]);
 
         if (! $token_response->ok()) {

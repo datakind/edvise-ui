@@ -1,15 +1,17 @@
 #!/bin/bash
 
 # This workaround required bc postgres enforces file permissions on the cert files.
-cp -v "$SSL_CA_PATH" "${PWD}/certs/server-ca.pem"
-cp -v "$SSL_KEY_PATH" "${PWD}/certs/client-key.pem"
-cp -v "$SSL_CERT_PATH" "${PWD}/certs/client-cert.pem"
+
+mkdir "/etc/ssl/private/pg_certs/"
+cp -v "$SSL_CA_PATH" "/etc/ssl/private/pg_certs/server-ca.pem"
+cp -v "$SSL_KEY_PATH" "/etc/ssl/private/pg_certs/client-key.pem"
+cp -v "$SSL_CERT_PATH" "/etc/ssl/private/pg_certs/client-cert.pem"
 
 
-chmod -R 600 "${PWD}/certs"
+chmod -R 600 "/etc/ssl/private/pg_certs/certs"
 
-export SSL_CA_PATH="${PWD}/certs/server-ca.pem"
-export SSL_KEY_PATH="${PWD}/certs/client-key.pem"
-export SSL_CERT_PATH="${PWD}/certs/client-cert.pem"
+export SSL_CA_PATH="/etc/ssl/private/pg_certs/server-ca.pem"
+export SSL_KEY_PATH="/etc/ssl/private/pg_certs/client-key.pem"
+export SSL_CERT_PATH="/etc/ssl/private/pg_certs/client-cert.pem"
 
 php artisan migrate --force

@@ -87,3 +87,6 @@ So for example, to add a new page, Foopage, which you'd like to be visible in th
 
 When deploying to dev, make sure to also check the outcome of the associated migration job in Cloud Run > Jobs.
 
+### General Notes
+
+You can set lifecycle rules for a given GCS bucket similar to setting CORS policies. The rules have actions and conditions, whereby the actions will be taken once all the conditions are met.

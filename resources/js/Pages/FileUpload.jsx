@@ -97,8 +97,7 @@ const fileHandler = (filesArg) => {
                     document.getElementById("button_content").innerHTML = "Validating...";
 
                     axios.post('/file-validate-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res2 => {
-                        document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed + " with output:";
-                        document.getElementById("json_result").textContent = JSON.stringify(res2, undefined, 2);
+                        document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
 
                         document.getElementById("button_content").innerHTML = "Submit Files";
                     }).catch(e => {
@@ -178,7 +177,6 @@ const fileHandler = (filesArg) => {
                         Submit Files
                     </button>
                     <div id="result_area"> 
-                    <pre id="json_result"></pre>
                     </div>
 
                     </div>

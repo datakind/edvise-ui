@@ -32,7 +32,7 @@ const tableCreate = (parsedValues) => {
             return;
         }
 
-        const output = axios.get('/download-inf-data/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filename).then(res => {
+        const output = axios.get('/download-inf-data/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filename).then(res => {
                 window.open(res.data, '_self');
             }).catch(err => {
                 document.getElementById("result_area").innerHTML = "3"+filename + " url:"  + err;
@@ -49,7 +49,7 @@ const tableCreate = (parsedValues) => {
             document.getElementById("result_area").innerHTML = "Please add a valid filename";
             return;
         }
-        const output = axios.get('/download-inf-data/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filename).then(res => {
+        const output = axios.get('/download-inf-data/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filename).then(res => {
 
     fetch(res.data).then(res1 => {
         res1.text().then(res2 => {

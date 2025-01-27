@@ -57,7 +57,7 @@ const fileHandler = (filesArg) => {
 
             } else {
                 setFiles(filesLocal);
-                document.getElementById("files-show").appendChild(document.createTextNode("Files to validate and upload (you will be email notified when files are validated or failed for successfully submitted files):"));
+                document.getElementById("files-show").appendChild(document.createTextNode("Files to validate and upload:"));
 
                 var ulElem = document.createElement("UL");
                 for (const f of filesLocal) {
@@ -89,12 +89,24 @@ const fileHandler = (filesArg) => {
                     "Content-Type": "text/csv", 
                 }
             }
-            const output = axios.post('/file-upload-api/'+'6488bd0c3715468fae3837bdd6e89199'+ '/' + filenameConstructed).then(res => {
+            const output = axios.post('/file-upload-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res => {
                 // Fun fact! If the file object is null or undefined, the Content-Type header gets auto-dropped by the browser.
                 // GCS signed URLs require the headers to match the ones used at URL generation time.
                 axios.put(res.data, file, config).then(res1 => {
-                    document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed;
-                    document.getElementById("button_content").innerHTML = "Submit Files";
+                    document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Validating " + file.name + " as " + filenameConstructed;
+                    document.getElementById("button_content").innerHTML = "Validating...";
+
+                    axios.post('/file-validate-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res2 => {
+                        document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>Submitted: " + file.name + " as " + filenameConstructed + " with output:";
+                        document.getElementById("json_result").textContent = JSON.stringify(res2, undefined, 2);
+
+                        document.getElementById("button_content").innerHTML = "Submit Files";
+                    }).catch(e => {
+                            document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR validating: " + file.name + " - " + e;
+                            document.getElementById("button_content").innerHTML = "Submit Files";
+
+                    });
+
                 }).catch(err => {
                 document.getElementById("result_area").innerHTML = document.getElementById("result_area").innerHTML + "<br>ERROR: " + file.name + " - " + err;
                 document.getElementById("button_content").innerHTML = "Submit Files";
@@ -166,6 +178,7 @@ const fileHandler = (filesArg) => {
                         Submit Files
                     </button>
                     <div id="result_area"> 
+                    <pre id="json_result"></pre>
                     </div>
 
                     </div>

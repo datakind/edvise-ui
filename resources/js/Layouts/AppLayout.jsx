@@ -181,9 +181,9 @@ href= {route('run-inference')}
 
 
                  
-          <li>
+          <ul>
             {renderNav(navigationAboveLine)} 
-        <hr class="h-1 my-8 bg-[#dfe4ea] border-0"></hr>
+        <hr className="h-1 my-8 bg-[#dfe4ea] border-0"></hr>
 
             {renderNav(navigationBelowLine)} 
 
@@ -241,7 +241,7 @@ href= {route('run-inference')}
 </div>
 ) : (<></>)}
 
-  </li>
+  </ul>
 
 
   {user ? (

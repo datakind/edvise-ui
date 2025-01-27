@@ -51,6 +51,7 @@ Route::middleware('auth')->get('/file-upload',
 
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{inst}/{filename}', [ApiController::class, 'fileUploadApi']);
+Route::middleware('auth')->post('/file-validate-api/{inst}/{filename}', [ApiController::class, 'fileValidateApi']);
 
 Route::middleware('auth')->get('/view-data',
     function () {

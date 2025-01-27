@@ -90,3 +90,5 @@ When deploying to dev, make sure to also check the outcome of the associated mig
 ### General Notes
 
 You can set lifecycle rules for a given GCS bucket similar to setting CORS policies. The rules have actions and conditions, whereby the actions will be taken once all the conditions are met.
+
+Postgresql does not work with certs that are volume mounted secrets in GCP, so using mysql.

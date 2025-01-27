@@ -1,34 +1,15 @@
 #!/bin/bash
-#sudo
 
-apt-get update && apt-get install -y \
-    zip \
-    curl \
-    unzip \
-    libonig-dev \
-    libzip-dev \
-    libpng-dev \
-    git && \
-    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
-
-apt-get clean && rm -rf /var/lib/apt/lists/*
-
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-echo "xxxxxxxxxxxxxx$USER"
-#chown -R $USER:$USER ./
-#chgrp -R $USER storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
-
-#composer install
-
-#php artisan optimize:clear
-#php artisan config:cache
-#php artisan route:cache
-#php artisan view:cache
-
-# Run Laravel migration (by force, since it would be a prod-environment)
-#php artisan migrate --force
+# This workaround required bc postgres enforces file permissions on the cert files.
+cp -v "$SSL_CA_PATH" "${PWD}/certs/server-ca.pem"
+cp -v "$SSL_KEY_PATH" "${PWD}/certs/client-key.pem"
+cp -v "$SSL_CERT_PATH" "${PWD}/certs/client-cert.pem"
 
 
-# curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - &&  apt-get install -y nodejs
-# npm install
-# npm run build
+chmod -R 600 "${PWD}/certs"
+
+export SSL_CA_PATH="${PWD}/certs/server-ca.pem"
+export SSL_KEY_PATH="${PWD}/certs/client-key.pem"
+export SSL_CERT_PATH="${PWD}/certs/client-cert.pem"
+
+php artisan migrate --force

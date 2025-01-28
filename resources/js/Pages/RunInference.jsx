@@ -9,10 +9,10 @@ export default function RunInference() {
         document.getElementById("result_area").innerHTML = "Creating inference run...";
         // ADD DATABRICKS WEBHOOK CALL HERE
     }
-
+    // The title in AppLayout needs to match the nav bar label.
     return (
         <AppLayout
-            title="Run Inference"
+            title="Start Prediction"
             renderHeader={() => (
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     Run Inference

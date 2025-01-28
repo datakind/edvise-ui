@@ -22,6 +22,7 @@ import {
   ChartBarIcon,
   ClipboardDocumentListIcon,
   PlusIcon,
+  PlusCircleIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
@@ -44,9 +45,17 @@ const navigationAboveLine = [
           { name: 'Model 2', href: route('dashboard') },
         ],
     },
+    {
+        name: 'Actions',
+        icon: PlusCircleIcon,
+        visibility_type: VisibilityType.PRIVATE_ONLY ,
+        children: [
+          { name: 'Upload Data', href: route('file-upload') },
+          { name: 'Start Prediction', href: route('run-inference') },
+        ],
+    },
     { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
     { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
-    { name: 'File Upload', href: route('file-upload'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
     { name: 'Data Dictionary', href: route('data-dictionary'), icon: BookOpenIcon, visibility_type: VisibilityType.BOTH},
     { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
 ];
@@ -105,6 +114,38 @@ export default function AppLayout({ title, renderHeader, children }) {
                 </a>)
                 
               ) : (
+        (item.children.some(e => e.name === title)) ? (
+            <Disclosure defaultOpen as="div">
+                  <DisclosureButton
+                    className={classNames(
+                      (item.name == title) ? 'bg-gray-50' : 'hover:bg-gray-50',
+                      'group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]',
+                    )}
+                  >
+                     <item.icon aria-hidden="true" className="size-6 shrink-0" />
+                    {item.name}
+                    <ChevronRightIcon
+                      aria-hidden="true"
+                      className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-gray-500"
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel as="ul" className="mt-1 px-2">
+                    {item.children.map((subItem) => (
+                      <li key={subItem.name}>
+                        <DisclosureButton
+                          as="a"
+                          href={subItem.href}
+                          className={classNames(
+                            (subItem.name == title) ? 'text-[#f79222]' : 'text-[#637381] hover:bg-gray-50',
+                            'block font-semibold rounded-md py-2 pl-9 pr-2 text-sm/12',
+                          )}
+                        >
+                          {subItem.name}
+                        </DisclosureButton>
+                      </li>
+                    ))}
+                  </DisclosurePanel>
+                </Disclosure>) : (
                 <Disclosure as="div">
                   <DisclosureButton
                     className={classNames(
@@ -126,8 +167,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                           as="a"
                           href={subItem.href}
                           className={classNames(
-                            (subItem.name == title) ? 'bg-gray-50' : 'hover:bg-gray-50',
-                            'block rounded-md py-2 pl-9 pr-2 text-sm/12 text-[#637381]',
+                            (subItem.name == title) ? 'text-[#f79222]' : 'text-[#637381] hover:bg-gray-50',
+                            'block font-semibold rounded-md py-2 pl-9 pr-2 text-sm/12',
                           )}
                         >
                           {subItem.name}
@@ -135,7 +176,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                       </li>
                     ))}
                   </DisclosurePanel>
-                </Disclosure>
+                </Disclosure>)
+                
               )}
             </li>) 
           ))
@@ -163,32 +205,15 @@ export default function AppLayout({ title, renderHeader, children }) {
 <header>
       <nav className="basis-2/12 bg-white shadow-md flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-96">
         <ul role="list" className="flex flex-1 flex-col gap-y-12">
-        <div className="flex h-16 shrink-0 flex-col items-center pt-12">
-        <a href={route('home')}>
-            <AppLogo  className="h-8 w-auto" />
-        </a>
-    </div>
-    {user ? (
-    <div className="flex items-center justify-center px-3">
-    <a className="flex items-center gap-2 text-gray-900 h-[50px] px-6 bg-[#f79222] rounded-md justify-center items-center gap-2 inline-flex"
-href= {route('run-inference')}
-    >
-        <PlusIcon aria-hidden="true" className="size-6 shrink-0 text-white" />
-        <div className="text-center text-white text-base font-medium font-['Helvetica Neue'] leading-normal">Predict</div>
-    </a>
-</div>
-) : (<></>)}
-
-
-                 
-          <ul>
+        <div className="flex h-16 shrink-0 flex-col items-center pt-12" key="logo">
+            <a href={route('home')}><AppLogo  className="h-8 w-auto" /></a>
+        </div>        
+        <ul>
             {renderNav(navigationAboveLine)} 
-        <hr className="h-1 my-8 bg-[#dfe4ea] border-0"></hr>
-
+            <hr className="h-1 my-8 bg-[#dfe4ea] border-0"></hr>
             {renderNav(navigationBelowLine)} 
-
 {user ? (
-    <div  className="flex items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50 hidden">
+    <div  className="flex items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50 hidden" key="profile">
 <span className="sr-only">Your profile</span>
     <Dropdown>
         <Dropdown.Trigger>

@@ -15,7 +15,6 @@ XMarkIcon,
 import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
 import classNames from 'classnames';
-import BigDangerAlert from '@/Components/BigDangerAlert';
 
 export default function FileUpload() {
 
@@ -171,7 +170,7 @@ const fileHandler = (filesArg) => {
                 </h2>
             )}
         >
-    <div className="flex flex-col" id="main_area">
+    <div className="w-full flex flex-col" id="main_area">
 {processing ? (
 <div>
     <div className="flex items-center justify-center">Validation in progress...</div>
@@ -198,7 +197,7 @@ const fileHandler = (filesArg) => {
         {(files == undefined || files.length == 0)? (<></>) : 
             (
         <ul className="flex flex-col gap-y-1 justify-stretch items-stretch font-semibold text-gray-600 w-full pr-24" id="files-show">
-        <div className="flex justify-center pb-6"><SuccessAlert className="flex" errDict={fileStatus}></SuccessAlert><DangerAlert className="flex" errDict={fileStatus}></DangerAlert></div>
+        <div className="flex justify-center pb-6"><SuccessAlert className="flex" errDict={fileStatus} mainMsg="Submission can be uploaded!"></SuccessAlert><DangerAlert className="flex" errDict={fileStatus} mainMsg="There were errors with your submission:"></DangerAlert></div>
                 {files.map((f) => (
         <li className="flex-col" key= {f.name}>
         <div className="flex justify-between w-full">

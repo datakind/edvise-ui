@@ -28,7 +28,7 @@ export default function Register() {
     }
     return (
         <AppLayout>
-            <div className="max-w-2xl mx-auto mt-12 -mb-12">
+            <div className="w-full max-w-2xl mx-auto mt-12 -mb-12">
                 <Head title="Register"/>
                   <form onSubmit={onSubmit}>
                     <div>

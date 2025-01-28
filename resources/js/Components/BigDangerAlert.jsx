@@ -3,8 +3,8 @@ import {
 XCircleIcon,
 } from '@heroicons/react/24/solid';
 
-export default function BigDangerAlert({ errDict, className }) {
-    if (errDict == undefined || Object.keys(errDict).length == 0) {
+export default function BigDangerAlert({ mainMsg, msgList, className }) {
+    if (mainMsg == undefined || mainMsg == "") {
         return null;
     }
 
@@ -36,13 +36,13 @@ export default function BigDangerAlert({ errDict, className }) {
             </svg>
           </div>
           <div className="w-full">
-            <h5 className="mb-3 text-base font-semibold text-[#BC1C21]">
-              There were 1 errors with your submission
+            <h5 className="mb-3 text-lg font-semibold text-red-900">
+              {mainMsg}
             </h5>
             <ul className="list-inside list-disc">
-              <li className="text-base leading-relaxed text-red-light">
-                Lorem Ipsum is simply dummy text of the printing
-              </li>
+        { (msgList == undefined || msgList.length == 0)? (<></>) : (msgList.map((e) => (
+          <li className="text-base leading-relaxed text-red-800" key={e}>{e}</li>
+        )))}
             </ul>
           </div>
         </div>

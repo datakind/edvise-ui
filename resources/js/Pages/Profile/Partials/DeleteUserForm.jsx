@@ -8,6 +8,7 @@ import DialogModal from '@/Components/Modals/DialogModal';
 import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+
 export default function DeleteUserForm() {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const form = useForm({
@@ -30,6 +31,7 @@ export default function DeleteUserForm() {
         setConfirmingUserDeletion(false);
         form.reset();
     }
+
     return (<ActionSection title={'Delete Account'} description={'Permanently delete your account.'}>
       <div className="max-w-xl text-sm text-gray-600">
         Once your account is deleted, all of its resources and data will be
@@ -37,7 +39,7 @@ export default function DeleteUserForm() {
         data or information that you wish to retain.
       </div>
 
-      <div className="mt-5">
+      <div className="flex items-center mt-5">
         <DangerButton onClick={confirmUserDeletion}>
           Delete Account
         </DangerButton>

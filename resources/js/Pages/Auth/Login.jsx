@@ -23,7 +23,7 @@ export default function Login({ canResetPassword, status }) {
     }
     return (
         <AppLayout>
-            <div className="max-w-2xl mx-auto mt-12 -mb-12">
+            <div className="w-full max-w-2xl mx-auto mt-12 -mb-12">
                 <Head title="login"/>
 
                 {status && (<div className="mb-4 font-medium text-sm text-green-600">

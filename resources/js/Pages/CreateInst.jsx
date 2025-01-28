@@ -45,7 +45,7 @@ export default function CreateInst() {
             )}
         >
 
-<div className="flex flex-col items-center">
+<div className="flex w-full flex-col items-center">
                             <h1 className="text-2xl font-bold pb-12">        Create New Institution </h1>
 
 

@@ -60,7 +60,7 @@ export default function DataDictionary() {
 
     return (
         <AppLayout title="Data Dictionary">
-            <div className="max-w-full mx-auto mb-12">
+            <div className="flex flex-col w-full mx-auto mb-12">
                 <div className="flex justify-end items-center mx-12 space-x-4">
                     <TableColumnSelection
                         rowsPerPage={rowsPerPage}

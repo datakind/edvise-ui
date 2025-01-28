@@ -203,7 +203,9 @@ export default function AppLayout({ title, renderHeader, children }) {
 
 <div className="bg-background flex flex-row">
 <header>
-      <nav className="basis-2/12 bg-white shadow-md flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-96">
+      <nav className="basis-2/12 bg-white shadow-md flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-full">
+        <div className="flex flex-col justify-between">
+
         <ul role="list" className="flex flex-1 flex-col gap-y-12">
         <div className="flex h-16 shrink-0 flex-col items-center pt-12" key="logo">
             <a href={route('home')}><AppLogo  className="h-8 w-auto" /></a>
@@ -268,7 +270,7 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   </ul>
 
-
+</ul>
   {user ? (
 <div className="flex pr-6 pl-6 pt-6 pb-6 items-left justify-between text-[#637381] flex-col"> 
 <div className="text-black font-semibold">{user.name}</div>
@@ -282,29 +284,18 @@ export default function AppLayout({ title, renderHeader, children }) {
 </div>
 
 )}
-
-
-
-
-</ul>
-
-
+</div>
 </nav>
 </header>
-
 <div className="basis-10/12 min-h-screen flex-col justify-between">
-<div class="h-[90%]">
-    <main className="pt-12">{children}</main>
-</div>
-<div class="h-[10%]">
-<footer className="gap-x-6 pt-6 flex justify-end pr-6">
+<main className="h-[90%] flex pt-12">{children}</main>
+<footer className="h-[10%] flex justify-center gap-x-6 pb-12 flex items-end pr-6">
     <a href={route('privacy-policy')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Privacy Policy</a>
     <a href={route('terms-of-service')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Terms of Service</a>
     <a href={route('license')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">License</a>
     <div>|</div>
     <div>&copy; 2025 Datakind</div>
 </footer>
-</div>
 
 </div>
 </div>

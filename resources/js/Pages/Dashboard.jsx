@@ -1,5 +1,9 @@
 import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
+import BigDangerAlert from '@/Components/BigDangerAlert';
+import BigSuccessAlert from '@/Components/BigSuccessAlert';
+import DangerAlert from '@/Components/DangerAlert';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 export default function Dashboard() {
     return (
@@ -13,9 +17,12 @@ export default function Dashboard() {
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    *Fellows debugging* DASHBOARD GOES HERE!!
-                    </div>
+                    DEBUGGING USE: view components:
+                                            <BigDangerAlert mainMsg="hello" msgList={["123", "234"]}></BigDangerAlert>
+                        <BigSuccessAlert mainMsg="hello" msgDetails="hellohello"></BigSuccessAlert>
+<SuccessAlert className="flex" errDict={[]} mainMsg="Submission can be uploaded!"></SuccessAlert>
+<DangerAlert className="flex" errDict={{name:"key", val:"value"}} mainMsg="There were errors with your submission:"></DangerAlert>
+
                 </div>
             </div>
         </AppLayout>

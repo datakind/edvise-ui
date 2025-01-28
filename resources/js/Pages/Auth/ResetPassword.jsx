@@ -24,6 +24,7 @@ export default function ResetPassword({ token, email }) {
     }
     return (
         <AppLayout>
+          <div className="flex">
             <div className="max-w-2xl mx-auto mt-12 -mb-12">
                 <Head title="Reset Password"/>
 
@@ -54,6 +55,7 @@ export default function ResetPassword({ token, email }) {
                       </PrimaryButton>
                     </div>
                   </form>
+            </div>
             </div>
         </AppLayout>);
 }

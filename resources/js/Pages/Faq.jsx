@@ -36,10 +36,9 @@ const FAQ = () => {
 
     return (
         <AppLayout title="FAQ">
-            <div className="max-w-6xl mx-auto my-12 px-4">
+            <div className="flex w-full mx-auto my-12 p-24">
                 <div className="prose-xl">
                     <h2 className="text-header">FAQ</h2>
-
                     {faqs.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="my-8">
                             <h2 className="text-subheader">{section.category}</h2>

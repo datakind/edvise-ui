@@ -13,7 +13,7 @@ import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
-import { set } from 'lodash';
+import ProgressBar from '@/Components/ProgressBar';
 
 export default function FileUpload() {
   // Change the state structure to handle multiple file status
@@ -179,14 +179,11 @@ export default function FileUpload() {
       <div className="w-full flex flex-col" id="main_area">
         <Steppers currentStep={currentStep} />
         {processing ? (
-          <div>
-            <div className="flex items-center justify-center">
-              Validation in progress...
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 ">
-              <div className="bg-gray-600 h-2.5 rounded-full"></div>
-            </div>
-          </div>
+          <ProgressBar
+            className="flex"
+            progressMsg="Validation in progress..."
+            amt="1/2"
+          ></ProgressBar>
         ) : (
           <div>
             <div className="flex items-center justify-center">

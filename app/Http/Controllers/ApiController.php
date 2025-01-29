@@ -59,7 +59,6 @@ class ApiController extends Controller
     public function fileUploadApi(Request $request, string $inst, string $filename)
     {
 
-        // Currently use the dev user for debugging.
         [$tok, $err] = TokenHelper::GetToken($request);
         if ($tok == "") {
             return response()->json(['error' => $err], 401);

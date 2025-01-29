@@ -19,7 +19,7 @@ export default function Dashboard() {
             <div className="py-12 w-full">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     DEBUGGING USE: view components:
-                                            <BigDangerAlert mainMsg="hello" msgList={["123", "234"]}></BigDangerAlert>
+                                            <BigDangerAlert mainMsg="hello"></BigDangerAlert>
                         <BigSuccessAlert mainMsg="hello" msgDetails="hellohello"></BigSuccessAlert>
 <SuccessAlert className="flex" errDict={[]} mainMsg="Submission can be uploaded!"></SuccessAlert>
 <DangerAlert className="flex" errDict={{name:"key", val:"value"}} mainMsg="There were errors with your submission:"></DangerAlert>

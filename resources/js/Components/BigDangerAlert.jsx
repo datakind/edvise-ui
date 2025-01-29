@@ -3,7 +3,7 @@ import {
 XCircleIcon,
 } from '@heroicons/react/24/solid';
 
-export default function BigDangerAlert({ mainMsg, msgList, className }) {
+export default function BigDangerAlert({ mainMsg, msgDict, excludeValue, className }) {
     if (mainMsg == undefined || mainMsg == "") {
         return null;
     }
@@ -40,9 +40,13 @@ export default function BigDangerAlert({ mainMsg, msgList, className }) {
               {mainMsg}
             </h5>
             <ul className="list-inside list-disc">
-        { (msgList == undefined || msgList.length == 0)? (<></>) : (msgList.map((e) => (
-          <li className="text-base leading-relaxed text-red-800" key={e}>{e}</li>
-        )))}
+         { (msgDict !== undefined  && Object.keys(msgDict).length !== 0) ? (
+          Object.entries(msgDict).map(([k,v]) => (
+            (v !== excludeValue) ? (
+          <li className="text-base leading-relaxed text-red-800" key={k}><span className="font-semibold">{k}:</span> {v}</li>
+          ) : (<></>)
+        ))
+          ) : (<></>)}
             </ul>
           </div>
         </div>

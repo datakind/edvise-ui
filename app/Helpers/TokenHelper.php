@@ -35,7 +35,7 @@ class TokenHelper
             'username' => env('BACKEND_FE_USER'),
             'password' => env('BACKEND_FE_PASSWORD'),
             'grant_type' => 'password',
-            'scope' => $request->user()->email(),
+            'scope' => $request->user()->email,
         ]);
 
         if (! $token_response->ok()) {

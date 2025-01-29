@@ -15,6 +15,7 @@ XMarkIcon,
 import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
 import classNames from 'classnames';
+import ProgressBar from '@/Components/ProgressBar';
 
 export default function FileUpload() {
 
@@ -172,12 +173,8 @@ const fileHandler = (filesArg) => {
         >
     <div className="w-full flex flex-col" id="main_area">
 {processing ? (
-<div>
-    <div className="flex items-center justify-center">Validation in progress...</div>
-    <div className="w-full bg-gray-200 rounded-full h-2.5 ">
-  <div className="bg-gray-600 h-2.5 rounded-full"></div>
-</div> 
-</div>) : 
+<ProgressBar className="flex" progressMsg="Validation in progress..." amt="1/2"></ProgressBar>
+) : 
 
 (<div>
     <div className="flex items-center justify-center">Please upload both course-level and student semester files to generate predictions.</div>

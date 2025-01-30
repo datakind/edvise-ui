@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Helpers\InstitutionHelper;
 
 // Main app entrypoint.
 
@@ -98,9 +99,26 @@ Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
 
-// Datakinder only paths. TODO: add a guard
+// The below are datakinder only paths. TODO: add a guard
 Route::middleware('auth')->post('/create-inst-api/{inst}/{filename}', [ApiController::class, 'createInstApi']);
 Route::middleware('auth')->get('/create-inst',
     function () {
         return Inertia::render('CreateInst');
     })->name('create-inst');
+Route::middleware('auth')->get('/set-inst',
+    function () {
+        return Inertia::render('SetInst');
+    })->name('set-inst');
+
+Route::middleware('auth')->post('/set-inst-api/{inst}', function (string $inst) {
+    $access_str = "";
+     if (Auth::user()->access_type != null) {
+        $access_str = Auth::user()->access_type;
+     }
+    $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
+    if($errStr != "") {
+        return response()->json(['error' => $errStr], 400);
+    }
+    return $inst;
+    });
+

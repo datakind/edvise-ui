@@ -61,6 +61,7 @@ const navigationAboveLine = [
         children: [
             { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
             { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+            { name: 'Set Institution', href: route('set-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
         ],
     },
     { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },

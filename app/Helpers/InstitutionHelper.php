@@ -24,9 +24,9 @@ class InstitutionHelper
     }
 
     // Set the institution id for Datakinders, return an error if any.
-    public static function setDatakinderInst(Request $request, string $inst)
+    public static function setDatakinderInst(string $access_type, string $inst)
     {
-        if ($request->user()->access_type != "DATAKINDER") {
+        if ($access_type != "DATAKINDER") {
             return "User must be DATAKINDER access type to set institution.";
         }
         if ($inst == "") {

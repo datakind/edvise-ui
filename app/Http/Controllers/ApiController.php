@@ -143,6 +143,17 @@ class ApiController extends Controller
         return Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions', $post_request_body);
     }
 
+   /* public function SetInstDatakinder(Request $request, string $inst)
+    {
+
+        [$inst, $instErr] = InstitutionHelper::SetDatakinderInst($request, $inst);
+
+        if ($instErr != "") {
+            return response()->json(['error' => $instErr], 400);
+        } 
+        return "";
+    }*/
+
     public function exampleFunction(Request $request)
     {
         $query = http_build_query($request->query());

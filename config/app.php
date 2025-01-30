@@ -188,6 +188,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'TokenHelper' => App\Helpers\TokenHelper::class, 
+        'InstitutionHelper' => App\Helpers\InstitutionHelper::class, 
     ])->toArray(),
 
 ];

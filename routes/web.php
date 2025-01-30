@@ -39,11 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->get('/create-inst',
-    function () {
-        return Inertia::render('CreateInst');
-    })->name('create-inst');
-
 Route::middleware('auth')->get('/file-upload',
     function () {
         return Inertia::render('FileUpload');
@@ -101,3 +96,11 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 
 Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
+
+
+// Datakinder only paths. TODO: add a guard
+Route::middleware('auth')->post('/create-inst-api/{inst}/{filename}', [ApiController::class, 'createInstApi']);
+Route::middleware('auth')->get('/create-inst',
+    function () {
+        return Inertia::render('CreateInst');
+    })->name('create-inst');

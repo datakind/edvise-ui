@@ -19,7 +19,7 @@ import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
-import LoadingDots from '@/Components/LoadingDots';
+import Spinner from '@/Components/Spinner';
 
 export default function FileUpload() {
 
@@ -27,6 +27,8 @@ export default function FileUpload() {
     const [fileStatus, setFileStatus] = useState({});
     const [files, setFiles] = useState([]);
     const [currentStep, setCurrentStep] = useState(1);
+    const [processing, setProcessing] = useState(false);
+
     const [validationResults, setValidationResults] = useState({});
 
     const steps = [
@@ -36,7 +38,7 @@ export default function FileUpload() {
     ];
 
     const renderProcessing = () => {
-        return (<LoadingDots mainMsg="Validation in progress"></LoadingDots>)
+        return (<div className="flex justify-center w-full"><Spinner mainMsg="Validation in progress"></Spinner></div>)
     }
 
  const renderValidationResults = (validationResults) => {
@@ -232,7 +234,7 @@ const renderUpload = (files, fileStatus) => {
         }
 
         setCurrentStep(2);
-
+        setProcessing(true);
         // Clear validation status
         //setValidationResults({});
         let localValidationResults = {};
@@ -286,7 +288,7 @@ const renderUpload = (files, fileStatus) => {
         });
         })).then(() => {
             setValidationResults(localValidationResults);
-            setCurrentStep(3);
+            setProcessing(false);
             return;
         });
         
@@ -326,7 +328,7 @@ const renderUpload = (files, fileStatus) => {
 
 {(currentStep == 1) ? 
 (renderUpload(files, fileStatus)) :
-    ( (currentStep == 2) ? 
+    ( (processing) ? 
             (renderProcessing()) : 
             (renderValidationResults(validationResults))
         

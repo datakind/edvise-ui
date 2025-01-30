@@ -54,16 +54,21 @@ const navigationAboveLine = [
           { name: 'Start Prediction', href: route('run-inference') },
         ],
     },
-    { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+    {
+        name: 'Admin Actions',
+        icon: Cog8ToothIcon,
+        visibility_type: VisibilityType.PRIVATE_ONLY ,
+        children: [
+            { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
+            { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+        ],
+    },
     { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
     { name: 'Data Dictionary', href: route('data-dictionary'), icon: BookOpenIcon, visibility_type: VisibilityType.BOTH},
-    { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
 ];
 
 const navigationBelowLine = [
     { name: 'FAQ', href: route('FAQ'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.BOTH },
-    { name: 'Profile', href: route('profile.edit'), icon: UsersIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
-    { name: 'Settings', href: '#', icon: Cog8ToothIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
     { name: 'Logout', href: route('logout'), icon: ArrowRightStartOnRectangleIcon, visibility_type: VisibilityType.PRIVATE_ONLY },
     { name: 'Contact Us', href: '#', icon: PhoneIcon, visibility_type: VisibilityType.PUBLIC_ONLY },
     { name: 'About', href: '#', icon: InformationCircleIcon, visibility_type: VisibilityType.PUBLIC_ONLY },
@@ -272,10 +277,14 @@ export default function AppLayout({ title, renderHeader, children }) {
 
 </ul>
   {user ? (
-<div className="flex pr-6 pl-6 pt-6 pb-6 items-left justify-between text-[#637381] flex-col"> 
+    <a href={route('profile.edit')} className="">
+        <div className="flex pr-4 pl-4 pt-6 pb-6 items-left justify-between text-[#637381] flex-col"> 
 <div className="text-black font-semibold">{user.name}</div>
 <div>{user.email}</div>
-</div>
+</div>  
+    </a>
+
+
 ) : (
   <div className="flex pr-6 pl-6 pt-6 pb-6 items-center justify-between" id="login-register">
 <a href={route('login')} className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">Login</a>

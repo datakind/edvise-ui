@@ -32,8 +32,9 @@ export default function DeleteUserForm() {
         form.reset();
     }
 
-    return (<ActionSection title={'Delete Account'} description={'Permanently delete your account.'}>
+    return (<ActionSection title={'Delete Account'} description={'Permanently delete your account. This action is not reversible.'}>
       <div className="max-w-xl text-sm text-gray-600">
+
         Once your account is deleted, all of its resources and data will be
         permanently deleted. Before deleting your account, please download any
         data or information that you wish to retain.

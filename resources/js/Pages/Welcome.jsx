@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
+import LoadingDots from '@/Components/LoadingDots';
+
 // Front page.
 
 export default function Welcome() {

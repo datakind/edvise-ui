@@ -19,6 +19,7 @@ import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
+import LoadingDots from '@/Components/LoadingDots';
 
 export default function FileUpload() {
 
@@ -27,7 +28,6 @@ export default function FileUpload() {
     const [files, setFiles] = useState([]);
     const [currentStep, setCurrentStep] = useState(1);
     const [validationResults, setValidationResults] = useState({});
-    const [progress, setProgress] = useState(0);
 
     const steps = [
         { label: 'Upload data', step: 1 },
@@ -35,9 +35,8 @@ export default function FileUpload() {
         { label: 'Save', step: 3 },
     ];
 
-    // Progress as a percentage.
-    const renderProcessingBar = (progress) => {
-        return (<ProgressBar className="flex" progressMsg="Validation in progress..." amt={progress}></ProgressBar>)
+    const renderProcessing = () => {
+        return (<LoadingDots mainMsg="Validation in progress"></LoadingDots>)
     }
 
  const renderValidationResults = (validationResults) => {
@@ -233,8 +232,6 @@ const renderUpload = (files, fileStatus) => {
         }
 
         setCurrentStep(2);
-        setProgress(5);
-        const incrProgressBy = Math.floor(1/files.length * 90);
 
         // Clear validation status
         //setValidationResults({});
@@ -259,15 +256,19 @@ const renderUpload = (files, fileStatus) => {
 
                     return axios.post('/file-validate-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res2 => {
                         localValidationResults[filenameConstructed]="ok";
-                                    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5");
-                                    setProgress(progress+incrProgressBy);
+                                    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5"+JSON.stringify(res2));
+
+//at this point getting:
+//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5{"data":"Internal Server Error","status":200,"statusText":"OK","headers":{"cache-control":"no-cache, private","connection":"close","content-type":"text/html; charset=UTF-8","date":"Thu, 30 Jan 2025 02:57:24 GMT","host":"127.0.0.1:8000","vary":"X-Inertia","x-powered-by":"PHP/8.2.26"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"headers":{"Accept":"application/json, text/plain, */*","X-Requested-With":"XMLHttpRequest","X-XSRF-TOKEN":"eyJpdiI6ImhtSlVsQ1NLZ0xBb3ZwdU9WUWRWdVE9PSIsInZhbHVlIjoieFRJRHNNKzZEZTZSdmcyTzg5SEJGNFg1bDV6bVc2djVZZ3BlVGJWb0cvNEtDZ2ltM2oyVlg5U3dnQlVPd3dLcnQ0bmhQVTJtTUhPRm0yd3Z4THpQT2RvNHJ6UWhoUm8xWWdoWTFNSnBsRHRWSnFETGFvdTNCRVI4cnRlbjRxU3AiLCJtYWMiOiIyNTNlNzBkMWQ0ZGU1YTMyZGFiNDkzNmM5MmQzNzVmYTcyNjJmN2ZmMWIwZWFiMzgwMzRjNDcwZDcwNGNlY2ExIiwidGFnIjoiIn0="},"method":"post","url":"/file-validate-api/14c81c50935e41518561c2fc3bdabc0f/1738205842885_tester1_29_v4.csv"},"request":{}}
+
+
+
                                     return;
 
                     }).catch(e => {
                                     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4" + e);
 
                             localValidationResults[filenameConstructed] = "[Validation] " + e;
-                                                                setProgress(progress+incrProgressBy);
 
                     });
 
@@ -275,19 +276,15 @@ const renderUpload = (files, fileStatus) => {
                                 console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3" + e);
 
                     localValidationResults[filenameConstructed] = "[Upload] " +e;
-                                                        setProgress(progress+incrProgressBy);
 
         });
             }).catch(e => {
                             console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
 
                 localValidationResults[filenameConstructed] = "[Upload URL retrieval] " + e;
-                                                    setProgress(progress+incrProgressBy);
 
         });
         })).then(() => {
-            setProgress(100);
-
             setValidationResults(localValidationResults);
             setCurrentStep(3);
             return;
@@ -330,7 +327,7 @@ const renderUpload = (files, fileStatus) => {
 {(currentStep == 1) ? 
 (renderUpload(files, fileStatus)) :
     ( (currentStep == 2) ? 
-            (renderProcessingBar(progress)) : 
+            (renderProcessing()) : 
             (renderValidationResults(validationResults))
         
 )

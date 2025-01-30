@@ -1,10 +1,6 @@
 import AppLayout from '@/Layouts/AppLayout';
-import BigDangerAlert from '@/Components/BigDangerAlert';
-import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import DangerAlert from '@/Components/DangerAlert';
-import SuccessAlert from '@/Components/SuccessAlert';
-import ProgressBar from '@/Components/ProgressBar';
-import HeaderLabel from '@/Components/HeaderLabel';
+import LoadingDots from '@/Components/LoadingDots';
+import Spinner from '@/Components/Spinner';
 
 import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
 import {
@@ -24,12 +20,11 @@ export default function Dashboard() {
             )}
         >
             <div className="py-12 w-full">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    DEBUGGING USE: view components:
-                                            <BigDangerAlert mainMsg="hello"></BigDangerAlert>
-                        <BigSuccessAlert mainMsg="hello" msgDetails="hellohello"></BigSuccessAlert>
-                </div>
+DASHBOARD PAGE: for now used for debugging
             </div>
+            <LoadingDots mainMsg="Validation in progress"></LoadingDots>
+                        <Spinner mainMsg="Validation in progress"></Spinner>
+
         </AppLayout>
     );
 }

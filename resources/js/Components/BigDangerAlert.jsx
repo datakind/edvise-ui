@@ -2,14 +2,17 @@ import React from 'react';
 import {
 XCircleIcon,
 } from '@heroicons/react/24/solid';
+import classNames from 'classnames';
 
 export default function BigDangerAlert({ mainMsg, msgDict, excludeValue, className }) {
     if (mainMsg == undefined || mainMsg == "") {
         return null;
     }
 
-    return (<div className={className}>
-      <div className="flex w-full rounded-lg border-l-[6px] border-red bg-red-50 px-7 py-8 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)] md:p-9">
+    return (
+      <div className={classNames(className,
+                            "flex w-full rounded-lg border-l-[6px] border-red bg-red-50 px-7 py-8 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)] md:p-9",
+                          )}>
           <div className="mr-5 flex h-[34px] w-full max-w-[34px] items-center justify-center rounded-lg bg-red">
             <svg
               width="18"
@@ -35,7 +38,7 @@ export default function BigDangerAlert({ mainMsg, msgDict, excludeValue, classNa
               </defs>
             </svg>
           </div>
-          <div className="w-full">
+          <div className="flex w-full flex-col h-fit">
             <h5 className="mb-3 text-lg font-semibold text-red-900">
               {mainMsg}
             </h5>
@@ -49,8 +52,6 @@ export default function BigDangerAlert({ mainMsg, msgDict, excludeValue, classNa
           ) : (<></>)}
             </ul>
           </div>
-        </div>
-
-    </div>);
+        </div>);
 }
 

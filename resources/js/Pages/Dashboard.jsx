@@ -28,11 +28,6 @@ export default function Dashboard() {
                     DEBUGGING USE: view components:
                                             <BigDangerAlert mainMsg="hello"></BigDangerAlert>
                         <BigSuccessAlert mainMsg="hello" msgDetails="hellohello"></BigSuccessAlert>
-<SuccessAlert className="flex" errDict={[]} mainMsg="Submission can be uploaded!"></SuccessAlert>
-<DangerAlert className="flex" errDict={{name:"key", val:"value"}} mainMsg="There were errors with your submission:"></DangerAlert>
-<HeaderLabel className="flex" iconObj={<PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />} majorTitle="Actions" minorTitle="Upload Data"></HeaderLabel>
-
-<ProgressBar className="flex" progressMsg="Validation in progress..." amt="50"></ProgressBar>
                 </div>
             </div>
         </AppLayout>

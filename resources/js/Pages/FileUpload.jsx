@@ -29,6 +29,12 @@ export default function FileUpload() {
     const [validationResults, setValidationResults] = useState({});
     const [progress, setProgress] = useState(0);
 
+    const steps = [
+        { label: 'Upload data', step: 1 },
+        { label: 'Data validation', step: 2 },
+        { label: 'Save', step: 3 },
+    ];
+
     // Progress as a percentage.
     const renderProcessingBar = (progress) => {
         return (<ProgressBar className="flex" progressMsg="Validation in progress..." amt={progress}></ProgressBar>)
@@ -319,7 +325,7 @@ const renderUpload = (files, fileStatus) => {
         >
     <div className="w-full flex flex-col" id="main_area">
     <HeaderLabel className="pl-12" iconObj={<PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />} majorTitle="Actions" minorTitle="Upload Data"></HeaderLabel>
-        <Steppers currentStep={currentStep} />
+        <Steppers currentStep={currentStep} stepsDict={steps} className="pt-32 pb-12" />
 
 {(currentStep == 1) ? 
 (renderUpload(files, fileStatus)) :

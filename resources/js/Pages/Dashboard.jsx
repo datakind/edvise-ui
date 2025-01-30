@@ -1,12 +1,19 @@
-import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
 import ProgressBar from '@/Components/ProgressBar';
+import HeaderLabel from '@/Components/HeaderLabel';
+
+import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
+import {
+  PlusCircleIcon,
+} from '@heroicons/react/24/outline';
 
 export default function Dashboard() {
+
+
     return (
         <AppLayout
             title="Dashboard"
@@ -23,7 +30,9 @@ export default function Dashboard() {
                         <BigSuccessAlert mainMsg="hello" msgDetails="hellohello"></BigSuccessAlert>
 <SuccessAlert className="flex" errDict={[]} mainMsg="Submission can be uploaded!"></SuccessAlert>
 <DangerAlert className="flex" errDict={{name:"key", val:"value"}} mainMsg="There were errors with your submission:"></DangerAlert>
-<ProgressBar className="flex" progressMsg="Validation in progress..." amt="1/2"></ProgressBar>
+<HeaderLabel className="flex" iconObj={<PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />} majorTitle="Actions" minorTitle="Upload Data"></HeaderLabel>
+
+<ProgressBar className="flex" progressMsg="Validation in progress..." amt="50"></ProgressBar>
                 </div>
             </div>
         </AppLayout>

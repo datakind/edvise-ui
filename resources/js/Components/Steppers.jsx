@@ -8,7 +8,7 @@ const Steppers = ({ currentStep }) => {
     ];
 
     return (
-        <div className="flex justify-center pt-24 pb-24">
+        <div className="flex justify-center pt-32 pb-24">
             {steps.map((step, index) => (
                 <div key={step.step} className="flex flex-col items-center mx-12 relative">
                     <div

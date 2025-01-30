@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
+import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
@@ -8,6 +9,7 @@ import {
   DocumentIcon,
   CheckIcon,
   XMarkIcon,
+  PlusCircleIcon,
 } from '@heroicons/react/24/outline';
 import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
@@ -16,6 +18,7 @@ import classNames from 'classnames';
 import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import BigDangerAlert from '@/Components/BigDangerAlert';
+import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function FileUpload() {
 
@@ -24,17 +27,11 @@ export default function FileUpload() {
     const [files, setFiles] = useState([]);
     const [currentStep, setCurrentStep] = useState(1);
     const [validationResults, setValidationResults] = useState({});
-    const [prevProgress, setPrevProgress] = useState(0);
     const [progress, setProgress] = useState(0);
 
-
     // Progress as a percentage.
-    const renderProcessingBar = (progress, prevProgress) => {
-      if (progress !== prevProgress) {
-        setPrevProgress(progress);
-      }
-            return (<ProgressBar className="flex" progressMsg="Validation in progress......" amt={progress}></ProgressBar>)
-       
+    const renderProcessingBar = (progress) => {
+        return (<ProgressBar className="flex" progressMsg="Validation in progress..." amt={progress}></ProgressBar>)
     }
 
  const renderValidationResults = (validationResults) => {
@@ -43,20 +40,44 @@ export default function FileUpload() {
 }
 if (Object.values(validationResults).find((element) => element !== "ok")) {
     return (<div className="flex flex-col pr-24 pl-24"><BigDangerAlert mainMsg="[ERROR] The following files must be re-uploaded" msgDict={validationResults} excludeValue="ok"></BigDangerAlert>
-        <div className="flex justify-end items-end pt-48">
-        <button id="button_content" onClick={createBatch} disabled={true} className="opacity-50 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">Next</button>
+            <div className="flex flex-row justify-between w-full items-end pt-48">
+        <Link
+            href={route('file-upload')}
+            as="button"
+            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">
+             Back
+        </Link>
+
+        <Link
+            href={route('file-upload')}
+            as="button"
+            disabled={true} className="opacity-50 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">
+             Next
+        </Link>
     </div></div>)
 }
-    return (<div className="flex flex-col pr-24 pl-24"><BigSuccessAlert mainMsg="OK" msgDetails="hellohello"></BigSuccessAlert>
-            <div className="flex justify-end items-end pt-48">
-        <button id="button_content" onClick={createBatch} className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">Next</button>
+    return (<div className="flex flex-col pr-24 pl-24"><BigSuccessAlert mainMsg="Data validation successful!" msgDetails="Your data has been successfully validated. You can now proceed to name the folder and confirm the upload."></BigSuccessAlert>
+            <div className="flex flex-row justify-between w-full items-end pt-48">
+        <Link
+            href={route('file-upload')}
+            as="button"
+            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">
+             Back
+        </Link>
+
+        <Link
+            href={route('file-upload')}
+            as="button"
+            className="opacity-100 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4">
+             Next
+        </Link>
     </div> </div>)
 
 }
 
  function validationButtonDisable(disabled) {
     return (
-    <div className="flex w-full justify-end items-end pr-24">
+    <div className="flex w-full justify-end items-end">
         <button id="button_content" onClick={triggerUpload} 
         disabled={disabled} 
         className={classNames(disabled ? 'opacity-50' : 'opacity-100', 'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4')}>Run Validation</button>
@@ -85,12 +106,12 @@ const renderUpload = (files, fileStatus) => {
             </div>
         </label>
     </div> 
-    <div className="flex py-12 w-full mx-auto pl-24">
+    <div className="flex py-12 w-full mx-auto pl-24 pr-24">
 
         {( files == undefined || files.length == 0)? (
             validationButtonDisable(true) ) : 
             (
-        <ul className="flex flex-col gap-y-1 justify-stretch items-stretch font-semibold text-gray-600 w-full pr-24" id="files-show">
+        <ul className="flex flex-col gap-y-1 justify-stretch items-stretch font-semibold text-gray-600 w-full" id="files-show">
         <div className="flex justify-center pb-6"><SuccessAlert className="flex" errDict={fileStatus} mainMsg="Submission can be uploaded!"></SuccessAlert><DangerAlert className="flex" errDict={fileStatus} mainMsg="There were errors with your submission:"></DangerAlert></div>
                 {files.map((f, idx) => (
         <li className="flex-col" key={f.name+idx}>
@@ -206,7 +227,8 @@ const renderUpload = (files, fileStatus) => {
         }
 
         setCurrentStep(2);
-        // use files.length to get a good interval for progress bar progression
+        setProgress(5);
+        const incrProgressBy = Math.floor(1/files.length * 90);
 
         // Clear validation status
         //setValidationResults({});
@@ -217,9 +239,10 @@ const renderUpload = (files, fileStatus) => {
                 "Content-Type": "text/csv", 
             }
         }
-
         Promise.allSettled(files.map((file) => {
             var filenameConstructed = Date.now() + '_' + file.name;
+
+
             return axios.post('/file-upload-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res => {
                             console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*"+JSON.stringify(res));
 
@@ -231,25 +254,34 @@ const renderUpload = (files, fileStatus) => {
                     return axios.post('/file-validate-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res2 => {
                         localValidationResults[filenameConstructed]="ok";
                                     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5");
+                                    setProgress(progress+incrProgressBy);
                                     return;
 
                     }).catch(e => {
                                     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4" + e);
 
                             localValidationResults[filenameConstructed] = "[Validation] " + e;
+                                                                setProgress(progress+incrProgressBy);
+
                     });
 
                 }).catch(e => {
                                 console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3" + e);
 
                     localValidationResults[filenameConstructed] = "[Upload] " +e;
+                                                        setProgress(progress+incrProgressBy);
+
         });
             }).catch(e => {
                             console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
 
                 localValidationResults[filenameConstructed] = "[Upload URL retrieval] " + e;
+                                                    setProgress(progress+incrProgressBy);
+
         });
         })).then(() => {
+            setProgress(100);
+
             setValidationResults(localValidationResults);
             setCurrentStep(3);
             return;
@@ -286,12 +318,13 @@ const renderUpload = (files, fileStatus) => {
             )}
         >
     <div className="w-full flex flex-col" id="main_area">
+    <HeaderLabel className="pl-12" iconObj={<PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />} majorTitle="Actions" minorTitle="Upload Data"></HeaderLabel>
         <Steppers currentStep={currentStep} />
 
 {(currentStep == 1) ? 
 (renderUpload(files, fileStatus)) :
     ( (currentStep == 2) ? 
-            (renderProcessingBar("1/2", prevProgress)) : 
+            (renderProcessingBar(progress)) : 
             (renderValidationResults(validationResults))
         
 )

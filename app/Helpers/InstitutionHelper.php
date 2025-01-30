@@ -14,8 +14,8 @@ class InstitutionHelper
             return [$request->user()->inst_id, ""];
         }
         if ($request->user()->access_type == "DATAKINDER") {
-            if ($request->session()->has('datakinder_inst_id') && session(['datakinder_inst_id']) != "") {
-                return [$request->session()->get('datakinder_inst_id'), ""];
+            if (session()->has('datakinder_inst_id') && session('datakinder_inst_id') != "") {
+                return [session()->get('datakinder_inst_id'), ""];
             }
             // Datakinder with no institution has to set their institution otherwise we will return an error
             return ["", "Datakinder must set an institution to proceed."];

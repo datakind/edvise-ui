@@ -2,41 +2,32 @@ import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
-import {
-  DocumentDuplicateIcon,
-  TrashIcon,
-  DocumentIcon,
-  CheckIcon,
-  XMarkIcon,
-  PlusCircleIcon,
-} from '@heroicons/react/24/outline';
-import DangerAlert from '@/Components/DangerAlert';
-import SuccessAlert from '@/Components/SuccessAlert';
-import Steppers from '@/Components/Steppers';
-import classNames from 'classnames';
-import ProgressBar from '@/Components/ProgressBar';
-import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import BigDangerAlert from '@/Components/BigDangerAlert';
-import HeaderLabel from '@/Components/HeaderLabel';
-import Spinner from '@/Components/Spinner';
 
 export default function AddDatakinders() {
   const handleSubmit = event => {
     event.preventDefault();
-    let inst = event.target.elements.instid.value;
-    if (inst == undefined) {
+    let usrs = [];
+    if (event.target.elements.user.value == undefined || event.target.elements.user.value == "") {
       document.getElementById('result_area').innerHTML =
         'Error: field is empty';
+        return;
     }
-    document.getElementById('result_area').innerHTML =
-      'Placeholder. This page does not currently do anything.';
-
-    /*return axios.post('/set-inst-api/'+inst).then(res => {
+    usrs.push(event.target.elements.user.value);
+    return axios({
+      method: 'post',
+      url: '/add-dk-api',
+      data: {
+        emails: usrs,
+      },
+    }).then(res => {
         document.getElementById("result_area").innerHTML = "Done";
     }).catch(e => {
-        document.getElementById("result_area").innerHTML = e;
-});*/
+        if( e.response ){
+            document.getElementById("result_area").innerHTML = "Error " + JSON.stringify(e.response.data.error); 
+          } else {
+            document.getElementById("result_area").innerHTML =  JSON.stringify(e) ;
+          }
+});
   };
   // The title in AppLayout needs to match the nav bar label.
   return (
@@ -64,7 +55,7 @@ export default function AddDatakinders() {
                   User email
                 </label>
                 <input
-                  name="user-0"
+                  name="user"
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="email"
                   placeholder="j.smith@datakind.org"

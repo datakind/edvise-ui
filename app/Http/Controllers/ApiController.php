@@ -190,6 +190,7 @@ class ApiController extends Controller
         }
         return $resp;
     }
+
     public function addDatakinderApi(Request $request)
     {
         [$tok, $tokErr] = TokenHelper::GetToken($request);
@@ -200,8 +201,8 @@ class ApiController extends Controller
         if ($request->user()->access_type != "DATAKINDER") {
             return response()->json(['error' => 'Only Datakinders can add other Datakinders'], 401);
         }
-
-        if ($request->input('emails') == null || sizeof($request->input('emails')) == 0) {
+        $emails_list = $request->input('emails');
+        if ( $emails_list == null || sizeof($emails_list) == 0) {
             return response()->json(['error' => 'At least one email required.'], 400);
         }
 
@@ -210,11 +211,8 @@ class ApiController extends Controller
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $post_request_body = [
-            'emails' => $request->input('emails'),
-        ];
 
-        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/datakinders', $post_request_body);
+        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/datakinders', $emails_list);
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
@@ -222,6 +220,46 @@ class ApiController extends Controller
                 return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
             }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+        }
+        return $resp;
+    }
+
+    public function createBatch(Request $request, string $filename)
+    {
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        [$tok, $tokErr] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $tokErr], 401);
+        }
+        if ($inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        $headers = [
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ];
+        $post_request_body = [
+            'name' => $request->input('name'),
+
+        ];
+         if ($request->input('description') != null && $request->input('description') != "") 
+            {$post_request_body['description'] = $request->input('description');}
+        if ($request->input('batch_disabled') != null) 
+            {$post_request_body['batch_disabled'] = $request->input('batch_disabled');}
+        if ($request->input('file_ids') != null) 
+            {$post_request_body['file_ids'] = $request->input('file_ids');}
+        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions/'.$inst.'/batch', $post_request_body);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
         }
         return $resp;
     }

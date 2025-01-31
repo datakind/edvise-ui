@@ -48,6 +48,7 @@ Route::middleware('auth')->get('/file-upload',
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
+Route::middleware('auth')->post('/create-batch', [ApiController::class, 'createBatch']);
 
 Route::middleware('auth')->get('/view-data',
     function () {
@@ -101,6 +102,7 @@ Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback'
 
 // The below are datakinder only paths. TODO: add a guard
 Route::middleware('auth')->post('/create-inst-api', [ApiController::class, 'createInstApi']);
+Route::middleware('auth')->post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
 Route::middleware('auth')->get('/create-inst',
     function () {
         return Inertia::render('CreateInst');

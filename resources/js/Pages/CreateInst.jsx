@@ -31,14 +31,10 @@ export default function CreateInst() {
 
 const handleSubmit = (event) => {
   event.preventDefault();
-let schemas = [];
 let pdp = false;
 if (event.target.elements.description.value == "PDP") {
   pdp = true;
 }
-
-        console.log("xxxxxxxxxxxxxxxxxxxx0");
-
   return axios({
   method: 'post',
   url: '/create-inst-api',
@@ -46,16 +42,12 @@ if (event.target.elements.description.value == "PDP") {
     name: event.target.elements.inst_name.value,
     description: event.target.elements.description.value,
     state: event.target.elements.state.value,
-    allowed_schemas: [],
-    allowed_emails: "",
     is_pdp: pdp,
-    retention_days: "",
   }
 }).then(res => {
       document.getElementById("result_area").innerHTML = Done;
-
       }).catch(e => {
-          document.getElementById("result_area").innerHTML = "There was an error.";
+      document.getElementById("result_area").innerHTML = "There was an error.";
   });
 }
 

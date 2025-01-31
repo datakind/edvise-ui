@@ -31,11 +31,14 @@ export default function CreateInst() {
 
 const handleSubmit = (event) => {
   event.preventDefault();
-schemas = [];
-pdp = false;
+let schemas = [];
+let pdp = false;
 if (event.target.elements.description.value == "PDP") {
   pdp = true;
 }
+
+        console.log("xxxxxxxxxxxxxxxxxxxx0");
+
   return axios({
   method: 'post',
   url: '/create-inst-api',
@@ -49,10 +52,10 @@ if (event.target.elements.description.value == "PDP") {
     retention_days: "",
   }
 }).then(res => {
-              document.getElementById("result_area").innerHTML = submitted;
+      document.getElementById("result_area").innerHTML = Done;
 
       }).catch(e => {
-          document.getElementById("result_area").innerHTML = {e};
+          document.getElementById("result_area").innerHTML = "There was an error.";
   });
 }
 
@@ -105,7 +108,19 @@ if (event.target.elements.description.value == "PDP") {
       </div>
     </div>
       </div>
-  
+  <div className="flex -mx-3 mb-6">
+  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="state">
+        State
+      </label>
+      <div className="relative">
+        <select name="state" className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+          <option>NY</option>
+          <option>CA</option>
+        </select>
+      </div>
+    </div>
+      </div>
 <div id="mult_users" className="flex flex-col gap-x-3">
 
   <div id="add_one_user" className="flex -mx-3 mb-2">

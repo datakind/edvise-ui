@@ -62,6 +62,7 @@ const navigationAboveLine = [
             { name: 'Create Institution', href: route('create-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY }, // TODO flip this to DATAKIND_ONLY after dev
             { name: 'View Data', href: route('view-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
             { name: 'Set Institution', href: route('set-inst'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
+            { name: 'Add Datakinders', href: route('add-dk'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
         ],
     },
     { name: 'Download Data', href: route('download-data'), icon: DocumentDuplicateIcon ,visibility_type: VisibilityType.PRIVATE_ONLY },
@@ -81,7 +82,7 @@ export default function AppLayout({ title, renderHeader, children }) {
     
     const { auth, jetstream } = useTypedPage().props;
     const user = auth.user;
-    const userIsDatakinder = auth.user ? auth.user.access == "DATAKINDER" : false;
+    const userIsDatakinder = auth.user ? auth.user.access_type == "DATAKINDER" : false;
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {

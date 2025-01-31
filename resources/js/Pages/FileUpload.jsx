@@ -246,45 +246,23 @@ const renderUpload = (files, fileStatus) => {
         }
         Promise.allSettled(files.map((file) => {
             var filenameConstructed = Date.now() + '_' + file.name;
-
-
-            return axios.post('/file-upload-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res => {
-                            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*"+JSON.stringify(res));
-
+            return axios.post('/file-upload-api/'+ filenameConstructed).then(res => {
                 // Fun fact! If the file object is null or undefined, the Content-Type header gets auto-dropped by the browser.
                 // GCS signed URLs require the headers to match the ones used at URL generation time.
                 return axios.put(res.data, file, config).then(res1 => {
-                                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa6");
-
-                    return axios.post('/file-validate-api/'+'14c81c50935e41518561c2fc3bdabc0f'+ '/' + filenameConstructed).then(res2 => {
+                    return axios.post('/file-validate-api/' + filenameConstructed).then(res2 => {
                         localValidationResults[filenameConstructed]="ok";
-                                    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5"+JSON.stringify(res2));
-
-//at this point getting:
-//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5{"data":"Internal Server Error","status":200,"statusText":"OK","headers":{"cache-control":"no-cache, private","connection":"close","content-type":"text/html; charset=UTF-8","date":"Thu, 30 Jan 2025 02:57:24 GMT","host":"127.0.0.1:8000","vary":"X-Inertia","x-powered-by":"PHP/8.2.26"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"headers":{"Accept":"application/json, text/plain, */*","X-Requested-With":"XMLHttpRequest","X-XSRF-TOKEN":"eyJpdiI6ImhtSlVsQ1NLZ0xBb3ZwdU9WUWRWdVE9PSIsInZhbHVlIjoieFRJRHNNKzZEZTZSdmcyTzg5SEJGNFg1bDV6bVc2djVZZ3BlVGJWb0cvNEtDZ2ltM2oyVlg5U3dnQlVPd3dLcnQ0bmhQVTJtTUhPRm0yd3Z4THpQT2RvNHJ6UWhoUm8xWWdoWTFNSnBsRHRWSnFETGFvdTNCRVI4cnRlbjRxU3AiLCJtYWMiOiIyNTNlNzBkMWQ0ZGU1YTMyZGFiNDkzNmM5MmQzNzVmYTcyNjJmN2ZmMWIwZWFiMzgwMzRjNDcwZDcwNGNlY2ExIiwidGFnIjoiIn0="},"method":"post","url":"/file-validate-api/14c81c50935e41518561c2fc3bdabc0f/1738205842885_tester1_29_v4.csv"},"request":{}}
-
-
-
                                     return;
-
                     }).catch(e => {
-                                    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa4" + e);
-
                             localValidationResults[filenameConstructed] = "[Validation] " + e;
-
                     });
 
                 }).catch(e => {
-                                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3" + e);
-
                     localValidationResults[filenameConstructed] = "[Upload] " +e;
 
         });
             }).catch(e => {
-                            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
-
                 localValidationResults[filenameConstructed] = "[Upload URL retrieval] " + e;
-
         });
         })).then(() => {
             setValidationResults(localValidationResults);

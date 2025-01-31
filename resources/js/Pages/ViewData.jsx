@@ -1,13 +1,14 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
+import useTypedPage from '@/Hooks/useTypedPage';
 
 // Skeleton for the view data page.
 export default function ViewData() {
 const [resultList, setResultList] = useState([]);
 const [error, setError] = useState(null);
     useEffect(() => {
-       axios.get('/view-input-data/'+'14c81c50935e41518561c2fc3bdabc0f').then(res => {
+       axios.get('/view-input-data').then(res => {
                 setResultList(res.data);
             }).catch(err => {
             setError(err);

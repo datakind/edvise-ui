@@ -19,11 +19,10 @@ export default function Dashboard() {
                 </h2>
             )}
         >
-            <div className="py-12 w-full">
-DASHBOARD PAGE: for now used for debugging
+            <div className="py-12 w-full font-bold text-xl">
+TO TEST THE VALIDATION AND UPLOAD FLOW: please login using username: tester-frontend@datakind.org and password: "password" with no quotes.
+Then, go to Set Institution and follow the instructions there for the dev bucket and hit submit -- after that you will be able to upload to the dev bucket.
             </div>
-            <LoadingDots mainMsg="Validation in progress"></LoadingDots>
-                        <Spinner mainMsg="Validation in progress"></Spinner>
 
         </AppLayout>
     );

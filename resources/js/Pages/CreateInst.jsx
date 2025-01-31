@@ -13,26 +13,48 @@ export default function CreateInst() {
         const multUsers = document.getElementById('mult_users');
         const newId = "placeholder";
         multUsers.innerHTML = multUsers.innerHTML + 
-        '<div class="flex id="'+newId+'" -mx-3 mb-2">'
-    +'<div class="w-1/2 px-3 mb-6">'
-      +'<label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="'+newId+'-access">Access Type</label>'
-      +'<div class="relative">'
-        +'<select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="'+newId+'-access">'
+        '<div className="flex id="'+newId+'" -mx-3 mb-2">'
+    +'<div className="w-1/2 px-3 mb-6">'
+      +'<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="'+newId+'-access">Access Type</label>'
+      +'<div className="relative">'
+        +'<select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="'+newId+'-access">'
           +'<option>Institution Researcher</option>'
         +'</select>'
       +'</div>'
     +'</div>'
-    +'<div class="w-1/2 px-3 mb-6">'
-      +'<label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="'+newId+'-email">User email</label>'
-      +'<input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="'+newId+'-email" type="email" placeholder="j.smith@inst1.edu"></input>'
+    +'<div className="w-1/2 px-3 mb-6">'
+      +'<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="'+newId+'-email">User email</label>'
+      +'<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="'+newId+'-email" type="email" placeholder="j.smith@inst1.edu"></input>'
     +'</div>'
   +'</div>';
     }
 
-    const submitForm = () => {
-        // TODO populate
-        const multUsers = document.getElementById('mult_users').getElementsByTagName('div');
-    }
+const handleSubmit = (event) => {
+  event.preventDefault();
+schemas = [];
+pdp = false;
+if (event.target.elements.description.value == "PDP") {
+  pdp = true;
+}
+  return axios({
+  method: 'post',
+  url: '/create-inst-api',
+  data: {
+    name: event.target.elements.inst_name.value,
+    description: event.target.elements.description.value,
+    state: event.target.elements.state.value,
+    allowed_schemas: [],
+    allowed_emails: "",
+    is_pdp: pdp,
+    retention_days: "",
+  }
+}).then(res => {
+              document.getElementById("result_area").innerHTML = submitted;
+
+      }).catch(e => {
+          document.getElementById("result_area").innerHTML = {e};
+  });
+}
 
 // TODO check if the user is a datakinder, otherwise show an error page.
     return (
@@ -46,38 +68,37 @@ export default function CreateInst() {
         >
 
 <div className="flex w-full flex-col items-center">
-                            <h1 className="text-2xl font-bold pb-12">        Create New Institution </h1>
+<h1 className="text-2xl font-bold pb-12">Create New Institution </h1>
 
-
-<form class="w-full max-w-full pl-36 pr-36">
+<form className="w-full max-w-full pl-36 pr-36" onSubmit={handleSubmit}>
 
 <div id="form_contents" className="flex flex-col">
 
-  <div class="flex -mx-3 mb-6 justify-center">
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+  <div className="flex -mx-3 mb-6 justify-center">
+    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="inst_name">
         Institution Name
       </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="College/University Name"></input>
-      <p class="text-red-500 text-xs italic">Required field.</p>
+      <input name="inst_name" className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" type="text" placeholder="College/University Name"></input>
+      <p className="text-red-500 text-xs italic">Required field.</p>
     </div>
   </div>
-  <div class="flex -mx-3 mb-6">
-    <div class="w-full px-3">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+  <div className="flex -mx-3 mb-6">
+    <div className="w-full px-3">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="description">
         Description
       </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="text"></input>
-      <p class="text-gray-600 text-xs italic">Optionally add a description of the institution.</p>
+      <input name="description" className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text"></input>
+      <p className="text-gray-600 text-xs italic">Optionally add a description of the institution.</p>
     </div>
   </div>
-<div class="flex -mx-3 mb-6">
-  <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+<div className="flex -mx-3 mb-6">
+  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="file_type">
         Expected File Types
       </label>
-      <div class="relative">
-        <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+      <div className="relative">
+        <select name="type" className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
           <option>PDP</option>
           <option>Custom</option>
         </select>
@@ -85,40 +106,36 @@ export default function CreateInst() {
     </div>
       </div>
   
-
-
-
 <div id="mult_users" className="flex flex-col gap-x-3">
 
-  <div id="add_one_user" class="flex -mx-3 mb-2">
-    <div class="w-1/2 px-3 mb-6">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="0-access">
+  <div id="add_one_user" className="flex -mx-3 mb-2">
+    <div className="w-1/2 px-3 mb-6">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="0-access">
         Access Type
       </label>
-      <div class="relative">
-        <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="0-access">
+      <div className="relative">
+        <select name="user_type-0" className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
           <option>Institution Researcher</option>
         </select>
       </div>
     </div>
-    <div class="w-1/2 px-3 mb-6">
-      <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="0-email">
+    <div className="w-1/2 px-3 mb-6">
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" id="0-email">
         User email
       </label>
-      <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="0-email" type="email" placeholder="j.smith@inst1.edu"></input>
+      <input name="user-0" className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="email" placeholder="j.smith@inst1.edu"></input>
     </div>
   
   </div>
-
-
-
 </div>
 </div>
+
+
+      <button id="button_add_field" className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3" onClick={addField}>Add Another Email</button> 
+
+      <button type="submit" className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3">Submit</button>
 </form>
-
-      <button id="button_add_field" className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3" onClick={addField}>Add Another Email</button> 
-
-      <button id="button_submit" className="bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3" onClick={submitForm}>Submit</button>
+<div id="result_area" className="flex pb-24"></div>
 
 </div>
         </AppLayout>

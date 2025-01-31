@@ -46,15 +46,15 @@ Route::middleware('auth')->get('/file-upload',
     })->name('file-upload');
 
 // difficult to get params working with named routes
-Route::middleware('auth')->post('/file-upload-api/{inst}/{filename}', [ApiController::class, 'fileUploadApi']);
-Route::middleware('auth')->post('/file-validate-api/{inst}/{filename}', [ApiController::class, 'fileValidateApi']);
+Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
+Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
 
 Route::middleware('auth')->get('/view-data',
     function () {
         return Inertia::render('ViewData');
     })->name('view-data');
 
-Route::middleware('auth')->get('/view-input-data/{inst}', [ApiController::class, 'viewInputData']);
+Route::middleware('auth')->get('/view-input-data', [ApiController::class, 'viewInputData']);
 
 
 Route::middleware('auth')->get('/run-inference',
@@ -67,7 +67,7 @@ Route::middleware('auth')->get('/download-data',
         return Inertia::render('DownloadInfData');
     })->name('download-data');
 
-Route::middleware('auth')->get('/download-inf-data/{inst}/{filename}', [ApiController::class, 'downloadInfData']);
+Route::middleware('auth')->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData']);
 
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
@@ -100,7 +100,7 @@ Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback'
 
 
 // The below are datakinder only paths. TODO: add a guard
-Route::middleware('auth')->post('/create-inst-api/{inst}/{filename}', [ApiController::class, 'createInstApi']);
+Route::middleware('auth')->post('/create-inst-api', [ApiController::class, 'createInstApi']);
 Route::middleware('auth')->get('/create-inst',
     function () {
         return Inertia::render('CreateInst');
@@ -109,7 +109,10 @@ Route::middleware('auth')->get('/set-inst',
     function () {
         return Inertia::render('SetInst');
     })->name('set-inst');
-
+Route::middleware('auth')->get('/add-dk',
+    function () {
+        return Inertia::render('AddDatakinders');
+    })->name('add-dk');
 Route::middleware('auth')->post('/set-inst-api/{inst}', function (string $inst) {
     $access_str = "";
      if (Auth::user()->access_type != null) {

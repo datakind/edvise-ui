@@ -2,7 +2,6 @@ import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import {
   DocumentDuplicateIcon,
   TrashIcon,
@@ -15,7 +14,6 @@ import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
-import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
@@ -364,17 +362,27 @@ export default function FileUpload() {
                     return;
                   })
                   .catch(e => {
-                    localValidationResults[filenameConstructed] =
-                      '[Validation] ' + e;
+                    if( e.response ){
+                      localValidationResults[filenameConstructed] = '[Validation] ' + e.response.data.error; 
+                    } else {
+                      localValidationResults[filenameConstructed] = '[Validation] ' + JSON.stringify(e) ;
+                    }
                   });
               })
               .catch(e => {
-                localValidationResults[filenameConstructed] = '[Upload] ' + e;
+                if( e.response ){
+                  localValidationResults[filenameConstructed] = '[Upload] ' + e.response.data.error; 
+                } else {
+                  localValidationResults[filenameConstructed] = '[Upload] ' + JSON.stringify(e);
+                }
               });
           })
           .catch(e => {
-            localValidationResults[filenameConstructed] =
-              '[Upload URL retrieval] ' + e;
+            if( e.response ){
+              localValidationResults[filenameConstructed] = '[Upload URL retrieval] ' + e.response.data.error; 
+            } else {
+              localValidationResults[filenameConstructed] = '[Upload URL retrieval] ' + JSON.stringify(e) ;
+            }
           });
       }),
     ).then(() => {

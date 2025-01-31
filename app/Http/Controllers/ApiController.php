@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 use TokenHelper;
 use InstitutionHelper;
+use DatakinderHelper;
 
 //use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\RequestException;
@@ -37,7 +38,14 @@ class ApiController extends Controller
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        return Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/download_url/'.$filename);
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/download_url/'.$filename);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
+        }
+        return $resp;
     }
 
     public function viewInputData(Request $request)
@@ -57,7 +65,14 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        return Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/input_debugging');
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/input_debugging');
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
+        }
+        return $resp;
     }
 
     public function fileUploadApi(Request $request, string $filename)
@@ -78,7 +93,14 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        return Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/upload_url/'.$filename);
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/upload_url/'.$filename);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
+        }
+        return $resp;
     }
 
     public function fileValidateApi(Request $request, string $filename)
@@ -99,7 +121,14 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        return Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions/'.$inst.'/input/validate/'.$filename);
+        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions/'.$inst.'/input/validate/'.$filename);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
+        }
+        return $resp;
     }
 
     public function createInstApi(Request $request)
@@ -140,19 +169,46 @@ class ApiController extends Controller
         if ($request->input('retention_days') != null && $request->input('retention_days') != "") 
             {$post_request_body['retention_days'] = $request->input('retention_days');}
         
-        return Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions', $post_request_body);
+        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions', $post_request_body);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+        }
+        return $resp;
     }
-
-   /* public function SetInstDatakinder(Request $request, string $inst)
+    public function addDatakinderApi(Request $request)
     {
+        [$tok, $tokErr] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $tokErr], 401);
+        }
 
-        [$inst, $instErr] = InstitutionHelper::SetDatakinderInst($request, $inst);
+        if ($request->user()->access_type != "DATAKINDER") {
+            return response()->json(['error' => 'Only Datakinders can add other Datakinders'], 401);
+        }
 
-        if ($instErr != "") {
-            return response()->json(['error' => $instErr], 400);
-        } 
-        return "";
-    }*/
+        if ($request->input('emails') == null || sizeof($request->input('emails')) == 0) {
+            return response()->json(['error' => 'At least one email required.'], 400);
+        }
+
+        $headers = [
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ];
+        $post_request_body = [
+            'emails' => $request->input('emails'),
+        ];
+
+        $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/datakinders', $post_request_body);
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+        }
+        return $resp;
+    }
 
     public function exampleFunction(Request $request)
     {

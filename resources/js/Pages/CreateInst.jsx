@@ -1,6 +1,7 @@
 import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 
 export default function CreateInst() {
   const removeItem = itemId => {
@@ -42,7 +43,7 @@ export default function CreateInst() {
   const handleSubmit = event => {
     event.preventDefault();
     let pdp = false;
-    if (event.target.elements.description.value == 'PDP') {
+    if (event.target.elements.type.value == 'PDP') {
       pdp = true;
     }
     return axios({
@@ -56,11 +57,17 @@ export default function CreateInst() {
       },
     })
       .then(res => {
-        document.getElementById('result_area').innerHTML = Done;
+        document.getElementById('result_area').innerHTML = 'Done. Response: '+ JSON.stringify(res);
       })
       .catch(e => {
+        let err = "";
+        if( e.response ){
+          err = e.response.data.error; 
+        } else {
+          err = JSON.stringify(e) ;
+        }
         document.getElementById('result_area').innerHTML =
-          'There was an error.';
+          'There was an error: ' + err;
       });
   };
 

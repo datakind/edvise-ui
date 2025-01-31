@@ -3,43 +3,41 @@
 @tailwind utilities;
 
 [x-cloak] {
-    display: none;
+  display: none;
 }
 
-input[type="text"].mapboxgl-ctrl-geocoder--input[placeholder="Search"] {
-    @apply px-8;
+input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
+  @apply px-8;
 }
 
 .text-header {
-    @apply font-sans font-bold text-5xl;
+  @apply font-sans font-bold text-5xl;
 }
 
 .text-subheader {
-    @apply font-sans text-2xl leading-normal tracking-normal font-normal;
+  @apply font-sans text-2xl leading-normal tracking-normal font-normal;
 }
 
 .text-section {
-    @apply font-sans font-bold text-2xl;
+  @apply font-sans font-bold text-2xl;
 }
 
 .text-feature {
-    @apply font-serif text-lg;
+  @apply font-serif text-lg;
 }
 
 .text-body {
-    @apply font-serif text-base;
+  @apply font-serif text-base;
 }
 
 .text-navigation {
-    @apply font-sans hover:font-bold text-base hover:text-gray-500 hover:underline active:text-gray-500 active:underline;
+  @apply font-sans hover:font-bold text-base hover:text-gray-500 hover:underline active:text-gray-500 active:underline;
 }
 
 .text-detail {
-    @apply font-sans font-[600] text-base;
+  @apply font-sans font-[600] text-base;
 }
 
 a {
-    @apply text-blue-700;
+  @apply text-blue-700;
 }
-
-

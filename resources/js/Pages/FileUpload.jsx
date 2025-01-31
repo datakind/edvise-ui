@@ -18,14 +18,17 @@ import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
+import { set } from 'lodash';
 
 export default function FileUpload() {
-  // Change the state structure to handle multiple file status
+  // TODO: Change the state structure to handle multiple file status
+  // TODO: Use buttons where static onclick changes are happenings and links otherwise.
   const [fileStatus, setFileStatus] = useState({});
   const [files, setFiles] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [processing, setProcessing] = useState(false);
-
+  const [batchName, setBatchName] = useState('');
+  const [additionalFiles, setAdditionalFiles] = useState([]);
   const [validationResults, setValidationResults] = useState({});
 
   const steps = [
@@ -62,6 +65,7 @@ export default function FileUpload() {
               href={route('file-upload')}
               as="button"
               className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              onClick={() => setCurrentStep(1)}
             >
               Back
             </Link>
@@ -89,14 +93,15 @@ export default function FileUpload() {
             href={route('file-upload')}
             as="button"
             className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            onClick={() => setCurrentStep(1)}
           >
             Back
           </Link>
-
           <Link
             href={route('file-upload')}
             as="button"
             className="opacity-100 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            onClick={() => setCurrentStep(3)}
           >
             Next
           </Link>
@@ -122,6 +127,7 @@ export default function FileUpload() {
       </div>
     );
   }
+
   function validationButton(files, fileStatus) {
     if (files == undefined || fileStatus == undefined) {
       return true;
@@ -183,12 +189,12 @@ export default function FileUpload() {
                 <SuccessAlert
                   className="flex"
                   errDict={fileStatus}
-                  mainMsg="Submission can be uploaded!"
+                  mainMsg="Data upload was successful!"
                 ></SuccessAlert>
                 <DangerAlert
                   className="flex"
                   errDict={fileStatus}
-                  mainMsg="There were errors with your submission:"
+                  mainMsg="Upload failed: There were errors with your submission:"
                 ></DangerAlert>
               </div>
               {files.map((f, idx) => (
@@ -362,26 +368,32 @@ export default function FileUpload() {
                     return;
                   })
                   .catch(e => {
-                    if( e.response ){
-                      localValidationResults[filenameConstructed] = '[Validation] ' + e.response.data.error; 
+                    if (e.response) {
+                      localValidationResults[filenameConstructed] =
+                        '[Validation] ' + e.response.data.error;
                     } else {
-                      localValidationResults[filenameConstructed] = '[Validation] ' + JSON.stringify(e) ;
+                      localValidationResults[filenameConstructed] =
+                        '[Validation] ' + JSON.stringify(e);
                     }
                   });
               })
               .catch(e => {
-                if( e.response ){
-                  localValidationResults[filenameConstructed] = '[Upload] ' + e.response.data.error; 
+                if (e.response) {
+                  localValidationResults[filenameConstructed] =
+                    '[Upload] ' + e.response.data.error;
                 } else {
-                  localValidationResults[filenameConstructed] = '[Upload] ' + JSON.stringify(e);
+                  localValidationResults[filenameConstructed] =
+                    '[Upload] ' + JSON.stringify(e);
                 }
               });
           })
           .catch(e => {
-            if( e.response ){
-              localValidationResults[filenameConstructed] = '[Upload URL retrieval] ' + e.response.data.error; 
+            if (e.response) {
+              localValidationResults[filenameConstructed] =
+                '[Upload URL retrieval] ' + e.response.data.error;
             } else {
-              localValidationResults[filenameConstructed] = '[Upload URL retrieval] ' + JSON.stringify(e) ;
+              localValidationResults[filenameConstructed] =
+                '[Upload URL retrieval] ' + JSON.stringify(e);
             }
           });
       }),
@@ -390,6 +402,89 @@ export default function FileUpload() {
       setProcessing(false);
       return;
     });
+  };
+
+  const renderSaveBatch = () => {
+    steps[2].label = 'Save batch';
+    return (
+      <div className="flex flex-col px-48 pt-12">
+        <div className="mb-6">
+          <label
+            htmlFor="batchName"
+            className="block text-md font-medium text-gray-700"
+          >
+            Optional: Give your batch a meaningful name.
+          </label>
+          <input
+            type="text"
+            name="batchName"
+            id="batchName"
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
+            value={batchName}
+            onChange={e => setBatchName(e.target.value)}
+            placeholder="Batch 20241212"
+          />
+          <p className="mt-2 text-sm text-gray-500">
+            If left blank, we will give it a default name (ie. Batch_YYYYMMDD)
+          </p>
+        </div>
+        <div>
+          <label className="block text-md font-medium text-gray-700">
+            Optional: Would you like to add previously stored files to this
+            batch?
+          </label>
+          <div className="mt-1">
+            <button
+              className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4 font-medium rounded-md hover:bg-[#f79222] hover:text-white focus:ring-2 focus:ring-[#f79222]"
+              onClick={() => {
+                /* Handle adding files logic here */
+              }}
+            >
+              + Add files
+            </button>
+          </div>
+          {additionalFiles.length > 0 && (
+            <ul className="mt-4">
+              {additionalFiles.map(file => (
+                <li key={file.name} className="py-1">
+                  {file.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="flex flex-row justify-between w-full items-end pt-24">
+          <Link
+            href={route('file-upload')}
+            as="button"
+            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 -ml-24"
+            onClick={() => {
+              setCurrentStep(2);
+            }}
+          >
+            Back
+          </Link>
+          <div className="flex -mr-24">
+            <button
+              className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4"
+              onClick={() => {
+                /* Handle save logic here */
+              }}
+            >
+              Save and start prediction
+            </button>
+            <button
+              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              onClick={() => {
+                /* Handle save and prediction logic here */
+              }}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const dragOverImageChange = event => {
@@ -444,11 +539,15 @@ export default function FileUpload() {
           className="pt-32 pb-12"
         />
 
-        {currentStep == 1
+        {currentStep === 1
           ? renderUpload(files, fileStatus)
-          : processing
+          : currentStep === 2
+          ? processing
             ? renderProcessing()
-            : renderValidationResults(validationResults)}
+            : renderValidationResults(validationResults)
+          : currentStep === 3
+          ? renderSaveBatch()
+          : null}
       </div>
     </AppLayout>
   );

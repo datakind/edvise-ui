@@ -59,7 +59,7 @@ export default function SetInstitution() {
             <div className="flex -mx-3 mb-6 justify-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  For development, input "14c81c50935e41518561c2fc3bdabc0f"
+                  For development, input "ace151d9638249cf8c4a190eb0672e63"
                   without quotes.
                 </label>
                 <input

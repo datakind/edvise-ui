@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Http;
 
 use TokenHelper;
 use InstitutionHelper;
-use DatakinderHelper;
 
 //use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\RequestException;
@@ -42,8 +41,10 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
-
         }
         return $resp;
     }
@@ -69,6 +70,9 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
 
         }
@@ -97,6 +101,9 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
 
         }
@@ -125,6 +132,9 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
 
         }
@@ -173,6 +183,9 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
         }
         return $resp;
@@ -205,6 +218,9 @@ class ApiController extends Controller
 
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
         }
         return $resp;

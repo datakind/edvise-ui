@@ -27,9 +27,11 @@ export default function FileUpload() {
   const [files, setFiles] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [processing, setProcessing] = useState(false);
+  const [batchCreationResult, setBatchCreationResult] = useState("");
+  const [startPrediction, setStartPrediction] = useState(false);
+  const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
   const [additionalFiles, setAdditionalFiles] = useState([]);
-  const [validationResults, setValidationResults] = useState({});
 
   const steps = [
     { label: 'Upload data', step: 1 },
@@ -41,6 +43,46 @@ export default function FileUpload() {
     return (
       <div className="flex justify-center w-full">
         <Spinner mainMsg="Validation in progress"></Spinner>
+      </div>
+    );
+  };
+
+  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {
+    if (batchCreationResult == "") {
+      return <></>;
+    }
+    if (batchCreationResult !== 'ok') {
+      let msg = "[ERROR] Batch creation failed: " + batchCreationResult;
+      return (
+        <div className="flex flex-col pr-24 pl-24">
+          <BigDangerAlert
+            mainMsg={msg}
+          ></BigDangerAlert>
+          <div className="flex flex-row justify-between w-full items-end pt-48">
+            <Link
+              href={route('file-upload')}
+              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            >
+              Upload Data
+            </Link>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-col pr-24 pl-24">
+        <BigSuccessAlert
+          mainMsg="Batch creation successful!"
+        ></BigSuccessAlert>
+        <div className="flex flex-row justify-between w-full items-end pt-48">
+        {startPrediction ? <Link
+              href={route('run-inference')}
+              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            >
+              Start Prediction
+            </Link>
+            : <></>}
+        </div>
       </div>
     );
   };
@@ -97,14 +139,12 @@ export default function FileUpload() {
           >
             Back
           </Link>
-          <Link
-            href={route('file-upload')}
-            as="button"
+          <button
             className="opacity-100 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
             onClick={() => setCurrentStep(3)}
           >
             Next
-          </Link>
+          </button>
         </div>{' '}
       </div>
     );
@@ -189,12 +229,12 @@ export default function FileUpload() {
                 <SuccessAlert
                   className="flex"
                   errDict={fileStatus}
-                  mainMsg="Data upload was successful!"
+                  mainMsg="Submission can be uploaded!"
                 ></SuccessAlert>
                 <DangerAlert
                   className="flex"
                   errDict={fileStatus}
-                  mainMsg="Upload failed: There were errors with your submission:"
+                  mainMsg="There were errors with your submission:"
                 ></DangerAlert>
               </div>
               {files.map((f, idx) => (
@@ -314,6 +354,9 @@ export default function FileUpload() {
         if (file == undefined || file.size == 0) {
           fileErrors[file.name] = 'Empty file.';
         }
+        if (file.name.length == 0 || file.name.length > 999) {
+          fileErrors[file.name] = 'File name too long.';
+        }
       }
       if (Object.keys(fileStatus).length != 0) {
         setFileStatus(
@@ -331,9 +374,52 @@ export default function FileUpload() {
     }
   };
 
-  // Frontend prepends timestamp, manually uploaded files on the backend don't include that.
-  const createBatch = () => {};
-  // Frontend prepends timestamp, manually uploaded files on the backend don't include that.
+  // Pass in startPrediction as a bool.
+  const createBatch = (startPred) => {
+        setBatchCreationResult("");
+        let batchConstructed = batchName;
+        if (batchConstructed == "") {
+          let currDate = new Date();
+          // Months start at 0 so we have to add one.
+          let currMonth = currDate.getMonth()+1;
+          let dayString = currDate.getFullYear() +'-'+ currMonth +'-'+ currDate.getDate();
+          batchConstructed = "Batch_"+ dayString + "_"+Date.now();
+        }
+    // Get the files that were just uploaded.
+    let fileIds = [];
+    for (const [key, value] of Object.entries(validationResults)) {
+        if (value == "ok") {
+          // TODO add way to add file names
+          //get file id of key
+        }
+      }
+    return axios({
+      method: 'post',
+      url: '/create-batch',
+      data: {
+        name: batchConstructed,
+        // description: event.target.elements.description.value,
+        // batch_disabled: event.target.elements.inst_name.value,
+        file_ids: fileIds,
+      },
+    })
+      .then(res => {
+        setBatchCreationResult("ok");
+        setStartPrediction(startPred);
+      })
+      .catch(e => {
+        let err = "";
+        if( e.response ){
+          err = e.response.data.error; 
+        } else {
+          err = JSON.stringify(e) ;
+        }
+        setBatchCreationResult("Error: "+err);
+        setStartPrediction(startPred);
+      });
+  };
+
+  // Frontend prepends timestamp, manually uploaded files on the backend won't include that.
   const triggerUpload = () => {
     if (Object.keys(fileStatus).length != 0 || files.length == 0) {
       return;
@@ -422,10 +508,10 @@ export default function FileUpload() {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
             value={batchName}
             onChange={e => setBatchName(e.target.value)}
-            placeholder="Batch 20241212"
+            placeholder="Inference Run 2024 Fall Cohort 1"
           />
           <p className="mt-2 text-sm text-gray-500">
-            If left blank, we will give it a default name (ie. Batch_YYYYMMDD)
+            If left blank, we will give it a default name (ie. Batch_YYYYMMDD_TIMESTAMP)
           </p>
         </div>
         <div>
@@ -454,21 +540,20 @@ export default function FileUpload() {
           )}
         </div>
         <div className="flex flex-row justify-between w-full items-end pt-24">
-          <Link
-            href={route('file-upload')}
-            as="button"
+          <button
             className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 -ml-24"
             onClick={() => {
               setCurrentStep(2);
             }}
           >
             Back
-          </Link>
+          </button>
           <div className="flex -mr-24">
             <button
               className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4"
               onClick={() => {
-                /* Handle save logic here */
+                // Also start the prediction so set it to true.
+                createBatch(true);
               }}
             >
               Save and start prediction
@@ -476,7 +561,8 @@ export default function FileUpload() {
             <button
               className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
               onClick={() => {
-                /* Handle save and prediction logic here */
+                // We don't start the prediction so set it to false.
+                createBatch(false);
               }}
             >
               Save
@@ -541,13 +627,14 @@ export default function FileUpload() {
 
         {currentStep === 1
           ? renderUpload(files, fileStatus)
-          : currentStep === 2
-          ? processing
+          : (currentStep === 2
+          ? (processing
             ? renderProcessing()
-            : renderValidationResults(validationResults)
-          : currentStep === 3
-          ? renderSaveBatch()
-          : null}
+            : renderValidationResults(validationResults))
+          : (currentStep === 3
+          ? ( batchCreationResult !== "" ? renderBatchCreationResults(batchCreationResult, startPrediction)
+            : renderSaveBatch())
+          : null))}
       </div>
     </AppLayout>
   );

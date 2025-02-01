@@ -224,7 +224,7 @@ class ApiController extends Controller
         return $resp;
     }
 
-    public function createBatch(Request $request, string $filename)
+    public function createBatch(Request $request)
     {
 
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);

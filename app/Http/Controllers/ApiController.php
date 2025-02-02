@@ -49,6 +49,38 @@ class ApiController extends Controller
         return $resp;
     }
 
+    // This returns batch and file info for a given inst.
+    public function viewUploadedData(Request $request)
+    {
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        [$tok, $tokErr] = TokenHelper::GetToken($request);
+        if ($tok == "") {
+            return response()->json(['error' => $tokErr], 401);
+        }
+        if ($inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        $headers = [
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ];
+
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions/'.$inst.'/input');
+
+        if ($resp->getStatusCode() != 200 ) {
+            $errMsg = json_decode($resp->getBody());
+            if ($errMsg == null) {
+                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+            }
+            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+
+        }
+        return $resp;
+    }
+
+    // TODO: delete. this is only for debugging
     public function viewInputData(Request $request)
     {
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
@@ -249,8 +281,8 @@ class ApiController extends Controller
             {$post_request_body['description'] = $request->input('description');}
         if ($request->input('batch_disabled') != null) 
             {$post_request_body['batch_disabled'] = $request->input('batch_disabled');}
-        if ($request->input('file_ids') != null) 
-            {$post_request_body['file_ids'] = $request->input('file_ids');}
+        if ($request->input('file_names') != null) 
+            {$post_request_body['file_names'] = $request->input('file_names');}
         $resp = Http::withHeaders($headers)->post(env('BACKEND_URL').'/institutions/'.$inst.'/batch', $post_request_body);
 
         if ($resp->getStatusCode() != 200 ) {

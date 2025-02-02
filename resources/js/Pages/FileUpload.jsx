@@ -105,9 +105,7 @@ export default function FileUpload() {
           <div className="flex flex-row justify-between w-full items-end pt-48">
             <Link
               href={route('file-upload')}
-              as="button"
               className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
-              onClick={() => setCurrentStep(1)}
             >
               Back
             </Link>
@@ -133,9 +131,7 @@ export default function FileUpload() {
         <div className="flex flex-row justify-between w-full items-end pt-48">
           <Link
             href={route('file-upload')}
-            as="button"
             className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
-            onClick={() => setCurrentStep(1)}
           >
             Back
           </Link>
@@ -385,12 +381,11 @@ export default function FileUpload() {
           let dayString = currDate.getFullYear() +'-'+ currMonth +'-'+ currDate.getDate();
           batchConstructed = "Batch_"+ dayString + "_"+Date.now();
         }
-    // Get the files that were just uploaded.
-    let fileIds = [];
+    // Get the files that were just successfully uploaded.
+    let batchFileNames = [];
     for (const [key, value] of Object.entries(validationResults)) {
         if (value == "ok") {
-          // TODO add way to add file names
-          //get file id of key
+          batchFileNames.push(key)
         }
       }
     return axios({
@@ -400,7 +395,7 @@ export default function FileUpload() {
         name: batchConstructed,
         // description: event.target.elements.description.value,
         // batch_disabled: event.target.elements.inst_name.value,
-        file_ids: fileIds,
+        file_names: batchFileNames,
       },
     })
       .then(res => {
@@ -416,6 +411,23 @@ export default function FileUpload() {
         }
         setBatchCreationResult("Error: "+err);
         setStartPrediction(startPred);
+      });
+  };
+
+  // Show file info (for the + Add File feature)
+  const viewData = () => {
+    return axios
+      .get('/view-uploaded-data')
+      .then(res => {
+        // TODO populate
+      })
+      .catch(e => {
+        let err = "";
+        if( e.response ){
+          err = e.response.data.error; 
+        } else {
+          err = JSON.stringify(e) ;
+        }
       });
   };
 
@@ -540,14 +552,12 @@ export default function FileUpload() {
           )}
         </div>
         <div className="flex flex-row justify-between w-full items-end pt-24">
-          <button
+        <Link
+              href={route('file-upload')}
             className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 -ml-24"
-            onClick={() => {
-              setCurrentStep(2);
-            }}
-          >
-            Back
-          </button>
+            >
+              Back
+            </Link>
           <div className="flex -mr-24">
             <button
               className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4"

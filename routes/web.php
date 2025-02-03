@@ -57,6 +57,7 @@ Route::middleware('auth')->get('/view-data',
 
 Route::middleware('auth')->get('/view-input-data', [ApiController::class, 'viewInputData']);
 Route::middleware('auth')->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
+Route::middleware('auth')->get('/view-output-data', [ApiController::class, 'viewOutputData']);
 
 Route::middleware('auth')->get('/run-inference',
     function () {

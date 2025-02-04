@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
+import FileView from '@/Components/FileView';
 
 // Skeleton for the view data page.
 export default function ViewData() {
@@ -25,8 +26,10 @@ export default function ViewData() {
           FileUpload
         </h2>
       )}
-    >
-      <div className="py-12">
+    >     
+    <div className="flex flex-col">
+         <FileView></FileView>
+      <div className="py-12 flex">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <p id="result_area">Files in the GCP dev bucket:</p>
           <ul>
@@ -36,6 +39,7 @@ export default function ViewData() {
             })}
           </ul>
         </div>
+      </div>
       </div>
     </AppLayout>
   );

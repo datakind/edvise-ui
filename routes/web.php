@@ -71,6 +71,8 @@ Route::middleware('auth')->get('/download-data',
 
 Route::middleware('auth')->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData']);
 
+Route::middleware('auth')->get('/model-data/{model_id}/{vers_id}/{output_id}', [ApiController::class, 'modelData']);
+
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

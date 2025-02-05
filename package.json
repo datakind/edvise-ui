@@ -49,6 +49,7 @@
     "papaparse": "^5.4.1",
     "react-drag-drop-files": "^2.3.10",
     "react-ga4": "^2.1.0",
+    "react-google-charts": "^5.2.1",
     "react-map-gl": "^7.1.7",
     "react-map-gl-geocoder": "^2.2.0",
     "react-range-slider-input": "^3.0.7",

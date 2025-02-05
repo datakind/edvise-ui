@@ -181,6 +181,13 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, '/download_url/'.$filename, "GET", null);
     }
 
+    public function modelData(Request $request, string $model_id, $vers_id, $output_id)
+    {
+        // TODO: make this work with the backend
+        // return ApiController::constructInstRequest($request, sprintf("/models/%s/vers/%s/output/%s", $model_id, $vers_id, $output_id), "GET", null);
+        return file_get_contents(__DIR__ . "/fixtures/model-output.json");
+    }
+
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)
     {

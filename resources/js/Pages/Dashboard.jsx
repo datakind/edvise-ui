@@ -106,24 +106,67 @@ export default function Dashboard() {
       {error && <div className="text-red-500 text-center mb-4">{error.message}</div>}
       {loading ? <Spinner /> :
         <div className='flex justify-between items-center flex-col m-auto'>
-          <Chart
+          <PrintableChart
             chartType="Histogram"
             data={chartData}
             options={histogramOptions}
             width={"800px"}
             height={"500px"}
-            style={{ margin: "20px auto" }}
           />
-          <Chart
+          <PrintableChart
             chartType="BarChart"
             data={chartData2}
             options={barChartOptions}
             width={"800px"}
             height={chartData2.length * 25 + 100}
-            style={{ margin: "20px auto" }}
           />
         </div>
       }
     </AppLayout>
+  );
+}
+
+function PrintableChart({ chartType, data, options, width, height }) {
+  const [chartWrapper, setChartWrapper] = useState(null);
+
+  const handleDownload = () => {
+    if (chartWrapper) {
+      const uri = chartWrapper.getChart().getImageURI();
+      const link = document.createElement('a');
+      link.href = uri;
+      link.download = 'chart.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  return (
+    <div style={{ textAlign: 'center', position: 'relative' }}>
+      <Chart
+        chartType={chartType}
+        data={data}
+        options={options}
+        width={width}
+        height={height}
+        style={{ margin: "20px auto" }}
+        getChartWrapper={(wrapper) => setChartWrapper(wrapper)}
+      />
+      {chartWrapper && (
+        <a
+          onClick={handleDownload}
+          style={{
+            position: 'absolute',
+            top: '24px',
+            right: '10px',
+            fontSize: '12px',
+            color: '#007bff',
+            cursor: 'pointer',
+          }}
+        >
+          Download Chart
+        </a>
+      )}
+    </div>
   );
 }

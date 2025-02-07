@@ -30,36 +30,6 @@ export default function UpdateProfileInformationForm({ user }) {
             onSuccess: () => clearPhotoFileInput(),
         });
     }
-    function selectNewPhoto() {
-        photoRef.current?.click();
-    }
-    function updatePhotoPreview() {
-        const photo = photoRef.current?.files?.[0];
-        if (!photo) {
-            return;
-        }
-        form.setData('photo', photo);
-        const reader = new FileReader();
-        reader.onload = e => {
-            setPhotoPreview(e.target?.result);
-        };
-        reader.readAsDataURL(photo);
-    }
-    function deletePhoto() {
-        router.delete(route('current-user-photo.destroy'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                setPhotoPreview(null);
-                clearPhotoFileInput();
-            },
-        });
-    }
-    function clearPhotoFileInput() {
-        if (photoRef.current?.value) {
-            photoRef.current.value = '';
-            form.setData('photo', null);
-        }
-    }
     return (<FormSection onSubmit={updateProfileInformation} title={'Profile Information'} description={`Update your account's profile information and email address.`} renderActions={() => (<>
           <ActionMessage on={form.recentlySuccessful} className="mr-3">
             Saved.
@@ -69,39 +39,6 @@ export default function UpdateProfileInformationForm({ user }) {
             Save
           </PrimaryButton>
         </>)}>
-      {/* <!-- Profile Photo --> */}
-      {page.props.jetstream.managesProfilePhotos ? (<div className="col-span-6 sm:col-span-4">
-          {/* <!-- Profile Photo File Input --> */}
-          <input type="file" className="hidden" ref={photoRef} onChange={updatePhotoPreview}/>
-
-          <InputLabel htmlFor="photo" value="Photo"/>
-
-          {photoPreview ? (
-            // <!-- New Profile Photo Preview -->
-            <div className="mt-2">
-              <span className="block rounded-full w-20 h-20" style={{
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center center',
-                    backgroundImage: `url('${photoPreview}')`,
-                }}></span>
-            </div>) : (
-            // <!-- Current Profile Photo -->
-            <div className="mt-2">
-              <img src={user.profile_photo_url} alt={user.name} className="rounded-full h-20 w-20 object-cover"/>
-            </div>)}
-
-          <SecondaryButton className="mt-2 mr-2" type="button" onClick={selectNewPhoto}>
-            Select A New Photo
-          </SecondaryButton>
-
-          {user.profile_photo_path ? (<SecondaryButton type="button" className="mt-2" onClick={deletePhoto}>
-              Remove Photo
-            </SecondaryButton>) : null}
-
-          <InputError message={form.errors.photo} className="mt-2"/>
-        </div>) : null}
-
       {/* <!-- Name --> */}
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="name" value="Name"/>

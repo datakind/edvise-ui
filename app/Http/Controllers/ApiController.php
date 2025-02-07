@@ -160,13 +160,13 @@ class ApiController extends Controller
     // Retrieves the GCS upload URL.
     public function fileUploadApi(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/upload_url/'.$filename, "GET", null);
+        return ApiController::constructInstRequest($request, '/upload-url/'.$filename, "GET", null);
     }
 
     // Validates a file that has been uploaded to the GCS bucket already.
     public function fileValidateApi(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/input/validate/'.$filename, "POST", null);
+        return ApiController::constructInstRequest($request, '/input/validate-upload/'.$filename, "POST", null);
     }
 
     // This shows all output data.
@@ -178,7 +178,7 @@ class ApiController extends Controller
     // Downloading inference output
     public function downloadInfData(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/download_url/'.$filename, "GET", null);
+        return ApiController::constructInstRequest($request, '/download-url/'.$filename, "GET", null);
     }
 
     public function modelData(Request $request, string $model_id, $vers_id, $output_id)
@@ -197,7 +197,7 @@ class ApiController extends Controller
     // TODO: delete. this is only for debugging
     public function viewInputData(Request $request)
     {
-        return ApiController::constructInstRequest($request, '/input_debugging', "GET", null);
+        return ApiController::constructInstRequest($request, '/input-debugging', "GET", null);
     }
 
 

@@ -3,7 +3,18 @@ import AppLayout from '@/Layouts/AppLayout';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
+
+
+
 export default function CreateInst() {
+
+     const schemas = [
+  { name: 'Custom', selected: true },
+  { name: 'PDP', selected: true },
+  { name: 'Option 3 (testing only, it will not work)', selected: false },
+];
+
+
   const removeItem = itemId => {
     const emailItem = document.getElementById(itemId);
     emailItem.remove;
@@ -123,21 +134,52 @@ export default function CreateInst() {
             </div>
             <div className="flex -mx-3 mb-6">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  id="file_type"
+                 <fieldset>
+      <legend className="text-base font-semibold text-gray-900">Schemas accepted by this institution</legend>
+      <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+        {schemas.map((schem, idx) => (
+          <div key={idx} className=" flex gap-3">
+            <div className="min-w-0 flex-1 text-sm/6 ">
+            <input
+                  defaultChecked={schem.selected}
+                  id={`${schem.name}`}
+                  name={`${schem.name}`}
+                  type="checkbox"
+                  className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-blue-600 checked:bg-blue-600 indeterminate:border-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                />
+              <label htmlFor={`${schem.name}`} className="m-2 select-none font-medium text-gray-900">
+                {schem.name}
+              </label>
+            </div>
+            <div className="flex h-6 shrink-0 items-center">
+              <div className="group grid size-4 grid-cols-1">
+                <svg
+                  fill="none"
+                  viewBox="0 0 14 14"
+                  className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
                 >
-                  Expected File Types
-                </label>
-                <div className="relative">
-                  <select
-                    name="type"
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  >
-                    <option>PDP</option>
-                    <option>Custom</option>
-                  </select>
-                </div>
+                  <path
+                    d="M3 8L6 11L11 3.5"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="opacity-0 group-has-[:checked]:opacity-100"
+                  />
+                  <path
+                    d="M3 7H11"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="opacity-0 group-has-[:indeterminate]:opacity-100"
+                  />
+                </svg>
+                
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </fieldset>
               </div>
             </div>
             <div className="flex -mx-3 mb-6">

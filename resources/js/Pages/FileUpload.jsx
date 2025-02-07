@@ -273,8 +273,7 @@ export default function FileUpload() {
     );
   };
 
-  // TODO reset to 1GB after dev: Currently 5MB for testing error case.
-  const MAX_FILE_BYTES = 5 * 1024 * 1024; // 1000 * 1024 * 1024; // limit 1 GB
+  const MAX_FILE_BYTES = 1000 * 1024 * 1024; // limit 1 GB
 
   const resetUploader = () => {
     setFileStatus({});

@@ -1,9 +1,12 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
+import FileView from '@/Components/FileView';
 
 // Skeleton for the download inf data page.
 export default function DownloadInfData() {
+  const [files, setFiles] = useState({});
+  const [batches, setBatches] = useState({});
   // csv as 2d matrix
   const tableCreate = parsedValues => {
     const tbl = document.createElement('table');
@@ -20,6 +23,25 @@ export default function DownloadInfData() {
       }
     }
     return tbl;
+  };
+
+  const getOutputFilesAndBatchesToView = () => {
+
+    return axios
+      .get('/view-output-data')
+      .then(res => {
+        let constructFileDict = {};
+        res.data.files;
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaa");
+        console.log(JSON.stringify(res.data.batches));
+
+        setFiles(res.data.files);
+        setBatches(res.data.batches);
+
+      })
+      .catch(err => {
+        console.log("errors");
+      });
   };
 
   const triggerDownload = () => {
@@ -97,9 +119,9 @@ export default function DownloadInfData() {
     >
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <FileView filesDict={files}></FileView>
           <p id="info">
-            Type in the filename you want to download below. A sample file you
-            can download: sample_output.csv
+            Type in the filename you want to download below.
           </p>
           <input type="text" id="filename" name="filename" />
           <button

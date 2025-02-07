@@ -66,31 +66,31 @@ const navigationAboveLine = [
   {
     name: 'Admin Actions',
     icon: Cog8ToothIcon,
-    visibility_type: VisibilityType.PRIVATE_ONLY,
+    visibility_type: VisibilityType.DATAKIND_ONLY,
     children: [
       {
         name: 'Create Institution',
         href: route('create-inst'),
         icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.PRIVATE_ONLY,
-      }, // TODO flip this to DATAKIND_ONLY after dev
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
       {
         name: 'View Data',
         href: route('view-data'),
         icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.PRIVATE_ONLY,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
       },
       {
         name: 'Set Institution',
         href: route('set-inst'),
         icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.PRIVATE_ONLY,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
       },
       {
         name: 'Add Datakinders',
         href: route('add-dk'),
         icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.PRIVATE_ONLY,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
       },
     ],
   },
@@ -139,9 +139,9 @@ const navigationBelowLine = [
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
   const user = auth.user;
-  const userIsDatakinder = auth.user
+  const userIsDatakinder = (auth.user != null
     ? auth.user.access_type == 'DATAKINDER'
-    : false;
+    : false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {

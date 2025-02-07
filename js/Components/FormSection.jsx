@@ -3,7 +3,9 @@ import React from 'react';
 import SectionTitle from '@/Components/SectionTitle';
 export default function FormSection({ onSubmit, renderActions, title, description, children, }) {
     const hasActions = !!renderActions;
-    return (<div className="md:grid md:grid-cols-3 md:gap-6">
+    return (<div className="md:grid md:grid-cols-3 md:gap-6 flex-row justify-between">
+
+      <div className="flex flex-rol justify-between">
       <SectionTitle title={title} description={description}/>
 
       <div className="mt-5 md:mt-0 md:col-span-2">
@@ -21,6 +23,7 @@ export default function FormSection({ onSubmit, renderActions, title, descriptio
               {renderActions?.()}
             </div>)}
         </form>
+      </div>
       </div>
     </div>);
 }

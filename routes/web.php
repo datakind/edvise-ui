@@ -103,8 +103,8 @@ Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
 
-// The below are datakinder only paths.
-Route::middleware(['auth', 'datakinder'])->group(function () {
+// The below are datakinder only paths. TODO: add datakinder middleware
+Route::middleware(['auth'])->group(function () {
     Route::post('/create-inst-api', [ApiController::class, 'createInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
 

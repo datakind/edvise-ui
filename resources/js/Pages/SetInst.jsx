@@ -10,6 +10,7 @@ import {
   CheckIcon,
   XMarkIcon,
   PlusCircleIcon,
+  Cog8ToothIcon,
 } from '@heroicons/react/24/outline';
 import DangerAlert from '@/Components/DangerAlert';
 import SuccessAlert from '@/Components/SuccessAlert';
@@ -48,27 +49,35 @@ export default function SetInstitution() {
         </h2>
       )}
     >
+          
       <div className="w-full flex flex-col items-center" id="main_area">
-        <h1 className="text-2xl font-bold pb-12">
-          {' '}
-          Institution Id to act as (for Datakinder only).{' '}
-        </h1>
+      <HeaderLabel
+          className="pl-12"
+          iconObj={
+            <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
+          }
+          majorTitle="Admin Actions"
+          minorTitle="Act as Institution"
+        ></HeaderLabel>
 
-        <form className="w-full max-w-full pl-36 pr-36" onSubmit={handleSubmit}>
+        <form className="w-full max-w-full pl-36 pr-36 pt-24" onSubmit={handleSubmit}>
           <div id="form_contents" className="flex flex-col">
             <div className="flex -mx-3 mb-6 justify-center">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  For development, input "ace151d9638249cf8c4a190eb0672e63"
-                  without quotes.
+              <div className="w-full px-3 mb-6">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                  The institution ID for the current Datakinder to use.
                 </label>
+
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   name="instid"
                   type="text"
                   placeholder="Copy institution id here."
                 ></input>
-                <p className="text-red-500 text-xs italic">Required field.</p>
+                <p className="text-gray-600 text-xs italic">
+                   For development, input "ace151d9638249cf8c4a190eb0672e63"
+                  without quotes.
+                </p>
               </div>
             </div>
             <div className="flex -mx-3 mb-6 hidden">
@@ -89,12 +98,14 @@ export default function SetInstitution() {
               </div>
             </div>
           </div>
+          <div className="flex justify-center">
           <button
             type="submit"
             className="bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
           >
             Submit
           </button>
+          </div>
         </form>
         <div className="flex" id="result_area"></div>
       </div>

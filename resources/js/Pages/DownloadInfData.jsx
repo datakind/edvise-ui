@@ -119,7 +119,6 @@ export default function DownloadInfData() {
     >
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <FileView filesDict={files}></FileView>
           <p id="info">
             Type in the filename you want to download below.
           </p>

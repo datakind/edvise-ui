@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import FileView from '@/Components/FileView';
+import HeaderLabel from '@/Components/HeaderLabel';
+import {
+  Cog8ToothIcon,
+} from '@heroicons/react/24/outline';
 
 // Skeleton for the view data page.
 export default function ViewData() {
@@ -27,7 +31,15 @@ export default function ViewData() {
         </h2>
       )}
     >     
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-12">
+    <HeaderLabel
+          className="pl-12"
+          iconObj={
+            <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
+          }
+          majorTitle="Admin Actions"
+          minorTitle="(temp) Debugging View of data"
+        ></HeaderLabel>
          <FileView></FileView>
       <div className="py-12 flex">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

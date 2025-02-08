@@ -2,6 +2,10 @@ import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
+import {
+  Cog8ToothIcon,
+} from '@heroicons/react/24/outline';
+import HeaderLabel from '@/Components/HeaderLabel';
 
 // TODO show user does not exist error message if the email does not exist in the user table.
 export default function AddDatakinders() {
@@ -41,19 +45,23 @@ export default function AddDatakinders() {
       )}
     >
       <div className="w-full flex flex-col items-center" id="main_area">
-        <h1 className="text-2xl font-bold pb-12">
-          {' '}
-          Add emails for accounts that should have access type DATAKINDER
-        </h1>
-        <form className="w-full max-w-full pl-36 pr-36" onSubmit={handleSubmit}>
+      <HeaderLabel
+          className="pl-12"
+          iconObj={
+            <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
+          }
+          majorTitle="Admin Actions"
+          minorTitle="Add Datakinders"
+        ></HeaderLabel>
+        <form className="w-full max-w-full pl-36 pr-36 pt-24" onSubmit={handleSubmit}>
           <div id="form_contents" className="flex flex-col">
             <div id="add_one_user" className="flex -mx-3 mb-2">
-              <div className="w-1/2 px-3 mb-6">
+              <div className="w-full">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   id="0-email"
                 >
-                  User email
+                  Account Email
                 </label>
                 <input
                   name="user"
@@ -61,15 +69,20 @@ export default function AddDatakinders() {
                   type="email"
                   placeholder="j.smith@datakind.org"
                 ></input>
+                <p className="text-gray-600 text-xs italic">
+                  Add an email of an existing account which you want to grant Datakinder access.
+                </p>
               </div>
             </div>
           </div>
+          <div className="flex justify-center pt-12">
           <button
             type="submit"
             className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
           >
             Submit
           </button>
+          </div>
         </form>
         <div className="flex" id="result_area"></div>
       </div>

@@ -65,7 +65,6 @@ export default function CreateInst() {
       url: '/create-inst-api',
       data: {
         name: event.target.elements.inst_name.value,
-        description: event.target.elements.description.value,
         state: event.target.elements.state.value,
         is_pdp: pdp,
         pdp_id: event.target.elements.pdp_id.value,
@@ -190,23 +189,6 @@ export default function CreateInst() {
                 </div>
             </div>
             </div>
-              <div className="flex flex-col w-full">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  id="description"
-                >
-                  Description
-                </label>
-                <input
-                  name="description"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="text"
-                ></input>
-                <p className="text-gray-600 text-xs italic">
-                  Optionally add a description or a note (1000 char limit).
-                </p>
-              </div>
-
 <div className="flex flex-row w-full gap-x-6">
               <div className="flex flex-col w-1/2">
                  <fieldset>

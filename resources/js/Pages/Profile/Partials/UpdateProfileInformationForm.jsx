@@ -78,65 +78,6 @@ export default function UpdateProfileInformationForm({ user }) {
         </>
       )}
     >
-      {/* <!-- Profile Photo --> */}
-      {page.props.jetstream.managesProfilePhotos ? (
-        <div className="col-span-6 sm:col-span-4">
-          {/* <!-- Profile Photo File Input --> */}
-          <input
-            type="file"
-            className="hidden"
-            ref={photoRef}
-            onChange={updatePhotoPreview}
-          />
-
-          <InputLabel htmlFor="photo" value="Photo" />
-
-          {photoPreview ? (
-            // <!-- New Profile Photo Preview -->
-            <div className="mt-2">
-              <span
-                className="block rounded-full w-20 h-20"
-                style={{
-                  backgroundSize: 'cover',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center center',
-                  backgroundImage: `url('${photoPreview}')`,
-                }}
-              ></span>
-            </div>
-          ) : (
-            // <!-- Current Profile Photo -->
-            <div className="mt-2">
-              <img
-                src={user.profile_photo_url}
-                alt={user.name}
-                className="rounded-full h-20 w-20 object-cover"
-              />
-            </div>
-          )}
-
-          <SecondaryButton
-            className="mt-2 mr-2"
-            type="button"
-            onClick={selectNewPhoto}
-          >
-            Select A New Photo
-          </SecondaryButton>
-
-          {user.profile_photo_path ? (
-            <SecondaryButton
-              type="button"
-              className="mt-2"
-              onClick={deletePhoto}
-            >
-              Remove Photo
-            </SecondaryButton>
-          ) : null}
-
-          <InputError message={form.errors.photo} className="mt-2" />
-        </div>
-      ) : null}
-
       {/* <!-- Name --> */}
       <div className="col-span-6 sm:col-span-4">
         <InputLabel htmlFor="name" value="Name" />

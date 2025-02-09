@@ -392,7 +392,6 @@ export default function FileUpload() {
       url: '/create-batch',
       data: {
         name: batchConstructed,
-        // description: event.target.elements.description.value,
         // batch_disabled: event.target.elements.inst_name.value,
         file_names: batchFileNames,
       },

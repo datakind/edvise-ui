@@ -33,7 +33,7 @@ return new class extends Migration
                 // DEFAULTS TO LIMITED_ACCESS
                 // Only Datakind access type can set inst id for created/invited users. Otherwise all inst id are inherited.
                 $table->string('access_type')->nullable();
-                $table->string('profile_photo_path', 2048)->nullable();
+                //$table->string('profile_photo_path', 2048)->nullable();
                 $table->dateTime('created_at')->nullable(); //->default(DB::raw('CURRENT_TIMESTAMP'));
                 $table->dateTime('updated_at')->nullable(); //->default(DB::raw('NULL on update CURRENT_TIMESTAMP'));
 

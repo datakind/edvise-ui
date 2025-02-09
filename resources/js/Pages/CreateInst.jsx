@@ -76,8 +76,8 @@ return (
   const handleSubmit = (event) => {
     event.preventDefault();
     let pdp = event.target.elements.PDP.checked;
-    // We currently only have custom.
-    let other_schemas = event.target.elements.Custom.checked ? ['Custom'] : null;
+    // We currently only have custom for potential other schemas. NOte that the shema passed to the API call must match the corresponding backend schema enum value.
+    let other_schemas = event.target.elements.Custom.checked ? ['CUSTOM'] : null;
     var emailDict = {};
     var accessDict = {};
 Array.from(event.target.elements).forEach((input) => {
@@ -110,12 +110,12 @@ for (const [key, value] of Object.entries(emailDict)) {
       },
     })
       .then(res => {
-        document.getElementById('result_area').innerHTML = 'Done. Response: '+ JSON.stringify(res);
+        document.getElementById('result_area').innerHTML = 'Done. Created new institution with ID: '+ JSON.stringify(res.data.inst_id);
       })
       .catch(e => {
         let err = "";
         if( e.response ){
-          err = e.response.data.error; 
+          err = JSON.stringify(e.response.data.error); 
         } else {
           err = JSON.stringify(e) ;
         }

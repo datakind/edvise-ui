@@ -92,6 +92,12 @@ const navigationAboveLine = [
         icon: DocumentDuplicateIcon,
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
+      {
+        name: 'Create Model',
+        href: route('create-model'),
+        icon: ChartPieIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
     ],
   },
   {

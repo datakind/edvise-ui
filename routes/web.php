@@ -112,6 +112,10 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
         return Inertia::render('CreateInst');
     })->name('create-inst');
 
+    Route::get('/create-model', function () {
+        return Inertia::render('CreateModel');
+    })->name('create-model');
+
     Route::get('/set-inst', function () {
         return Inertia::render('SetInst');
     })->name('set-inst');

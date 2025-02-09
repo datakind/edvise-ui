@@ -189,6 +189,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'TokenHelper' => App\Helpers\TokenHelper::class, 
         'InstitutionHelper' => App\Helpers\InstitutionHelper::class, 
+        'UserHelper' => App\Helpers\UserHelper::class, 
     ])->toArray(),
 
 ];

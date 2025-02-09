@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
@@ -11,61 +11,99 @@ import {
 
 export default function CreateInst() {
 
+  // Any update to this schemas list needs to be reflected in the handleSubmit() function call as a checkbox.
      const schemas = [
-  { name: 'Custom', selected: true },
-  { name: 'PDP', selected: true },
-  { name: 'Option 3 (testing only, it will not work)', selected: false },
+  { name: 'Custom', selected: false },
+  { name: 'PDP', selected: false },
 ];
 
+  const [addUserCounter, setAddUserCounter] = useState(0);
 
+// TODO implement remove additional email fields
   const removeItem = itemId => {
     const emailItem = document.getElementById(itemId);
     emailItem.remove;
   };
 
-  const addField = () => {
-    const multUsers = document.getElementById('mult_users');
-    const newId = 'placeholder';
-    multUsers.innerHTML =
-      multUsers.innerHTML +
-      '<div className="flex id="' +
-      newId +
-      '" -mx-3 mb-2">' +
-      '<div className="w-1/2 px-3 mb-6">' +
-      '<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="' +
-      newId +
-      '-access">Access Type</label>' +
-      '<div className="relative">' +
-      '<select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="' +
-      newId +
-      '-access">' +
-      '<option>Institution Researcher</option>' +
-      '</select>' +
-      '</div>' +
-      '</div>' +
-      '<div className="w-1/2 px-3 mb-6">' +
-      '<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="' +
-      newId +
-      '-email">User email</label>' +
-      '<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="' +
-      newId +
-      '-email" type="email" placeholder="j.smith@inst1.edu"></input>' +
-      '</div>' +
-      '</div>';
+ const incrementCounter = () => {
+  const newId = addUserCounter +1;
+  setAddUserCounter(newId);
+ };
+
+  const renderFullEmailList = () => {
+    const arrOfAllAddedEmailSlots = Array.from(Array(addUserCounter).keys());
+return (
+  <div>
+    {arrOfAllAddedEmailSlots.map((id) => (
+  <div id="one_user" className="flex">
+                <div className="w-1/2">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    id="access"
+                  >
+                    Access Type
+                  </label>
+                  <div className="relative">
+                    <select
+                      name={id+"-access"}
+                      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    >
+                      <option>Institution Researcher</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="w-1/2 px-3 mb-6">
+                  <label
+                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    id="email"
+                  >
+                    User email
+                  </label>
+                  <input
+                    name={id+"-email"}
+                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    type="email"
+                    placeholder="j.smith@inst1.edu"
+                  ></input>
+                </div>
+              </div>
+  ))}
+    </div>
+    );
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    let pdp = false;
-    if (event.target.elements.type.value == 'PDP') {
-      pdp = true;
-    }
+    let pdp = event.target.elements.PDP.checked;
+    // We currently only have custom.
+    let other_schemas = event.target.elements.Custom.checked ? ['Custom'] : null;
+    var emailDict = {};
+    var accessDict = {};
+Array.from(event.target.elements).forEach((input) => {
+  if (input.name.endsWith("-access") || input.name.endsWith("-email")) {
+    let idx = Array.from(input.name)[0];
+    if (input.name.endsWith("-access")) {
+      accessDict[idx] = input.value;
+    } else {
+      emailDict[idx] = input.value;
+  }
+}
+});
+
+var constructedEmailDict = {};
+for (const [key, value] of Object.entries(emailDict)) {
+  if (value != null && value != "") {
+    constructedEmailDict[value] = accessDict[key];
+  }
+}
     return axios({
       method: 'post',
       url: '/create-inst-api',
       data: {
         name: event.target.elements.inst_name.value,
         state: event.target.elements.state.value,
+        allowed_schemas: other_schemas,
+        allowed_emails: constructedEmailDict.length == 0 ? null : constructedEmailDict,
         is_pdp: pdp,
         pdp_id: event.target.elements.pdp_id.value,
       },
@@ -81,7 +119,7 @@ export default function CreateInst() {
           err = JSON.stringify(e) ;
         }
         document.getElementById('result_area').innerHTML =
-          'There was an error: ' + err;
+          'Error: ' + err;
       });
   };
 
@@ -256,59 +294,36 @@ export default function CreateInst() {
               </div>
          </div>
             <div id="mult_users" className="flex flex-col">
-              <div id="add_one_user" className="flex">
-                <div className="w-1/2">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    id="0-access"
-                  >
-                    Access Type
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="user_type-0"
-                      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    >
-                      <option>Institution Researcher</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="w-1/2 px-3 mb-6">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    id="0-email"
-                  >
-                    User email
-                  </label>
-                  <input
-                    name="user-0"
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    type="email"
-                    placeholder="j.smith@inst1.edu"
-                  ></input>
-                </div>
-              </div>
+              {renderFullEmailList()}
             </div>
           </div>
 <div className="flex w-full justify-center">
           <button
             id="button_add_field"
+            type="button"
             className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
-            onClick={addField}
+            onClick={incrementCounter}
           >
             Add Another Email
           </button>
 </div>
-<div className="flex w-full justify-center pt-12">
+<div className="flex w-full justify-center pt-12 gap-x-6">
+ <button
+            type="reset"
+            className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+          >
+            Reset
+          </button>
           <button
             type="submit"
             className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
           >
             Submit
           </button>
+         
           </div>
         </form>
-        <div id="result_area" className="flex pb-24"></div>
+        <div id="result_area" className="flex pb-24 pt-12"></div>
       </div>
     </AppLayout>
   );

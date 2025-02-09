@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 use TokenHelper;
 use InstitutionHelper;
+use UserHelper;
 
 //use GuzzleHttp\Client;
 //use GuzzleHttp\Exception\RequestException;
@@ -68,12 +69,19 @@ class ApiController extends Controller
         if ( $emails_list == null || sizeof($emails_list) == 0) {
             return response()->json(['error' => 'At least one email required.'], 400);
         }
+
+        foreach ($emails_list as $email) {
+            $res = UserHelper::checkEmailExists($email);
+            if ($res != "") {
+                return response()->json(['error' => $email." error: ".$res], 400);
+            }
+        }
+
         return ApiController::constructDatakinderRequest($request, '/datakinders', "POST", $emails_list);
     }
 
     public function createInstApi(Request $request)
     {
-
         if ($request->input('name') == null || $request->input('name') == "") {
             return response()->json(['error' => 'Name required.'], 400);
         }
@@ -82,8 +90,6 @@ class ApiController extends Controller
         ];
 
         // Optional fields.
-        if ($request->input('description') != null && $request->input('description') != "") 
-            {$post_request_body['description'] = $request->input('description');}
         if ($request->input('state') != null && $request->input('state') != "") 
             {$post_request_body['state'] = $request->input('state');}
         if ($request->input('allowed_schemas') != null) 
@@ -92,6 +98,8 @@ class ApiController extends Controller
             {$post_request_body['allowed_emails'] = $request->input('allowed_emails');}
         if ($request->input('is_pdp') != null) 
             {$post_request_body['is_pdp'] = $request->input('is_pdp');}
+        if ($request->input('pdp_id') != null) 
+            {$post_request_body['pdp_id'] = $request->input('pdp_id');}
         if ($request->input('retention_days') != null && $request->input('retention_days') != "") 
             {$post_request_body['retention_days'] = $request->input('retention_days');}
         
@@ -145,8 +153,6 @@ class ApiController extends Controller
         $post_request_body = [
             'name' => $request->input('name'),
         ];
-         if ($request->input('description') != null && $request->input('description') != "") 
-            {$post_request_body['description'] = $request->input('description');}
         if ($request->input('batch_disabled') != null) 
             {$post_request_body['batch_disabled'] = $request->input('batch_disabled');}
         if ($request->input('file_names') != null) 

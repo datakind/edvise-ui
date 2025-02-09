@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import HeaderLabel from '@/Components/HeaderLabel';
 
-// TODO show user does not exist error message if the email does not exist in the user table.
+// TODO enable adding multiple datakinders at once.
 export default function AddDatakinders() {
   const handleSubmit = event => {
     event.preventDefault();

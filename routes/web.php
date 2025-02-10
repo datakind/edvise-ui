@@ -107,6 +107,7 @@ Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback'
 Route::middleware(['auth', 'datakinder'])->group(function () {
     Route::post('/create-inst-api', [ApiController::class, 'createInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
+    Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');

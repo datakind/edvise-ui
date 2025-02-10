@@ -96,14 +96,23 @@ class ApiController extends Controller
             {$post_request_body['allowed_schemas'] = $request->input('allowed_schemas');}
         if ($request->input('allowed_emails') != null) 
             {$post_request_body['allowed_emails'] = $request->input('allowed_emails');}
-        if ($request->input('is_pdp') != null) 
-            {$post_request_body['is_pdp'] = $request->input('is_pdp');}
+        if ($request->input('is_pdp') != null) {   
+            if ($request->input('is_pdp') && $request->input('pdp_id') == null) {
+                return response()->json(['error' => 'Please set the PDP ID field for schools that support PDP schemas.'], 400);
+            }
+            $post_request_body['is_pdp'] = $request->input('is_pdp');
+        }
         if ($request->input('pdp_id') != null) 
             {$post_request_body['pdp_id'] = $request->input('pdp_id');}
         if ($request->input('retention_days') != null && $request->input('retention_days') != "") 
             {$post_request_body['retention_days'] = $request->input('retention_days');}
         
         return ApiController::constructDatakinderRequest($request, '/institutions', "POST", $post_request_body);
+    }
+
+    public function viewAllInstitutions(Request $request)
+    {
+        return ApiController::constructDatakinderRequest($request, '/institutions', "GET", /* No POST body*/ null);
     }
 
     // Constructs a query without the BACKEND_URL+/institutions/<inst> prefix.

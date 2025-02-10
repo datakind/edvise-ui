@@ -4,6 +4,7 @@ import { Chart } from "react-google-charts";
 
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
+import ModelRunHistory from '@/Components/ModelRunHistory';
 
 const histogramOptions = {
   title: "Distribution of Support Scores",
@@ -120,6 +121,9 @@ export default function Dashboard() {
             width={"800px"}
             height={chartData2.length * 25 + 100}
           />
+          <div className="w-full max-w-[1057px] mx-auto">
+            <ModelRunHistory />
+          </div>
         </div>
       }
     </AppLayout>

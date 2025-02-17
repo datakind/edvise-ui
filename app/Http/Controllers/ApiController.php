@@ -85,6 +85,9 @@ class ApiController extends Controller
         if ($request->input('name') == null || $request->input('name') == "") {
             return response()->json(['error' => 'Name required.'], 400);
         }
+        if (!preg_match("^[A-Za-z0-9&_ -]*$", $request->input('name'))) {
+            return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, & and spaces.'], 400);
+        }
         $post_request_body = [
             'name' => $request->input('name'),
         ];
@@ -154,6 +157,33 @@ class ApiController extends Controller
             return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
         }
         return $resp;
+    }
+
+    public function createModelApi(Request $request)
+    {
+        if ($request->user()->access_type != "DATAKINDER") {
+            return response()->json(['error' => 'Only datakinders can perform this action'], 401);
+        }
+        if ($request->input('name') == null || $request->input('name') == "") {
+            return response()->json(['error' => 'Name required.'], 400);
+        }
+        if (!preg_match("^[A-Za-z0-9_ -]*$", $request->input('name'))) {
+            return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, and spaces.'], 400);
+        }
+        $post_request_body = [
+            'name' => $request->input('name'),
+        ];
+
+        // Optional fields.
+        if ($request->input('vers_id') != null && $request->input('vers_id') != "") 
+            {$post_request_body['vers_id'] = $request->input('vers_id');}
+        if ($request->input('valid') != null) {   
+            $post_request_body['valid'] = $request->input('valid');
+        }
+
+        if ($request->input('schema_configs') != null) 
+            {$post_request_body['schema_configs'] = $request->input('schema_configs');}
+        return ApiController::constructInstRequest($request, '/models/', "POST", $post_request_body);
     }
 
     public function createBatch(Request $request)

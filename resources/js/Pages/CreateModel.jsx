@@ -16,8 +16,44 @@ export default function CreateModel() {
 ];
   const handleSubmit = (event) => {
     event.preventDefault();
-// API call here
-    return null;
+    let schemaConfig = [];
+    if (event.target.elements.PDP.checked) {
+      schemaConfig.push( [
+        {"schema_type": "PDP_COURSE", "optional": false, "multiple_allowed": false},
+        {"schema_type": "PDP_COHORT", "optional": false, "multiple_allowed": false},
+        {"schema_type": "SST_PDP_FINANCE", "optional": true, "multiple_allowed": false},
+    ]);
+      schemaConfig.push(  [
+        {"schema_type": "SST_PDP_COHORT", "optional": false, "multiple_allowed": false},
+        {"schema_type": "SST_PDP_COURSE", "optional": false, "multiple_allowed": false},
+        {"schema_type": "SST_PDP_FINANCE", "optional": true, "multiple_allowed": false},
+    ]);
+    }
+    if (event.target.elements.Custom.checked) {
+      schemaConfig.push( [
+      {"schema_type": "", "optional": false, "multiple_allowed": true},
+    ]);
+    }
+    return axios({
+      method: 'post',
+      url: '/create-model',
+      data: {
+        name: event.target.elements.model_name.value,
+        vers_id:  event.target.elements.vers_id.value,
+        valid: event.target.elements.valid.value,
+        schema_configs: schemaConfig,
+      },
+    })
+      .then(res => {
+         document.getElementById("result_area").innerHTML = "Done";
+      })
+      .catch(e => {
+        if( e.response ){
+            document.getElementById("result_area").innerHTML = "Error " + JSON.stringify(e.response.data.error); 
+          } else {
+            document.getElementById("result_area").innerHTML =  JSON.stringify(e) ;
+          }
+      });
   };
 
   return (
@@ -36,7 +72,7 @@ export default function CreateModel() {
             <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Admin Actions"
-          minorTitle="Create Model (Currently NOOP)"
+          minorTitle="Create Model"
         ></HeaderLabel>
         <form className="w-full max-w-full pl-36 pr-36 pt-24" onSubmit={handleSubmit}>
           <div id="form_contents" className="flex flex-col gap-y-6">
@@ -57,6 +93,25 @@ export default function CreateModel() {
                 <p className="text-red-500 text-xs italic">Required field.</p>
               </div>
             </div>
+            <div className="flex flex-col w-1/2">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  id="vers_id"
+                >
+                  Version ID
+                </label>
+                <input
+                  name="vers_id"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="number" min="0" max="10" defaultValue="0"
+                ></input>
+                <p className="text-gray-600 text-xs italic">
+                  Version ID of the model. Use zero for initial version.
+                </p>
+              </div>
+              <div className="flex flex-row w-1/2 gap-x-3 items-center">
+              <input type="radio" id="valid" name="model_valid" defaultValue="Valid"></input><label htmlFor="valid">Model is "valid" (i.e. ready for use).</label>
+              </div>
 <div className="flex flex-row w-full gap-x-6">
               <div className="flex flex-col w-1/2">
                  <fieldset>

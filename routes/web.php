@@ -49,6 +49,7 @@ Route::middleware('auth')->get('/file-upload',
 Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
 Route::middleware('auth')->post('/create-batch', [ApiController::class, 'createBatch']);
+Route::middleware('auth')->post('/create-model', [ApiController::class, 'createModelApi']);
 
 Route::middleware('auth')->get('/view-data',
     function () {

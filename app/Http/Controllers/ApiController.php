@@ -85,7 +85,7 @@ class ApiController extends Controller
         if ($request->input('name') == null || $request->input('name') == "") {
             return response()->json(['error' => 'Name required.'], 400);
         }
-        if (!preg_match("^[A-Za-z0-9&_ -]*$", $request->input('name'))) {
+        if (!preg_match('/^[A-Za-z0-9&_ -]*$/', $request->input('name'))) {
             return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, & and spaces.'], 400);
         }
         $post_request_body = [
@@ -167,7 +167,7 @@ class ApiController extends Controller
         if ($request->input('name') == null || $request->input('name') == "") {
             return response()->json(['error' => 'Name required.'], 400);
         }
-        if (!preg_match("^[A-Za-z0-9_ -]*$", $request->input('name'))) {
+        if (!preg_match('/^[A-Za-z0-9_ -]*$/', $request->input('name'))) {
             return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, and spaces.'], 400);
         }
         $post_request_body = [
@@ -224,6 +224,12 @@ class ApiController extends Controller
     public function downloadInfData(Request $request, string $filename)
     {
         return ApiController::constructInstRequest($request, '/download-url/'.$filename, "GET", null);
+    }
+
+    // Gets list of models for a given institution
+    public function getModels(Request $request)
+    {
+        return ApiController::constructInstRequest($request, '/models', "GET", null);
     }
 
     public function modelData(Request $request, string $model_id, $vers_id, $output_id)

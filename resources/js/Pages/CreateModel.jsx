@@ -34,13 +34,14 @@ export default function CreateModel() {
       {"schema_type": "", "optional": false, "multiple_allowed": true},
     ]);
     }
+    let validBool = (event.target.elements.valid.value == "Valid");
     return axios({
       method: 'post',
       url: '/create-model',
       data: {
         name: event.target.elements.model_name.value,
         vers_id:  event.target.elements.vers_id.value,
-        valid: event.target.elements.valid.value,
+        valid: validBool,
         schema_configs: schemaConfig,
       },
     })

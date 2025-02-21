@@ -61,18 +61,21 @@ export default function RunInference() {
         is_pdp: true,
       },
     }).then(res => {
+      console.log("aaaaaaaaaaaaaaaaaaaaaaa1");
         setResult(JSON.stringify(res.data));
         setTriggeredRun(true);
       })
       .catch(err => {
+      console.log("aaaaaaaaaaaaaaaaaaaaaaa2");
         setError(JSON.stringify(err));
         setTriggeredRun(true);
       });
+      return;
   };
 
-  const renderResults = result => {
+  const renderResults = (result, error) => {
     let msg = 'Prediction initiated!';
-    if (error !== '') {
+    if (result == null || result == '') {
       msg = '[ERROR] Prediction request failed with: ' + error;
       return (
         <div className="flex px-36">
@@ -185,7 +188,7 @@ export default function RunInference() {
           className="pt-32 pb-12"
         />
         {triggeredRun
-          ? renderResults(result)
+          ? renderResults(result, error)
           : renderPredictionParamInputs(currentStep)}
       </div>
     </AppLayout>

@@ -65,7 +65,7 @@ export default function RunInference() {
         setTriggeredRun(true);
       })
       .catch(err => {
-        setError(JSON.stringify(err));
+        setError(JSON.stringify(err.message));
         setTriggeredRun(true);
       });
   };

@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
         // return redirect()->route('home'); // simply returns the homepage
-    })->name('dashboard');
+    })->name('dashboard_old');
 });
 
 Route::middleware('auth')->group(function () {
@@ -45,11 +45,19 @@ Route::middleware('auth')->get('/file-upload',
         return Inertia::render('FileUpload');
     })->name('file-upload');
 
+Route::middleware('auth')->get('/dashboard/{modelname}',
+    function ($modelname) {
+        return Inertia::render('Dashboard', ['model_name' => $modelname]);
+    })->name('dashboard');
+
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
+Route::middleware('auth')->post('/run-inference/{model_name}/{model_vers}', [ApiController::class, 'runInference']);
+
 Route::middleware('auth')->post('/create-batch', [ApiController::class, 'createBatch']);
 Route::middleware('auth')->post('/create-model', [ApiController::class, 'createModelApi']);
+Route::middleware('auth')->get('/models-api', [ApiController::class, 'getModels']);
 
 Route::middleware('auth')->get('/view-data',
     function () {

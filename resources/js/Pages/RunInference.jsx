@@ -14,15 +14,65 @@ export default function RunInference() {
   const [result, setResult] = useState('');
   const steps = [{ label: 'Start Prediction', step: 1 }];
 
-  const triggerInference = () => {
-    setTriggeredRun(true);
-    setResult('');
-    // ADD DATABRICKS WEBHOOK CALL HERE
+  const [batchList, setBatchList] = useState([]);
+  const [modelsList, setModelsList] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    axios
+      .get('/models-api')
+      .then(res => {
+        setModelsList(res.data);
+        console.log(JSON.stringify(res.data));
+      })
+      .catch(err => {
+        setError(JSON.stringify(err));
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get('/view-uploaded-data')
+      .then(res => {
+        setBatchList(res.data.batches);
+        console.log(JSON.stringify(res.data.batches));
+      })
+      .catch(err => {
+        setError(JSON.stringify(err));
+      });
+  }, []);
+
+  const triggerInference = (event) => {
+    event.preventDefault();
+    let pdp = true; //event.target.elements.PDP.checked;
+    if (event.target.elements.batch_name.value == "") {
+      setError("No batch set.");
+      return;
+    }
+    if (event.target.elements.model_name.value == "") {
+      setError("No model set.");
+      return;
+    }
+    // TODO: enable model versions
+    axios({
+      method: 'post',
+      url: '/run-inference/'+event.target.elements.model_name.value+'/0',
+      data: {
+        batch_name: event.target.elements.batch_name.value,
+        is_pdp: pdp,
+      },
+    }).then(res => {
+        setResult(JSON.stringify(res.data));
+        setTriggeredRun(true);
+      })
+      .catch(err => {
+        setError(JSON.stringify(err));
+        setTriggeredRun(true);
+      });
   };
 
   const renderResults = result => {
     let msg = 'Prediction initiated!';
-    if (result !== '') {
+    if (error !== '') {
       msg = '[ERROR] Prediction request failed with: ' + result;
       return (
         <div className="flex px-36">
@@ -30,6 +80,7 @@ export default function RunInference() {
         </div>
       );
     }
+    msg = msg + result;
     return (
       <div className="flex px-36">
         <BigSuccessAlert
@@ -54,13 +105,21 @@ export default function RunInference() {
           Step 1: Please select an existing batch or import new data.
         </div>
         <div className="flex flex-row gap-x-6 w-full justify-center">
-          <select
+        {(batchList == undefined || batchList.length == 0) ?
+
+      (  <select
             className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
-            id="batch-id"
+            id="batch_name"
           >
-            <option>Batch 1</option>
-            <option>Batch 2</option>
+            <option disabled value="">No batches exist</option>
           </select>
+          ) : (
+               <select
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            id="batch_name"
+          >
+          {batchList.map((b) => <option>{b.name}</option>)}
+          </select>) }
           <span className="text-black font-bold flex">or</span>
           <Link
             href={route('file-upload')}
@@ -73,13 +132,20 @@ export default function RunInference() {
         <div className="flex py-3 font-bold">
           Step 2: Please select a model.
         </div>
-        <select
-          className="flex bg-white border border-gray-200 text-gray-700 w-1/2 py-2 px-6 mb-4 rounded-lg focus:outline-none focus:border-gray-500"
-          id="model-id"
-        >
-          <option>Model 1</option>
-          <option>Model 2</option>
-        </select>
+      {(modelsList == undefined || modelsList.length == 0) ?
+      (<select
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            id="model_name"
+          >
+            <option disabled value="">No Models exist</option>
+          </select>
+          ) : (
+               <select
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            id="model_name"
+          >
+          {modelsList.map((m) => <option>{m.name}</option>)}
+          </select>) }
         <div className="flex w-full justify-end items-end pr-48 pt-12">
           <button
             id="button_content"

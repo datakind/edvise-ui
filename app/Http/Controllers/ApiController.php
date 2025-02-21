@@ -217,13 +217,25 @@ class ApiController extends Controller
     // This shows all output data.
     public function viewOutputData(Request $request)
     {
-        return ApiController::constructInstRequest($request, '/output', "GET");
+        return ApiController::constructInstRequest($request, '/output', "GET", null);
     }
 
     // Downloading inference output
     public function downloadInfData(Request $request, string $filename)
     {
         return ApiController::constructInstRequest($request, '/download-url/'.$filename, "GET", null);
+    }
+
+    // Triggers inference run. 
+    public function runInference(Request $request, string $model_name, int $model_vers)
+    {
+         $post_request_body = [
+            'batch_name' => $request->input('batch_name'),
+        ];
+        if ($request->input('is_pdp') != null) 
+            {$post_request_body['is_pdp'] = $request->input('is_pdp');}
+
+        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/vers/'.$model_vers.'/run-inference', "POST", $post_request_body);
     }
 
     // Gets list of models for a given institution

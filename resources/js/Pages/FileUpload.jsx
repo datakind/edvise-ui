@@ -31,7 +31,6 @@ export default function FileUpload() {
   const [startPrediction, setStartPrediction] = useState(false);
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
-  const [additionalFiles, setAdditionalFiles] = useState([]);
 
   const steps = [
     { label: 'Upload data', step: 1 },
@@ -523,31 +522,6 @@ export default function FileUpload() {
           <p className="mt-2 text-sm text-gray-500">
             If left blank, we will give it a default name (ie. Batch_YYYYMMDD_TIMESTAMP)
           </p>
-        </div>
-        <div>
-          <label className="block text-md font-medium text-gray-700">
-            Optional: Would you like to add previously stored files to this
-            batch?
-          </label>
-          <div className="mt-1">
-            <button
-              className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4 font-medium rounded-md hover:bg-[#f79222] hover:text-white focus:ring-2 focus:ring-[#f79222]"
-              onClick={() => {
-                /* Handle adding files logic here */
-              }}
-            >
-              + Add files
-            </button>
-          </div>
-          {additionalFiles.length > 0 && (
-            <ul className="mt-4">
-              {additionalFiles.map(file => (
-                <li key={file.name} className="py-1">
-                  {file.name}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
         <div className="flex flex-row justify-between w-full items-end pt-24">
         <Link

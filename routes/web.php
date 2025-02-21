@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
         // return redirect()->route('home'); // simply returns the homepage
-    })->name('dashboard_old');
+    })->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
@@ -45,11 +45,11 @@ Route::middleware('auth')->get('/file-upload',
         return Inertia::render('FileUpload');
     })->name('file-upload');
 
-Route::middleware('auth')->get('/dashboard/{modelname}',
+/*Route::middleware('auth')->get('/dashboard/{modelname}',
     function ($modelname) {
         return Inertia::render('Dashboard', ['model_name' => $modelname]);
-    })->name('dashboard');
-
+    })->name('dashboard_modelname');
+*/
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);

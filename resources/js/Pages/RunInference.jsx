@@ -43,7 +43,7 @@ export default function RunInference() {
 
   const triggerInference = (event) => {
     event.preventDefault();
-    let pdp = event.target.elements.PDP.checked;
+    // TODO: enable some way to indicate if it is pdp or not? is that required.
     if (event.target.elements.batch_name.value == "") {
       setError("No batch set.");
       return;
@@ -58,7 +58,7 @@ export default function RunInference() {
       url: '/run-inference/'+event.target.elements.model_name.value+'/0',
       data: {
         batch_name: event.target.elements.batch_name.value,
-        is_pdp: pdp,
+        is_pdp: true,
       },
     }).then(res => {
         setResult(JSON.stringify(res.data));

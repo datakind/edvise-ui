@@ -76,6 +76,10 @@ return (
   const handleSubmit = (event) => {
     event.preventDefault();
     let pdp = event.target.elements.PDP.checked;
+    if (event.target.elements.inst_name.value == null || event.target.elements.inst_name.value == ""){
+      document.getElementById('result_area').innerHTML = 'Error: Institution name is required.';
+      return;
+    }
     // We currently only have custom for potential other schemas. NOte that the shema passed to the API call must match the corresponding backend schema enum value.
     let other_schemas = event.target.elements.Custom.checked ? ['CUSTOM'] : null;
     var emailDict = {};
@@ -155,11 +159,11 @@ for (const [key, value] of Object.entries(emailDict)) {
                 </label>
                 <input
                   name="inst_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   type="text"
                   placeholder="College/University Name"
                 ></input>
-                <p className="text-red-500 text-xs italic">Required field.</p>
+                <p className="text-gray-700 text-xs italic">Required field.</p>
               </div>
               <div className="flex flex-col w-1/3">
                 <label

@@ -43,7 +43,7 @@ export default function RunInference() {
 
   const triggerInference = (event) => {
     event.preventDefault();
-    let pdp = true; //event.target.elements.PDP.checked;
+    let pdp = event.target.elements.PDP.checked;
     if (event.target.elements.batch_name.value == "") {
       setError("No batch set.");
       return;
@@ -101,21 +101,22 @@ export default function RunInference() {
         <div className="flex pb-6">
           Select the model and batch that you would like to run a prediction on.
         </div>
-        <div className="flex py-3 font-bold">
+        <form onSubmit={triggerInference}>
+        <div className="flex py-3 font-bold justify-center">
           Step 1: Please select an existing batch or import new data.
         </div>
         <div className="flex flex-row gap-x-6 w-full justify-center">
         {(batchList == undefined || batchList.length == 0) ?
 
       (  <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
             id="batch_name"
           >
             <option disabled value="">No batches exist</option>
           </select>
           ) : (
                <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
             id="batch_name"
           >
           {batchList.map((b) => <option>{b.name}</option>)}
@@ -134,27 +135,28 @@ export default function RunInference() {
         </div>
       {(modelsList == undefined || modelsList.length == 0) ?
       (<select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
             id="model_name"
           >
             <option disabled value="">No Models exist</option>
           </select>
           ) : (
                <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/4 rounded-lg focus:outline-none focus:border-gray-500"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
             id="model_name"
           >
           {modelsList.map((m) => <option>{m.name}</option>)}
           </select>) }
-        <div className="flex w-full justify-end items-end pr-48 pt-12">
+        <div className="flex w-full justify-end items-end pt-12">
           <button
-            id="button_content"
-            onClick={triggerInference}
-            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            type="submit"
+            className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center font-semibold rounded-lg"
           >
             Generate Predictions
           </button>
+
         </div>
+        </form>
       </div>
     );
   };

@@ -73,7 +73,7 @@ export default function RunInference() {
   const renderResults = result => {
     let msg = 'Prediction initiated!';
     if (error !== '') {
-      msg = '[ERROR] Prediction request failed with: ' + result;
+      msg = '[ERROR] Prediction request failed with: ' + error;
       return (
         <div className="flex px-36">
           <BigDangerAlert mainMsg={msg}></BigDangerAlert>

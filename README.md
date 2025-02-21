@@ -66,6 +66,9 @@ Optionally install the React Dev Tools: https://chromewebstore.google.com/detail
 
 Use console.log() and fn+12 to open chrome dev panel.
 
+## Other setup
+To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database.
+
 ## Styling
 
 Similar to Python's Black, you can use run `./vendor/bin/pint` to autoformat your PHP.

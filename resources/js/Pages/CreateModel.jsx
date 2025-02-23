@@ -31,7 +31,7 @@ export default function CreateModel() {
     }
     if (event.target.elements.Custom.checked) {
       schemaConfig.push( [
-      {"schema_type": "", "optional": false, "multiple_allowed": true},
+      {"schema_type": "UNKNOWN", "optional": false, "multiple_allowed": true},
     ]);
     }
     let validBool = (event.target.elements.valid.value == "Valid");

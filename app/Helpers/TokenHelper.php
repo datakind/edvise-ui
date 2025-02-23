@@ -31,15 +31,17 @@ class TokenHelper
     }
 
     public static function makeTokenAPICall(Request $request, int $current_timestamp) {
-        $token_response = Http::asForm()->post(env('BACKEND_URL').'/token', [
-            'username' => env('BACKEND_FE_USER'),
-            'password' => env('BACKEND_FE_PASSWORD'),
-            'grant_type' => 'password',
-            'scope' => $request->user()->email,
-        ]);
+        $headers = [
+            'X-API-KEY' => env('BACKEND_API_KEY'),
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+            'ENDUSER' => $request->user()->email,
+        ];
+        $url = env('BACKEND_URL').'/token-from-api-key';
+        $token_response = Http::withHeaders($headers)->post($url);
 
         if (! $token_response->ok()) {
-            return ["", "Invalid username/password"];
+            return ["", "Invalid API Key"];
         }
 
         $tok = json_decode($token_response)->access_token;

@@ -27,13 +27,14 @@ Route::get('/login', function () {
     ]);
 })->name('login');
 
+/*
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
         // return redirect()->route('home'); // simply returns the homepage
     })->name('dashboard');
 });
-
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -45,15 +46,21 @@ Route::middleware('auth')->get('/file-upload',
         return Inertia::render('FileUpload');
     })->name('file-upload');
 
-/*Route::middleware('auth')->get('/dashboard/{modelname}',
+Route::middleware('auth')->get('/dashboard/{modelname}',
     function ($modelname) {
         return Inertia::render('Dashboard', ['model_name' => $modelname]);
     })->name('dashboard_modelname');
-*/
+
+// The default dashboard page.
+Route::middleware('auth')->get('/dashboard',
+    function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
 // difficult to get params working with named routes
 Route::middleware('auth')->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware('auth')->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
-Route::middleware('auth')->post('/run-inference/{model_name}/{model_vers}', [ApiController::class, 'runInference']);
+Route::middleware('auth')->post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
 
 Route::middleware('auth')->post('/create-batch', [ApiController::class, 'createBatch']);
 Route::middleware('auth')->post('/create-model', [ApiController::class, 'createModelApi']);
@@ -80,8 +87,8 @@ Route::middleware('auth')->get('/download-data',
 
 Route::middleware('auth')->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData']);
 
-Route::middleware('auth')->get('/model-data/{model_id}/{vers_id}/{output_id}', [ApiController::class, 'modelData']);
-
+Route::middleware('auth')->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes']);
+Route::middleware('auth')->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

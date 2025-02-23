@@ -227,7 +227,7 @@ class ApiController extends Controller
     }
 
     // Triggers inference run. 
-    public function runInference(Request $request, string $model_name, int $model_vers)
+    public function runInferenceApi(Request $request, string $model_name)
     {
          $post_request_body = [
             'batch_name' => $request->input('batch_name'),
@@ -235,7 +235,7 @@ class ApiController extends Controller
         if ($request->input('is_pdp') != null) 
             {$post_request_body['is_pdp'] = $request->input('is_pdp');}
 
-        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/vers/'.$model_vers.'/run-inference', "POST", $post_request_body);
+        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/run-inference', "POST", $post_request_body);
     }
 
     // Gets list of models for a given institution
@@ -244,13 +244,18 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, '/models', "GET", null);
     }
 
-    public function modelData(Request $request, string $model_id, $vers_id, $output_id)
+    public function fileBytes(Request $request, string $file_name)
     {
-        // TODO: make this work with the backend
-        // return ApiController::constructInstRequest($request, sprintf("/models/%s/vers/%s/output/%s", $model_id, $vers_id, $output_id), "GET", null);
-        return file_get_contents(__DIR__ . "/fixtures/model-output.json");
+        // TODO: finish implementing
+        //return file_get_contents(__DIR__ . "/fixtures/model-output.json");
+        // This returns a bytes value
+        return ApiController::constructInstRequest($request, '/output-file-contents/'.$file_name, "GET", null);
     }
 
+    public function modelRuns(Request $request, string $model_name) {
+
+        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/runs', "GET", null);
+    }
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)
     {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { usePage } from '@inertiajs/react';
-
+import {
+  ArrowUturnLeftIcon,
+} from '@heroicons/react/24/outline';
 const ModelRunHistory = () => {
     const { modelRunHistory } = usePage().props;
 
@@ -23,8 +25,8 @@ const ModelRunHistory = () => {
     const dataToDisplay = modelRunHistory || sampleModelRunHistory;
 
     return (
-        <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-2">Model Run History</h3> {/* Heading remains */}
+        <div className="mt-8 pb-12">
+            <h3 className="text-lg font-semibold mb-2 flex flex-row gap-x-3"><ArrowUturnLeftIcon aria-hidden="true" className="size-6 shrink-0"/> Model Run History</h3> {/* Heading remains */}
             <div className="flex overflow-hidden flex-wrap items-start self-stretch w-full text-sm font-medium leading-none text-gray-700 bg-white rounded-lg shadow max-md:mt-10">
                 <div className="flex flex-col grow shrink min-w-[240px] w-[257px]">
                     <TableHeader title="DATE" />

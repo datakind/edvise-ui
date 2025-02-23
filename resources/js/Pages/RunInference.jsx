@@ -52,10 +52,9 @@ export default function RunInference() {
       setError("No model set.");
       return;
     }
-    // TODO: enable model versions
     axios({
       method: 'post',
-      url: '/run-inference/'+event.target.elements.model_name.value+'/0',
+      url: '/run-inference/'+event.target.elements.model_name.value,
       data: {
         batch_name: event.target.elements.batch_name.value,
         is_pdp: true,

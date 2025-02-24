@@ -91,6 +91,7 @@ export default function Dashboard({ modelname }) {
   const [outputFilename, setOutputFilename] = useState('');
   const [currentRunId, setCurrentRunId] = useState('');
   const [data, setData] = useState([]); // the raw json data of the csv file
+  const [shapImgUrl, setShapImgUrl] = useState(''); // the img url of the object
 
   useEffect(() => {
     const fetchModel = async () => {
@@ -137,12 +138,23 @@ export default function Dashboard({ modelname }) {
             }
 
             setRunDatesToJobDict(runDatesDict);
-            // TODO get the most recent run
-            if (run_results[0].output_filename != null) {
-              setOutputFilename(run_results[0].output_filename);
-              const file_response = await axios.get('/output-file-bytes/'+run_results[0].output_filename);
-              // Store output as json instead of bytes.
+            // TODO right now it's just getting the first value, make sure it's the most recent run (on webapp side?)
+            let csv_filename = run_results[0].output_filename;
+            if (csv_filename != null) {
+              setOutputFilename(csv_filename);
+              const file_response = await axios.get('/output-file-bytes/'+csv_filename);
+              let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
+              const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
+              // For the csv data used for histogram, store output as json instead of bytes.
               setData(JSON.stringify(file_response.data));
+              // Convert the byte array to a Blob
+              // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
+              // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
+              const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
+              // Create a URL for the Blob
+              const imageUrl = URL.createObjectURL(blob);
+              // For png data, store bytes directly.
+              setShapImgUrl(imageUrl);
             }
 
           }
@@ -296,6 +308,7 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={chartData2.length * 25 + 100}
           />
+          <img id="ShapPreview" src={shapImgUrl}>
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory />
           </div>

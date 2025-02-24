@@ -80,10 +80,10 @@ Route::middleware('auth')->get('/run-inference',
         return Inertia::render('RunInference');
     })->name('run-inference');
 
-Route::middleware('auth')->get('/download-data',
+Route::middleware('auth')->get('/file-management',
     function () {
-        return Inertia::render('DownloadInfData');
-    })->name('download-data');
+        return Inertia::render('FileManagement');
+    })->name('file-management');
 
 Route::middleware('auth')->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename','.*');
 

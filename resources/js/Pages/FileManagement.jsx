@@ -2,9 +2,12 @@ import React, { useState, ChangeEvent, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import FileView from '@/Components/FileView';
-
+import HeaderLabel from '@/Components/HeaderLabel';
+import {
+  DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline';
 // Skeleton for the download inf data page.
-export default function DownloadInfData() {
+export default function FileManagement() {
   const [files, setFiles] = useState({});
   const [batches, setBatches] = useState({});
   // csv as 2d matrix
@@ -113,11 +116,19 @@ export default function DownloadInfData() {
       title="Download Data"
       renderHeader={() => (
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          FileUpload
+          File Management
         </h2>
       )}
     >
       <div className="py-12">
+      <HeaderLabel
+          className="pl-12"
+          iconObj={
+            <DocumentDuplicateIcon aria-hidden="true" className="size-6 shrink-0" />
+          }
+          majorTitle="Actions"
+          minorTitle="File Management"
+        ></HeaderLabel>
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <p id="info">
             Type in the filename you want to download below.
@@ -144,8 +155,3 @@ export default function DownloadInfData() {
     </AppLayout>
   );
 }
-
-/* TODO: Add file type to the file database as a column and do a match with the model type 
-Does databricks track what files are used for a particular run? 
-Add a way to skip validation
-*/

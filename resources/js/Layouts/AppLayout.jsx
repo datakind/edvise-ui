@@ -58,6 +58,7 @@ var navigationAboveLine = [
     children: [
       { name: 'Upload Data', href: route('file-upload') },
       { name: 'Start Prediction', href: route('run-inference') },
+      { name: 'File Management', href: route('file-management')},
     ],
   },
   {
@@ -96,12 +97,6 @@ var navigationAboveLine = [
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
     ],
-  },
-  {
-    name: 'Download Data',
-    href: route('download-data'),
-    icon: DocumentDuplicateIcon,
-    visibility_type: VisibilityType.PRIVATE_ONLY,
   },
   {
     name: 'Data Dictionary',

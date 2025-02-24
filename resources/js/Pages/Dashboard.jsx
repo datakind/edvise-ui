@@ -146,15 +146,16 @@ export default function Dashboard({ modelname }) {
               setOutputFilename(csv_filename);
               const file_response = await axios.get('/output-file-bytes/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
+              // broken TODO
+              //const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
               // For the csv data used for histogram, store output as json instead of bytes.
               setData(JSON.stringify(file_response.data));
               // Convert the byte array to a Blob
               // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
               // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
-              const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
+              // const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
               // Create a URL for the Blob
-              setShapImgBlob(blob);
+              // setShapImgBlob(blob);
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
               // TODO handle
@@ -225,17 +226,17 @@ export default function Dashboard({ modelname }) {
               // Store file as json.
               setData(JSON.stringify(res.data));
                let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
+              /*return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
                  const blob = new Blob([new Uint8Array(res1.data)], { type: 'image/png' });
                   setShapImgBlob(blob);
-              }).catch(err1 => setError(err1));
+              }).catch(err1 => setError(err1));*/
             }
         ).catch(err => setError(err));
     } else {
       setCurrentRunCompleted(false);
     }
   };
-
+//            <img id="ShapPreview" alt="shap value graph" src={URL.createObjectURL(shapImgBlob)}/>
   return (
     <AppLayout
       title="Dashboard"
@@ -323,7 +324,7 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={chartData2.length * 25 + 100}
           />
-          <img id="ShapPreview" alt="shap value graph" src={URL.createObjectURL(shapImgBlob)}/>
+
           </div>
           ) : (<></>)}
           <div className="w-full max-w-[1057px] mx-auto">

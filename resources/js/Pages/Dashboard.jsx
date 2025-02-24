@@ -181,20 +181,6 @@ export default function Dashboard({ modelname }) {
     fetchModel();
   }, []);
 
-  /*useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/model-data/foo/bar/baz');
-        setData(response.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-*/
   const triggerDownload = () => {
     if (outputFilename != null && outputFilename != "") {
       return axios
@@ -210,8 +196,6 @@ export default function Dashboard({ modelname }) {
   };
 
   const chartData = processRiskScoreData(data);
-  // const chartData2 = processFeatureData(data);
-
 
   // TODO handle the case where multiple runs occurred in one day
   const applyDate = (event) => {
@@ -328,7 +312,7 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={chartData2.length * 25 + 100}
           /> */}
- <img id="ShapPreview" alt="shap value graph" src={URL.createObjectURL(shapImgBlob)}/>
+        <img id="ShapPreview" alt="shap value graph" src={shapImgBlob}/>
           </div>
           ) : (<></>)}
           <div className="w-full max-w-[1057px] mx-auto">

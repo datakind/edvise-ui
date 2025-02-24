@@ -58,7 +58,8 @@ var navigationAboveLine = [
     children: [
       { name: 'Upload Data', href: route('file-upload') },
       { name: 'Start Prediction', href: route('run-inference') },
-      { name: 'File Management', href: route('file-management')},
+      // TODO: uncomment once we have this implemented.
+      // { name: 'File Management', href: route('file-management')},
     ],
   },
   {
@@ -98,28 +99,28 @@ var navigationAboveLine = [
       },
     ],
   },
-  {
+  /*{
     name: 'Data Dictionary',
     href: route('data-dictionary'),
     icon: BookOpenIcon,
     visibility_type: VisibilityType.BOTH,
-  },
+  },*/
 ];
 
 const navigationBelowLine = [
-  {
+  /*{
     name: 'FAQ',
     href: route('FAQ'),
     icon: DocumentDuplicateIcon,
     visibility_type: VisibilityType.BOTH,
-  },
+  },*/
   {
     name: 'Logout',
     href: route('logout'),
     icon: ArrowRightStartOnRectangleIcon,
     visibility_type: VisibilityType.PRIVATE_ONLY,
   },
-  {
+  /*{
     name: 'Contact Us',
     href: '#',
     icon: PhoneIcon,
@@ -130,7 +131,7 @@ const navigationBelowLine = [
     href: '#',
     icon: InformationCircleIcon,
     visibility_type: VisibilityType.PUBLIC_ONLY,
-  },
+  },*/
 ];
 
            

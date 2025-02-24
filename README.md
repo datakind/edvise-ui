@@ -71,9 +71,19 @@ Use console.log() and fn+12 to open chrome dev panel.
 You will need to spin up a local version of the backend.
 * Git clone the student-success-tool repo on the branch fellows-experimental
 * In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
+* Go to 127.0.0.1:8001/docs, authorize with the LOCAL env credentials: username = tester@datakind.org, password = tester_password
+* Then execute the /generate-api-key endpoint with the following request body: 
+```
+{
+  "access_type": "DATAKINDER",
+  "allows_enduser": true,
+  "valid": true
+}
+```
+* Copy the resulting key to be the value for your frontend env file's variable `BACKEND_API_KEY=`
 * In your frontend .env file set: `BACKEND_URL="http://127.0.0.1:8001/api/v1"`
-* And set `BACKEND_API_KEY=` to a value you generated with your local version of the backend.
-To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database.
+
+To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database OR just create the tester@datakind.org with the password tester_password user in the local frontend.
 
 ## Styling
 

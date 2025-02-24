@@ -88,10 +88,11 @@ export default function Dashboard({ modelname }) {
   const [runs, setRuns] = useState([]);
   const [runDatesToJobDict, setRunDatesToJobDict] = useState({});
   // These need to be set depending on the current run.
-  const [outputFilename, setOutputFilename] = useState('');
   const [currentRunId, setCurrentRunId] = useState('');
+  const [currentRunCompleted, setCurrentRunCompleted] = useState(false); // Whether the current run has output and has completed.
+  const [outputFilename, setOutputFilename] = useState('');
   const [data, setData] = useState([]); // the raw json data of the csv file
-  const [shapImgUrl, setShapImgUrl] = useState(''); // the img url of the object
+  const [shapImgBlob, setShapImgBlob] = useState(null); // the img blob
 
   useEffect(() => {
     const fetchModel = async () => {
@@ -103,6 +104,7 @@ export default function Dashboard({ modelname }) {
         if (models == null || models.length == 0 ){
           // No models for this institution exist.
           setModelInfo(null);
+          throw new Error("This institution does not have any models.");
         } else {
 
           if (modelname == null || modelname == ""){
@@ -111,16 +113,12 @@ export default function Dashboard({ modelname }) {
             setModelInfo(model);
           } else {
             // Find the specific model specified.
-            console.log("aaaaaaaaaaaaaaaaa1");
             let specifiedModel = models.filter((m) => m.name == modelname);
-            console.log("aaaaaaaaaaaaaaaaa2");
-
             if (specifiedModel.length == 0 ) {
               // Specified model not found
-              console.log("aaaaaaaaaaaaaaaaa3");
               setModelInfo(null);
+              throw new Error("Specified model "+modelname+" not found.");
             } else {
-              console.log("aaaaaaaaaaaaaaaaa4");
               model = specifiedModel[0];
               setModelInfo(model);
           }
@@ -138,9 +136,13 @@ export default function Dashboard({ modelname }) {
             }
 
             setRunDatesToJobDict(runDatesDict);
+            if (runDatesDict == {}) {
+                throw new Error("Could not find run dates for "+model.name);      
+            }
             // TODO right now it's just getting the first value, make sure it's the most recent run (on webapp side?)
             let csv_filename = run_results[0].output_filename;
             if (csv_filename != null) {
+              setCurrentRunCompleted(true);
               setOutputFilename(csv_filename);
               const file_response = await axios.get('/output-file-bytes/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
@@ -152,16 +154,19 @@ export default function Dashboard({ modelname }) {
               // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
               const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
               // Create a URL for the Blob
-              const imageUrl = URL.createObjectURL(blob);
-              // For png data, store bytes directly.
-              setShapImgUrl(imageUrl);
+              setShapImgBlob(blob);
+            } else {
+              // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
+              // TODO handle
             }
 
+          } else {
+            throw new Error(model.name+" does not have any runs.");
           }
 
         }
       } catch (err) {
-        setError("Error fetching model info");
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -212,14 +217,22 @@ export default function Dashboard({ modelname }) {
     let run_id = runDatesToJobDict[event.target.elements.run_time.value];
     setCurrentRunId(run_id);
     let runInfo = runs.filter((r) => r.run_id == run_id);
-
-    if (runInfo.output_filename != null) {
-      setOutputFilename(runInfo.output_filename);
-      return axios.get('/output-file-bytes/'+runInfo.output_filename).then(res =>{
+    const csv_filename = runInfo.output_filename;
+    if (csv_filename != null) {
+      setCurrentRunCompleted(true);
+      setOutputFilename(csv_filename);
+      return axios.get('/output-file-bytes/'+csv_filename).then(res =>{
               // Store file as json.
               setData(JSON.stringify(res.data));
+               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
+              return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
+                 const blob = new Blob([new Uint8Array(res1.data)], { type: 'image/png' });
+                  setShapImgBlob(blob);
+              }).catch(err1 => setError(err1));
             }
         ).catch(err => setError(err));
+    } else {
+      setCurrentRunCompleted(false);
     }
   };
 
@@ -234,10 +247,12 @@ export default function Dashboard({ modelname }) {
     >
     {
       <div className="w-full flex" id="main_area">
-      {loading ? (<Spinner />) : (
+      {loading ? (<div className="flex justify-center w-full">
+           <Spinner mainMsg="Loading"></Spinner>
+        </div>) : (
               error != null ?
     (<BigDangerAlert
-            mainMsg={error}
+            mainMsg={"Error: "+ error.message}
             className="flex h-fit mr-24 ml-24"
           ></BigDangerAlert>
       ) : (
@@ -291,7 +306,7 @@ export default function Dashboard({ modelname }) {
             <ArrowUpTrayIcon aria-hidden="true" className="size-6 shrink-0"/>Export
           </button>
           </div>
-        { data != null && data != [] ?
+        { currentRunCompleted ?
         (<div className='flex justify-between items-center flex-col m-auto'>
 
           <PrintableChart
@@ -308,12 +323,12 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={chartData2.length * 25 + 100}
           />
-          <img id="ShapPreview" src={shapImgUrl}>
+          <img id="ShapPreview" alt="shap value graph" src={URL.createObjectURL(shapImgBlob)}/>
+          </div>
+          ) : (<></>)}
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory />
           </div>
-          </div>
-          ) : (<></>)}
          </div>
         )
         )

@@ -61,7 +61,7 @@ export default function RunInference() {
       },
     }).then(res => {
       console.log("aaaaaaaaaaaaaaaaaaaaaaa1");
-        setResult(JSON.stringify(res.data));
+        setResult("Run ID: " + res.data.run_id);
         setTriggeredRun(true);
       })
       .catch(err => {

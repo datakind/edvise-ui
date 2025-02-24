@@ -10,6 +10,8 @@ import {
 
 
 export default function CreateInst() {
+  // TODO: switch to error instead of setting result_area
+  const [error, setError] = useState(null);
 
   // Any update to this schemas list needs to be reflected in the handleSubmit() function call as a checkbox.
      const schemas = [

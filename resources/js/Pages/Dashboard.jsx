@@ -6,6 +6,7 @@ import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
+import BigDangerAlert from '@/Components/BigDangerAlert';
 import {
   ChartBarIcon,
   ArrowUpTrayIcon,
@@ -109,14 +110,18 @@ export default function Dashboard({ modelname }) {
             setModelInfo(model);
           } else {
             // Find the specific model specified.
+            console.log("aaaaaaaaaaaaaaaaa1");
             let specifiedModel = models.filter((m) => m.name == modelname);
+            console.log("aaaaaaaaaaaaaaaaa2");
 
             if (specifiedModel.length == 0 ) {
               // Specified model not found
+              console.log("aaaaaaaaaaaaaaaaa3");
               setModelInfo(null);
             } else {
-            model = specifiedModel[0];
-            setModelInfo(model);
+              console.log("aaaaaaaaaaaaaaaaa4");
+              model = specifiedModel[0];
+              setModelInfo(model);
           }
           }
         }
@@ -144,7 +149,6 @@ export default function Dashboard({ modelname }) {
 
         }
       } catch (err) {
-        setModelInfo(null);
         setError("Error fetching model info");
       } finally {
         setLoading(false);
@@ -218,8 +222,13 @@ export default function Dashboard({ modelname }) {
     >
     {
       <div className="w-full flex" id="main_area">
-      {error && <div className="text-red-500 text-center mb-4">{error.message}</div>}
       {loading ? (<Spinner />) : (
+              error != null ?
+    (<BigDangerAlert
+            mainMsg={error}
+            className="flex h-fit mr-24 ml-24"
+          ></BigDangerAlert>
+      ) : (
               <div className="w-full flex flex-col items-center" id="main_area">
                   <HeaderLabel
           className="pl-12"
@@ -294,7 +303,7 @@ export default function Dashboard({ modelname }) {
           ) : (<></>)}
          </div>
         )
-
+        )
       }
       </div> }
     </AppLayout>

@@ -249,7 +249,7 @@ class ApiController extends Controller
         // TODO: finish implementing
         //return file_get_contents(__DIR__ . "/fixtures/model-output.json");
         // This returns a bytes value
-        return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($fixed_name), "GET", null);
+        return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($file_name), "GET", null);
     }
 
     public function modelRuns(Request $request, string $model_name) {

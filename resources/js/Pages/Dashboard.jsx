@@ -53,32 +53,32 @@ const barChartOptions = {
 };
 
 const processRiskScoreData = (data) => {
-  const chartData = [['Student ID', 'Risk Score']];
+  const chartData = [['Student ID', 'Support Score']];
   for (const item of data) {
-    chartData.push([item['Student ID'], item['Risk Score'] * 100]);
+    chartData.push([item['Student ID'], item['Support Score'] * 100]);
   }
   return chartData;
 };
 
-const processFeatureData = (data) => {
-  const features = new Set();
-  for (let i = 1; i < data.length; i++) {
-    features.add(data[i].Feature);
-  }
-  const featureCounts = {};
-  for (const feature of features) {
-    featureCounts[feature] = 0;
-  }
-  for (let i = 1; i < data.length; i++) {
-    featureCounts[data[i].Feature] += 1;
-  }
-  const chartData2 = [["Feature", "Count"]];
-  const sortedFeatures = Object.entries(featureCounts).sort((a, b) => b[1] - a[1]);
-  for (const [feature, count] of sortedFeatures) {
-    chartData2.push([feature, count]);
-  }
-  return chartData2;
-};
+// const processFeatureData = (data) => {
+//   const features = new Set();
+//   for (let i = 1; i < data.length; i++) {
+//     features.add(data[i].Feature);
+//   }
+//   const featureCounts = {};
+//   for (const feature of features) {
+//     featureCounts[feature] = 0;
+//   }
+//   for (let i = 1; i < data.length; i++) {
+//     featureCounts[data[i].Feature] += 1;
+//   }
+//   const chartData2 = [["Feature", "Count"]];
+//   const sortedFeatures = Object.entries(featureCounts).sort((a, b) => b[1] - a[1]);
+//   for (const [feature, count] of sortedFeatures) {
+//     chartData2.push([feature, count]);
+//   }
+//   return chartData2;
+// };
 
 export default function Dashboard({ modelname }) {
     // TODO below only gets the csv file, update to handle shap as well
@@ -210,7 +210,7 @@ export default function Dashboard({ modelname }) {
   };
 
   const chartData = processRiskScoreData(data);
-  const chartData2 = processFeatureData(data);
+  // const chartData2 = processFeatureData(data);
 
 
   // TODO handle the case where multiple runs occurred in one day
@@ -321,13 +321,13 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={"500px"}
           />
-          <PrintableChart
+          {/* <PrintableChart
             chartType="BarChart"
             data={chartData2}
             options={barChartOptions}
             width={"800px"}
             height={chartData2.length * 25 + 100}
-          />
+          /> */}
  <img id="ShapPreview" alt="shap value graph" src={URL.createObjectURL(shapImgBlob)}/>
           </div>
           ) : (<></>)}

@@ -31,11 +31,26 @@ export default function FileUpload() {
   const [startPrediction, setStartPrediction] = useState(false);
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
+  const [modelsList, setModelsList] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get('/models-api')
+      .then(res => {
+        setModelsList(res.data);
+        console.log(JSON.stringify(res.data));
+      })
+      .catch(err => {
+        setError(JSON.stringify(err));
+      });
+  }, []);
 
   const steps = [
     { label: 'Upload data', step: 1 },
     { label: 'Data validation', step: 2 },
     { label: 'Save', step: 3 },
+    { label: 'Start prediction', step: 4 },
   ];
 
   const renderProcessing = () => {
@@ -73,15 +88,16 @@ export default function FileUpload() {
         <BigSuccessAlert
           mainMsg="Batch creation successful!"
         ></BigSuccessAlert>
-        <div className="flex flex-row justify-between w-full items-end pt-48">
-        {startPrediction ? <Link
-              href={route('run-inference')}
-              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
-            >
-              Start Prediction
-            </Link>
-            : <></>}
-        </div>
+        <button
+          id="button_content"
+          onClick={() => setCurrentStep(4)}
+          className={classNames(
+            'opacity-100',
+            'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4',
+          )}
+        >
+          Start Prediction
+        </button>
       </div>
     );
   };
@@ -370,22 +386,22 @@ export default function FileUpload() {
 
   // Pass in startPrediction as a bool.
   const createBatch = (startPred) => {
-        setBatchCreationResult("");
-        let batchConstructed = batchName;
-        if (batchConstructed == "") {
-          let currDate = new Date();
-          // Months start at 0 so we have to add one.
-          let currMonth = currDate.getMonth()+1;
-          let dayString = currDate.getFullYear() +'-'+ currMonth +'-'+ currDate.getDate();
-          batchConstructed = "Batch_"+ dayString + "_"+Date.now();
-        }
+    setBatchCreationResult("");
+    let batchConstructed = batchName;
+    if (batchConstructed == "") {
+      let currDate = new Date();
+      // Months start at 0 so we have to add one.
+      let currMonth = currDate.getMonth() + 1;
+      let dayString = currDate.getFullYear() + '-' + currMonth + '-' + currDate.getDate();
+      batchConstructed = "Batch_" + dayString + "_" + Date.now();
+    }
     // Get the files that were just successfully uploaded.
     let batchFileNames = [];
     for (const [key, value] of Object.entries(validationResults)) {
-        if (value == "ok") {
-          batchFileNames.push(key)
-        }
+      if (value == "ok") {
+        batchFileNames.push(key)
       }
+    }
     return axios({
       method: 'post',
       url: '/create-batch',
@@ -401,12 +417,12 @@ export default function FileUpload() {
       })
       .catch(e => {
         let err = "";
-        if( e.response ){
-          err = e.response.data.error; 
+        if (e.response) {
+          err = e.response.data.error;
         } else {
-          err = JSON.stringify(e) ;
+          err = JSON.stringify(e);
         }
-        setBatchCreationResult("Error: "+err);
+        setBatchCreationResult("Error: " + err);
         setStartPrediction(startPred);
       });
   };
@@ -420,10 +436,10 @@ export default function FileUpload() {
       })
       .catch(e => {
         let err = "";
-        if( e.response ){
-          err = e.response.data.error; 
+        if (e.response) {
+          err = e.response.data.error;
         } else {
-          err = JSON.stringify(e) ;
+          err = JSON.stringify(e);
         }
       });
   };
@@ -524,12 +540,12 @@ export default function FileUpload() {
           </p>
         </div>
         <div className="flex flex-row justify-between w-full items-end pt-24">
-        <Link
-              href={route('file-upload')}
+          <Link
+            href={route('file-upload')}
             className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 -ml-24"
-            >
-              Back
-            </Link>
+          >
+            Back
+          </Link>
           <div className="flex -mr-24">
             <button
               className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4"
@@ -554,6 +570,55 @@ export default function FileUpload() {
       </div>
     );
   };
+
+  // TODO: This is an empty placeholder, it needs to be wired up with the backend.
+  const triggerPredictions = () => {
+    console.log("To Do: This needs to be wired up!");
+  };
+
+  const renderStartPrediction = () => {
+    return (
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="flex">
+          For the most up-to-date SST predictions we recommend starting a new
+          prediction for each semester.
+        </div>
+        <div className="flex pb-6">
+          Select the model that you would like to run a prediction on.
+        </div>
+        <form onSubmit={triggerPredictions}>
+          <div className="flex py-3 font-bold">
+            Please select a model.
+          </div>
+          {(modelsList == undefined || modelsList.length == 0) ?
+            (<select
+              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              id="model_name"
+            >
+              <option disabled value="">No Models exist</option>
+            </select>
+            ) : (
+              <select
+                className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+                id="model_name"
+              >
+                {modelsList.map((m) => <option>{m.name}</option>)}
+              </select>)}
+          <div className="flex w-full justify-end items-end pt-12">
+            <button
+              type="submit"
+              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center font-semibold rounded-lg"
+            >
+              Generate Predictions
+            </button>
+
+          </div>
+        </form>
+      </div>
+    );
+  };
+
+
 
   const dragOverImageChange = event => {
     const dropZone = document.getElementById('drop-zone');
@@ -610,13 +675,14 @@ export default function FileUpload() {
         {currentStep === 1
           ? renderUpload(files, fileStatus)
           : (currentStep === 2
-          ? (processing
-            ? renderProcessing()
-            : renderValidationResults(validationResults))
-          : (currentStep === 3
-          ? ( batchCreationResult !== "" ? renderBatchCreationResults(batchCreationResult, startPrediction)
-            : renderSaveBatch())
-          : null))}
+            ? (processing
+              ? renderProcessing()
+              : renderValidationResults(validationResults))
+            : (currentStep === 3
+              ? (batchCreationResult !== "" ? renderBatchCreationResults(batchCreationResult, startPrediction)
+                : renderSaveBatch())
+              : currentStep === 4 ? renderStartPrediction()
+                : null))}
       </div>
     </AppLayout>
   );

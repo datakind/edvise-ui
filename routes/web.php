@@ -48,7 +48,7 @@ Route::middleware('auth')->get('/file-upload',
 
 Route::middleware('auth')->get('/dashboard/{modelname}',
     function ($modelname) {
-        return Inertia::render('Dashboard', ['model_name' => $modelname]);
+        return Inertia::render('Dashboard', ['modelname' => $modelname]);
     })->name('dashboard_modelname');
 
 // The default dashboard page.

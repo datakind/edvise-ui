@@ -67,6 +67,12 @@ Optionally install the React Dev Tools: https://chromewebstore.google.com/detail
 Use console.log() and fn+12 to open chrome dev panel.
 
 ## Other setup
+
+You will need to spin up a local version of the backend.
+* Git clone the student-success-tool repo on the branch fellows-experimental
+* In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
+* In your frontend .env file set: `BACKEND_URL="http://127.0.0.1:8001/api/v1"`
+* And set `BACKEND_API_KEY=` to a value you generated with your local version of the backend.
 To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database.
 
 ## Styling

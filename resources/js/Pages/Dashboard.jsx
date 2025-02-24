@@ -78,13 +78,18 @@ const processFeatureData = (data) => {
 };
 
 export default function Dashboard({ modelname }) {
-  const [data, setData] = useState([]);
+    // TODO below only gets the csv file, update to handle shap as well
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // These only need to be set once
   const [modelInfo, setModelInfo] = useState({});
   const [runs, setRuns] = useState([]);
-  const [outputFile, setOutputFile] = useState(null);
-  // TODO get the shap png
+  const [runDatesToJobDict, setRunDatesToJobDict] = useState({});
+  // These need to be set depending on the current run.
+  const [outputFilename, setOutputFilename] = useState('');
+  const [currentRunId, setCurrentRunId] = useState('');
+  const [data, setData] = useState([]); // the raw json data of the csv file
 
   useEffect(() => {
     const fetchModel = async () => {
@@ -104,26 +109,41 @@ export default function Dashboard({ modelname }) {
             setModelInfo(model);
           } else {
             // Find the specific model specified.
-            specifiedModel = models.filter((m) => m.name == modelname);
+            let specifiedModel = models.filter((m) => m.name == modelname);
+
             if (specifiedModel.length == 0 ) {
               // Specified model not found
               setModelInfo(null);
-            }
+            } else {
             model = specifiedModel[0];
             setModelInfo(model);
+          }
           }
         }
         if (model != null) {
           const runs_response = await axios.get('/model/'+model.name);
           if (runs_response.data != null && runs_response.data.length != 0) {
-          setRuns(runs_response.data);
-          const file_response = await axios.get('/output-file-bytes/'+runs_response.data[0].output_filename);
-          setOutputFile(file_response.data);
+            let run_results = runs_response.data;
+            setRuns(run_results);
+            var runDatesDict = {};
+                                  
+            for(var i in run_results) {
+              runDatesDict[run_results[i].triggered_at.split("T")[0]] =  run_results[i].run_id;
+            }
+
+            setRunDatesToJobDict(runDatesDict);
+            // TODO get the most recent run
+            if (run_results[0].output_filename != null) {
+              setOutputFilename(run_results[0].output_filename);
+              const file_response = await axios.get('/output-file-bytes/'+run_results[0].output_filename);
+              // Store output as json instead of bytes.
+              setData(JSON.stringify(file_response.data));
+            }
+
           }
 
         }
       } catch (err) {
-        console.log(JSON.stringify(err));
         setModelInfo(null);
         setError("Error fetching model info");
       } finally {
@@ -150,22 +170,42 @@ export default function Dashboard({ modelname }) {
   }, []);
 */
   const triggerDownload = () => {
-/*
-// TODO: xxx impl
-
-    const output = axios
-      .get('/download-inf-data/' + modelInfo.output_filename)
+    if (outputFile != null && outputFile != "") {
+      return axios
+      .get('/download-inf-data/' + outputFile)
       .then(res => {
         window.open(res.data, '_self');
       })
       .catch(err => {
-        document.getElementById('result_area').innerHTML =
-          '3' + filename + ' url:' + err;
-      });*/
+        setError(err);
+      });
+    }
+    
   };
 
   const chartData = processRiskScoreData(data);
   const chartData2 = processFeatureData(data);
+
+
+  // TODO handle the case where multiple runs occurred in one day
+  const applyDate = (event) => {
+    event.preventDefault();
+    if (event.target.elements.run_time.value == "") {
+      return;
+    }
+    let run_id = runDatesToJobDict[event.target.elements.run_time.value];
+    setCurrentRunId(run_id);
+    let runInfo = runs.filter((r) => r.run_id == run_id);
+
+    if (runInfo.output_filename != null) {
+      setOutputFilename(runInfo.output_filename);
+      return axios.get('/output-file-bytes/'+runInfo.output_filename).then(res =>{
+              // Store file as json.
+              setData(JSON.stringify(res.data));
+            }
+        ).catch(err => setError(err));
+    }
+  };
 
   return (
     <AppLayout
@@ -176,33 +216,52 @@ export default function Dashboard({ modelname }) {
         </h2>
       )} 
     >
-    {modelInfo == null || modelInfo == {} ?
-     <div className="w-full flex flex-col items-center" id="main_area">
-      <HeaderLabel
+    {
+      <div className="w-full flex" id="main_area">
+      {error && <div className="text-red-500 text-center mb-4">{error.message}</div>}
+      {loading ? (<Spinner />) : (
+              <div className="w-full flex flex-col items-center" id="main_area">
+                  <HeaderLabel
           className="pl-12"
           iconObj={
             <ChartBarIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Dashboard"
-          minorTitle="No models exist for this institution"
-        ></HeaderLabel>
-     </div>: 
-        (
-      <div className="w-full flex flex-col items-center" id="main_area">
-
-          <HeaderLabel
-          className="pl-12"
-          iconObj={
-            <ChartBarIcon aria-hidden="true" className="size-6 shrink-0" />
-          }
-          majorTitle="Dashboard"
-          minorTitle={modelInfo == null || modelInfo == {} ? "No model" : modelInfo.name}
+          minorTitle={modelInfo == null || modelInfo == {} ? "Model not found" : modelInfo.name}
         ></HeaderLabel>
         
         <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
-        <div className="flex flex-row">
+        <form onSubmit={applyDate} className="flex flex-row gap-x-2 justify-center items-center">
+        <div className="flex">
           Run Date: 
-        </div>
+          </div>
+          <div className="flex">
+          {(runDatesToJobDict == undefined ||
+      Object.keys(runDatesToJobDict).length == 0) ?
+
+      (  <select
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            id="run_time"
+          >
+            <option disabled value="">No runs exist</option>
+          </select>
+          ) : (
+               <select
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            id="run_time"
+          >
+          {Object.keys(runDatesToJobDict).map((r) => <option>{r}</option>)}
+          </select>) }
+          </div>
+        
+        <button
+            type="submit"
+            className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
+          >
+            Apply
+          </button>
+
+      </form>
         <button
             id="button_content"
             onClick={triggerDownload}
@@ -211,9 +270,9 @@ export default function Dashboard({ modelname }) {
             <ArrowUpTrayIcon aria-hidden="true" className="size-6 shrink-0"/>Export
           </button>
           </div>
-      {error && <div className="text-red-500 text-center mb-4">{error.message}</div>}
-      {loading ? <Spinner /> :
-        <div className='flex justify-between items-center flex-col m-auto'>
+        { data != null && data != [] ?
+        (<div className='flex justify-between items-center flex-col m-auto'>
+
           <PrintableChart
             chartType="Histogram"
             data={chartData}
@@ -231,9 +290,13 @@ export default function Dashboard({ modelname }) {
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory />
           </div>
-        </div>
+          </div>
+          ) : (<></>)}
+         </div>
+        )
+
       }
-      </div>) }
+      </div> }
     </AppLayout>
   );
 }

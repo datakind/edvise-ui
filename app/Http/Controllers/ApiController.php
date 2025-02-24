@@ -255,7 +255,7 @@ class ApiController extends Controller
     public function fileJson(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
-        $data = $file->getContent();
+        $data = $file->body();
         $rows = array_map('str_getcsv', explode("\n", $data));
         $header = array_shift($rows);
         $jsonArray = array();

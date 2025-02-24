@@ -252,6 +252,21 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($file_name), "GET", null);
     }
 
+    public function fileJson(Request $request, string $file_name)
+    {
+        $file = $this->fileBytes($request, $file_name);
+        $data = $file->getContent();
+        $rows = array_map('str_getcsv', explode("\n", $data));
+        $header = array_shift($rows);
+        $jsonArray = array();
+        foreach ($rows as $row) {
+            if (count($row) == count($header)) {
+                $jsonArray[] = array_combine($header, $row);
+            }
+        }
+        return response()->json($jsonArray);
+    }
+
     public function modelRuns(Request $request, string $model_name) {
 
         return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);

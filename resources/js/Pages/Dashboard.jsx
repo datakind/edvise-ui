@@ -7,10 +7,12 @@ import AppLayout from '@/Layouts/AppLayout';
 import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
 import BigDangerAlert from '@/Components/BigDangerAlert';
+
 import {
   ChartBarIcon,
   ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline';
+
 const histogramOptions = {
   title: "Distribution of Support Scores",
   titleTextStyle: { fontSize: 18, bold: false },
@@ -144,12 +146,14 @@ export default function Dashboard({ modelname }) {
             if (csv_filename != null) {
               setCurrentRunCompleted(true);
               setOutputFilename(csv_filename);
-              const file_response = await axios.get('/output-file-bytes/'+csv_filename);
+              const file_response = await axios.get('/output-file-json/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               // broken TODO
               const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
               // For the csv data used for histogram, store output as json instead of bytes.
-              setData(JSON.stringify(file_response.data));
+              const x = 4;
+              console.log('file_response', file_response);  
+              setData(file_response.data);
               // Convert the byte array to a Blob
               // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
               // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 

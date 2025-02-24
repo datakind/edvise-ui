@@ -205,13 +205,13 @@ class ApiController extends Controller
     // Retrieves the GCS upload URL.
     public function fileUploadApi(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/upload-url/'.$filename, "GET", null);
+        return ApiController::constructInstRequest($request, '/upload-url/'.urlencode($filename), "GET", null);
     }
 
     // Validates a file that has been uploaded to the GCS bucket already.
     public function fileValidateApi(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/input/validate-upload/'.$filename, "POST", null);
+        return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), "POST", null);
     }
 
     // This shows all output data.
@@ -223,7 +223,7 @@ class ApiController extends Controller
     // Downloading inference output
     public function downloadInfData(Request $request, string $filename)
     {
-        return ApiController::constructInstRequest($request, '/download-url/'.$filename, "GET", null);
+        return ApiController::constructInstRequest($request, '/download-url/'.urlencode($filename), "GET", null);
     }
 
     // Triggers inference run. 
@@ -235,7 +235,7 @@ class ApiController extends Controller
         if ($request->input('is_pdp') != null) 
             {$post_request_body['is_pdp'] = $request->input('is_pdp');}
 
-        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/run-inference', "POST", $post_request_body);
+        return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/run-inference', "POST", $post_request_body);
     }
 
     // Gets list of models for a given institution
@@ -249,12 +249,12 @@ class ApiController extends Controller
         // TODO: finish implementing
         //return file_get_contents(__DIR__ . "/fixtures/model-output.json");
         // This returns a bytes value
-        return ApiController::constructInstRequest($request, '/output-file-contents/'.$file_name, "GET", null);
+        return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($fixed_name), "GET", null);
     }
 
     public function modelRuns(Request $request, string $model_name) {
 
-        return ApiController::constructInstRequest($request, '/models/'.$model_name.'/runs', "GET", null);
+        return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
     }
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)

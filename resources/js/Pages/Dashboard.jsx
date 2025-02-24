@@ -174,9 +174,9 @@ export default function Dashboard({ modelname }) {
   }, []);
 */
   const triggerDownload = () => {
-    if (outputFile != null && outputFile != "") {
+    if (outputFilename != null && outputFilename != "") {
       return axios
-      .get('/download-inf-data/' + outputFile)
+      .get('/download-inf-data/' + outputFilename)
       .then(res => {
         window.open(res.data, '_self');
       })

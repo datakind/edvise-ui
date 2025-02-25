@@ -155,7 +155,7 @@ export default function Dashboard({ modelname }) {
               console.log('file_response', file_response);  
               setData(file_response.data);
               // Create a URL for the Blob
-              blobToBase64(shap_response.data).then(blob => {
+              bytesToBase64(shap_response.data).then(blob => {
                 setShapImgBlob(`data:image/png;base64,${blob}`);
               })
             } else {
@@ -221,7 +221,7 @@ export default function Dashboard({ modelname }) {
               setData(JSON.stringify(res.data));
                let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
-                blobToBase64(res1.data).then(blob => {
+                bytesToBase64(res1.data).then(blob => {
                   setShapImgBlob(`data:image/png;base64,${blob}`);
                 });
               }).catch(err1 => setError(err1));
@@ -336,10 +336,11 @@ export default function Dashboard({ modelname }) {
   );
 }
 
-function blobToBase64(blob) {
+function bytesToBase64(bytes) {
   return new Promise((resolve, _) => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result);
+    const blob = new Blob([bytes], { type: 'image/png' });
     reader.readAsDataURL(blob);
   });
 }

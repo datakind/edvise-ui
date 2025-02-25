@@ -154,12 +154,8 @@ export default function Dashboard({ modelname }) {
               const x = 4;
               console.log('file_response', file_response);  
               setData(file_response.data);
-              // Convert the byte array to a Blob
-              // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
-              // TODO: BROKEN Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
-              const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
               // Create a URL for the Blob
-              setShapImgBlob(blob);
+              setShapImgBlob(`data:image/png;base64,${btoa(shap_response.data)}`);
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
               // TODO handle
@@ -223,8 +219,7 @@ export default function Dashboard({ modelname }) {
               setData(JSON.stringify(res.data));
                let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
-                 const blob = new Blob([new Uint8Array(res1.data)], { type: 'image/png' });
-                  setShapImgBlob(blob);
+                setShapImgBlob(`data:image/png;base64,${btoa(res1.data)}`);
               }).catch(err1 => setError(err1));
             }
         ).catch(err => setError(err));

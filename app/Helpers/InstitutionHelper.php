@@ -24,7 +24,7 @@ class InstitutionHelper
             'Cache-Control' => 'no-cache',
         ];
 
-        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/check_self');
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/check-self');
         if ($resp->getStatusCode() != 200 ) {
             $errMsg = json_decode($resp->getBody());
             if ($errMsg == null) {

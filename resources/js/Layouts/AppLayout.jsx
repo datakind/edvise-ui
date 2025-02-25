@@ -179,7 +179,6 @@ function dashboardNavHelper(item, modelData) {
     const fetchModels = async () => {
       try {
         const response = await axios.get('/models-api');
-        //let response = {"data":[{"name" : "model_a"},{"name" : "model_b"}]}; // testing
         let newNav = navAboveLine.map(item => dashboardNavHelper(item, response.data));
         setNavAboveLine(newNav);
       } catch (err) {

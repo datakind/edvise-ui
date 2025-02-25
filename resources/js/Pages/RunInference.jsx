@@ -22,10 +22,13 @@ export default function RunInference() {
       .get('/models-api')
       .then(res => {
         setModelsList(res.data);
-        console.log(JSON.stringify(res.data));
       })
       .catch(err => {
-        setError(JSON.stringify(err));
+        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }
       });
   }, []);
 
@@ -37,7 +40,11 @@ export default function RunInference() {
         console.log(JSON.stringify(res.data.batches));
       })
       .catch(err => {
-        setError(JSON.stringify(err));
+        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }
       });
   }, []);
 
@@ -60,13 +67,15 @@ export default function RunInference() {
         is_pdp: true,
       },
     }).then(res => {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaa1");
         setResult("Run ID: " + res.data.run_id);
         setTriggeredRun(true);
       })
       .catch(err => {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaa2");
-        setError(JSON.stringify(err));
+      if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }
         setTriggeredRun(true);
       });
       return;

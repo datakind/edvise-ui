@@ -32,17 +32,18 @@ export default function FileUpload() {
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
   const [modelsList, setModelsList] = useState([]);
-  const [error, setError] = useState(null);
+  const [predictionResults, setPredictionResults] = useState(null);
+
 
   useEffect(() => {
     axios
       .get('/models-api')
       .then(res => {
         setModelsList(res.data);
-        console.log(JSON.stringify(res.data));
       })
       .catch(err => {
-        setError(JSON.stringify(err));
+        // TODO bubble out these errors
+        console.log("error with model fetch");
       });
   }, []);
 
@@ -61,8 +62,33 @@ export default function FileUpload() {
     );
   };
 
-  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {
-    if (batchCreationResult == "") {
+  const renderPredictionResults = () => {
+    if (predictionResults == null) {
+      return <></>;
+    }
+    if (predictionResults["error"]) {
+      let msg = "[ERROR] Prediction trigger failed: " + predictionResults["error"];
+      return (
+        <div className="flex flex-col pr-24 pl-24">
+          <BigDangerAlert
+            mainMsg={msg}
+          ></BigDangerAlert>
+        </div>
+      );
+    }
+      return (
+      <div className="flex flex-col pr-24 pl-24 gap-y-24">
+        <BigSuccessAlert
+          mainMsg="Prediction initiated!"
+          msgDetails={"You will get an email notifying you of the new dashboard results, once they're ready. " + predictionResults["ok"]}
+        ></BigSuccessAlert>
+      </div>
+    );
+    
+  };
+
+  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {    
+  if (batchCreationResult == "") {
       return <></>;
     }
     if (batchCreationResult !== 'ok') {
@@ -83,23 +109,29 @@ export default function FileUpload() {
         </div>
       );
     }
-    return (
-      <div className="flex flex-col pr-24 pl-24">
+    if (!startPrediction) {
+      return (
+      <div className="flex flex-col pr-24 pl-24 gap-y-24">
         <BigSuccessAlert
           mainMsg="Batch creation successful!"
         ></BigSuccessAlert>
+        <div className="flex justify-end w-full items-end">
         <button
           id="button_content"
           onClick={() => setCurrentStep(4)}
           className={classNames(
             'opacity-100',
-            'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4',
+            'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 justify-center flex',
           )}
         >
           Start Prediction
         </button>
+        </div>
       </div>
     );
+    }
+    setCurrentStep(4);
+    return <></>;
   };
 
   const renderValidationResults = validationResults => {
@@ -412,6 +444,7 @@ export default function FileUpload() {
       },
     })
       .then(res => {
+        setBatchName(batchConstructed);
         setBatchCreationResult("ok");
         setStartPrediction(startPred);
       })
@@ -571,9 +604,40 @@ export default function FileUpload() {
     );
   };
 
-  // TODO: This is an empty placeholder, it needs to be wired up with the backend.
-  const triggerPredictions = () => {
-    console.log("To Do: This needs to be wired up!");
+  const triggerPredictions = (event) => {
+    event.preventDefault();
+    // TODO: enable some way to indicate if it is pdp or not? is that required.
+    if (batchName == "") {
+      let res = {};
+      res["error"] = "No batch set.";
+      setPredictionResults(res);
+      return;
+    }
+    if (event.target.elements.model_name.value == "") {
+      let res = {};
+      res["error"] = "No model set.";
+      setPredictionResults(res);
+      return;
+    }
+    axios({
+      method: 'post',
+      url: '/run-inference/'+event.target.elements.model_name.value,
+      data: {
+        batch_name: batchName,
+        is_pdp: true,
+      },
+    }).then(res => {
+      let result = {};
+      result["ok"] = "Run ID: " + res.data.run_id;
+      setPredictionResults(result);
+      })
+      .catch(err => {
+      let res = {};
+      res["error"] = JSON.stringify(err);
+      setPredictionResults(res);
+
+      });
+      return;
   };
 
   const renderStartPrediction = () => {
@@ -681,7 +745,7 @@ export default function FileUpload() {
             : (currentStep === 3
               ? (batchCreationResult !== "" ? renderBatchCreationResults(batchCreationResult, startPrediction)
                 : renderSaveBatch())
-              : currentStep === 4 ? renderStartPrediction()
+              : currentStep === 4 ? ( predictionResults != null ? renderPredictionResults() : renderStartPrediction())
                 : null))}
       </div>
     </AppLayout>

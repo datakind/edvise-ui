@@ -171,7 +171,11 @@ export default function Dashboard({ modelname }) {
 
         }
       } catch (err) {
-        setError(err);
+        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }
       } finally {
         setLoading(false);
       }
@@ -189,7 +193,11 @@ export default function Dashboard({ modelname }) {
         window.open(res.data, '_self');
       })
       .catch(err => {
-        setError(err);
+        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }
       });
     }
     

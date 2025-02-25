@@ -156,7 +156,7 @@ export default function Dashboard({ modelname }) {
               setData(file_response.data);
               // Create a URL for the Blob
               bytesToBase64(shap_response.data).then(blob => {
-                setShapImgBlob(`data:image/png;base64,${blob}`);
+                setShapImgBlob(blob);
               })
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
@@ -222,7 +222,7 @@ export default function Dashboard({ modelname }) {
                let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
                 bytesToBase64(res1.data).then(blob => {
-                  setShapImgBlob(`data:image/png;base64,${blob}`);
+                  setShapImgBlob(blob);
                 });
               }).catch(err1 => setError(err1));
             }

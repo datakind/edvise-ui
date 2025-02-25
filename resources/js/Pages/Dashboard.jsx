@@ -183,7 +183,7 @@ export default function Dashboard({ modelname }) {
       
     };
     fetchModel();
-  }, []);
+  }, [currentRunId]);
 
   const triggerDownload = () => {
     if (outputFilename != null && outputFilename != "") {
@@ -213,7 +213,7 @@ export default function Dashboard({ modelname }) {
     }
     let run_id = runDatesToJobDict[event.target.elements.run_time.value];
     setCurrentRunId(run_id);
-    let runInfo = runs.filter((r) => r.run_id == run_id);
+    let runInfo = runs.find((r) => r.run_id == run_id);
     const csv_filename = runInfo.output_filename;
     if (csv_filename != null) {
       setCurrentRunCompleted(true);

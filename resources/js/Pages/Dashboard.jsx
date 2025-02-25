@@ -322,7 +322,9 @@ export default function Dashboard({ modelname }) {
           /> */}
         <img id="ShapPreview" alt="shap value graph" src={shapImgBlob}/>
           </div>
-          ) : (<></>)}
+          ) : (<div className="flex w-full justify-center font-bold text-xl">
+            Data not yet available.
+          </div>)}
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory />
           </div>

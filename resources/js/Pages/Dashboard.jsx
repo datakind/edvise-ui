@@ -143,7 +143,7 @@ export default function Dashboard({ modelname }) {
             if (runDatesDict == {}) {
                 throw new Error("Could not find run dates for "+model.name);      
             }
-            let csv_filename = run_results[0].output_filename;
+            let csv_filename = run_results[currentRunId].output_filename;
             if (csv_filename != null) {
               setCurrentRunCompleted(true);
               setOutputFilename(csv_filename);

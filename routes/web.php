@@ -90,6 +90,7 @@ Route::middleware('auth')->get('/download-inf-data/{filename}', [ApiController::
 // Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
 Route::middleware('auth')->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename','.*');
 Route::middleware('auth')->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename','.*');
+Route::middleware('auth')->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename','.*');
 
 Route::middleware('auth')->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
 // Data dictionary does not require logging in to view.

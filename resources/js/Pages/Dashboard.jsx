@@ -149,15 +149,12 @@ export default function Dashboard({ modelname }) {
               setOutputFilename(csv_filename);
               const file_response = await axios.get('/output-file-json/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
               // For the csv data used for histogram, store output as json instead of bytes.
               const x = 4;
               console.log('file_response', file_response);  
               setData(file_response.data);
               // Create a URL for the Blob
-              bytesToBase64(shap_response.data).then(blob => {
-                setShapImgBlob(blob);
-              })
+              setShapImgBlob('/output-file-png/'+shap_filename);
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
               // TODO handle
@@ -219,12 +216,8 @@ export default function Dashboard({ modelname }) {
       return axios.get('/output-file-bytes/'+csv_filename).then(res =>{
               // Store file as json.
               setData(JSON.stringify(res.data));
-               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
-                bytesToBase64(res1.data).then(blob => {
-                  setShapImgBlob(blob);
-                });
-              }).catch(err1 => setError(err1));
+              let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
+              setShapImgBlob('/output-file-png/'+shap_filename);
             }
         ).catch(err => setError(err));
     } else {

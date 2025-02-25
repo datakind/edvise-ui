@@ -267,6 +267,12 @@ class ApiController extends Controller
         return response()->json($jsonArray);
     }
 
+    public function filePng(Request $request, string $file_name)
+    {
+        $file = $this->fileBytes($request, $file_name);
+        return response($file->body())->header('Content-Type', 'image/png');
+    }
+
     public function modelRuns(Request $request, string $model_name) {
 
         return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);

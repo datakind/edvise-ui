@@ -155,7 +155,9 @@ export default function Dashboard({ modelname }) {
               console.log('file_response', file_response);  
               setData(file_response.data);
               // Create a URL for the Blob
-              setShapImgBlob(`data:image/png;base64,${btoa(shap_response.data)}`);
+              blobToBase64(shap_response.data).then(blob => {
+                setShapImgBlob(`data:image/png;base64,${blob}`);
+              })
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
               // TODO handle
@@ -219,7 +221,9 @@ export default function Dashboard({ modelname }) {
               setData(JSON.stringify(res.data));
                let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
-                setShapImgBlob(`data:image/png;base64,${btoa(res1.data)}`);
+                blobToBase64(res1.data).then(blob => {
+                  setShapImgBlob(`data:image/png;base64,${blob}`);
+                });
               }).catch(err1 => setError(err1));
             }
         ).catch(err => setError(err));
@@ -330,6 +334,14 @@ export default function Dashboard({ modelname }) {
       </div> }
     </AppLayout>
   );
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
 }
 
 function PrintableChart({ chartType, data, options, width, height }) {

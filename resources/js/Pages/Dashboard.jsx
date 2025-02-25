@@ -134,21 +134,21 @@ export default function Dashboard({ modelname }) {
             var runDatesDict = {};
                                   
             for(var i in run_results) {
-              runDatesDict[run_results[i].triggered_at.split("T")[0]] =  run_results[i].run_id;
+              // TODO: currently we show the full timestamp, so that multiple runs within a date can be shown
+              // runDatesDict[run_results[i].triggered_at.split("T")[0]] =  run_results[i].run_id;
+              runDatesDict[run_results[i].triggered_at] =  run_results[i].run_id;
             }
 
             setRunDatesToJobDict(runDatesDict);
             if (runDatesDict == {}) {
                 throw new Error("Could not find run dates for "+model.name);      
             }
-            // TODO right now it's just getting the first value, make sure it's the most recent run (on webapp side?)
             let csv_filename = run_results[0].output_filename;
             if (csv_filename != null) {
               setCurrentRunCompleted(true);
               setOutputFilename(csv_filename);
               const file_response = await axios.get('/output-file-json/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              // broken TODO
               const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
               // For the csv data used for histogram, store output as json instead of bytes.
               const x = 4;
@@ -156,7 +156,7 @@ export default function Dashboard({ modelname }) {
               setData(file_response.data);
               // Convert the byte array to a Blob
               // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
-              // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
+              // TODO: BROKEN Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
               const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
               // Create a URL for the Blob
               setShapImgBlob(blob);

@@ -34,24 +34,6 @@ const histogramOptions = {
   }
 };
 
-const barChartOptions = {
-  title: "Top Indicators",
-  titleTextStyle: { fontSize: 18, bold: false },
-  legend: { position: "none" },
-  colors: ['#f79222'],
-  chartArea: {
-    left: "40%",
-    top: 75,
-    right: 75,
-    bottom: 75,
-  },
-  vAxis: {
-    textStyle: {
-      fontSize: 12,
-    }
-  }
-};
-
 const processRiskScoreData = (data) => {
   const chartData = [['Student ID', 'Support Score']];
   for (const item of data) {
@@ -60,29 +42,7 @@ const processRiskScoreData = (data) => {
   return chartData;
 };
 
-// const processFeatureData = (data) => {
-//   const features = new Set();
-//   for (let i = 1; i < data.length; i++) {
-//     features.add(data[i].Feature);
-//   }
-//   const featureCounts = {};
-//   for (const feature of features) {
-//     featureCounts[feature] = 0;
-//   }
-//   for (let i = 1; i < data.length; i++) {
-//     featureCounts[data[i].Feature] += 1;
-//   }
-//   const chartData2 = [["Feature", "Count"]];
-//   const sortedFeatures = Object.entries(featureCounts).sort((a, b) => b[1] - a[1]);
-//   for (const [feature, count] of sortedFeatures) {
-//     chartData2.push([feature, count]);
-//   }
-//   return chartData2;
-// };
-
 export default function Dashboard({ modelname }) {
-    // TODO below only gets the csv file, update to handle shap as well
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // These only need to be set once
@@ -174,9 +134,8 @@ export default function Dashboard({ modelname }) {
       } finally {
         setLoading(false);
       }
-
-      
     };
+
     fetchModel();
   }, [currentRunId]);
 
@@ -213,13 +172,6 @@ export default function Dashboard({ modelname }) {
     if (csv_filename != null) {
       setCurrentRunCompleted(true);
       setOutputFilename(csv_filename);
-      return axios.get('/output-file-bytes/'+csv_filename).then(res =>{
-              // Store file as json.
-              setData(JSON.stringify(res.data));
-              let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              setShapImgBlob('/output-file-png/'+shap_filename);
-            }
-        ).catch(err => setError(err));
     } else {
       setCurrentRunCompleted(false);
     }

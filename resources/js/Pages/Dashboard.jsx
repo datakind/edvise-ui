@@ -53,6 +53,7 @@ export default function Dashboard({ modelname }) {
   const [currentRunId, setCurrentRunId] = useState('');
   const [currentRunCompleted, setCurrentRunCompleted] = useState(false); // Whether the current run has output and has completed.
   const [outputFilename, setOutputFilename] = useState('');
+  const [outputApproved, setOutputApproved] = useState(false);
   const [data, setData] = useState([]); // the raw json data of the csv file
   const [shapImgBlob, setShapImgBlob] = useState(null); // the img blob
 
@@ -107,17 +108,16 @@ export default function Dashboard({ modelname }) {
             if (csv_filename != null) {
               setCurrentRunCompleted(true);
               setOutputFilename(csv_filename);
+              setOutputApproved(run_results.find(r => r.run_id === currentRunId)?.output_valid);
               const file_response = await axios.get('/output-file-json/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               // For the csv data used for histogram, store output as json instead of bytes.
-              const x = 4;
-              console.log('file_response', file_response);  
               setData(file_response.data);
               // Create a URL for the Blob
               setShapImgBlob('/output-file-png/'+shap_filename);
             } else {
-              // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
-              // TODO handle
+              // If the output filename isn't present in the run, that means it hasn't completed.
+              setCurrentRunCompleted(false);
             }
 
           } else {
@@ -159,7 +159,7 @@ export default function Dashboard({ modelname }) {
 
   const chartData = processRiskScoreData(data);
 
-  // TODO handle the case where multiple runs occurred in one day
+  // TODO how to handle the case where multiple runs occurred in one day
   const applyDate = (event) => {
     event.preventDefault();
     if (event.target.elements.run_time.value == "") {
@@ -167,14 +167,6 @@ export default function Dashboard({ modelname }) {
     }
     let run_id = runDatesToJobDict[event.target.elements.run_time.value];
     setCurrentRunId(run_id);
-    let runInfo = runs.find((r) => r.run_id == run_id);
-    const csv_filename = runInfo.output_filename;
-    if (csv_filename != null) {
-      setCurrentRunCompleted(true);
-      setOutputFilename(csv_filename);
-    } else {
-      setCurrentRunCompleted(false);
-    }
   };
 
   return (
@@ -249,7 +241,7 @@ export default function Dashboard({ modelname }) {
           </div>
         { currentRunCompleted ?
         (<div className='flex justify-between items-center flex-col m-auto'>
-
+          {outputApproved ? (<div className="flex"> Output Validated by Datakinder.</div>) : (<div className="flex">Output NOT Validated by Datakinder.</div>)}
           <PrintableChart
             chartType="Histogram"
             data={chartData}

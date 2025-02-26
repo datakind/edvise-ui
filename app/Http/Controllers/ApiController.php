@@ -244,14 +244,13 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, '/models', "GET", null);
     }
 
+    // Returns file as bytes
     public function fileBytes(Request $request, string $file_name)
     {
-        // TODO: finish implementing
-        //return file_get_contents(__DIR__ . "/fixtures/model-output.json");
-        // This returns a bytes value
         return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($file_name), "GET", null);
     }
 
+    // Returns file as json
     public function fileJson(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
@@ -267,6 +266,7 @@ class ApiController extends Controller
         return response()->json($jsonArray);
     }
 
+    // Returns file as png type
     public function filePng(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);

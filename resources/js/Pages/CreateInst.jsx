@@ -293,10 +293,9 @@ for (const [key, value] of Object.entries(emailDict)) {
                 <input
                   name="pdp_id"
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="number" min="1" max="10000000"
-                ></input>
+                  type="text"></input>
                 <p className="text-gray-600 text-xs italic">
-                  For PDP schools, please add the PDP_INST id of the institution.
+                  For PDP schools, please add the PDP_INST id of the institution. Include any leading zeroes.
                 </p>
               </div>
          </div>

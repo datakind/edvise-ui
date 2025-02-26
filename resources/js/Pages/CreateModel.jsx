@@ -162,22 +162,6 @@ export default function CreateModel() {
       </div>
     </fieldset>
               </div>
-        <div className="flex flex-col w-1/2 hidden">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  id="pdp_id"
-                >
-                  PDP Institution ID
-                </label>
-                <input
-                  name="pdp_id"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="number" min="1" max="100000"
-                ></input>
-                <p className="text-gray-600 text-xs italic">
-                  For PDP schools, please add the PDP_INST id of the institution.
-                </p>
-              </div>
          </div>
           </div>
 <div className="flex w-full justify-center pt-12 gap-x-6">

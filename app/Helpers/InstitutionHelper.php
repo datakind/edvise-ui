@@ -33,9 +33,18 @@ class InstitutionHelper
             return ["","", $resp->getStatusCode().": ".$errMsg->detail];
         }
 
+        if ($resp["inst_id"] == null && $resp["access_type"] == null ) {
+            // For the webapp if both these fields are empty, this is a random user. 
+            return ["", "", "User does not have an institution nor access type."];
+        }
+
+        $acces_type_str = '';
+        if ($resp["access_type"] != null) {
+            $acces_type_str = $resp["access_type"];
+        }
         $affected = DB::table('users')
               ->where('email', $request->user()->email)
-              ->update(['access_type' => $resp["access_type"], 'inst_id' => $resp["inst_id"]]);
+              ->update(['access_type' => $acces_type_str, 'inst_id' => $resp["inst_id"]]);
         if ($affected != 1) {
             return ["", "", "Error: User table update affected ".$affected." rows. 1 affected row expected."];
         }

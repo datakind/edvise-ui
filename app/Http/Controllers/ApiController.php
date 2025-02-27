@@ -126,7 +126,7 @@ class ApiController extends Controller
         if ($tok == "") {
             return response()->json(['error' => $tokErr], 401);
         }
-        if ($inst == "") {
+        if ($inst == null || $inst == "") {
             return response()->json(['error' => $instErr], 401);
         }
         $headers = [

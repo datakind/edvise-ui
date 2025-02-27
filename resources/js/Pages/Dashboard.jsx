@@ -239,14 +239,17 @@ export default function Dashboard({ modelname }) {
             type="submit"
             className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
           >
-            Apply
+            Update View
           </button>
 
       </form>
         <button
             id="button_content"
             onClick={triggerDownload}
-            className="bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center"
+            className={classNames(
+            disabled ? 'opacity-50' : 'opacity-100',
+            'bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center',
+          )}
             disabled={!currentRunCompleted}
           >
             <ArrowUpTrayIcon aria-hidden="true" className="size-6 shrink-0"/>Export
@@ -272,7 +275,7 @@ export default function Dashboard({ modelname }) {
         <img id="ShapPreview" alt="shap value graph" src={shapImgBlob}/>
           </div>
           ) : (<div className="flex w-full justify-center font-bold text-xl">
-            Data not yet available.
+            Run pending. You will recieve an email once the data is available for viewing.
           </div>)}
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory />

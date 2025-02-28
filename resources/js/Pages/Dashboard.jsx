@@ -103,7 +103,7 @@ export default function Dashboard({ modelname }) {
 
             setRunDatesToJobDict(runDatesDict);
             if (runDatesDict == {}) {
-                throw new Error("Could not find run dates for "+model.name);      
+                throw new Error("Could not find run times for "+model.name);      
             }
             let csv_filename = run_results.find(r => r.run_id === currentRunId)?.output_filename;
             if (csv_filename != null) {
@@ -166,7 +166,6 @@ export default function Dashboard({ modelname }) {
     const time_val = firstParse[1];
     // We want the result to look like 2/24/2025 19:48:43
     let result = date_val[1] + "/"+date_val[2] + "/" + date_val[0]+" "+ time_val;
-    console.log(result);
     return result;
   }
 
@@ -215,21 +214,21 @@ export default function Dashboard({ modelname }) {
         <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
         <form onSubmit={applyDate} className="flex flex-row gap-x-2 justify-center items-center">
         <div className="flex">
-          Run Date: 
+          Run Time: 
           </div>
           <div className="flex">
           {(runDatesToJobDict == undefined ||
       Object.keys(runDatesToJobDict).length == 0) ?
 
       (  <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 pr-5 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
             id="run_time"
           >
             <option disabled value="">No runs exist</option>
           </select>
           ) : (
                <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 pr-5 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
             id="run_time"
           >
           {Object.keys(runDatesToJobDict).map((r) => <option value={r}>{convertDateToReadable(r)}</option>)}

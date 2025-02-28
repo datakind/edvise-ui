@@ -248,7 +248,7 @@ export default function Dashboard({ modelname }) {
             id="button_content"
             onClick={triggerDownload}
             className={classNames(
-            disabled ? 'opacity-50' : 'opacity-100',
+            currentRunCompleted ? 'opacity-100' : 'opacity-50',
             'bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center',
           )}
             disabled={!currentRunCompleted}

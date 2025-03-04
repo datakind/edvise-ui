@@ -80,6 +80,13 @@ Route::middleware('auth')->get('/run-inference',
         return Inertia::render('RunInference');
     })->name('run-inference');
 
+Route::middleware('auth')->get(
+    '/manage-uploads',
+    function () {
+        return Inertia::render('ManageUploads');
+    }
+)->name('manage-uploads');
+
 Route::middleware('auth')->get('/file-management',
     function () {
         return Inertia::render('FileManagement');

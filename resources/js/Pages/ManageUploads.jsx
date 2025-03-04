@@ -21,7 +21,7 @@ export default function ManageUploads() {
           majorTitle="Actions"
           minorTitle="Manage Uploads"
         ></HeaderLabel>
-        To Do: Coming soon!
+        <div className='p-16'>To Do: Coming soon!</div>
       </div>
     </AppLayout>
   );

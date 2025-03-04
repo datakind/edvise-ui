@@ -254,6 +254,9 @@ class ApiController extends Controller
     public function fileJson(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
+        if ($file == null || $file->body() == null){
+            return response()->json(['error' => $file_name.' requested returned null.'], 404);
+        }
         $data = $file->body();
         $rows = array_map('str_getcsv', explode("\n", $data));
         $header = array_shift($rows);
@@ -270,6 +273,9 @@ class ApiController extends Controller
     public function filePng(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
+        if ($file == null || $file->body() == null){
+            return response()->json(['error' => $file_name.' requested returned null.'], 404);
+        }
         return response($file->body())->header('Content-Type', 'image/png');
     }
 

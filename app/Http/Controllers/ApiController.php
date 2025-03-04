@@ -253,11 +253,18 @@ class ApiController extends Controller
     // Returns file as json
     public function fileJson(Request $request, string $file_name)
     {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+     $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
         $file = $this->fileBytes($request, $file_name);
+         $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2");
         if ($file == null || $file->body() == null){
+                 $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx3");
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
         }
+             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4");
+             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4".$file);
         $data = $file->body();
+             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5");
         $rows = array_map('str_getcsv', explode("\n", $data));
         $header = array_shift($rows);
         $jsonArray = array();

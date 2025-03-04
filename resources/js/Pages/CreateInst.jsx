@@ -82,6 +82,12 @@ return (
       document.getElementById('result_area').innerHTML = 'Error: Institution name is required.';
       return;
     }
+    // Enforce the selection of at least one schema type.
+    // NOTE: As schemas get added here, you'll need to expand this if check to include those schemas as well.
+    if (!event.target.elements.Custom.checked && !event.target.elements.PDP.checked) {
+      document.getElementById('result_area').innerHTML = 'Error: Schema type must contain at least one selection.';
+      return;
+    }
     // We currently only have custom for potential other schemas. NOte that the shema passed to the API call must match the corresponding backend schema enum value.
     let other_schemas = event.target.elements.Custom.checked ? ['UNKNOWN'] : null;
     var emailDict = {};

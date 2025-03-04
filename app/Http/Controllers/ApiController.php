@@ -257,7 +257,7 @@ class ApiController extends Controller
      $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
         $file = $this->fileBytes($request, $file_name);
          $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2");
-        if ($file == null || $file->body() == null){
+        if ($file == null){
                  $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx3");
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
         }

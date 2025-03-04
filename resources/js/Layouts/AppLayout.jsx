@@ -58,6 +58,7 @@ var navigationAboveLine = [
     children: [
       { name: 'Upload Data', href: route('file-upload') },
       { name: 'Start Prediction', href: route('run-inference') },
+      { name: 'Manage Uploads', href: route('manage-uploads') },
       // TODO: uncomment once we have this implemented.
       // { name: 'File Management', href: route('file-management')},
     ],

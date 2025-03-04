@@ -10,7 +10,7 @@
         "google/auth": "^1.45",
         "google/cloud-core": "^1.60",
         "guzzlehttp/guzzle": "^7.9",
-        "inertiajs/inertia-laravel": "^0.6.8",
+        "inertiajs/inertia-laravel": "^2.0",
         "laravel/fortify": "^1.25",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.1",

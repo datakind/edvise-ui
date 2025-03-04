@@ -96,14 +96,17 @@ export default function Dashboard({ modelname }) {
             var runDatesDict = {};
                                   
             for(var i in run_results) {
-              // TODO: currently we show the full timestamp, so that multiple runs within a date can be shown
-              // runDatesDict[run_results[i].triggered_at.split("T")[0]] =  run_results[i].run_id;
               runDatesDict[run_results[i].triggered_at] =  run_results[i].run_id;
             }
 
             setRunDatesToJobDict(runDatesDict);
             if (runDatesDict == {}) {
                 throw new Error("Could not find run times for "+model.name);      
+            }
+            if (currentRunId == '' && run_results.length >= 1){
+              // Set current run id to the first run (the returned runs are sorted by triggered time from most recent to least recent)
+              // The current run id should only be empty on first page load.
+              setCurrentRunId(run_results[0].run_id);
             }
             let csv_filename = run_results.find(r => r.run_id === currentRunId)?.output_filename;
             if (csv_filename != null) {
@@ -221,14 +224,14 @@ export default function Dashboard({ modelname }) {
       Object.keys(runDatesToJobDict).length == 0) ?
 
       (  <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 pr-5 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
             id="run_time"
           >
             <option disabled value="">No runs exist</option>
           </select>
           ) : (
                <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 pr-5 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
             id="run_time"
           >
           {Object.keys(runDatesToJobDict).map((r) => <option value={r}>{convertDateToReadable(r)}</option>)}

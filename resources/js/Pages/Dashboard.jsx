@@ -24,6 +24,10 @@ const histogramOptions = {
     viewWindow: { min: 0, max: 100 },
     buckets: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
     format: '#', // Integer formatting
+    title: 'Support Score'
+  },
+  vAxis: {
+    title: 'Number of Students'
   },
   series: {
     0: {

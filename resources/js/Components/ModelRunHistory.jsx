@@ -1,28 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import {
   ArrowUturnLeftIcon,
 } from '@heroicons/react/24/outline';
-const ModelRunHistory = () => {
-    const { modelRunHistory } = usePage().props;
+import classNames from 'classnames';
 
-    const sampleModelRunHistory = [
-        // Only for test purposes
-        {
-            date: '01/02/2024 9:30 AM',
-            user: 'Jane Cooper',
-            batch: 'Batch234',
-            outputFile: '20240201_results.csv',
-        },
-        {
-            date: '09/17/2023 11:30 AM',
-            user: 'James Smith',
-            batch: 'Batch123',
-            outputFile: '20230917_results.csv',
-        },
-    ];
+const ModelRunHistory = (props) => {
+    const [dataToDisplay, setDataToDisplay] = useState([]);
+    useEffect(() => {
+        let runvars = props.runInfos;
+        try {
+            if (runvars != undefined) {
+                let vals = runvars.map((run) => ({"date": convertDateToReadable(run.triggered_at), 
+                "user": getUserName(run.created_by), "batch": run.batch_name, "outputFile": run.completed? run.output_filename : "Pending", "approved": run.output_valid }));
+                setDataToDisplay(vals);
+            } else {
+                setDataToDisplay([]);
 
-    const dataToDisplay = modelRunHistory || sampleModelRunHistory;
+            }
+        } catch (err) {
+            console.log(JSON.stringify(err));
+        /*if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+          setError(Error(err.response.data.error));
+        } else {
+          setError(err);
+        }*/
+        } finally {
+        //setLoading(false);
+        }
+
+    }, [props]);
+
+// TODO: dedup with the version of this in Dashboard.jsx
+  function convertDateToReadable(date_str) {
+    // Convert date to readable string.
+    // The strings are of type "2025-02-25T19:48:43"
+    const firstParse = date_str.split("T");
+    const date_val = firstParse[0].split("-");
+    const time_val = firstParse[1];
+    // We want the result to look like 2/24/2025 19:48:43
+    let result = date_val[1] + "/"+date_val[2] + "/" + date_val[0]+" "+ time_val;
+    return result;
+  }
+    function getUserName(user_uuid) {
+    return "Temp Placeholder";
+  }
 
     return (
         <div className="mt-8 pb-12">
@@ -59,12 +81,15 @@ const ModelRunHistory = () => {
                         </React.Fragment>
                     ))}
                 </div>
-                <div className="flex flex-col grow shrink text-indigo-600 min-w-[240px] w-[211px]">
+                <div className="flex flex-col grow shrink min-w-[240px] w-[211px]">
                     <TableHeader title="OUTPUT FILE" />
                     {dataToDisplay.map((run, index) => (
                         <React.Fragment key={index}>
                             <TableCell>
-                                <div className="pr-0 w-[26px]">{run.outputFile}</div>
+                                <div className={classNames(
+            run.outputFile == "Pending" ? 'text-black' : 'text-indigo-600',
+            'pr-0 w-[26px]',
+          )} >{run.outputFile}</div>
                             </TableCell>
                             {index !== dataToDisplay.length - 1 && <TableDivider />}
                         </React.Fragment>

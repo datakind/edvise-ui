@@ -285,7 +285,7 @@ export default function Dashboard({ modelname }) {
             Run pending. You will recieve an email once the data is available for viewing.
           </div>)}
           <div className="w-full max-w-[1057px] mx-auto">
-            <ModelRunHistory />
+            <ModelRunHistory runInfos={runs} />
           </div>
          </div>
         )

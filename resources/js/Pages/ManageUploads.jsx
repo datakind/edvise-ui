@@ -1,8 +1,56 @@
 import AppLayout from '@/Layouts/AppLayout';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
 
 export default function ManageUploads() {
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const mockUpload1 = {
+    id: 'Id1',
+    batch: 'Batch1',
+    files: ['FileA', 'FileB'],
+    modified_by: 'Jane Doe',
+    date_modified: '01/02/2024 9:30 AM',
+    status: 'In progress',
+  };
+
+  const mockUpload2 = {
+    id: 'Id2',
+    batch: 'Batch2',
+    files: ['Very very long file name FileX', 'Long file name FileY'],
+    modified_by: 'John Doe',
+    date_modified: '11/10/2024 7:30 AM',
+    status: 'In progress',
+  };
+
+  useEffect(() => {
+    // To Do: Please replace by call to the backend API but keep the mock around for easy frontend testing. 
+    // Use the mock JSON object for reference on the format of the response.
+    const getUploadsData = async () => {
+      try {
+        const jsonResponse = [mockUpload1, mockUpload2];
+        setData(jsonResponse);
+        setLoading(false);
+      }
+      catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+    getUploadsData();
+  }, []);
+
+  if (loading) {
+    return <p>Loading data...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
   return (
     <AppLayout
       title="Manage Uploads"
@@ -12,16 +60,43 @@ export default function ManageUploads() {
         </h2>
       )}
     >
-      <div className="w-full flex flex-col" id="main_area">
+      <div className="w-full flex flex-col pl-12" id="main_area">
         <HeaderLabel
-          className="pl-12"
           iconObj={
             <PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Actions"
           minorTitle="Manage Uploads"
         ></HeaderLabel>
-        <div className='p-16'>To Do: Coming soon!</div>
+        <div className='w-full flex pt-16'>
+          <table className='min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md' id="uploads-table">
+            <thead>
+              <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
+                <th className='p-4 px-6'>BATCH</th>
+                <th className='p-4 px-6'>FILES</th>
+                <th className='p-4 px-6'>MODIFIED BY</th>
+                <th className='p-4 px-6'>DATE MODIFIED</th>
+                <th className='p-4 px-6'>STATUS</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data.map((upload) => (
+                <tr className='border-b border-gray-300 text-gray-700 text-sm font-normal leading-5' key={upload.id}>
+                  <td className='p-4 px-6'>{upload.batch}</td>
+                  <td className='p-4 px-6'><ul>
+                    {upload.files.map((item, index) => (
+                      <li key={index}>&#8226;&nbsp;{item}</li>
+                    ))}
+                  </ul></td>
+                  <td className='p-4 px-6 font-medium'>{upload.modified_by}</td>
+                  <td className='p-4 px-6 font-medium'>{upload.date_modified}</td>
+                  <td className='p-4 px-6'>{upload.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </AppLayout>
   );

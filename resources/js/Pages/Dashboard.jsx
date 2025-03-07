@@ -273,9 +273,9 @@ export default function Dashboard({ modelname }) {
             height={"500px"}
           />
             <div className="pl-4 pr-4 pt-4 pb-4 bg-white">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between">
                 <span className="text-lg">Student Success Predictions</span>
-                <a className="text-sm" href={shapImgBlob} download="shap_chart.png">
+                <a className="text-xs" href={shapImgBlob} download="shap_chart.png">
                   Download SHAP Chart
                 </a>
               </div>
@@ -339,7 +339,7 @@ function PrintableChart({ chartType, data, options, width, height }) {
             position: 'absolute',
             top: '24px',
             right: '10px',
-            fontSize: '12px',
+            fontSize: '0.75rem',
             color: '#007bff',
             cursor: 'pointer',
           }}

@@ -122,7 +122,9 @@ export default function Dashboard({ modelname }) {
               // For the csv data used for histogram, store output as json instead of bytes.
               setData(file_response.data);
               // Create a URL for the Blob
-              setShapImgBlob('/output-file-png/'+shap_filename);
+              <div>
+                setShapImgBlob('/output-file-png/'+shap_filename);
+              </div>
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed.
               setCurrentRunCompleted(false);
@@ -272,14 +274,12 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={"500px"}
           />
-          {/* <PrintableChart
-            chartType="BarChart"
-            data={chartData2}
-            options={barChartOptions}
-            width={"800px"}
-            height={chartData2.length * 25 + 100}
-          /> */}
-        <img id="ShapPreview" alt="shap value graph" src={shapImgBlob}/>
+            <div className="pl-4 pr-4 pt-4 pb-4 bg-white text-right text-xs">
+              <a href={shapImgBlob} download="shap_chart.png">
+                Download SHAP Chart
+              </a>
+              <img id="ShapPreview" style="width: calc(800px - 2rem);" alt="shap value graph" src={shapImgBlob}/>
+            </div>
           </div>
           ) : (<div className="flex w-full justify-center font-bold text-xl">
             Run pending. You will recieve an email once the data is available for viewing.

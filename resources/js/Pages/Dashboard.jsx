@@ -250,7 +250,7 @@ export default function Dashboard({ modelname }) {
           </div>
         { currentRunCompleted ?
         (<div className='flex justify-between items-center flex-col m-auto'>
-          {outputApproved ? (<div className="flex"> Output Validated by Datakinder.</div>) : (<div className="flex">Output NOT Validated by Datakinder.</div>)}
+          {outputApproved ? (<div className="flex"> Output review completed.</div>) : (<div className="flex">Output review not completed.</div>)}
           <PrintableChart
             chartType="Histogram"
             data={chartData}

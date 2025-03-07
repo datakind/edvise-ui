@@ -77,7 +77,7 @@ const ModelRunHistory = (props) => {
                             <TableCell>
                                 <div className='pr-0 w-[26px]'>
                                 {run.outputFile == "Pending" ? (<>Pending</>) :
-                                 (<a href={run.outputLink}>{run.outputFile}</a>)}</div>
+                                 (<a href={run.outputLink}>Download</a>)}</div>
                             </TableCell>
                             {index !== dataToDisplay.length - 1 && <TableDivider />}
                         </React.Fragment>

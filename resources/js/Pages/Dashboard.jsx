@@ -274,10 +274,13 @@ export default function Dashboard({ modelname }) {
             width={"800px"}
             height={"500px"}
           />
-            <div className="pl-4 pr-4 pt-4 pb-4 bg-white text-right text-xs">
-              <a href={shapImgBlob} download="shap_chart.png">
-                Download SHAP Chart
-              </a>
+            <div className="pl-4 pr-4 pt-4 pb-4 bg-white">
+              <div className="flex justify-between items-center">
+                <span className="text-lg">Student Success Predictions</span>
+                <a className="text-sm" href={shapImgBlob} download="shap_chart.png">
+                  Download SHAP Chart
+                </a>
+              </div>
               <img id="ShapPreview" style="width: calc(800px - 2rem);" alt="shap value graph" src={shapImgBlob}/>
             </div>
           </div>

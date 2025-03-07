@@ -122,9 +122,7 @@ export default function Dashboard({ modelname }) {
               // For the csv data used for histogram, store output as json instead of bytes.
               setData(file_response.data);
               // Create a URL for the Blob
-              <div>
-                setShapImgBlob('/output-file-png/'+shap_filename);
-              </div>
+              setShapImgBlob('/output-file-png/'+shap_filename);
             } else {
               // If the output filename isn't present in the run, that means it hasn't completed.
               setCurrentRunCompleted(false);

@@ -281,7 +281,7 @@ export default function Dashboard({ modelname }) {
                   Download SHAP Chart
                 </a>
               </div>
-              <img id="ShapPreview" style="width: calc(800px - 2rem);" alt="shap value graph" src={shapImgBlob}/>
+              <img id="ShapPreview" style={{width: "calc(800px - 2rem)"}} alt="shap value graph" src={shapImgBlob}/>
             </div>
           </div>
           ) : (<div className="flex w-full justify-center font-bold text-xl">

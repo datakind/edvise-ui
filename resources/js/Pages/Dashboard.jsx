@@ -113,19 +113,16 @@ export default function Dashboard({ modelname }) {
               setCurrentRunId(run_results[0].run_id);
             }
             let csv_filename = run_results.find(r => r.run_id === currentRunId)?.output_filename;
+            setCurrentRunCompleted(run_results.find(r => r.run_id === currentRunId)?.completed);
+            setOutputFilename(csv_filename);
+            setOutputApproved(run_results.find(r => r.run_id === currentRunId)?.output_valid);
             if (csv_filename != null) {
-              setCurrentRunCompleted(true);
-              setOutputFilename(csv_filename);
-              setOutputApproved(run_results.find(r => r.run_id === currentRunId)?.output_valid);
               const file_response = await axios.get('/output-file-json/'+csv_filename);
               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
               // For the csv data used for histogram, store output as json instead of bytes.
               setData(file_response.data);
               // Create a URL for the Blob
               setShapImgBlob('/output-file-png/'+shap_filename);
-            } else {
-              // If the output filename isn't present in the run, that means it hasn't completed.
-              setCurrentRunCompleted(false);
             }
 
           } else {
@@ -164,17 +161,6 @@ export default function Dashboard({ modelname }) {
     }
     
   };
-
-  function convertDateToReadable(date_str) {
-    // Convert date to readable string.
-    // The strings are of type "2025-02-25T19:48:43"
-    const firstParse = date_str.split("T");
-    const date_val = firstParse[0].split("-");
-    const time_val = firstParse[1];
-    // We want the result to look like 2/24/2025 19:48:43
-    let result = date_val[1] + "/"+date_val[2] + "/" + date_val[0]+" "+ time_val;
-    return result;
-  }
 
   const chartData = processRiskScoreData(data);
 
@@ -238,7 +224,7 @@ export default function Dashboard({ modelname }) {
             className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
             id="run_time"
           >
-          {Object.keys(runDatesToJobDict).map((r) => <option value={r}>{convertDateToReadable(r)}</option>)}
+          {Object.keys(runDatesToJobDict).map((r) => <option value={r}>{r}</option>)}
           </select>) }
           </div>
         

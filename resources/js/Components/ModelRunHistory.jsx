@@ -11,12 +11,16 @@ const ModelRunHistory = (props) => {
         let runvars = props.runInfos;
         try {
             if (runvars != undefined) {
-                let vals = runvars.map((run) => ({"date": convertDateToReadable(run.triggered_at), 
-                "user": getUserName(run.created_by), "batch": run.batch_name, "outputFile": run.completed? run.output_filename : "Pending", "approved": run.output_valid }));
+                let vals = runvars.map((run) => (
+                {"date": run.triggered_at, 
+                "user": run.created_by, 
+                "batch": run.batch_name, 
+                "outputFile": run.output_valid ? run.output_filename : "Pending", 
+                "approved": run.output_valid,
+                "outputLink" : run.output_valid ? run.output_file_link : null}));
                 setDataToDisplay(vals);
             } else {
                 setDataToDisplay([]);
-
             }
         } catch (err) {
             console.log(JSON.stringify(err));
@@ -30,21 +34,6 @@ const ModelRunHistory = (props) => {
         }
 
     }, [props]);
-
-// TODO: dedup with the version of this in Dashboard.jsx
-  function convertDateToReadable(date_str) {
-    // Convert date to readable string.
-    // The strings are of type "2025-02-25T19:48:43"
-    const firstParse = date_str.split("T");
-    const date_val = firstParse[0].split("-");
-    const time_val = firstParse[1];
-    // We want the result to look like 2/24/2025 19:48:43
-    let result = date_val[1] + "/"+date_val[2] + "/" + date_val[0]+" "+ time_val;
-    return result;
-  }
-    function getUserName(user_uuid) {
-    return "Temp Placeholder";
-  }
 
     return (
         <div className="mt-8 pb-12">
@@ -86,10 +75,9 @@ const ModelRunHistory = (props) => {
                     {dataToDisplay.map((run, index) => (
                         <React.Fragment key={index}>
                             <TableCell>
-                                <div className={classNames(
-            run.outputFile == "Pending" ? 'text-black' : 'text-indigo-600',
-            'pr-0 w-[26px]',
-          )} >{run.outputFile}</div>
+                                <div className='pr-0 w-[26px]'>
+                                {run.outputFile == "Pending" ? (<>Pending</>) :
+                                 (<a href={run.outputLink}>{run.outputFile}</a>)}</div>
                             </TableCell>
                             {index !== dataToDisplay.length - 1 && <TableDivider />}
                         </React.Fragment>

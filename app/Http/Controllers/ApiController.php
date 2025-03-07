@@ -253,18 +253,12 @@ class ApiController extends Controller
     // Returns file as json
     public function fileJson(Request $request, string $file_name)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-     $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
         $file = $this->fileBytes($request, $file_name);
-         $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2");
         if ($file == null){
-                 $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx3");
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
         }
-             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4");
-             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx4".$file);
+        // TODO: add error handling if the fileBytes response errors out, we want to bubble that out.
         $data = $file->body();
-             $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx5");
         $rows = array_map('str_getcsv', explode("\n", $data));
         $header = array_shift($rows);
         $jsonArray = array();
@@ -286,9 +280,55 @@ class ApiController extends Controller
         return response($file->body())->header('Content-Type', 'image/png');
     }
 
+    public function convertDateToReadable(string $date_str) {
+        // Convert date to readable string.
+        // The strings start off with type "2025-02-25T19:48:43"
+        $first_parse = explode("T", $date_str);
+        $date_val = explode("-", $first_parse[0]);
+        return $date_val[1]."/".$date_val[2]."/".$date_val[0]." ".$first_parse[1];
+    }
+
     public function modelRuns(Request $request, string $model_name) {
 
-        return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
+        $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
+        // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
+        // E.g. convert user uuid to name and convert the timestamp to human readable string.
+        if ($result != null && $result->getStatusCode() == 200) {
+            $output = $result->json();
+            if ($output != null) {
+                $collected_user_ids = [];
+                foreach ($output as $run) {
+                    array_push($collected_user_ids, $run["created_by"]);
+                }
+                $user_id_map = UserHelper::getNames($collected_user_ids);
+                if (!$user_id_map) {
+                    // actually this shouldn't be error, users can be deleted
+                    return response()->json(['error' => $tokErr], 404);
+                }
+                foreach ($output as $key=>$run) {
+                    $user_name = $run["created_by"];
+                    if ($user_id_map && $user_id_map[$run["created_by"]] != null) {
+                        $user_name = $user_id_map[$run["created_by"]];
+                    }
+                    $time = ApiController::convertDateToReadable($run["triggered_at"]);
+                    $run["created_by"] = $user_name;
+                    $run["triggered_at"] = $time;
+                    // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
+                    if ($run["completed"] && $run["output_filename"] != null && $run["output_filename"] != "") {
+                        $download_url = ApiController::downloadInfData($request, $run["output_filename"]);
+                        if ($download_url->getStatusCode() == 200) {
+                            $run["output_file_link"] = $download_url->json();
+                        } else {
+                            $run["output_file_link"] =  '';
+                        }
+                    }
+                    $output[$key] = $run;
+                }
+            }
+            // Set the result to the modified output.
+            return response()->json($output);
+        }
+        return $result;
     }
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)

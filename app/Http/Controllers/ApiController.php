@@ -301,14 +301,10 @@ class ApiController extends Controller
                     array_push($collected_user_ids, $run["created_by"]);
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
-                if (!$user_id_map) {
-                    // actually this shouldn't be error, users can be deleted
-                    return response()->json(['error' => $tokErr], 404);
-                }
                 foreach ($output as $key=>$run) {
                     $user_name = $run["created_by"];
-                    if ($user_id_map && $user_id_map[$run["created_by"]] != null) {
-                        $user_name = $user_id_map[$run["created_by"]];
+                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                        $user_name = $user_id_map[$user_name];
                     }
                     $time = ApiController::convertDateToReadable($run["triggered_at"]);
                     $run["created_by"] = $user_name;
@@ -330,19 +326,45 @@ class ApiController extends Controller
         }
         return $result;
     }
+
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)
     {
-        return ApiController::constructInstRequest($request, '/input', "GET", null);
+        // convert the user ids to names here prior to submission
+        $result = ApiController::constructInstRequest($request, '/input', "GET", null);
+        if ($result != null && $result->getStatusCode() == 200) {
+            $output = $result->json();
+            if ($output != null) {
+                $batches = $output->batches;
+                $collected_user_ids = [];
+                foreach ($batches as $batch) {
+                    if ($batch["updated_by"] == null) {
+                        array_push($collected_user_ids, $batch["created_by"]);
+                    } else {
+                        array_push($collected_user_ids, $batch["updated_by"]);
+                    }
+                }
+                $user_id_map = UserHelper::getNames($collected_user_ids);
+                foreach ($batches as $key=>$batch) {
+                    $user_name = ($batch["updated_by"] == null) ? $batch["created_by"] : $batch["updated_by"];
+                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                        $user_name = $user_id_map[$user_name];
+                    }
+                    $time = ApiController::convertDateToReadable($batch["updated_at"]);
+                    $batch["updated_by"] = $user_name;
+                    $batch["updated_at"] = $time;
+                    $batches[$key] = $batch;
+                }
+                $output->batches = $batches;
+            }
+            // Set the result to the modified output.
+            return response()->json($output);
+        }
+        return $result;
     }
 
-    // TODO: delete. this is only for debugging
-    public function viewInputData(Request $request)
-    {
-        return ApiController::constructInstRequest($request, '/input-debugging', "GET", null);
-    }
 
-
+    // The below provided by DK.
     public function exampleFunction(Request $request)
     {
         $query = http_build_query($request->query());

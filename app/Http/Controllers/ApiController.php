@@ -335,7 +335,7 @@ class ApiController extends Controller
         if ($result != null && $result->getStatusCode() == 200) {
             $output = $result->json();
             if ($output != null) {
-                $batches = $output->batches;
+                $batches = $output["batches"];
                 $collected_user_ids = [];
                 foreach ($batches as $batch) {
                     if ($batch["updated_by"] == null) {
@@ -355,7 +355,7 @@ class ApiController extends Controller
                     $batch["updated_at"] = $time;
                     $batches[$key] = $batch;
                 }
-                $output->batches = $batches;
+                $output["batches"] = $batches;
             }
             // Set the result to the modified output.
             return response()->json($output);

@@ -461,6 +461,7 @@ export default function FileUpload() {
   };
 
   // Show file info (for the + Add File feature)
+  // TODO delete?
   const viewData = () => {
     return axios
       .get('/view-uploaded-data')

@@ -9,21 +9,29 @@ export default function ManageUploads() {
   const [error, setError] = useState(null);
 
   const mockUpload1 = {
-    id: 'Id1',
-    batch: 'Batch1',
-    files: ['FileA', 'FileB'],
-    modified_by: 'Jane Doe',
-    date_modified: '01/02/2024 9:30 AM',
-    status: 'In progress',
+    batch_id: 'Id1',
+    inst_id: '12345',
+    file_names_to_ids: {"file1.txt":"123", "file2.txt":"124"},
+    name: 'Batch1',
+    created_by: 'Jane Doe',
+    completed: true,
+    deleted: false,
+    updated_at: '01/02/2024 09:30:20',
+    created_at: '01/02/2024 09:30:20',
+    updated_by: 'Jane Doe',
   };
 
   const mockUpload2 = {
-    id: 'Id2',
-    batch: 'Batch2',
-    files: ['Very very long file name FileX', 'Long file name FileY'],
-    modified_by: 'John Doe',
-    date_modified: '11/10/2024 7:30 AM',
-    status: 'In progress',
+    batch_id: 'Id1',
+    inst_id: '12345',
+    file_names_to_ids: {"Very very long file name FileX.txt":"123", "Long file name FileY.txt":"124"},
+    name: 'Batch1',
+    created_by: 'Jane Doe',
+    completed: true,
+    deleted: false,
+    updated_at: '01/02/2024 09:30:20',
+    created_at: '01/02/2024 09:30:20',
+    updated_by: 'Jane Doe',
   };
 
   useEffect(() => {
@@ -31,8 +39,16 @@ export default function ManageUploads() {
     // Use the mock JSON object for reference on the format of the response.
     const getUploadsData = async () => {
       try {
+        // Comment out the following lines when testing.
+        const output = await axios.get('/view-uploaded-data');
+        if (output != null) {
+          setData(output.data.batches);
+        }
+
+        /* // Uncomment when testing
         const jsonResponse = [mockUpload1, mockUpload2];
         setData(jsonResponse);
+        */
         setLoading(false);
       }
       catch (err) {
@@ -81,19 +97,19 @@ export default function ManageUploads() {
             </thead>
 
             <tbody>
-              {data.map((upload) => (
-                <tr className='border-b border-gray-300 text-gray-700 text-sm font-normal leading-5' key={upload.id}>
-                  <td className='p-4 px-6'>{upload.batch}</td>
+              {data.map((upload) => (upload.deleted ? (<></>) : (
+                <tr className='border-b border-gray-300 text-gray-700 text-sm font-normal leading-5' key={upload.batch_id}>
+                  <td className='p-4 px-6'>{upload.name}</td>
                   <td className='p-4 px-6'><ul>
-                    {upload.files.map((item, index) => (
-                      <li key={index}>&#8226;&nbsp;{item}</li>
+                    {Object.entries(upload.file_names_to_ids).map(([k, v]) => (
+                      <li key={k}>&#8226;&nbsp;{k}</li>
                     ))}
                   </ul></td>
-                  <td className='p-4 px-6 font-medium'>{upload.modified_by}</td>
-                  <td className='p-4 px-6 font-medium'>{upload.date_modified}</td>
-                  <td className='p-4 px-6'>{upload.status}</td>
+                  <td className='p-4 px-6 font-medium'>{upload.updated_by}</td>
+                  <td className='p-4 px-6 font-medium'>{upload.updated_at}</td>
+                  <td className='p-4 px-6'>{upload.completed ? (<>Complete</>): (<>Not marked complete</>)}</td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

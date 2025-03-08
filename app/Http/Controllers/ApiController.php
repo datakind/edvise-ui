@@ -350,7 +350,8 @@ class ApiController extends Controller
                     if ($user_id_map && $user_id_map[$user_name] != null) {
                         $user_name = $user_id_map[$user_name];
                     }
-                    $time = ApiController::convertDateToReadable($batch["updated_at"]);
+                    $time_in = ($batch["updated_at"] == null) ? $batch["created_at"] : $batch["updated_at"];
+                    $time = ApiController::convertDateToReadable($time_in);
                     $batch["updated_by"] = $user_name;
                     $batch["updated_at"] = $time;
                     $batches[$key] = $batch;

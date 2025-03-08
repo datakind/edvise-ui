@@ -31,9 +31,12 @@ const ModelRunHistory = (props) => {
 
     return (
 
-<div className='w-full flex pt-16 pb-12'>
+<div className='w-full flex pt-16 pb-12 flex-col'>
+<div className='flex'>
     <h3 className="text-lg font-semibold mb-2 flex flex-row gap-x-3">
     <ArrowUturnLeftIcon aria-hidden="true" className="size-6 shrink-0"/> Model Run History</h3>
+    </div>
+    <div className='flex'>
   <table className='min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md' id="model-history-table">
     <thead>
       <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
@@ -56,6 +59,7 @@ const ModelRunHistory = (props) => {
       ))}
     </tbody>
   </table>
+  </div>
 </div>
 
     );

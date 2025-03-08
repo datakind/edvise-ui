@@ -164,7 +164,6 @@ export default function Dashboard({ modelname }) {
 
   const chartData = processRiskScoreData(data);
 
-  // TODO how to handle the case where multiple runs occurred in one day
   const applyDate = (event) => {
     event.preventDefault();
     if (event.target.elements.run_time.value == "") {
@@ -250,7 +249,7 @@ export default function Dashboard({ modelname }) {
           </div>
         { currentRunCompleted ?
         (<div className='flex justify-between items-center flex-col m-auto'>
-          {outputApproved ? (<div className="flex"> Output review completed.</div>) : (<div className="flex">Output review not completed.</div>)}
+          <div className="flex pt-12 pb-12">{outputApproved ? (<>Output review completed.</>) : (<>Output review not completed.</>)}</div>
           <PrintableChart
             chartType="Histogram"
             data={chartData}
@@ -262,7 +261,7 @@ export default function Dashboard({ modelname }) {
               <div className="flex justify-between">
                 <span className="text-lg">Student Success Predictions</span>
                 <a className="text-xs" href={shapImgBlob} download="shap_chart.png">
-                  Download SHAP Chart
+                  Download Chart
                 </a>
               </div>
               <img id="ShapPreview" style={{width: "calc(800px - 2rem)"}} alt="shap value graph" src={shapImgBlob}/>
@@ -321,13 +320,11 @@ function PrintableChart({ chartType, data, options, width, height }) {
       {chartWrapper && (
         <a
           onClick={handleDownload}
+          className="text-xs cursor-pointer"
           style={{
             position: 'absolute',
-            top: '24px',
-            right: '10px',
-            fontSize: '0.75rem',
-            color: '#007bff',
-            cursor: 'pointer',
+            top: '34px',
+            right: '16px',
           }}
         >
           Download Chart

@@ -214,11 +214,8 @@ export default function Dashboard({ modelname }) {
             Your institution does not have a model yet.
             </div>
             <div className="flex">
-            Create a model and start a prediction to see dashboard results.
+            Please contact Datakind to set up your model, <a href="mailto:education@datakind.org?subject=SST%20Inquiry">education@datakind.org</a>.
             </div>
-<a href={route('create-model')} className="flex mt-3 bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg">
-Create Model</a>
-
           </div>
             ) : (       <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
             <div className="flex font-bold">

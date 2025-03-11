@@ -30,7 +30,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+    return Inertia::render('Auth/VerifyEmail');
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {

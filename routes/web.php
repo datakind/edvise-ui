@@ -37,7 +37,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 */
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -46,7 +46,7 @@ Route::middleware(array_filter([
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/file-upload',
     function () {
         return Inertia::render('FileUpload');
@@ -54,7 +54,7 @@ Route::middleware(array_filter([
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/dashboard/{modelname}',
     function ($modelname) {
         return Inertia::render('Dashboard', ['modelname' => $modelname]);
@@ -63,7 +63,7 @@ Route::middleware(array_filter([
 // The default dashboard page.
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/dashboard',
     function () {
         return Inertia::render('Dashboard');
@@ -72,46 +72,46 @@ Route::middleware(array_filter([
 // difficult to get params working with named routes
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/create-batch', [ApiController::class, 'createBatch']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/create-model', [ApiController::class, 'createModelApi']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/models-api', [ApiController::class, 'getModels']);
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-input-data', [ApiController::class, 'viewInputData']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-output-data', [ApiController::class, 'viewOutputData']);
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/run-inference',
     function () {
         return Inertia::render('RunInference');
@@ -119,7 +119,7 @@ Route::middleware(array_filter([
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/manage-uploads',
     function () {
@@ -129,7 +129,7 @@ Route::middleware(array_filter([
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/file-management',
     function () {
         return Inertia::render('FileManagement');
@@ -137,26 +137,26 @@ Route::middleware(array_filter([
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename','.*');
 
 // Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename','.*');
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename','.*');
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename','.*');
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
@@ -181,7 +181,7 @@ Route::get('/terms-of-service', function () {
 
 Route::middleware(array_filter([
     'auth',
-    env('APP_ENV') === 'production' ? 'verified' : null,
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
 
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);

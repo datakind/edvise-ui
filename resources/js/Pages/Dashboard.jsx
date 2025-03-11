@@ -214,7 +214,7 @@ export default function Dashboard({ modelname }) {
             Your institution does not have a model yet.
             </div>
             <div className="flex">
-            Please contact Datakind to set up your model, <a href="mailto:education@datakind.org?subject=SST%20Inquiry">education@datakind.org</a>.
+            Please contact Datakind to set up your model at{' '}<a href="mailto:education@datakind.org?subject=SST%20Inquiry">education@datakind.org</a>.
             </div>
           </div>
             ) : (       <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">

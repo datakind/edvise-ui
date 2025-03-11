@@ -12,7 +12,7 @@ const ModelRunHistory = (props) => {
     useEffect(() => {
         let runvars = props.runInfos;
         try {
-            if (runvars != undefined) {
+            if (runvars != undefined && runvars != []) {
                 let vals = runvars.map((run) => (
                 {"date": run.triggered_at, 
                 "user": run.created_by, 
@@ -36,7 +36,8 @@ const ModelRunHistory = (props) => {
     <h3 className="text-lg font-semibold mb-2 flex flex-row gap-x-3">
     <ArrowUturnLeftIcon aria-hidden="true" className="size-6 shrink-0"/> Model Run History</h3>
     </div>
-    <div className='w-full flex justify-center'>
+    { dataToDisplay.length == 0 ?
+(<div className='flex'><i>No run available yet.</i></div>):(<div className='w-full flex justify-center'>
   <table className='min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md' id="model-history-table">
     <thead>
       <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
@@ -59,7 +60,7 @@ const ModelRunHistory = (props) => {
       ))}
     </tbody>
   </table>
-  </div>
+  </div>)}
 </div>
 
     );

@@ -72,7 +72,7 @@ export default function Dashboard({ modelname }) {
         if (models == null || models.length == 0 ){
           // No models for this institution exist.
           setModelInfo(null);
-          throw new Error("This institution does not have any models.");
+          throw new Error("NO_MODELS");
         } else {
 
           if (modelname == null || modelname == ""){
@@ -124,9 +124,8 @@ export default function Dashboard({ modelname }) {
               // Create a URL for the Blob
               setShapImgBlob('/output-file-png/'+shap_filename);
             }
-
           } else {
-            throw new Error(model.name+" does not have any runs.");
+            throw new Error("NO_RUNS");
           }
 
         }
@@ -187,7 +186,7 @@ export default function Dashboard({ modelname }) {
       {loading ? (<div className="flex justify-center w-full">
            <Spinner mainMsg="Loading"></Spinner>
         </div>) : (
-              error != null ?
+              error != null && !(error.message == "NO_MODELS" || error.message == "NO_RUNS") ?
     (<BigDangerAlert
             mainMsg={"Error: "+ error.message}
             className="flex h-fit mr-24 ml-24"
@@ -200,9 +199,45 @@ export default function Dashboard({ modelname }) {
             <ChartBarIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Dashboard"
-          minorTitle={modelInfo == null || modelInfo == {} ? "Model not found" : modelInfo.name}
+          minorTitle={modelInfo == null || modelInfo == {} ? "" : modelInfo.name}
         ></HeaderLabel>
         
+ {error != null && (error.message == "NO_MODELS" || error.message == "NO_RUNS") ?       
+ (<><div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
+        <div className="flex flex-row gap-x-2 justify-center items-center">
+          Run Time: <i>No run available yet.</i>
+          </div>
+          </div>
+          {error.message == "NO_MODELS" ? (
+       <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+            <div className="flex font-bold">
+            Your institution does not have a model yet.
+            </div>
+            <div className="flex">
+            Create a model and start a prediction to see dashboard results.
+            </div>
+<a href={route('create-model')} className="flex mt-3 bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg">
+Create Model</a>
+
+          </div>
+            ) : (       <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+            <div className="flex font-bold">
+            This model does not have any predictions available yet.
+            </div>
+            <div className="flex">
+            Click below to begin one.
+            </div>
+<a href={route('run-inference')} className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg">
+Start Prediction</a>
+
+          </div>
+          )}
+          <div className="w-full max-w-[1057px] mx-auto">
+            <ModelRunHistory runInfos={[]}/>
+          </div>
+
+</>) :
+(<>
         <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
         <form onSubmit={applyDate} className="flex flex-row gap-x-2 justify-center items-center">
         <div className="flex">
@@ -233,7 +268,6 @@ export default function Dashboard({ modelname }) {
           >
             Update View
           </button>
-
       </form>
         <button
             id="button_content"
@@ -249,7 +283,12 @@ export default function Dashboard({ modelname }) {
           </div>
         { currentRunCompleted ?
         (<div className='flex justify-between items-center flex-col m-auto'>
-          <div className="flex pt-12 pb-12">{outputApproved ? (<>Output review completed.</>) : (<>Output review not completed.</>)}</div>
+          <div className="flex ml-24 mt-12 mb-12 mr-24 w-3/4 items-center justify-center h-12 border-2 border-dashed rounded-lg border-gray-500">
+            <div className="flex font-bold">
+            {outputApproved ? (<>Output review completed.</>) : 
+          (<>Output review not completed.</>)}
+            </div>
+          </div>
           <PrintableChart
             chartType="Histogram"
             data={chartData}
@@ -267,12 +306,18 @@ export default function Dashboard({ modelname }) {
               <img id="ShapPreview" style={{width: "calc(800px - 2rem)"}} alt="shap value graph" src={shapImgBlob}/>
             </div>
           </div>
-          ) : (<div className="flex w-full justify-center font-bold text-xl">
+          ) : (
+       <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+            <div className="flex font-bold">
             Run pending. You will recieve an email once the data is available for viewing.
-          </div>)}
+            </div>
+          </div>
+          )}
           <div className="w-full max-w-[1057px] mx-auto">
             <ModelRunHistory runInfos={runs} />
           </div>
+
+          </>)}
          </div>
         )
         )

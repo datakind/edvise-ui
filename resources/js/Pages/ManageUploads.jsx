@@ -92,7 +92,6 @@ export default function ManageUploads() {
                 <th className='p-4 px-6'>FILES</th>
                 <th className='p-4 px-6'>MODIFIED BY</th>
                 <th className='p-4 px-6'>DATE MODIFIED</th>
-                <th className='p-4 px-6'>STATUS</th>
               </tr>
             </thead>
 
@@ -107,7 +106,6 @@ export default function ManageUploads() {
                   </ul></td>
                   <td className='p-4 px-6 font-medium'>{upload.updated_by}</td>
                   <td className='p-4 px-6 font-medium'>{upload.updated_at}</td>
-                  <td className='p-4 px-6'>{upload.completed ? (<>Complete</>): (<>Not marked complete</>)}</td>
                 </tr>
               )))}
             </tbody>

@@ -66,11 +66,6 @@ Route::middleware('auth')->post('/create-batch', [ApiController::class, 'createB
 Route::middleware('auth')->post('/create-model', [ApiController::class, 'createModelApi']);
 Route::middleware('auth')->get('/models-api', [ApiController::class, 'getModels']);
 
-Route::middleware('auth')->get('/view-data',
-    function () {
-        return Inertia::render('ViewData');
-    })->name('view-data');
-
 Route::middleware('auth')->get('/view-input-data', [ApiController::class, 'viewInputData']);
 Route::middleware('auth')->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
 Route::middleware('auth')->get('/view-output-data', [ApiController::class, 'viewOutputData']);

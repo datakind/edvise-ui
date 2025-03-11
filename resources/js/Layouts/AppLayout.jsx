@@ -59,8 +59,6 @@ var navigationAboveLine = [
       { name: 'Upload Data', href: route('file-upload') },
       { name: 'Start Prediction', href: route('run-inference') },
       { name: 'Manage Uploads', href: route('manage-uploads') },
-      // TODO: uncomment once we have this implemented.
-      // { name: 'File Management', href: route('file-management')},
     ],
   },
   {
@@ -71,12 +69,6 @@ var navigationAboveLine = [
       {
         name: 'Create Institution',
         href: route('create-inst'),
-        icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.DATAKIND_ONLY,
-      },
-      {
-        name: 'View Data',
-        href: route('view-data'),
         icon: DocumentDuplicateIcon,
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },

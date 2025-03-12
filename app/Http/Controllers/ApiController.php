@@ -6,7 +6,6 @@ use App\Models\DataDictionary;
 use App\Traits\UsesApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
 use TokenHelper;
 use InstitutionHelper;
 use UserHelper;
@@ -43,7 +42,7 @@ class ApiController extends Controller
         $resp = null;
         if ($method == "GET") {
             $resp = Http::withHeaders($headers)->get($url);
-        } else if ($method == "POST") {
+        } elseif ($method == "POST") {
             if ($post_body == null) {
                 $resp = Http::withHeaders($headers)->post($url);
             } else {
@@ -53,7 +52,7 @@ class ApiController extends Controller
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }
 
-        if ($resp->getStatusCode() != 200 ) {
+        if ($resp->getStatusCode() != 200) {
             $errMsg = json_decode($resp->getBody());
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
@@ -66,7 +65,7 @@ class ApiController extends Controller
     public function addDatakinderApi(Request $request)
     {
         $emails_list = $request->input('emails');
-        if ( $emails_list == null || sizeof($emails_list) == 0) {
+        if ($emails_list == null || sizeof($emails_list) == 0) {
             return response()->json(['error' => 'At least one email required.'], 400);
         }
 
@@ -93,23 +92,28 @@ class ApiController extends Controller
         ];
 
         // Optional fields.
-        if ($request->input('state') != null && $request->input('state') != "") 
-            {$post_request_body['state'] = $request->input('state');}
-        if ($request->input('allowed_schemas') != null) 
-            {$post_request_body['allowed_schemas'] = $request->input('allowed_schemas');}
-        if ($request->input('allowed_emails') != null) 
-            {$post_request_body['allowed_emails'] = $request->input('allowed_emails');}
-        if ($request->input('is_pdp') != null) {   
+        if ($request->input('state') != null && $request->input('state') != "") {
+            $post_request_body['state'] = $request->input('state');
+        }
+        if ($request->input('allowed_schemas') != null) {
+            $post_request_body['allowed_schemas'] = $request->input('allowed_schemas');
+        }
+        if ($request->input('allowed_emails') != null) {
+            $post_request_body['allowed_emails'] = $request->input('allowed_emails');
+        }
+        if ($request->input('is_pdp') != null) {
             if ($request->input('is_pdp') && $request->input('pdp_id') == null) {
                 return response()->json(['error' => 'Please set the PDP ID field for schools that support PDP schemas.'], 400);
             }
             $post_request_body['is_pdp'] = $request->input('is_pdp');
         }
-        if ($request->input('pdp_id') != null) 
-            {$post_request_body['pdp_id'] = $request->input('pdp_id');}
-        if ($request->input('retention_days') != null && $request->input('retention_days') != "") 
-            {$post_request_body['retention_days'] = $request->input('retention_days');}
-        
+        if ($request->input('pdp_id') != null) {
+            $post_request_body['pdp_id'] = $request->input('pdp_id');
+        }
+        if ($request->input('retention_days') != null && $request->input('retention_days') != "") {
+            $post_request_body['retention_days'] = $request->input('retention_days');
+        }
+
         return ApiController::constructDatakinderRequest($request, '/institutions', "POST", $post_request_body);
     }
 
@@ -119,7 +123,7 @@ class ApiController extends Controller
     }
 
     // Constructs a query without the BACKEND_URL+/institutions/<inst> prefix.
-     public function constructInstRequest(Request $request, string $url_piece, string $method, $post_body)
+    public function constructInstRequest(Request $request, string $url_piece, string $method, $post_body)
     {
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
         [$tok, $tokErr] = TokenHelper::GetToken($request);
@@ -139,7 +143,7 @@ class ApiController extends Controller
         $resp = null;
         if ($method == "GET") {
             $resp = Http::withHeaders($headers)->get($url);
-        } else if ($method == "POST") {
+        } elseif ($method == "POST") {
             if ($post_body == null) {
                 $resp = Http::withHeaders($headers)->post($url);
             } else {
@@ -149,7 +153,7 @@ class ApiController extends Controller
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }
 
-        if ($resp->getStatusCode() != 200 ) {
+        if ($resp->getStatusCode() != 200) {
             $errMsg = json_decode($resp->getBody());
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
@@ -175,14 +179,16 @@ class ApiController extends Controller
         ];
 
         // Optional fields.
-        if ($request->input('vers_id') != null && $request->input('vers_id') != "") 
-            {$post_request_body['vers_id'] = $request->input('vers_id');}
-        if ($request->input('valid') != null) {   
+        if ($request->input('vers_id') != null && $request->input('vers_id') != "") {
+            $post_request_body['vers_id'] = $request->input('vers_id');
+        }
+        if ($request->input('valid') != null) {
             $post_request_body['valid'] = $request->input('valid');
         }
 
-        if ($request->input('schema_configs') != null) 
-            {$post_request_body['schema_configs'] = $request->input('schema_configs');}
+        if ($request->input('schema_configs') != null) {
+            $post_request_body['schema_configs'] = $request->input('schema_configs');
+        }
         return ApiController::constructInstRequest($request, '/models/', "POST", $post_request_body);
     }
 
@@ -192,10 +198,12 @@ class ApiController extends Controller
         $post_request_body = [
             'name' => $request->input('name'),
         ];
-        if ($request->input('batch_disabled') != null) 
-            {$post_request_body['batch_disabled'] = $request->input('batch_disabled');}
-        if ($request->input('file_names') != null) 
-            {$post_request_body['file_names'] = $request->input('file_names');}
+        if ($request->input('batch_disabled') != null) {
+            $post_request_body['batch_disabled'] = $request->input('batch_disabled');
+        }
+        if ($request->input('file_names') != null) {
+            $post_request_body['file_names'] = $request->input('file_names');
+        }
 
 
         return ApiController::constructInstRequest($request, '/batch', "POST", $post_request_body);
@@ -226,14 +234,15 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, '/download-url/'.urlencode($filename), "GET", null);
     }
 
-    // Triggers inference run. 
+    // Triggers inference run.
     public function runInferenceApi(Request $request, string $model_name)
     {
-         $post_request_body = [
-            'batch_name' => $request->input('batch_name'),
+        $post_request_body = [
+           'batch_name' => $request->input('batch_name'),
         ];
-        if ($request->input('is_pdp') != null) 
-            {$post_request_body['is_pdp'] = $request->input('is_pdp');}
+        if ($request->input('is_pdp') != null) {
+            $post_request_body['is_pdp'] = $request->input('is_pdp');
+        }
 
         return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/run-inference', "POST", $post_request_body);
     }
@@ -254,7 +263,7 @@ class ApiController extends Controller
     public function fileJson(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
-        if ($file == null){
+        if ($file == null) {
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
         }
         // TODO: add error handling if the fileBytes response errors out, we want to bubble that out.
@@ -274,13 +283,14 @@ class ApiController extends Controller
     public function filePng(Request $request, string $file_name)
     {
         $file = $this->fileBytes($request, $file_name);
-        if ($file == null || $file->body() == null){
+        if ($file == null || $file->body() == null) {
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
         }
         return response($file->body())->header('Content-Type', 'image/png');
     }
 
-    public function convertDateToReadable(string $date_str) {
+    public function convertDateToReadable(string $date_str)
+    {
         // Convert date to readable string.
         // The strings start off with type "2025-02-25T19:48:43"
         $first_parse = explode("T", $date_str);
@@ -288,7 +298,8 @@ class ApiController extends Controller
         return $date_val[1]."/".$date_val[2]."/".$date_val[0]." ".$first_parse[1];
     }
 
-    public function modelRuns(Request $request, string $model_name) {
+    public function modelRuns(Request $request, string $model_name)
+    {
 
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -301,7 +312,7 @@ class ApiController extends Controller
                     array_push($collected_user_ids, $run["created_by"]);
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
-                foreach ($output as $key=>$run) {
+                foreach ($output as $key => $run) {
                     $user_name = $run["created_by"];
                     if ($user_id_map && $user_id_map[$user_name] != null) {
                         $user_name = $user_id_map[$user_name];
@@ -345,7 +356,7 @@ class ApiController extends Controller
                     }
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
-                foreach ($batches as $key=>$batch) {
+                foreach ($batches as $key => $batch) {
                     $user_name = ($batch["updated_by"] == null) ? $batch["created_by"] : $batch["updated_by"];
                     if ($user_id_map && $user_id_map[$user_name] != null) {
                         $user_name = $user_id_map[$user_name];

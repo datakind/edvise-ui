@@ -35,13 +35,13 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
- 
+
     return redirect('/');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
- 
+
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
@@ -65,27 +65,33 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/file-upload',
+]))->get(
+    '/file-upload',
     function () {
         return Inertia::render('FileUpload');
-    })->name('file-upload');
+    }
+)->name('file-upload');
 
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/dashboard/{modelname}',
+]))->get(
+    '/dashboard/{modelname}',
     function ($modelname) {
         return Inertia::render('Dashboard', ['modelname' => $modelname]);
-    })->name('dashboard_modelname');
+    }
+)->name('dashboard_modelname');
 
 // The default dashboard page.
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/dashboard',
+]))->get(
+    '/dashboard',
     function () {
         return Inertia::render('Dashboard');
-    })->name('dashboard');
+    }
+)->name('dashboard');
 
 // difficult to get params working with named routes
 Route::middleware(array_filter([
@@ -130,10 +136,12 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/run-inference',
+]))->get(
+    '/run-inference',
     function () {
         return Inertia::render('RunInference');
-    })->name('run-inference');
+    }
+)->name('run-inference');
 
 Route::middleware(array_filter([
     'auth',
@@ -148,29 +156,31 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/file-management',
+]))->get(
+    '/file-management',
     function () {
         return Inertia::render('FileManagement');
-    })->name('file-management');
+    }
+)->name('file-management');
 
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename','.*');
+]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename', '.*');
 
 // Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename','.*');
+]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename', '.*');
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename','.*');
+]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
 Route::middleware(array_filter([
     'auth',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename','.*');
+]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
 
 Route::middleware(array_filter([
     'auth',
@@ -242,4 +252,3 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
         return $inst;
     });
 });
-

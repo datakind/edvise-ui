@@ -103,7 +103,8 @@ const PrivacyPolicy = () => {
                 and keep track of your professional profile, skills etc. In the
                 course of your volunteering work with us, the output of your
                 work may contain elements that describe you, e.g. pictures of
-                you or notes that may refer to meetings and events you attended.{' '}
+                you or notes that may refer to meetings and events you
+                attended.{' '}
               </li>
               <li>
                 If you participate in a community event or webinar, we collect

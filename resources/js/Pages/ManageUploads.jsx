@@ -11,7 +11,7 @@ export default function ManageUploads() {
   const mockUpload1 = {
     batch_id: 'Id1',
     inst_id: '12345',
-    file_names_to_ids: {"file1.txt":"123", "file2.txt":"124"},
+    file_names_to_ids: { 'file1.txt': '123', 'file2.txt': '124' },
     name: 'Batch1',
     created_by: 'Jane Doe',
     completed: true,
@@ -24,7 +24,10 @@ export default function ManageUploads() {
   const mockUpload2 = {
     batch_id: 'Id1',
     inst_id: '12345',
-    file_names_to_ids: {"Very very long file name FileX.txt":"123", "Long file name FileY.txt":"124"},
+    file_names_to_ids: {
+      'Very very long file name FileX.txt': '123',
+      'Long file name FileY.txt': '124',
+    },
     name: 'Batch1',
     created_by: 'Jane Doe',
     completed: true,
@@ -35,7 +38,7 @@ export default function ManageUploads() {
   };
 
   useEffect(() => {
-    // To Do: Please replace by call to the backend API but keep the mock around for easy frontend testing. 
+    // To Do: Please replace by call to the backend API but keep the mock around for easy frontend testing.
     // Use the mock JSON object for reference on the format of the response.
     const getUploadsData = async () => {
       try {
@@ -50,8 +53,7 @@ export default function ManageUploads() {
         setData(jsonResponse);
         */
         setLoading(false);
-      }
-      catch (err) {
+      } catch (err) {
         setError(err);
         setLoading(false);
       }
@@ -84,30 +86,48 @@ export default function ManageUploads() {
           majorTitle="Actions"
           minorTitle="Manage Uploads"
         ></HeaderLabel>
-        <div className='w-full flex pt-16'>
-          <table className='min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md' id="uploads-table">
+        <div className="w-full flex pt-16">
+          <table
+            className="min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md"
+            id="uploads-table"
+          >
             <thead>
-              <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
-                <th className='p-4 px-6'>BATCH</th>
-                <th className='p-4 px-6'>FILES</th>
-                <th className='p-4 px-6'>MODIFIED BY</th>
-                <th className='p-4 px-6'>DATE MODIFIED</th>
+              <tr className="bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase">
+                <th className="p-4 px-6">BATCH</th>
+                <th className="p-4 px-6">FILES</th>
+                <th className="p-4 px-6">MODIFIED BY</th>
+                <th className="p-4 px-6">DATE MODIFIED</th>
               </tr>
             </thead>
 
             <tbody>
-              {data.map((upload) => (upload.deleted ? (<></>) : (
-                <tr className='border-b border-gray-300 text-gray-700 text-sm font-normal leading-5' key={upload.batch_id}>
-                  <td className='p-4 px-6'>{upload.name}</td>
-                  <td className='p-4 px-6'><ul>
-                    {Object.entries(upload.file_names_to_ids).map(([k, v]) => (
-                      <li key={k}>&#8226;&nbsp;{k}</li>
-                    ))}
-                  </ul></td>
-                  <td className='p-4 px-6 font-medium'>{upload.updated_by}</td>
-                  <td className='p-4 px-6 font-medium'>{upload.updated_at}</td>
-                </tr>
-              )))}
+              {data.map(upload =>
+                upload.deleted ? (
+                  <></>
+                ) : (
+                  <tr
+                    className="border-b border-gray-300 text-gray-700 text-sm font-normal leading-5"
+                    key={upload.batch_id}
+                  >
+                    <td className="p-4 px-6">{upload.name}</td>
+                    <td className="p-4 px-6">
+                      <ul>
+                        {Object.entries(upload.file_names_to_ids).map(
+                          ([k, v]) => (
+                            <li key={k}>&#8226;&nbsp;{k}</li>
+                          ),
+                        )}
+                      </ul>
+                    </td>
+                    <td className="p-4 px-6 font-medium">
+                      {upload.updated_by}
+                    </td>
+                    <td className="p-4 px-6 font-medium">
+                      {upload.updated_at}
+                    </td>
+                  </tr>
+                ),
+              )}
             </tbody>
           </table>
         </div>

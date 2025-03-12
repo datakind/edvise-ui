@@ -27,13 +27,12 @@ export default function FileUpload() {
   const [files, setFiles] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [processing, setProcessing] = useState(false);
-  const [batchCreationResult, setBatchCreationResult] = useState("");
+  const [batchCreationResult, setBatchCreationResult] = useState('');
   const [startPrediction, setStartPrediction] = useState(false);
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
   const [modelsList, setModelsList] = useState([]);
   const [predictionResults, setPredictionResults] = useState(null);
-
 
   useEffect(() => {
     axios
@@ -43,7 +42,7 @@ export default function FileUpload() {
       })
       .catch(err => {
         // TODO bubble out these errors
-        console.log("error with model fetch");
+        console.log('error with model fetch');
       });
   }, []);
 
@@ -66,38 +65,37 @@ export default function FileUpload() {
     if (predictionResults == null) {
       return <></>;
     }
-    if (predictionResults["error"]) {
-      let msg = "[ERROR] Prediction trigger failed: " + predictionResults["error"];
+    if (predictionResults['error']) {
+      let msg =
+        '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
         <div className="flex flex-col pr-24 pl-24">
-          <BigDangerAlert
-            mainMsg={msg}
-          ></BigDangerAlert>
+          <BigDangerAlert mainMsg={msg}></BigDangerAlert>
         </div>
       );
     }
-      return (
+    return (
       <div className="flex flex-col pr-24 pl-24 gap-y-24">
         <BigSuccessAlert
           mainMsg="Prediction initiated!"
-          msgDetails={"You will get an email notifying you of the new dashboard results, once they're ready. " + predictionResults["ok"]}
+          msgDetails={
+            "You will get an email notifying you of the new dashboard results, once they're ready. " +
+            predictionResults['ok']
+          }
         ></BigSuccessAlert>
       </div>
     );
-    
   };
 
-  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {    
-  if (batchCreationResult == "") {
+  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {
+    if (batchCreationResult == '') {
       return <></>;
     }
     if (batchCreationResult !== 'ok') {
-      let msg = "[ERROR] Batch creation failed: " + batchCreationResult;
+      let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
         <div className="flex flex-col pr-24 pl-24">
-          <BigDangerAlert
-            mainMsg={msg}
-          ></BigDangerAlert>
+          <BigDangerAlert mainMsg={msg}></BigDangerAlert>
           <div className="flex flex-row justify-between w-full items-end pt-48">
             <Link
               href={route('file-upload')}
@@ -111,24 +109,22 @@ export default function FileUpload() {
     }
     if (!startPrediction) {
       return (
-      <div className="flex flex-col pr-24 pl-24 gap-y-24">
-        <BigSuccessAlert
-          mainMsg="Batch creation successful!"
-        ></BigSuccessAlert>
-        <div className="flex justify-end w-full items-end">
-        <button
-          id="button_content"
-          onClick={() => setCurrentStep(4)}
-          className={classNames(
-            'opacity-100',
-            'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 justify-center flex',
-          )}
-        >
-          Start Prediction
-        </button>
+        <div className="flex flex-col pr-24 pl-24 gap-y-24">
+          <BigSuccessAlert mainMsg="Batch creation successful!"></BigSuccessAlert>
+          <div className="flex justify-end w-full items-end">
+            <button
+              id="button_content"
+              onClick={() => setCurrentStep(4)}
+              className={classNames(
+                'opacity-100',
+                'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 justify-center flex',
+              )}
+            >
+              Start Prediction
+            </button>
+          </div>
         </div>
-      </div>
-    );
+      );
     }
     setCurrentStep(4);
     return <></>;
@@ -417,21 +413,22 @@ export default function FileUpload() {
   };
 
   // Pass in startPrediction as a bool.
-  const createBatch = (startPred) => {
-    setBatchCreationResult("");
+  const createBatch = startPred => {
+    setBatchCreationResult('');
     let batchConstructed = batchName;
-    if (batchConstructed == "") {
+    if (batchConstructed == '') {
       let currDate = new Date();
       // Months start at 0 so we have to add one.
       let currMonth = currDate.getMonth() + 1;
-      let dayString = currDate.getFullYear() + '-' + currMonth + '-' + currDate.getDate();
-      batchConstructed = "Batch_" + dayString + "_" + Date.now();
+      let dayString =
+        currDate.getFullYear() + '-' + currMonth + '-' + currDate.getDate();
+      batchConstructed = 'Batch_' + dayString + '_' + Date.now();
     }
     // Get the files that were just successfully uploaded.
     let batchFileNames = [];
     for (const [key, value] of Object.entries(validationResults)) {
-      if (value == "ok") {
-        batchFileNames.push(key)
+      if (value == 'ok') {
+        batchFileNames.push(key);
       }
     }
     return axios({
@@ -445,17 +442,17 @@ export default function FileUpload() {
     })
       .then(res => {
         setBatchName(batchConstructed);
-        setBatchCreationResult("ok");
+        setBatchCreationResult('ok');
         setStartPrediction(startPred);
       })
       .catch(e => {
-        let err = "";
+        let err = '';
         if (e.response) {
           err = e.response.data.error;
         } else {
           err = JSON.stringify(e);
         }
-        setBatchCreationResult("Error: " + err);
+        setBatchCreationResult('Error: ' + err);
         setStartPrediction(startPred);
       });
   };
@@ -469,7 +466,7 @@ export default function FileUpload() {
         // TODO populate
       })
       .catch(e => {
-        let err = "";
+        let err = '';
         if (e.response) {
           err = e.response.data.error;
         } else {
@@ -570,7 +567,8 @@ export default function FileUpload() {
             placeholder="Inference Run 2024 Fall Cohort 1"
           />
           <p className="mt-2 text-sm text-gray-500">
-            If left blank, we will give it a default name (ie. Batch_YYYYMMDD_TIMESTAMP)
+            If left blank, we will give it a default name (ie.
+            Batch_YYYYMMDD_TIMESTAMP)
           </p>
         </div>
         <div className="flex flex-row justify-between w-full items-end pt-24">
@@ -605,40 +603,40 @@ export default function FileUpload() {
     );
   };
 
-  const triggerPredictions = (event) => {
+  const triggerPredictions = event => {
     event.preventDefault();
     // TODO: enable some way to indicate if it is pdp or not? is that required.
-    if (batchName == "") {
+    if (batchName == '') {
       let res = {};
-      res["error"] = "No batch set.";
+      res['error'] = 'No batch set.';
       setPredictionResults(res);
       return;
     }
-    if (event.target.elements.model_name.value == "") {
+    if (event.target.elements.model_name.value == '') {
       let res = {};
-      res["error"] = "No model set.";
+      res['error'] = 'No model set.';
       setPredictionResults(res);
       return;
     }
     axios({
       method: 'post',
-      url: '/run-inference/'+event.target.elements.model_name.value,
+      url: '/run-inference/' + event.target.elements.model_name.value,
       data: {
         batch_name: batchName,
         is_pdp: true,
       },
-    }).then(res => {
-      let result = {};
-      result["ok"] = "Run ID: " + res.data.run_id;
-      setPredictionResults(result);
+    })
+      .then(res => {
+        let result = {};
+        result['ok'] = 'Run ID: ' + res.data.run_id;
+        setPredictionResults(result);
       })
       .catch(err => {
-      let res = {};
-      res["error"] = JSON.stringify(err);
-      setPredictionResults(res);
-
+        let res = {};
+        res['error'] = JSON.stringify(err);
+        setPredictionResults(res);
       });
-      return;
+    return;
   };
 
   const renderStartPrediction = () => {
@@ -652,23 +650,26 @@ export default function FileUpload() {
           Select the model that you would like to run a prediction on.
         </div>
         <form onSubmit={triggerPredictions}>
-          <div className="flex py-3 font-bold">
-            Please select a model.
-          </div>
-          {(modelsList == undefined || modelsList.length == 0) ?
-            (<select
+          <div className="flex py-3 font-bold">Please select a model.</div>
+          {modelsList == undefined || modelsList.length == 0 ? (
+            <select
               className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
               id="model_name"
             >
-              <option disabled value="">No Models exist</option>
+              <option disabled value="">
+                No Models exist
+              </option>
             </select>
-            ) : (
-              <select
-                className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
-                id="model_name"
-              >
-                {modelsList.map((m) => <option>{m.name}</option>)}
-              </select>)}
+          ) : (
+            <select
+              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              id="model_name"
+            >
+              {modelsList.map(m => (
+                <option>{m.name}</option>
+              ))}
+            </select>
+          )}
           <div className="flex w-full justify-end items-end pt-12">
             <button
               type="submit"
@@ -676,14 +677,11 @@ export default function FileUpload() {
             >
               Generate Predictions
             </button>
-
           </div>
         </form>
       </div>
     );
   };
-
-
 
   const dragOverImageChange = event => {
     const dropZone = document.getElementById('drop-zone');
@@ -739,15 +737,22 @@ export default function FileUpload() {
 
         {currentStep === 1
           ? renderUpload(files, fileStatus)
-          : (currentStep === 2
-            ? (processing
+          : currentStep === 2
+            ? processing
               ? renderProcessing()
-              : renderValidationResults(validationResults))
-            : (currentStep === 3
-              ? (batchCreationResult !== "" ? renderBatchCreationResults(batchCreationResult, startPrediction)
-                : renderSaveBatch())
-              : currentStep === 4 ? ( predictionResults != null ? renderPredictionResults() : renderStartPrediction())
-                : null))}
+              : renderValidationResults(validationResults)
+            : currentStep === 3
+              ? batchCreationResult !== ''
+                ? renderBatchCreationResults(
+                    batchCreationResult,
+                    startPrediction,
+                  )
+                : renderSaveBatch()
+              : currentStep === 4
+                ? predictionResults != null
+                  ? renderPredictionResults()
+                  : renderStartPrediction()
+                : null}
       </div>
     </AppLayout>
   );

@@ -24,7 +24,11 @@ export default function RunInference() {
         setModelsList(res.data);
       })
       .catch(err => {
-        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+        if (
+          err.response != null &&
+          err.response.data != null &&
+          err.response.data.error != null
+        ) {
           setError(Error(err.response.data.error));
         } else {
           setError(err);
@@ -40,7 +44,11 @@ export default function RunInference() {
         console.log(JSON.stringify(res.data.batches));
       })
       .catch(err => {
-        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+        if (
+          err.response != null &&
+          err.response.data != null &&
+          err.response.data.error != null
+        ) {
           setError(Error(err.response.data.error));
         } else {
           setError(err);
@@ -48,37 +56,42 @@ export default function RunInference() {
       });
   }, []);
 
-  const triggerInference = (event) => {
+  const triggerInference = event => {
     event.preventDefault();
     // TODO: enable some way to indicate if it is pdp or not? is that required.
-    if (event.target.elements.batch_name.value == "") {
-      setError("No batch set.");
+    if (event.target.elements.batch_name.value == '') {
+      setError('No batch set.');
       return;
     }
-    if (event.target.elements.model_name.value == "") {
-      setError("No model set.");
+    if (event.target.elements.model_name.value == '') {
+      setError('No model set.');
       return;
     }
     axios({
       method: 'post',
-      url: '/run-inference/'+event.target.elements.model_name.value,
+      url: '/run-inference/' + event.target.elements.model_name.value,
       data: {
         batch_name: event.target.elements.batch_name.value,
         is_pdp: true,
       },
-    }).then(res => {
-        setResult("Run ID: " + res.data.run_id);
+    })
+      .then(res => {
+        setResult('Run ID: ' + res.data.run_id);
         setTriggeredRun(true);
       })
       .catch(err => {
-      if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+        if (
+          err.response != null &&
+          err.response.data != null &&
+          err.response.data.error != null
+        ) {
           setError(Error(err.response.data.error));
         } else {
           setError(err);
         }
         setTriggeredRun(true);
       });
-      return;
+    return;
   };
 
   const renderResults = (result, error) => {
@@ -113,60 +126,68 @@ export default function RunInference() {
           Select the model and batch that you would like to run a prediction on.
         </div>
         <form onSubmit={triggerInference}>
-        <div className="flex py-3 font-bold justify-center">
-          Step 1: Please select an existing batch or import new data.
-        </div>
-        <div className="flex flex-row gap-x-6 w-full justify-center">
-        {(batchList == undefined || batchList.length == 0) ?
-
-      (  <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
-            id="batch_name"
-          >
-            <option disabled value="">No batches exist</option>
-          </select>
+          <div className="flex py-3 font-bold justify-center">
+            Step 1: Please select an existing batch or import new data.
+          </div>
+          <div className="flex flex-row gap-x-6 w-full justify-center">
+            {batchList == undefined || batchList.length == 0 ? (
+              <select
+                className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
+                id="batch_name"
+              >
+                <option disabled value="">
+                  No batches exist
+                </option>
+              </select>
+            ) : (
+              <select
+                className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
+                id="batch_name"
+              >
+                {batchList.map(b => (
+                  <option>{b.name}</option>
+                ))}
+              </select>
+            )}
+            <span className="text-black font-bold flex">or</span>
+            <Link
+              href={route('file-upload')}
+              as="button"
+              className="flex border border-[#f79222] text-[#f79222] bg-white font-semibold py-2 px-6 mb-4 rounded-lg"
+            >
+              Upload Data
+            </Link>
+          </div>
+          <div className="flex py-3 font-bold">
+            Step 2: Please select a model.
+          </div>
+          {modelsList == undefined || modelsList.length == 0 ? (
+            <select
+              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              id="model_name"
+            >
+              <option disabled value="">
+                No Models exist
+              </option>
+            </select>
           ) : (
-               <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-1/2 rounded-lg focus:outline-none focus:border-gray-500"
-            id="batch_name"
-          >
-          {batchList.map((b) => <option>{b.name}</option>)}
-          </select>) }
-          <span className="text-black font-bold flex">or</span>
-          <Link
-            href={route('file-upload')}
-            as="button"
-            className="flex border border-[#f79222] text-[#f79222] bg-white font-semibold py-2 px-6 mb-4 rounded-lg"
-          >
-            Upload Data
-          </Link>
-        </div>
-        <div className="flex py-3 font-bold">
-          Step 2: Please select a model.
-        </div>
-      {(modelsList == undefined || modelsList.length == 0) ?
-      (<select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
-            id="model_name"
-          >
-            <option disabled value="">No Models exist</option>
-          </select>
-          ) : (
-               <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
-            id="model_name"
-          >
-          {modelsList.map((m) => <option>{m.name}</option>)}
-          </select>) }
-        <div className="flex w-full justify-end items-end pt-12">
-          <button
-            type="submit"
-            className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center font-semibold rounded-lg"
-          >
-            Generate Predictions
-          </button>
-
-        </div>
+            <select
+              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              id="model_name"
+            >
+              {modelsList.map(m => (
+                <option>{m.name}</option>
+              ))}
+            </select>
+          )}
+          <div className="flex w-full justify-end items-end pt-12">
+            <button
+              type="submit"
+              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center font-semibold rounded-lg"
+            >
+              Generate Predictions
+            </button>
+          </div>
         </form>
       </div>
     );

@@ -1,12 +1,15 @@
 import AppLayout from '@/Layouts/AppLayout';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import SortIcon from '@/Components/Icons/SortIcon';
 import React, { useState, useEffect } from 'react';
 
 export default function ManageUploads() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const mockUpload1 = {
     batch_id: 'Id1',
@@ -69,6 +72,40 @@ export default function ManageUploads() {
     return <p>Error: {error.message}</p>;
   }
 
+  const handleSort = (column) => {
+    sortData(column);
+  };
+
+  const sortData = (column) => {
+    let sortedData = [...data]; 
+
+    if (sortColumn === column && sortDirection === 'asc') {
+      setSortDirection('desc');
+    } else {
+      setSortDirection('asc');
+    }
+
+    if (sortColumn === column) {
+      sortedData.sort((a, b) => {
+        if (sortDirection === 'asc') {
+          return a[column] > b[column] ? 1 : -1;
+        } else {
+          return a[column] < b[column] ? 1 : -1;
+        }
+      });
+    } else {
+      setSortColumn(column);
+      sortedData.sort((a, b) => {
+        if (sortDirection === 'asc') {
+          return a[column] > b[column] ? 1 : -1;
+        } else {
+          return a[column] < b[column] ? 1 : -1;
+        }
+      });
+    }
+    setData(sortedData);
+  };
+
   return (
     <AppLayout
       title="Manage Uploads"
@@ -92,11 +129,22 @@ export default function ManageUploads() {
             id="uploads-table"
           >
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase">
-                <th className="p-4 px-6">BATCH</th>
-                <th className="p-4 px-6">FILES</th>
-                <th className="p-4 px-6">MODIFIED BY</th>
-                <th className="p-4 px-6">DATE MODIFIED</th>
+              <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
+                <th className='p-4 px-6'>
+                  <button onClick={() => handleSort('batch')}>
+                    <span className='inline-flex align-middle pr-2'>BATCH</span><SortIcon />
+                  </button>
+                </th>
+                <th className='p-4 px-6'>
+                  <button onClick={() => handleSort('files')}>
+                    <span className='inline-flex align-middle pr-2'>FILES</span><SortIcon />
+                  </button></th>
+                <th className='p-4 px-6'><button onClick={() => handleSort('modified_by')}>
+                  <span className='inline-flex align-middle pr-2'>MODIFIED BY</span><SortIcon />
+                </button></th>
+                <th className='p-4 px-6'><button onClick={() => handleSort('date_modified')}>
+                  <span className='inline-flex align-middle pr-2'>DATE MODIFIED</span><SortIcon />
+                </button></th>
               </tr>
             </thead>
 

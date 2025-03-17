@@ -4,23 +4,23 @@
 
 ## About the Student Success Tool
 
-
 ## Frameworks Used
 
 the Student Success Tool is built on:
 
-* Laravel Framework. [Documentation](https://laravel.com/docs)
+- Laravel Framework. [Documentation](https://laravel.com/docs)
 
-* Inertiajs. [Documentation](https://inertiajs.com)
+- Inertiajs. [Documentation](https://inertiajs.com)
 
-* Reactjs. [Documentation](https://reactjs.org/docs/getting-started.html)
+- Reactjs. [Documentation](https://reactjs.org/docs/getting-started.html)
 
-* Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
+- Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
 
 ## DO NOT DO THIS! It has already been done.
 
 For the record: How to set-up an env from scratch
 DO NOT DO THIS FOR fellows dev environment or local development as this has already been done
+
 1. Create a Cloud Bucket to store the static files (the files we'll generate in the cloudbuild autodeploy flow)
 2. Update the cors-config.json with allowed origin URLs
 3. Run `gcloud storage buckets update gs://<BUCKET_NAME> --cors-file=cors-config.json`
@@ -29,8 +29,7 @@ DO NOT DO THIS FOR fellows dev environment or local development as this has alre
 
 NOTE: DO NOT STORE SENSITIVE/SECRET INFO IN THIS BUCKET -- this bucket should be only used to store static vite generated files.
 
-
-1. Static Asset Creation: handled automatically on push by Cloudbuild.yaml using npm install and npm build and cp to cloud bucket Cloud Build 
+1. Static Asset Creation: handled automatically on push by Cloudbuild.yaml using npm install and npm build and cp to cloud bucket Cloud Build
 2. Database migrations: Cloud Run Job
 3. Auto-deploy: orchestrated by Cloud Build (currently stored inline) on Github push
 
@@ -41,8 +40,7 @@ You only have to do this once in your local development system.
 1. `brew install composer` (Assuming you are on Mac, but install as you think best)
 2. `brew install npm` (Assuming you are on Mac, but install as you think best)
 
-
-## Local Development 
+## Local Development
 
 If you use `npm run dev` it'll allow for realtime updates in the local site as you make changes.
 
@@ -69,10 +67,12 @@ Use console.log() and fn+12 to open chrome dev panel.
 ## Other setup
 
 You will need to spin up a local version of the backend.
-* Git clone the student-success-tool repo on the branch fellows-experimental
-* In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
-* Go to 127.0.0.1:8001/docs, authorize with the LOCAL env credentials: username = tester@datakind.org, password = tester_password
-* Then execute the /generate-api-key endpoint with the following request body: 
+
+- Git clone the student-success-tool repo on the branch fellows-experimental
+- In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
+- Go to 127.0.0.1:8001/docs, authorize with the LOCAL env credentials: username = tester@datakind.org, password = tester_password
+- Then execute the /generate-api-key endpoint with the following request body:
+
 ```
 {
   "access_type": "DATAKINDER",
@@ -80,8 +80,9 @@ You will need to spin up a local version of the backend.
   "valid": true
 }
 ```
-* Copy the resulting key to be the value for your frontend env file's variable `BACKEND_API_KEY=`
-* In your frontend .env file set: `BACKEND_URL="http://127.0.0.1:8001/api/v1"`
+
+- Copy the resulting key to be the value for your frontend env file's variable `BACKEND_API_KEY=`
+- In your frontend .env file set: `BACKEND_URL="http://127.0.0.1:8001/api/v1"`
 
 To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database OR just create the tester@datakind.org with the password tester_password user in the local frontend.
 
@@ -91,16 +92,15 @@ Similar to Python's Black, you can use run `./vendor/bin/pint` to autoformat you
 
 ### Notes on files and locations of interest
 
-* routes/web.php is the main entrypoint to define all routes and available functions.
-* resources/js/Layouts/AppLayout.jsx contains the page layout and function renderNavLinks() modifies which links are available in the nav bar.
-* resources/js/Pages/ contains all the separate page views (e.g. Welcome.jsx is the front page, Dashboard.jsx is what's shown when the Dashboard route is clicked etc.)
+- routes/web.php is the main entrypoint to define all routes and available functions.
+- resources/js/Layouts/AppLayout.jsx contains the page layout and function renderNavLinks() modifies which links are available in the nav bar.
+- resources/js/Pages/ contains all the separate page views (e.g. Welcome.jsx is the front page, Dashboard.jsx is what's shown when the Dashboard route is clicked etc.)
 
 So for example, to add a new page, Foopage, which you'd like to be visible in the nav bar, you'd have to:
 
 1. Add a Foopage route in web.php (include auth middleware if that page should require user login: `Route::middleware('auth')->get('/foopage', function () { return Inertia::render('Foopage'); })->name('foopage');`
 2. In AppLayout.jsx add the Foopage item to route mapping in renderNavLinks(): `const renderNavLinks = () => (['home', 'FAQ', 'data-dictionary', 'dashboard', 'foopage'].map((routeName)...`
 3. Add a Foopage.jsx file under resources/js/Pages/... subdirectory that contains the actual page rendering code.
-
 
 ### Notes on deploying to dev
 

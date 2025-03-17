@@ -1,18 +1,19 @@
 <?php
+
 namespace App\Helpers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
-
 use TokenHelper;
 
 class InstitutionHelper
-{    
+{
     // This calls the API endpoint that checks if the current self user has been allowlisted in any institution's email lists.
     // Returns the institution id, access_type of the current user if set anywhere.
-    public static function checkSelfInst(Request $request) {
+    public static function checkSelfInst(Request $request)
+    {
         [$tok, $tokErr] = TokenHelper::GetToken($request);
         if ($tok == "") {
             return ["","", $tokErr];
@@ -25,7 +26,7 @@ class InstitutionHelper
         ];
 
         $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/check-self');
-        if ($resp->getStatusCode() != 200 ) {
+        if ($resp->getStatusCode() != 200) {
             $errMsg = json_decode($resp->getBody());
             if ($errMsg == null) {
                 return ["","", $resp->getStatusCode()];
@@ -33,9 +34,18 @@ class InstitutionHelper
             return ["","", $resp->getStatusCode().": ".$errMsg->detail];
         }
 
+        if ($resp["inst_id"] == null && $resp["access_type"] == null) {
+            // For the webapp if both these fields are empty, this is a random user.
+            return ["", "", "User does not have an institution nor access type."];
+        }
+
+        $acces_type_str = '';
+        if ($resp["access_type"] != null) {
+            $acces_type_str = $resp["access_type"];
+        }
         $affected = DB::table('users')
               ->where('email', $request->user()->email)
-              ->update(['access_type' => $resp["access_type"], 'inst_id' => $resp["inst_id"]]);
+              ->update(['access_type' => $acces_type_str, 'inst_id' => $resp["inst_id"]]);
         if ($affected != 1) {
             return ["", "", "Error: User table update affected ".$affected." rows. 1 affected row expected."];
         }

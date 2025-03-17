@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use Illuminate\Http\Request;
@@ -30,7 +31,8 @@ class TokenHelper
         return [$backend_tok, ""];
     }
 
-    public static function makeTokenAPICall(Request $request, int $current_timestamp) {
+    public static function makeTokenAPICall(Request $request, int $current_timestamp)
+    {
         $headers = [
             'X-API-KEY' => env('BACKEND_API_KEY'),
             'accept' => 'application/json',

@@ -5,33 +5,79 @@ import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 
-export default function CreateInst() {
-  // TODO: switch to error instead of setting result_area
-  const [error, setError] = useState(null);
+const US_STATES = [
+  'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+  'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD',
+  'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH',
+  'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+  'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'
+];
 
-  // Any update to this schemas list needs to be reflected in the handleSubmit() function call as a checkbox.
-  const schemas = [
+export default function EditInst() {
+  const [error, setError] = useState(null);
+  const [addUserCounter, setAddUserCounter] = useState(1);
+  const [schemas] = useState([
     { name: 'Custom', selected: false },
     { name: 'PDP', selected: false },
-  ];
+  ]);
 
-  const [addUserCounter, setAddUserCounter] = useState(0);
-
-  // TODO implement remove additional email fields
-  const removeItem = itemId => {
+  const removeItem = (itemId) => {
     const emailItem = document.getElementById(itemId);
-    emailItem.remove;
+    if (emailItem) {
+      emailItem.remove();
+    }
   };
 
   const incrementCounter = () => {
-    const newId = addUserCounter + 1;
-    setAddUserCounter(newId);
+    setAddUserCounter(prev => prev + 1);
+  };
+
+  const resetForm = () => {
+    setAddUserCounter(1);
+    setError(null);
+    schemas.forEach(schema => schema.selected = false);
+    const form = document.getElementById('edit-institution-form');
+    if (form) {
+      form.reset();
+    }
   };
 
   const renderFullEmailList = () => {
-    const arrOfAllAddedEmailSlots = Array.from(Array(addUserCounter).keys());
+    const arrOfAllAddedEmailSlots = Array.from(
+      Array(addUserCounter).keys(),
+    ).slice(1);
     return (
       <div>
+        {/* Default first row */}
+        <div id="default_user" className="flex">
+          <div className="w-1/2">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              Access Type
+            </label>
+            <div className="relative">
+              <select
+                name="0-access"
+                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
+                <option>MODEL_OWNER</option>
+                <option>VIEWER</option>
+              </select>
+            </div>
+          </div>
+          <div className="w-1/2 px-3 mb-6">
+            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              User email
+            </label>
+            <input
+              name="0-email"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              type="email"
+              placeholder="j.smith@inst1.edu"
+            />
+          </div>
+        </div>
+
+        {/* Additional rows */}
         {arrOfAllAddedEmailSlots.map(id => (
           <div id="one_user" className="flex">
             <div className="w-1/2">
@@ -71,86 +117,32 @@ export default function CreateInst() {
     );
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    let pdp = event.target.elements.PDP.checked;
-    if (
-      event.target.elements.inst_name.value == null ||
-      event.target.elements.inst_name.value == ''
-    ) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Institution name is required.';
-      return;
-    }
-    // Enforce the selection of at least one schema type.
-    // NOTE: As schemas get added here, you'll need to expand this if check to include those schemas as well.
-    if (
-      !event.target.elements.Custom.checked &&
-      !event.target.elements.PDP.checked
-    ) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Schema type must contain at least one selection.';
-      return;
-    }
-    // We currently only have custom for potential other schemas. NOte that the shema passed to the API call must match the corresponding backend schema enum value.
-    let other_schemas = event.target.elements.Custom.checked
-      ? ['UNKNOWN']
-      : null;
-    var emailDict = {};
-    var accessDict = {};
-    Array.from(event.target.elements).forEach(input => {
-      if (input.name.endsWith('-access') || input.name.endsWith('-email')) {
-        let idx = Array.from(input.name)[0];
-        if (input.name.endsWith('-access')) {
-          accessDict[idx] = input.value;
-        } else {
-          emailDict[idx] = input.value;
-        }
-      }
-    });
-
-    var constructedEmailDict = {};
-    for (const [key, value] of Object.entries(emailDict)) {
-      if (value != null && value != '') {
-        constructedEmailDict[value] = accessDict[key];
-      }
-    }
-    return axios({
-      method: 'post',
-      url: '/create-inst-api',
-      data: {
-        name: event.target.elements.inst_name.value,
-        state: event.target.elements.state.value,
-        allowed_schemas: other_schemas,
-        allowed_emails:
-          constructedEmailDict.length == 0 ? null : constructedEmailDict,
-        is_pdp: pdp,
-        pdp_id: event.target.elements.pdp_id.value,
-      },
-    })
-      .then(res => {
-        document.getElementById('result_area').innerHTML =
-          'Done. Created new institution with ID: ' +
-          JSON.stringify(res.data.inst_id);
-      })
-      .catch(e => {
-        let err = '';
-        if (e.response) {
-          err = JSON.stringify(e.response.data.error);
-        } else {
-          err = JSON.stringify(e);
-        }
-        document.getElementById('result_area').innerHTML = 'Error: ' + err;
+    const formData = new FormData(event.target);
+    
+    try {
+      const response = await axios.post('/edit-inst-api', {
+        name: formData.get('inst_name'),
+        state: formData.get('state'),
+        allowed_schemas: formData.get('Custom') ? ['UNKNOWN'] : null,
+        allowed_emails: constructEmailDict(formData),
+        is_pdp: formData.get('PDP') === 'on',
+        pdp_id: formData.get('pdp_id'),
       });
+
+      setError(null);
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+    }
   };
 
-  // TODO check if the user is a datakinder, otherwise show an error page.
   return (
     <AppLayout
-      title="Create Institution"
+      title="Edit Institution"
       renderHeader={() => (
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Create Institution
+          Edit Institution
         </h2>
       )}
     >
@@ -161,9 +153,10 @@ export default function CreateInst() {
             <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Admin Actions"
-          minorTitle="Create New Institution"
+          minorTitle="Add Users to Institutions"
         ></HeaderLabel>
         <form
+          id="edit-institution-form"
           className="w-full max-w-full pl-36 pr-36 pt-24"
           onSubmit={handleSubmit}
         >
@@ -178,11 +171,11 @@ export default function CreateInst() {
                 </label>
                 <input
                   name="inst_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white cursor-not-allowed"
                   type="text"
-                  placeholder="College/University Name"
-                ></input>
-                <p className="text-gray-700 text-xs italic">Required field.</p>
+                  value="Placeholder for institution name"
+                  disabled
+                />
               </div>
               <div className="flex flex-col w-1/3">
                 <label
@@ -197,56 +190,9 @@ export default function CreateInst() {
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   >
                     <option defaultValue></option>
-                    <option>AK</option>
-                    <option>AL</option>
-                    <option>AR</option>
-                    <option>AZ</option>
-                    <option>CA</option>
-                    <option>CO</option>
-                    <option>CT</option>
-                    <option>DE</option>
-                    <option>FL</option>
-                    <option>GA</option>
-                    <option>HI</option>
-                    <option>IA</option>
-                    <option>ID</option>
-                    <option>IL</option>
-                    <option>IN</option>
-                    <option>KS</option>
-                    <option>KY</option>
-                    <option>LA</option>
-                    <option>MA</option>
-                    <option>MD</option>
-                    <option>ME</option>
-                    <option>MI</option>
-                    <option>MN</option>
-                    <option>MO</option>
-                    <option>MS</option>
-                    <option>MT</option>
-                    <option>NC</option>
-                    <option>ND</option>
-                    <option>NE</option>
-                    <option>NH</option>
-                    <option>NJ</option>
-                    <option>NM</option>
-                    <option>NV</option>
-                    <option>NY</option>
-                    <option>OH</option>
-                    <option>OK</option>
-                    <option>OR</option>
-                    <option>PA</option>
-                    <option>RI</option>
-                    <option>SC</option>
-                    <option>SD</option>
-                    <option>TN</option>
-                    <option>TX</option>
-                    <option>UT</option>
-                    <option>VA</option>
-                    <option>VT</option>
-                    <option>WA</option>
-                    <option>WI</option>
-                    <option>WV</option>
-                    <option>WY</option>
+                    {US_STATES.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -322,6 +268,7 @@ export default function CreateInst() {
                 </p>
               </div>
             </div>
+            <div className="flex flex-row w-full gap-x-6"></div>
             <div id="mult_users" className="flex flex-col">
               {renderFullEmailList()}
             </div>
@@ -338,7 +285,8 @@ export default function CreateInst() {
           </div>
           <div className="flex w-full justify-center pt-12 gap-x-6">
             <button
-              type="reset"
+              type="button"
+              onClick={resetForm}
               className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
             >
               Reset
@@ -351,6 +299,11 @@ export default function CreateInst() {
             </button>
           </div>
         </form>
+        {error && (
+          <div className="text-red-500 mt-4">
+            {error}
+          </div>
+        )}
         <div id="result_area" className="flex pb-24 pt-12"></div>
       </div>
     </AppLayout>

@@ -229,6 +229,10 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
         return Inertia::render('CreateInst');
     })->name('create-inst');
 
+    Route::get('/edit-inst', function () {
+        return Inertia::render('EditInst');
+    })->name('edit-inst');
+
     Route::get('/create-model', function () {
         return Inertia::render('CreateModel');
     })->name('create-model');

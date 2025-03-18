@@ -68,7 +68,7 @@ Use console.log() and fn+12 to open chrome dev panel.
 
 You will need to spin up a local version of the backend.
 
-- Git clone the student-success-tool repo on the branch fellows-experimental
+- Git clone the [sst-app-api](https://github.com/datakind/sst-app-api) repo on the branch fellows-experimental
 - In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
 - Go to 127.0.0.1:8001/docs, authorize with the LOCAL env credentials: username = tester@datakind.org, password = tester_password
 - Then execute the /generate-api-key endpoint with the following request body:

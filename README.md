@@ -64,27 +64,7 @@ Optionally install the React Dev Tools: https://chromewebstore.google.com/detail
 
 Use console.log() and fn+12 to open chrome dev panel.
 
-## Other setup
-
-You will need to spin up a local version of the backend.
-
-- Git clone the [sst-app-api](https://github.com/datakind/sst-app-api) repo on the branch fellows-experimental
-- In the root directory, run `fastapi dev src/webapp/main.py --port 8001`
-- Go to 127.0.0.1:8001/docs, authorize with the LOCAL env credentials: username = tester@datakind.org, password = tester_password
-- Then execute the /generate-api-key endpoint with the following request body:
-
-```
-{
-  "access_type": "DATAKINDER",
-  "allows_enduser": true,
-  "valid": true
-}
-```
-
-- Copy the resulting key to be the value for your frontend env file's variable `BACKEND_API_KEY=`
-- In your frontend .env file set: `BACKEND_URL="http://127.0.0.1:8001/api/v1"`
-
-To enable full API functionality locally, you'll need to create a user in the frontend and also create that user in the backend database OR just create the tester@datakind.org with the password tester_password user in the local frontend.
+Feel free to modify the mocked out return values in Http/Controllers/ApiController.php if you want to test other cases.
 
 ## Styling
 
@@ -102,9 +82,9 @@ So for example, to add a new page, Foopage, which you'd like to be visible in th
 2. In AppLayout.jsx add the Foopage item to route mapping in renderNavLinks(): `const renderNavLinks = () => (['home', 'FAQ', 'data-dictionary', 'dashboard', 'foopage'].map((routeName)...`
 3. Add a Foopage.jsx file under resources/js/Pages/... subdirectory that contains the actual page rendering code.
 
-### Notes on deploying to dev
+### Notes on deploying
 
-When deploying to dev, make sure to also check the outcome of the associated migration job in Cloud Run > Jobs.
+When deploying, make sure to also check the outcome of the associated migration job in Cloud Run > Jobs.
 
 ### General Notes
 

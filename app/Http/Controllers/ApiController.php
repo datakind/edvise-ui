@@ -21,6 +21,15 @@ class ApiController extends Controller
     // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
 
+    // For local requests, mock out backend calls.
+    public function isLocalRequest()
+    {
+        if (strtoupper(env('APP_ENV')) == 'LOCAL') {
+            return True;
+        }
+        return False;
+    }
+
     // Constructs a query for Datakinder cases that does not retrieve institution info.
     public function constructDatakinderRequest(Request $request, string $url_piece, string $method, $post_body)
     {
@@ -76,6 +85,10 @@ class ApiController extends Controller
             }
         }
 
+        if (ApiController::isLocalRequest()) {
+            return response()->json($emails_list, 200);
+        }
+
         return ApiController::constructDatakinderRequest($request, '/datakinders', "POST", $emails_list);
     }
 
@@ -114,11 +127,17 @@ class ApiController extends Controller
             $post_request_body['retention_days'] = $request->input('retention_days');
         }
 
+        if (ApiController::isLocalRequest()) {
+            return response()->json( ['inst_id' => '64dbce41111b46fe8e84c38757477ef2', 'name' => $request->input('name'), 'state' => $request->input('state'), 'pdp_id' => $request->input('pdp_id')], 200);
+        }
         return ApiController::constructDatakinderRequest($request, '/institutions', "POST", $post_request_body);
     }
 
     public function viewAllInstitutions(Request $request)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json( [['inst_id' => '1d7c75c33eda42949c6675ea8af97b55', 'name' => 'University of South Foo', 'state' => 'NY', 'pdp_id' => '12345'],['inst_id' => '5301a352c03d4a39beec16c5668c4700', 'name' => 'Bar Community College', 'state' => 'CA']], 200);
+        }
         return ApiController::constructDatakinderRequest($request, '/institutions', "GET", /* No POST body*/ null);
     }
 
@@ -189,6 +208,14 @@ class ApiController extends Controller
         if ($request->input('schema_configs') != null) {
             $post_request_body['schema_configs'] = $request->input('schema_configs');
         }
+
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json( ['inst_id' => $inst, 'name' => $request->input('name'), 'm_id' => 'e4862c62829440d8ab4c9c298f02f619', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False], 200);
+        }
         return ApiController::constructInstRequest($request, '/models/', "POST", $post_request_body);
     }
 
@@ -206,6 +233,25 @@ class ApiController extends Controller
         }
 
 
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json( [
+                "batch_id"=> "1bc27bbe2a124dda983d156fafcca649",
+                "inst_id"=> $inst,
+                "file_names_to_ids"=> [],
+                "name"=> $request->input('name'),
+                "created_by"=> $request->user()->id,
+                "deleted"=> false,
+                "completed"=> false,
+                "deletion_request_time"=> null,
+                "created_at"=> "2025-02-27T18:57:05",
+                "updated_at"=> "2025-02-27T18:57:05",
+                "updated_by"=> $request->user()->id,
+            ], 200);
+        }
         return ApiController::constructInstRequest($request, '/batch', "POST", $post_request_body);
     }
 
@@ -213,24 +259,45 @@ class ApiController extends Controller
     // Retrieves the GCS upload URL.
     public function fileUploadApi(Request $request, string $filename)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json("local-url-fake-signed", 200);
+        }
         return ApiController::constructInstRequest($request, '/upload-url/'.urlencode($filename), "GET", null);
     }
 
     // Validates a file that has been uploaded to the GCS bucket already.
     public function fileValidateApi(Request $request, string $filename)
     {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json(['name'=> 'foo_file.csv', 'inst_id' => $inst, 'file_types' => ['UNKNOWN'], 'source'=> 'MANUAL_UPLOAD'], 200);
+        }
         return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), "POST", null);
     }
 
     // This shows all output data.
     public function viewOutputData(Request $request)
     {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // TODO: populate. This isn't yet used by the webapp.
+            return response()->json(null, 200);
+        }
         return ApiController::constructInstRequest($request, '/output', "GET", null);
     }
 
     // Downloading inference output
     public function downloadInfData(Request $request, string $filename)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json("local-url-fake-signed", 200);
+        }
         return ApiController::constructInstRequest($request, '/download-url/'.urlencode($filename), "GET", null);
     }
 
@@ -244,24 +311,45 @@ class ApiController extends Controller
             $post_request_body['is_pdp'] = $request->input('is_pdp');
         }
 
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json(['run_id' => '123', 'inst_id' => $inst, 'm_name' => $model_name, 'created_by' => $request->user()->id, 'triggered_at'=>'2025-02-02T19:19:19'], 200);
+        }
         return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/run-inference', "POST", $post_request_body);
     }
 
     // Gets list of models for a given institution
     public function getModels(Request $request)
     {
+
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json([['m_id' => 'e4862c62829440d8ab4c9c298f02f619', 'name' => 'latest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False]], 200);
+        }
         return ApiController::constructInstRequest($request, '/models', "GET", null);
     }
 
     // Returns file as bytes
     public function fileBytes(Request $request, string $file_name)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json(null, 200);
+        }
         return ApiController::constructInstRequest($request, '/output-file-contents/'.urlencode($file_name), "GET", null);
     }
 
     // Returns file as json
     public function fileJson(Request $request, string $file_name)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json(null, 200);
+        }
         $file = $this->fileBytes($request, $file_name);
         if ($file == null) {
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
@@ -282,6 +370,9 @@ class ApiController extends Controller
     // Returns file as png type
     public function filePng(Request $request, string $file_name)
     {
+        if (ApiController::isLocalRequest()) {
+            return response()->json(null, 200);
+        }
         $file = $this->fileBytes($request, $file_name);
         if ($file == null || $file->body() == null) {
             return response()->json(['error' => $file_name.' requested returned null.'], 404);
@@ -300,7 +391,13 @@ class ApiController extends Controller
 
     public function modelRuns(Request $request, string $model_name)
     {
-
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json([['run_id' => '123', 'inst_id' => $inst, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed'=>False]], 200);
+        }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
         // E.g. convert user uuid to name and convert the timestamp to human readable string.
@@ -341,6 +438,66 @@ class ApiController extends Controller
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)
     {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json([ 
+        "batches"=> [
+        [
+            "batch_id"=> "1bc27bbe2a124dda983d156fafcca648",
+            "inst_id"=> "11fdb6e1d1814508a779a36f0b7e67f3",
+            "file_names_to_ids"=> [
+                "1740682576373_synthetic_student_semester_ar_deidentified.csv"=> "cde1d91f6f204c4797e07fa235430390",
+                "1740682576372_synthetic_course_level_ar_deid.csv"=> "90dad338de0b43239eb5fec8c6872e0b"
+            ],
+            "name"=> "Spring 2025",
+            "created_by"=> "d0e443a4292449a184bf135f1ff0d33a",
+            "deleted"=> false,
+            "completed"=> false,
+            "deletion_request_time"=> null,
+            "created_at"=> "2025-02-27T18:57:05",
+            "updated_at"=> "02/27/2025 18:57:05",
+            "updated_by"=> "Frontend Tester"
+        ]
+        ],
+        "files"=> [
+            [
+                "name"=> "1740682576372_synthetic_course_level_ar_deid.csv",
+                "data_id"=> "90dad338de0b43239eb5fec8c6872e0b",
+                "batch_ids"=> [
+                    "1bc27bbe2a124dda983d156fafcca648"
+                ],
+                "inst_id"=> "11fdb6e1d1814508a779a36f0b7e67f3",
+                "uploader"=> "d0e443a4292449a184bf135f1ff0d33a",
+                "source"=> "MANUAL_UPLOAD",
+                "deleted"=> false,
+                "deletion_request_time"=> null,
+                "retention_days"=> null,
+                "sst_generated"=> false,
+                "valid"=> true,
+                "uploaded_date"=> "2025-02-27T18:56:18"
+            ],
+            [
+                "name"=> "1740682576373_synthetic_student_semester_ar_deidentified.csv",
+                "data_id"=> "cde1d91f6f204c4797e07fa235430390",
+                "batch_ids"=> [
+                    "1bc27bbe2a124dda983d156fafcca648"
+                ],
+                "inst_id"=> "11fdb6e1d1814508a779a36f0b7e67f3",
+                "uploader"=> "d0e443a4292449a184bf135f1ff0d33a",
+                "source"=> "MANUAL_UPLOAD",
+                "deleted"=> false,
+                "deletion_request_time"=> null,
+                "retention_days"=> null,
+                "sst_generated"=> false,
+                "valid"=> true,
+                "uploaded_date"=> "2025-02-27T18:56:18"
+            ]
+        ]
+        ], 200);
+        }
         // convert the user ids to names here prior to submission
         $result = ApiController::constructInstRequest($request, '/input', "GET", null);
         if ($result != null && $result->getStatusCode() == 200) {

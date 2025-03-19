@@ -158,6 +158,10 @@ export default function Dashboard({ modelname }) {
       return axios
         .get('/download-inf-data/' + outputFilename)
         .then(res => {
+          if (res.data == 'local-url-fake-signed') {
+            // This is the local testing case. Don't download as this is not a real file.
+            return;
+          }
           window.open(res.data, '_self');
         })
         .catch(err => {

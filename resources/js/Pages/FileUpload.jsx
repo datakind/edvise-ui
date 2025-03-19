@@ -500,6 +500,12 @@ export default function FileUpload() {
           .then(res => {
             // Fun fact! If the file object is null or undefined, the Content-Type header gets auto-dropped by the browser.
             // GCS signed URLs require the headers to match the ones used at URL generation time.
+
+            if (res.data == 'local-url-fake-signed') {
+              // This is the local test case, simply validate as true as we're mocking out this data.
+              localValidationResults[filenameConstructed] = 'ok';
+              return;
+            }
             return axios
               .put(res.data, file, config)
               .then(res1 => {

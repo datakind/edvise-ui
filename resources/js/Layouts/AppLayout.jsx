@@ -67,12 +67,6 @@ var navigationAboveLine = [
     visibility_type: VisibilityType.DATAKIND_ONLY,
     children: [
       {
-        name: 'Create Institution',
-        href: route('create-inst'),
-        icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.DATAKIND_ONLY,
-      },
-      {
         name: 'Set Institution',
         href: route('set-inst'),
         icon: DocumentDuplicateIcon,
@@ -87,6 +81,18 @@ var navigationAboveLine = [
       {
         name: 'Create Model',
         href: route('create-model'),
+        icon: ChartPieIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
+      {
+        name: 'Create Institution',
+        href: route('create-inst'),
+        icon: DocumentDuplicateIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
+      {
+        name: 'Edit Institution',
+        href: route('edit-inst'),
         icon: ChartPieIcon,
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },

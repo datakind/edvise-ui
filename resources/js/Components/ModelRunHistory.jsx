@@ -15,9 +15,9 @@ const ModelRunHistory = props => {
           date: run.triggered_at,
           user: run.created_by,
           batch: run.batch_name,
-          outputFile: run.output_valid ? run.output_filename : 'Pending',
+          outputFile: run.completed ? run.output_filename : 'Pending',
           approved: run.output_valid,
-          outputLink: run.output_valid ? run.output_file_link : null,
+          outputLink: run.completed ? run.output_file_link : null,
         }));
         setDataToDisplay(vals);
       } else {

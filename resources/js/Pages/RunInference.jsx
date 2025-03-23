@@ -41,7 +41,6 @@ export default function RunInference() {
       .get('/view-uploaded-data')
       .then(res => {
         setBatchList(res.data.batches);
-        console.log(JSON.stringify(res.data.batches));
       })
       .catch(err => {
         if (

@@ -8,7 +8,7 @@ Note that the `users` table is the only one that, in production, is shared by th
 
 ## Development environments
 
-1. Local development with calls to external calls mocked out. See the mocked out values in `Http/Controllers/ApiController.php`.
+1. Local development with calls to external systems are mocked out. See the mocked out values in `Http/Controllers/ApiController.php`.
 2. Dev environment with fake data to test integration with the API + GCP databases
 3. Staging environment with real data (potentially sampled if your datasets are large) to test real data flowing through the full end to end setup of a real system that mimics prod.
 4. Prod environment with real data on real systems.

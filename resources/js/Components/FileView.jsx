@@ -15,9 +15,7 @@ export default function FileView({ className }) {
       .get('/view-uploaded-data')
       .then(res => {
         setFileList(res.data.files);
-        console.log(JSON.stringify(res.data.files));
         setBatchList(res.data.batches);
-        console.log(JSON.stringify(res.data.batches));
       })
       .catch(err => {
         setError(JSON.stringify(err));

@@ -26,15 +26,12 @@ export default function FileManagement() {
     return tbl;
   };
 
+  // TODO: delete or use
   const getOutputFilesAndBatchesToView = () => {
     return axios
       .get('/view-output-data')
       .then(res => {
         let constructFileDict = {};
-        res.data.files;
-        console.log('aaaaaaaaaaaaaaaaaaaaaaaa');
-        console.log(JSON.stringify(res.data.batches));
-
         setFiles(res.data.files);
         setBatches(res.data.batches);
       })

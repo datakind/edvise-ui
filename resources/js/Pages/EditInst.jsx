@@ -153,7 +153,7 @@ export default function EditInst() {
             <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Admin Actions"
-          minorTitle="DOES NOT WORK YET: TODO wire this up with backend"
+          minorTitle="Edit Institution [Do not use: Work in progress]"
         ></HeaderLabel>
         <form
           id="edit-institution-form"

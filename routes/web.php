@@ -222,8 +222,11 @@ Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback'
 // The below are datakinder only paths.
 Route::middleware(['auth', 'datakinder'])->group(function () {
     Route::post('/create-inst-api', [ApiController::class, 'createInstApi']);
+    Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
+    // The following returns a list of two strings, the first is the inst id, the second is an error if any.
+    Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');

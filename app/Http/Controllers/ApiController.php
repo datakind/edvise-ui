@@ -31,7 +31,7 @@ class ApiController extends Controller
     }
 
     // Constructs a query for Datakinder cases that does not retrieve institution info.
-    public function constructDatakinderRequest(Request $request, string $url_piece, string $method, $post_body)
+    public function constructDatakinderRequest(Request $request, string $url_piece, string $method, $req_body)
     {
         [$tok, $tokErr] = TokenHelper::GetToken($request);
         if ($tok == "") {
@@ -52,10 +52,16 @@ class ApiController extends Controller
         if ($method == "GET") {
             $resp = Http::withHeaders($headers)->get($url);
         } elseif ($method == "POST") {
-            if ($post_body == null) {
+            if ($req_body == null) {
                 $resp = Http::withHeaders($headers)->post($url);
             } else {
-                $resp = Http::withHeaders($headers)->post($url, $post_body);
+                $resp = Http::withHeaders($headers)->post($url, $req_body);
+            }
+        } elseif ($method == "PATCH") {
+            if ($req_body == null) {
+                $resp = Http::withHeaders($headers)->patch($url);
+            } else {
+                $resp = Http::withHeaders($headers)->patch($url, $req_body);
             }
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
@@ -141,8 +147,8 @@ class ApiController extends Controller
         return ApiController::constructDatakinderRequest($request, '/institutions', "GET", /* No POST body*/ null);
     }
 
-    // Constructs a query without the BACKEND_URL+/institutions/<inst> prefix.
-    public function constructInstRequest(Request $request, string $url_piece, string $method, $post_body)
+    // Constructs a query with the BACKEND_URL+/institutions/<inst> prefix.
+    public function constructInstRequest(Request $request, string $url_piece, string $method, $req_body)
     {
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
         [$tok, $tokErr] = TokenHelper::GetToken($request);
@@ -163,10 +169,16 @@ class ApiController extends Controller
         if ($method == "GET") {
             $resp = Http::withHeaders($headers)->get($url);
         } elseif ($method == "POST") {
-            if ($post_body == null) {
+            if ($req_body == null) {
                 $resp = Http::withHeaders($headers)->post($url);
             } else {
-                $resp = Http::withHeaders($headers)->post($url, $post_body);
+                $resp = Http::withHeaders($headers)->post($url, $req_body);
+            }
+        } elseif ($method == "PATCH") {
+            if ($req_body == null) {
+                $resp = Http::withHeaders($headers)->patch($url);
+            } else {
+                $resp = Http::withHeaders($headers)->patch($url, $req_body);
             }
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
@@ -181,6 +193,47 @@ class ApiController extends Controller
         }
         return $resp;
     }
+
+public function EditInstApi(Request $request)
+    {
+        // Optional fields.
+        $req_body = [];
+        if ($request->input('name') != null && $request->input('name') != "") {
+            $req_body['name'] = $request->input('name');
+        }
+        if ($request->input('state') != null && $request->input('state') != "") {
+            $req_body['state'] = $request->input('state');
+        }
+        if ($request->input('allowed_schemas') != null) {
+            $req_body['allowed_schemas'] = $request->input('allowed_schemas');
+        }
+        if ($request->input('allowed_emails') != null) {
+            $req_body['allowed_emails'] = $request->input('allowed_emails');
+        }
+        if ($request->input('is_pdp') != null) {
+            if ($request->input('is_pdp') && $request->input('pdp_id') == null) {
+                return response()->json(['error' => 'Please set the PDP ID field for schools that support PDP schemas.'], 400);
+            }
+            $req_body['is_pdp'] = $request->input('is_pdp');
+        }
+        if ($request->input('pdp_id') != null) {
+            $req_body['pdp_id'] = $request->input('pdp_id');
+        }
+        if ($request->input('retention_days') != null && $request->input('retention_days') != "") {
+            $req_body['retention_days'] = $request->input('retention_days');
+        }
+
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+
+            return response()->json( ['inst_id' => $inst, 'name' => $request->input('name'), 'state' => $request->input('state'), 'pdp_id' => $request->input('pdp_id')], 200);
+        }
+        return ApiController::constructInstRequest($request, '', "PATCH", $req_body);
+    }
+
 
     public function createModelApi(Request $request)
     {

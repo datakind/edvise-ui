@@ -2,6 +2,7 @@ import AppLayout from '@/Layouts/AppLayout';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SortIcon from '@/Components/Icons/SortIcon';
+import OverflowMenu from '@/Components/OverflowMenu';
 import React, { useState, useEffect } from 'react';
 
 export default function ManageUploads() {
@@ -25,20 +26,26 @@ export default function ManageUploads() {
   };
 
   const mockUpload2 = {
-    batch_id: 'Id1',
+    batch_id: 'Id2',
     inst_id: '12345',
     file_names_to_ids: {
       'Very very long file name FileX.txt': '123',
       'Long file name FileY.txt': '124',
     },
-    name: 'Batch1',
-    created_by: 'Jane Doe',
+    name: 'Batch2',
+    created_by: 'John Doe',
     completed: true,
     deleted: false,
     updated_at: '01/02/2024 09:30:20',
     created_at: '01/02/2024 09:30:20',
-    updated_by: 'Jane Doe',
+    updated_by: 'John Doe',
   };
+
+  const actions = [
+    { label: 'Change batch name', onClick: () => console.log('Change batch name clicked') },
+    { label: 'Add files to batch', onClick: () => console.log('Add files to batch clicked') },
+    { label: 'Delete batch', onClick: () => console.log('Delete batch clicked') },
+  ];
 
   useEffect(() => {
     // To Do: Please replace by call to the backend API but keep the mock around for easy frontend testing.
@@ -77,7 +84,7 @@ export default function ManageUploads() {
   };
 
   const sortData = (column) => {
-    let sortedData = [...data]; 
+    let sortedData = [...data];
 
     if (sortColumn === column && sortDirection === 'asc') {
       setSortDirection('desc');
@@ -145,6 +152,9 @@ export default function ManageUploads() {
                 <th className='p-4 px-6'><button onClick={() => handleSort('date_modified')}>
                   <span className='inline-flex align-middle pr-2'>DATE MODIFIED</span><SortIcon />
                 </button></th>
+                <th className='p-4 px-6'>
+                  <span className='inline-flex align-middle pr-2'>ACTIONS</span>
+                </th>
               </tr>
             </thead>
 
@@ -172,6 +182,9 @@ export default function ManageUploads() {
                     </td>
                     <td className="p-4 px-6 font-medium">
                       {upload.updated_at}
+                    </td>
+                    <td className="p-4 px-6 font-medium">
+                      <OverflowMenu items={actions} />
                     </td>
                   </tr>
                 ),

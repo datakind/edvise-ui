@@ -6,11 +6,6 @@ function OverflowMenu({ items }) {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const buttonStyle = {
-        borderRadius: '8px',
-        border: isOpen ? '1px solid #F79222' : 'none',
-    }
-
     const menuStyle = {
         display: 'inline-flex',
         padding: '10px 0px',
@@ -33,7 +28,7 @@ function OverflowMenu({ items }) {
         lineHeight: '26px',
     };
 
-    const handleToggle = (event) => {
+    const handleToggle = () => {
         setIsOpen(!isOpen);
     };
 
@@ -57,7 +52,7 @@ function OverflowMenu({ items }) {
 
     return (
         <div style={{ position: 'relative', display: 'inline-block' }}>
-            <MoreButton styles={buttonStyle} onClick={handleToggle}></MoreButton>
+            <MoreButton style={{ border: isOpen ? '1px solid #F79222' : 'none', borderRadius: '8px'}} onClick={handleToggle}></MoreButton>
             {isOpen && (
                 <div
                     ref={menuRef}

@@ -4,6 +4,11 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SortIcon from '@/Components/Icons/SortIcon';
 import OverflowMenu from '@/Components/OverflowMenu';
 import React, { useState, useEffect } from 'react';
+import DialogModal from '@/Components/Modals/DialogModal';
+import ActionSection from '@/Components/ActionSection';
+import TextInput from '@/Components/Fields/TextInput';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 
 export default function ManageUploads() {
   const [data, setData] = useState({});
@@ -11,6 +16,8 @@ export default function ManageUploads() {
   const [error, setError] = useState(null);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
+  const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
+  const [isChangeModalPrimaryBtnDisabled, setIsChangeModalPrimaryBtnDisabled] = useState(true);
 
   const mockUpload1 = {
     batch_id: 'Id1',
@@ -42,7 +49,7 @@ export default function ManageUploads() {
   };
 
   const actions = [
-    { label: 'Change batch name', onClick: () => console.log('Change batch name clicked') },
+    { label: 'Change batch name', onClick: () => showChangeModal() },
     { label: 'Add files to batch', onClick: () => console.log('Add files to batch clicked') },
     { label: 'Delete batch', onClick: () => console.log('Delete batch clicked') },
   ];
@@ -112,6 +119,64 @@ export default function ManageUploads() {
     }
     setData(sortedData);
   };
+
+  const showChangeModal = () => {
+    setIsChangeModalOpen(true);
+  }
+
+  const enableChangeModalPrimaryBtn = () => {
+    setIsChangeModalPrimaryBtnDisabled(false);
+  };
+
+  const closeChangeModal = () => {
+    setIsChangeModalOpen(false);
+    setIsChangeModalPrimaryBtnDisabled(true);
+  }
+
+  const changeBatchName = () => {
+    //TODO: Make necessary backend calls to update the batch name.
+    console.log('Updating batch name....');
+    setIsChangeModalOpen(false);
+  }
+
+  if (isChangeModalOpen) {
+    return (
+      <ActionSection>
+          <DialogModal isOpen={isChangeModalOpen} onClose={closeChangeModal}>
+            <DialogModal.Content title={'Change batch name'}>
+              <div className="mt-4">
+                <TextInput
+                  className="mt-1 block w-3/4"
+                  placeholder="OldBatchName"
+                  onChange={() => enableChangeModalPrimaryBtn()}
+                />
+              </div>
+            </DialogModal.Content>
+            <DialogModal.Footer>
+              <SecondaryButton style={{ 
+                background: 'white', 
+                color: '#f79222', 
+                border: '1px solid #f79222', 
+                textTransform: 'none', 
+                fontFamily: 'Helvetica Neue', 
+                fontSize: '16px', 
+                lineHeight: '24px', 
+                fontWeight: '500', 
+                marginRight: '8px' }} onClick={closeChangeModal}>Cancel</SecondaryButton>
+              <PrimaryButton style={{ 
+                background: '#f79222', 
+                color: 'white', 
+                textTransform: 'none',
+                fontFamily: 'Helvetica Neue', 
+                fontSize: '16px', 
+                lineHeight: '24px', 
+                fontWeight: '500', 
+                opacity: isChangeModalPrimaryBtnDisabled ? '0.5' : '1' }} disabled={isChangeModalPrimaryBtnDisabled} onClick={changeBatchName}>Update</PrimaryButton>
+            </DialogModal.Footer>
+          </DialogModal>
+      </ActionSection>
+    );
+  }
 
   return (
     <AppLayout

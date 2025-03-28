@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function MoreButton({ onClick, ...styles }) {
+export default function MoreButton({ onClick, ...props}) {
     return (
       <button
         onClick={onClick}
+        style={props.style}
         className="w-10 h-10 flex items-center justify-center"
-        style={{...styles}}
         aria-label="More options"
         aria-haspopup="true"
       >

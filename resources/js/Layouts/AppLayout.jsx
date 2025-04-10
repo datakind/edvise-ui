@@ -58,8 +58,7 @@ var navigationAboveLine = [
     children: [
       { name: 'Upload Data', href: route('file-upload') },
       { name: 'Start Prediction', href: route('run-inference') },
-      // TODO: uncomment once we have this implemented.
-      // { name: 'File Management', href: route('file-management')},
+      { name: 'Manage Uploads', href: route('manage-uploads') },
     ],
   },
   {
@@ -67,18 +66,6 @@ var navigationAboveLine = [
     icon: Cog8ToothIcon,
     visibility_type: VisibilityType.DATAKIND_ONLY,
     children: [
-      {
-        name: 'Create Institution',
-        href: route('create-inst'),
-        icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.DATAKIND_ONLY,
-      },
-      {
-        name: 'View Data',
-        href: route('view-data'),
-        icon: DocumentDuplicateIcon,
-        visibility_type: VisibilityType.DATAKIND_ONLY,
-      },
       {
         name: 'Set Institution',
         href: route('set-inst'),
@@ -94,6 +81,18 @@ var navigationAboveLine = [
       {
         name: 'Create Model',
         href: route('create-model'),
+        icon: ChartPieIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
+      {
+        name: 'Create Institution',
+        href: route('create-inst'),
+        icon: DocumentDuplicateIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
+      {
+        name: 'Edit Institution',
+        href: route('edit-inst'),
         icon: ChartPieIcon,
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
@@ -134,15 +133,12 @@ const navigationBelowLine = [
   },*/
 ];
 
-           
-
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
   const user = auth.user;
-  const userIsDatakinder = (auth.user != null
-    ? auth.user.access_type == 'DATAKINDER'
-    : false);
+  const userIsDatakinder =
+    auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [navAboveLine, setNavAboveLine] = useState(navigationAboveLine);
 
@@ -154,41 +150,45 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   const pathname = window.location.pathname;
 
-function dashboardNavHelper(item, modelData) {
-  if (item.name == 'Dashboard' && (modelData != null && modelData.length != 0 )) {
-    // Create a newItem to drop the href that's there by default.
-    item = {
-    name: 'Dashboard',
-    icon: ChartBarIcon,
-    visibility_type: VisibilityType.PRIVATE_ONLY,
-    children: [],
-  };
-    modelData.forEach((elem) => {
-      let transformedElem = {};
-      transformedElem.name = elem.name;
-      transformedElem.href = route('dashboard_modelname', elem.name);
-      transformedElem.visibility_type =VisibilityType.PRIVATE_ONLY;
-      item.children.push(transformedElem);
+  function dashboardNavHelper(item, modelData) {
+    if (
+      item.name == 'Dashboard' &&
+      modelData != null &&
+      modelData.length != 0
+    ) {
+      // Create a newItem to drop the href that's there by default.
+      item = {
+        name: 'Dashboard',
+        icon: ChartBarIcon,
+        visibility_type: VisibilityType.PRIVATE_ONLY,
+        children: [],
+      };
+      modelData.forEach(elem => {
+        let transformedElem = {};
+        transformedElem.name = elem.name;
+        transformedElem.href = route('dashboard_modelname', elem.name);
+        transformedElem.visibility_type = VisibilityType.PRIVATE_ONLY;
+        item.children.push(transformedElem);
+      });
     }
-    );
+    return item;
   }
-  return item;
-}
 
   useEffect(() => {
     const fetchModels = async () => {
       try {
         const response = await axios.get('/models-api');
-        let newNav = navAboveLine.map(item => dashboardNavHelper(item, response.data));
+        let newNav = navAboveLine.map(item =>
+          dashboardNavHelper(item, response.data),
+        );
         setNavAboveLine(newNav);
       } catch (err) {
         //console.log(JSON.stringify(err));
-        console.log("error during fetchModels");
+        console.log('error during fetchModels');
       }
     };
     fetchModels();
   }, []);
-
 
   const renderNav = navMap =>
     navMap.map(item =>

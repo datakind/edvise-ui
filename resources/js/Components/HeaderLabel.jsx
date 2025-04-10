@@ -16,8 +16,14 @@ export default function HeaderLabel({
       )}
     >
       {iconObj} {majorTitle}{' '}
-      <ArrowRightIcon aria-hidden="true" className="size-6 shrink-0" />{' '}
-      <span className="text-black">{minorTitle}</span>
+      {minorTitle == '' ? (
+        <></>
+      ) : (
+        <>
+          <ArrowRightIcon aria-hidden="true" className="size-6 shrink-0" />{' '}
+          <span className="text-black">{minorTitle}</span>
+        </>
+      )}
     </div>
   );
 }

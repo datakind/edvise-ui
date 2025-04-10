@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: composer install -n --prefer-dist
       - name: Generate key
-        run: php artisan key:generate 
+        run: php artisan key:generate
       - name: Create database
         run: |
           mkdir -p database
@@ -31,6 +31,6 @@ jobs:
       - name: Install more dependencies
         run: npm install
       - name: Build vite assets
-        run: npm run build        
+        run: npm run build
       - name: Run tests
         run: php artisan test

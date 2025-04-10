@@ -1,58 +1,42 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Chart } from "react-google-charts";
+import { Chart } from 'react-google-charts';
 
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
 import BigDangerAlert from '@/Components/BigDangerAlert';
+import classNames from 'classnames';
 
-import {
-  ChartBarIcon,
-  ArrowUpTrayIcon,
-} from '@heroicons/react/24/outline';
+import { ChartBarIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 const histogramOptions = {
-  title: "Distribution of Support Scores",
+  title: 'Distribution of Support Scores',
   titleTextStyle: { fontSize: 18, bold: false },
-  chartArea: { width: "80%", height: "70%" },
-  legend: { position: "none" },
+  chartArea: { width: '80%', height: '70%' },
+  legend: { position: 'none' },
   colors: ['#f79222'],
   hAxis: {
     viewWindow: { min: 0, max: 100 },
     buckets: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
     format: '#', // Integer formatting
+    title: 'Support Score',
+  },
+  vAxis: {
+    title: 'Number of Students',
   },
   series: {
     0: {
       annotations: {
         style: 'none',
-        textStyle: { color: 'black' }
-      }
-    }
-  }
-};
-
-const barChartOptions = {
-  title: "Top Indicators",
-  titleTextStyle: { fontSize: 18, bold: false },
-  legend: { position: "none" },
-  colors: ['#f79222'],
-  chartArea: {
-    left: "40%",
-    top: 75,
-    right: 75,
-    bottom: 75,
+        textStyle: { color: 'black' },
+      },
+    },
   },
-  vAxis: {
-    textStyle: {
-      fontSize: 12,
-    }
-  }
 };
 
-const processRiskScoreData = (data) => {
+const processRiskScoreData = data => {
   const chartData = [['Student ID', 'Support Score']];
   for (const item of data) {
     chartData.push([item['Student ID'], item['Support Score'] * 100]);
@@ -60,29 +44,7 @@ const processRiskScoreData = (data) => {
   return chartData;
 };
 
-// const processFeatureData = (data) => {
-//   const features = new Set();
-//   for (let i = 1; i < data.length; i++) {
-//     features.add(data[i].Feature);
-//   }
-//   const featureCounts = {};
-//   for (const feature of features) {
-//     featureCounts[feature] = 0;
-//   }
-//   for (let i = 1; i < data.length; i++) {
-//     featureCounts[data[i].Feature] += 1;
-//   }
-//   const chartData2 = [["Feature", "Count"]];
-//   const sortedFeatures = Object.entries(featureCounts).sort((a, b) => b[1] - a[1]);
-//   for (const [feature, count] of sortedFeatures) {
-//     chartData2.push([feature, count]);
-//   }
-//   return chartData2;
-// };
-
 export default function Dashboard({ modelname }) {
-    // TODO below only gets the csv file, update to handle shap as well
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // These only need to be set once
@@ -93,6 +55,7 @@ export default function Dashboard({ modelname }) {
   const [currentRunId, setCurrentRunId] = useState('');
   const [currentRunCompleted, setCurrentRunCompleted] = useState(false); // Whether the current run has output and has completed.
   const [outputFilename, setOutputFilename] = useState('');
+  const [outputApproved, setOutputApproved] = useState(false);
   const [data, setData] = useState([]); // the raw json data of the csv file
   const [shapImgBlob, setShapImgBlob] = useState(null); // the img blob
 
@@ -103,75 +66,81 @@ export default function Dashboard({ modelname }) {
         const response = await axios.get('/models-api');
         let models = response.data;
         let model = null;
-        if (models == null || models.length == 0 ){
+        if (models == null || models.length == 0) {
           // No models for this institution exist.
           setModelInfo(null);
-          throw new Error("This institution does not have any models.");
+          throw new Error('NO_MODELS');
         } else {
-
-          if (modelname == null || modelname == ""){
+          if (modelname == null || modelname == '') {
             // No model specified, so we just pick one.
             model = models[0];
             setModelInfo(model);
           } else {
             // Find the specific model specified.
-            let specifiedModel = models.filter((m) => m.name == modelname);
-            if (specifiedModel.length == 0 ) {
+            let specifiedModel = models.filter(m => m.name == modelname);
+            if (specifiedModel.length == 0) {
               // Specified model not found
               setModelInfo(null);
-              throw new Error("Specified model "+modelname+" not found.");
+              throw new Error('Specified model ' + modelname + ' not found.');
             } else {
               model = specifiedModel[0];
               setModelInfo(model);
-          }
+            }
           }
         }
         if (model != null) {
-          const runs_response = await axios.get('/model/'+model.name);
+          const runs_response = await axios.get('/model/' + model.name);
           if (runs_response.data != null && runs_response.data.length != 0) {
             let run_results = runs_response.data;
             setRuns(run_results);
             var runDatesDict = {};
-                                  
-            for(var i in run_results) {
-              runDatesDict[run_results[i].triggered_at.split("T")[0]] =  run_results[i].run_id;
+
+            for (var i in run_results) {
+              runDatesDict[run_results[i].triggered_at] = run_results[i].run_id;
             }
 
             setRunDatesToJobDict(runDatesDict);
             if (runDatesDict == {}) {
-                throw new Error("Could not find run dates for "+model.name);      
+              throw new Error('Could not find run times for ' + model.name);
             }
-            // TODO right now it's just getting the first value, make sure it's the most recent run (on webapp side?)
-            let csv_filename = run_results[0].output_filename;
+            if (currentRunId == '' && run_results.length >= 1) {
+              // Set current run id to the first run (the returned runs are sorted by triggered time from most recent to least recent)
+              // The current run id should only be empty on first page load.
+              setCurrentRunId(run_results[0].run_id);
+            }
+            let csv_filename = run_results.find(
+              r => r.run_id === currentRunId,
+            )?.output_filename;
+            setCurrentRunCompleted(
+              run_results.find(r => r.run_id === currentRunId)?.completed,
+            );
+            setOutputFilename(csv_filename);
+            setOutputApproved(
+              run_results.find(r => r.run_id === currentRunId)?.output_valid,
+            );
             if (csv_filename != null) {
-              setCurrentRunCompleted(true);
-              setOutputFilename(csv_filename);
-              const file_response = await axios.get('/output-file-json/'+csv_filename);
-              let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              // broken TODO
-              const shap_response = await axios.get('/output-file-bytes/'+shap_filename);
+              const file_response = await axios.get(
+                '/output-file-json/' + csv_filename,
+              );
+              let shap_filename = csv_filename.replace(
+                'inference_output.csv',
+                'shap_chart.png',
+              );
               // For the csv data used for histogram, store output as json instead of bytes.
-              const x = 4;
-              console.log('file_response', file_response);  
               setData(file_response.data);
-              // Convert the byte array to a Blob
-              // https://thewebdev.info/2024/04/13/how-to-display-an-image-stored-as-a-byte-array-in-html-and-javascript/
-              // TODO: Does the blob need to be stored in state too? If blob is a local var that goes away where does it get saved? 
-              const blob = new Blob([new Uint8Array(shap_response.data)], { type: 'image/png' });
               // Create a URL for the Blob
-              setShapImgBlob(blob);
-            } else {
-              // If the output filename isn't present in the run, that means it hasn't completed. This is not an error but we should handle it.
-              // TODO handle
+              setShapImgBlob('/output-file-png/' + shap_filename);
             }
-
           } else {
-            throw new Error(model.name+" does not have any runs.");
+            throw new Error('NO_RUNS');
           }
-
         }
       } catch (err) {
-        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
+        if (
+          err.response != null &&
+          err.response.data != null &&
+          err.response.data.error != null
+        ) {
           setError(Error(err.response.data.error));
         } else {
           setError(err);
@@ -179,58 +148,45 @@ export default function Dashboard({ modelname }) {
       } finally {
         setLoading(false);
       }
-
-      
     };
+
     fetchModel();
-  }, []);
+  }, [currentRunId]);
 
   const triggerDownload = () => {
-    if (outputFilename != null && outputFilename != "") {
+    if (outputFilename != null && outputFilename != '') {
       return axios
-      .get('/download-inf-data/' + outputFilename)
-      .then(res => {
-        window.open(res.data, '_self');
-      })
-      .catch(err => {
-        if (err.response != null && err.response.data != null && err.response.data.error != null) {          
-          setError(Error(err.response.data.error));
-        } else {
-          setError(err);
-        }
-      });
+        .get('/download-inf-data/' + outputFilename)
+        .then(res => {
+          if (res.data == 'local-url-fake-signed') {
+            // This is the local testing case. Don't download as this is not a real file.
+            return;
+          }
+          window.open(res.data, '_self');
+        })
+        .catch(err => {
+          if (
+            err.response != null &&
+            err.response.data != null &&
+            err.response.data.error != null
+          ) {
+            setError(Error(err.response.data.error));
+          } else {
+            setError(err);
+          }
+        });
     }
-    
   };
 
   const chartData = processRiskScoreData(data);
 
-  // TODO handle the case where multiple runs occurred in one day
-  const applyDate = (event) => {
+  const applyDate = event => {
     event.preventDefault();
-    if (event.target.elements.run_time.value == "") {
+    if (event.target.elements.run_time.value == '') {
       return;
     }
     let run_id = runDatesToJobDict[event.target.elements.run_time.value];
     setCurrentRunId(run_id);
-    let runInfo = runs.filter((r) => r.run_id == run_id);
-    const csv_filename = runInfo.output_filename;
-    if (csv_filename != null) {
-      setCurrentRunCompleted(true);
-      setOutputFilename(csv_filename);
-      return axios.get('/output-file-bytes/'+csv_filename).then(res =>{
-              // Store file as json.
-              setData(JSON.stringify(res.data));
-               let shap_filename = csv_filename.replace("inference_output.csv", "shap_chart.png");
-              return axios.get('/output-file-bytes/'+shap_filename).then(res1 => {
-                 const blob = new Blob([new Uint8Array(res1.data)], { type: 'image/png' });
-                  setShapImgBlob(blob);
-              }).catch(err1 => setError(err1));
-            }
-        ).catch(err => setError(err));
-    } else {
-      setCurrentRunCompleted(false);
-    }
   };
 
   return (
@@ -240,99 +196,196 @@ export default function Dashboard({ modelname }) {
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
           Dashboard
         </h2>
-      )} 
+      )}
     >
-    {
-      <div className="w-full flex" id="main_area">
-      {loading ? (<div className="flex justify-center w-full">
-           <Spinner mainMsg="Loading"></Spinner>
-        </div>) : (
-              error != null ?
-    (<BigDangerAlert
-            mainMsg={"Error: "+ error.message}
-            className="flex h-fit mr-24 ml-24"
-          ></BigDangerAlert>
-      ) : (
-              <div className="w-full flex flex-col items-center" id="main_area">
-                  <HeaderLabel
-          className="pl-12"
-          iconObj={
-            <ChartBarIcon aria-hidden="true" className="size-6 shrink-0" />
-          }
-          majorTitle="Dashboard"
-          minorTitle={modelInfo == null || modelInfo == {} ? "Model not found" : modelInfo.name}
-        ></HeaderLabel>
-        
-        <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
-        <form onSubmit={applyDate} className="flex flex-row gap-x-2 justify-center items-center">
-        <div className="flex">
-          Run Date: 
-          </div>
-          <div className="flex">
-          {(runDatesToJobDict == undefined ||
-      Object.keys(runDatesToJobDict).length == 0) ?
-
-      (  <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
-            id="run_time"
-          >
-            <option disabled value="">No runs exist</option>
-          </select>
+      {
+        <div className="w-full flex" id="main_area">
+          {loading ? (
+            <div className="flex justify-center w-full">
+              <Spinner mainMsg="Loading"></Spinner>
+            </div>
+          ) : error != null &&
+            !(error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
+            <BigDangerAlert
+              mainMsg={'Error: ' + error.message}
+              className="flex h-fit mr-24 ml-24"
+            ></BigDangerAlert>
           ) : (
-               <select
-            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
-            id="run_time"
-          >
-          {Object.keys(runDatesToJobDict).map((r) => <option>{r}</option>)}
-          </select>) }
-          </div>
-        
-        <button
-            type="submit"
-            className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
-          >
-            Apply
-          </button>
+            <div className="w-full flex flex-col items-center" id="main_area">
+              <HeaderLabel
+                className="pl-12"
+                iconObj={
+                  <ChartBarIcon
+                    aria-hidden="true"
+                    className="size-6 shrink-0"
+                  />
+                }
+                majorTitle="Dashboard"
+                minorTitle={
+                  modelInfo == null || modelInfo == {} ? '' : modelInfo.name
+                }
+              ></HeaderLabel>
 
-      </form>
-        <button
-            id="button_content"
-            onClick={triggerDownload}
-            className="bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center"
-          >
-            <ArrowUpTrayIcon aria-hidden="true" className="size-6 shrink-0"/>Export
-          </button>
-          </div>
-        { currentRunCompleted ?
-        (<div className='flex justify-between items-center flex-col m-auto'>
+              {error != null &&
+              (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
+                <>
+                  <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
+                    <div className="flex flex-row gap-x-2 justify-center items-center">
+                      Run Time: <i>No run available yet.</i>
+                    </div>
+                  </div>
+                  {error.message == 'NO_MODELS' ? (
+                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                      <div className="flex font-bold">
+                        Your institution does not have a model yet.
+                      </div>
+                      <div className="flex">
+                        Please contact Datakind to set up your model at{' '}
+                        <a href="mailto:education@datakind.org?subject=SST%20Inquiry">
+                          education@datakind.org
+                        </a>
+                        .
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                      <div className="flex font-bold">
+                        This model does not have any predictions available yet.
+                      </div>
+                      <div className="flex">Click below to begin one.</div>
+                      <a
+                        href={route('run-inference')}
+                        className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
+                      >
+                        Start Prediction
+                      </a>
+                    </div>
+                  )}
+                  <div className="w-full max-w-[1057px] mx-auto">
+                    <ModelRunHistory runInfos={[]} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
+                    <form
+                      onSubmit={applyDate}
+                      className="flex flex-row gap-x-2 justify-center items-center"
+                    >
+                      <div className="flex">Run Time:</div>
+                      <div className="flex">
+                        {runDatesToJobDict == undefined ||
+                        Object.keys(runDatesToJobDict).length == 0 ? (
+                          <select
+                            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+                            id="run_time"
+                          >
+                            <option disabled value="">
+                              No runs exist
+                            </option>
+                          </select>
+                        ) : (
+                          <select
+                            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+                            id="run_time"
+                          >
+                            {Object.keys(runDatesToJobDict).map(r => (
+                              <option value={r}>{r}</option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
 
-          <PrintableChart
-            chartType="Histogram"
-            data={chartData}
-            options={histogramOptions}
-            width={"800px"}
-            height={"500px"}
-          />
-          {/* <PrintableChart
-            chartType="BarChart"
-            data={chartData2}
-            options={barChartOptions}
-            width={"800px"}
-            height={chartData2.length * 25 + 100}
-          /> */}
-        <img id="ShapPreview" alt="shap value graph" src={shapImgBlob}/>
-          </div>
-          ) : (<></>)}
-          <div className="w-full max-w-[1057px] mx-auto">
-            <ModelRunHistory />
-          </div>
-         </div>
-        )
-        )
+                      <button
+                        type="submit"
+                        className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
+                      >
+                        Update View
+                      </button>
+                    </form>
+                    <button
+                      id="button_content"
+                      onClick={triggerDownload}
+                      className={classNames(
+                        currentRunCompleted ? 'opacity-100' : 'opacity-50',
+                        'bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center',
+                      )}
+                      disabled={!currentRunCompleted}
+                    >
+                      <ArrowUpTrayIcon
+                        aria-hidden="true"
+                        className="size-6 shrink-0"
+                      />
+                      Export
+                    </button>
+                  </div>
+                  {currentRunCompleted ? (
+                    <div className="flex justify-between items-center flex-col m-auto">
+                      <div className="flex ml-24 mt-12 mb-12 mr-24 w-3/4 items-center justify-center h-12 border-2 border-dashed rounded-lg border-gray-500">
+                        <div className="flex font-bold">
+                          {outputApproved ? (
+                            <>Output review completed.</>
+                          ) : (
+                            <>Output review not completed.</>
+                          )}
+                        </div>
+                      </div>
+                      <PrintableChart
+                        chartType="Histogram"
+                        data={chartData}
+                        options={histogramOptions}
+                        width={'800px'}
+                        height={'500px'}
+                      />
+                      <div className="pl-4 pr-4 pt-4 pb-4 bg-white">
+                        <div className="flex justify-between">
+                          <span className="text-lg">
+                            Student Success Predictions
+                          </span>
+                          <a
+                            className="text-xs"
+                            href={shapImgBlob}
+                            download="shap_chart.png"
+                          >
+                            Download Chart
+                          </a>
+                        </div>
+                        <img
+                          id="ShapPreview"
+                          style={{ width: 'calc(800px - 2rem)' }}
+                          alt="shap value graph"
+                          src={shapImgBlob}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                      <div className="flex font-bold">
+                        Run pending. You will recieve an email once the data is
+                        available for viewing.
+                      </div>
+                    </div>
+                  )}
+                  <div className="w-full max-w-[1057px] mx-auto">
+                    <ModelRunHistory runInfos={runs} />
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       }
-      </div> }
     </AppLayout>
   );
+}
+
+function bytesToBase64(bytes) {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    const blob = new Blob([bytes], { type: 'image/png' });
+    reader.readAsDataURL(blob);
+  });
 }
 
 function PrintableChart({ chartType, data, options, width, height }) {
@@ -358,19 +411,17 @@ function PrintableChart({ chartType, data, options, width, height }) {
         options={options}
         width={width}
         height={height}
-        style={{ margin: "20px auto" }}
-        getChartWrapper={(wrapper) => setChartWrapper(wrapper)}
+        style={{ margin: '20px auto' }}
+        getChartWrapper={wrapper => setChartWrapper(wrapper)}
       />
       {chartWrapper && (
         <a
           onClick={handleDownload}
+          className="text-xs cursor-pointer"
           style={{
             position: 'absolute',
-            top: '24px',
-            right: '10px',
-            fontSize: '12px',
-            color: '#007bff',
-            cursor: 'pointer',
+            top: '34px',
+            right: '16px',
           }}
         >
           Download Chart

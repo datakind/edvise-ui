@@ -2,9 +2,7 @@ import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import {
-  Cog8ToothIcon,
-} from '@heroicons/react/24/outline';
+import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 // TODO enable adding multiple datakinders at once.
@@ -12,10 +10,13 @@ export default function AddDatakinders() {
   const handleSubmit = event => {
     event.preventDefault();
     let usrs = [];
-    if (event.target.elements.user.value == undefined || event.target.elements.user.value == "") {
+    if (
+      event.target.elements.user.value == undefined ||
+      event.target.elements.user.value == ''
+    ) {
       document.getElementById('result_area').innerHTML =
         'Error: field is empty';
-        return;
+      return;
     }
     usrs.push(event.target.elements.user.value);
     return axios({
@@ -24,15 +25,18 @@ export default function AddDatakinders() {
       data: {
         emails: usrs,
       },
-    }).then(res => {
-        document.getElementById("result_area").innerHTML = "Done";
-    }).catch(e => {
-        if( e.response ){
-            document.getElementById("result_area").innerHTML = "Error " + JSON.stringify(e.response.data.error); 
-          } else {
-            document.getElementById("result_area").innerHTML =  JSON.stringify(e) ;
-          }
-});
+    })
+      .then(res => {
+        document.getElementById('result_area').innerHTML = 'Done';
+      })
+      .catch(e => {
+        if (e.response) {
+          document.getElementById('result_area').innerHTML =
+            'Error ' + JSON.stringify(e.response.data.error);
+        } else {
+          document.getElementById('result_area').innerHTML = JSON.stringify(e);
+        }
+      });
   };
   // The title in AppLayout needs to match the nav bar label.
   return (
@@ -45,7 +49,7 @@ export default function AddDatakinders() {
       )}
     >
       <div className="w-full flex flex-col items-center" id="main_area">
-      <HeaderLabel
+        <HeaderLabel
           className="pl-12"
           iconObj={
             <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
@@ -53,7 +57,10 @@ export default function AddDatakinders() {
           majorTitle="Admin Actions"
           minorTitle="Add Datakinders"
         ></HeaderLabel>
-        <form className="w-full max-w-full pl-36 pr-36 pt-24" onSubmit={handleSubmit}>
+        <form
+          className="w-full max-w-full pl-36 pr-36 pt-24"
+          onSubmit={handleSubmit}
+        >
           <div id="form_contents" className="flex flex-col">
             <div id="add_one_user" className="flex -mx-3 mb-2">
               <div className="w-full">
@@ -70,18 +77,19 @@ export default function AddDatakinders() {
                   placeholder="j.smith@datakind.org"
                 ></input>
                 <p className="text-gray-600 text-xs italic">
-                  Add an email of an existing account which you want to grant Datakinder access.
+                  Add an email of an existing account which you want to grant
+                  Datakinder access.
                 </p>
               </div>
             </div>
           </div>
           <div className="flex justify-center pt-12">
-          <button
-            type="submit"
-            className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
-          >
-            Submit
-          </button>
+            <button
+              type="submit"
+              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+            >
+              Submit
+            </button>
           </div>
         </form>
         <div className="flex" id="result_area"></div>

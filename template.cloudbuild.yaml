@@ -1,27 +1,27 @@
 options:
-    logging: CLOUD_LOGGING_ONLY
-    pool: {}
+  logging: CLOUD_LOGGING_ONLY
+  pool: {}
 steps:
-  - name: "gcr.io/k8s-skaffold/pack"
-    id: "BUILD and PUSH with cloudpacks"
-    entrypoint: "pack"
+  - name: 'gcr.io/k8s-skaffold/pack'
+    id: 'BUILD and PUSH with cloudpacks'
+    entrypoint: 'pack'
     args:
       [
-        "build",
-        "--builder=gcr.io/buildpacks/builder",
-        "--publish",
-        "gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA",
+        'build',
+        '--builder=gcr.io/buildpacks/builder',
+        '--publish',
+        'gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA',
       ]
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: "DEPLOY to cloud run"
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'DEPLOY to cloud run'
     entrypoint: gcloud
     args:
       [
-        "run",
-        "deploy",
-        "dev-frontend",
-        "--image",
-        "gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA",
-        "--region",
-        "{REGION}",
+        'run',
+        'deploy',
+        'dev-frontend',
+        '--image',
+        'gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA',
+        '--region',
+        '{REGION}',
       ]

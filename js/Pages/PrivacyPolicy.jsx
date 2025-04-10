@@ -2,8 +2,9 @@ import React from 'react';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo';
 import { Head } from '@inertiajs/react';
 export default function PrivacyPolicy({ policy }) {
-    return (<div>
-      <Head title="Privacy Policy"/>
+  return (
+    <div>
+      <Head title="Privacy Policy" />
 
       <div className="font-sans text-gray-900 antialiased">
         <div className="pt-4 bg-gray-100">
@@ -12,9 +13,13 @@ export default function PrivacyPolicy({ policy }) {
               <AuthenticationCardLogo />
             </div>
 
-            <div className="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose" dangerouslySetInnerHTML={{ __html: policy }}/>
+            <div
+              className="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose"
+              dangerouslySetInnerHTML={{ __html: policy }}
+            />
           </div>
         </div>
       </div>
-    </div>);
+    </div>
+  );
 }

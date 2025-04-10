@@ -3,9 +3,7 @@ import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import FileView from '@/Components/FileView';
 import HeaderLabel from '@/Components/HeaderLabel';
-import {
-  DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 // Skeleton for the download inf data page.
 export default function FileManagement() {
   const [files, setFiles] = useState({});
@@ -28,22 +26,17 @@ export default function FileManagement() {
     return tbl;
   };
 
+  // TODO: delete or use
   const getOutputFilesAndBatchesToView = () => {
-
     return axios
       .get('/view-output-data')
       .then(res => {
         let constructFileDict = {};
-        res.data.files;
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa");
-        console.log(JSON.stringify(res.data.batches));
-
         setFiles(res.data.files);
         setBatches(res.data.batches);
-
       })
       .catch(err => {
-        console.log("errors");
+        console.log('errors');
       });
   };
 
@@ -121,18 +114,19 @@ export default function FileManagement() {
       )}
     >
       <div className="py-12">
-      <HeaderLabel
+        <HeaderLabel
           className="pl-12"
           iconObj={
-            <DocumentDuplicateIcon aria-hidden="true" className="size-6 shrink-0" />
+            <DocumentDuplicateIcon
+              aria-hidden="true"
+              className="size-6 shrink-0"
+            />
           }
           majorTitle="Actions"
           minorTitle="File Management"
         ></HeaderLabel>
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <p id="info">
-            Type in the filename you want to download below.
-          </p>
+          <p id="info">Type in the filename you want to download below.</p>
           <input type="text" id="filename" name="filename" />
           <button
             id="button_content"

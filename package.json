@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "format:landing": "prettier --write resources/css/landing.css resources/js/Components/Landing/*",
     "update-static": "vite build && gsutil -o \"GSUtil:parallel_process_count=1\" -m cp -r public/* gs://${ASSET_BUCKET}"
   },
   "devDependencies": {
@@ -25,7 +26,8 @@
     "globals": "^15.14.0",
     "laravel-vite-plugin": "^0.7.8",
     "postcss": "^8.4.31",
-    "prettier": "2.8.8",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.56.1",
@@ -44,6 +46,7 @@
     "@types/mapbox-gl": "^2.7.19",
     "classnames": "^2.3.2",
     "html2canvas": "^1.4.1",
+    "lenis": "^1.2.3",
     "lodash": "^4.17.21",
     "mapbox-gl": "^3.3.0",
     "papaparse": "^5.4.1",

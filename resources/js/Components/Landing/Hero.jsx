@@ -1,3 +1,5 @@
+import Button from '@/Components/Landing/Button';
+
 export default function Hero() {
   return (
     <div className="hero">
@@ -16,8 +18,21 @@ export default function Hero() {
           </p>
         </div>
       </div>
-      <div className="hero-image m-full rounded-[50px] overflow-hidden">
-        <img src="/images/landing-hero-image.png" alt="Hero" />
+      <div className="hero-image m-full rounded-[50px] overflow-hidden relative">
+        <div class="relative">
+          <img src="/images/landing-hero-image.png" alt="Hero" />
+        </div>
+
+        <div className="hero-image-overlay px-10 py-6 items-center absolute bottom-2.5 left-2.5 right-2.5 bg-[#D5E5EE] rounded-full flex">
+          <div className="mr-8">
+            <img src="/images/NYt-logo.svg" alt="NYT Logo" />
+          </div>
+          <p className="text-[18px] font-light leading-tight">
+            “How A.I. Increased the Graduation Rate at John Jay College by 32
+            Points”
+          </p>
+          <Button className="ml-auto">Read the article</Button>
+        </div>
       </div>
     </div>
   );

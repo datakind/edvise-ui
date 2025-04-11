@@ -7,6 +7,7 @@ import { LenisProvider } from '@/Components/Landing/LenisProvider';
 import Hero from '@/Components/Landing/Hero';
 import AdvisorsSection from '@/Components/Landing/AdvisorsSection';
 import ProductSection from '@/Components/Landing/ProductSection';
+import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
 import { Head } from '@inertiajs/react';
 
@@ -32,6 +33,7 @@ export default function Welcome() {
             <div className="layout:box-container pt-[120px] pb-[220px]">
               <AdvisorsSection className="mb-40" />
               <ProductSection />
+              <RequestDemoSection />
             </div>
             <Footer />
           </div>

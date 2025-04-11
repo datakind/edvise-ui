@@ -9,6 +9,7 @@ import AdvisorsSection from '@/Components/Landing/AdvisorsSection';
 import ProductSection from '@/Components/Landing/ProductSection';
 import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
+import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 
 export default function Welcome() {
@@ -24,13 +25,14 @@ export default function Welcome() {
         />
       </Head>
       <LenisProvider>
-        <main className="main bg-[#EEF2F6] min-h-screen pb-10">
+        <main className="main min-h-screen bg-[#EEF2F6] pb-10">
           <div className="layout:max-width">
             <Header />
             <div className="pt-[120px]">
               <Hero />
             </div>
-            <div className="layout:box-container pt-[120px] pb-[220px]">
+            <div className="layout:box-container pb-[220px] pt-[120px]">
+              <DotGrid />
               <AdvisorsSection className="mb-40" />
               <ProductSection />
               <RequestDemoSection />

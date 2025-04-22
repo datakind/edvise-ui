@@ -1,34 +1,62 @@
 export default function Footer() {
+  const footerLinksOne = [
+    {
+      label: 'Contact us',
+      href: '#',
+    },
+    {
+      label: 'Press and resources',
+      href: '#',
+    },
+  ];
+
+  const footerLinksTwo = [
+    {
+      label: 'X',
+      href: '#',
+    },
+    {
+      label: 'Facebook',
+      href: '#',
+    },
+    {
+      label: 'LinkedIn',
+      href: '#',
+    },
+  ];
+
   return (
-    <div className="footer pt-20">
+    <div className="footer pt-36">
       <div className="layout:grid mb-64">
-        <div className="col-span-3 col-start-2">
-          <img src="/images/deemia-logo-footer.svg" alt="Deemia Logo" />
+        <div className="col-span-2 col-start-1">
+          <img src="/images/landing/deemia-logo-footer.svg" alt="Deemia Logo" />
         </div>
-        <div className="col-span-3 col-start-8">
+        <div className="col-span-4 col-start-5">
           <ul>
-            <li>
-              <a href="#">Press and resources </a>
-            </li>
-            <li>
-              <a href="#">Contact us</a>
-            </li>
+            {footerLinksOne.map(link => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="text-base leading-[160%] text-[#000] underline"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-4 col-start-11">
           <ul>
-            <li>
-              <a href="#">Twitter</a>
-            </li>
-            <li>
-              <a href="#">Facebook</a>
-            </li>
-            <li>
-              <a href="#">Instagram</a>
-            </li>
-            <li>
-              <a href="#">LinkedIn</a>
-            </li>
+            {footerLinksTwo.map(link => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="text-base leading-[160%] text-[#000] underline"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -36,9 +64,15 @@ export default function Footer() {
         <div className="col-span-3">
           <p>© 2025 DataKind</p>
         </div>
-        <div className="col-span-6 col-start-8">
-          <a href="#">Terms of Use</a> <span>•</span>{' '}
-          <a href="#">Privacy Policy</a>
+        <div className="col-span-6 col-start-5">
+          <a href="#" className="text-base text-[#000] underline">
+            Terms of Use
+          </a>
+        </div>
+        <div className="col-span-3 col-start-11">
+          <a href="#" className="text-base text-[#000] underline">
+            Privacy Policy
+          </a>
         </div>
       </div>
     </div>

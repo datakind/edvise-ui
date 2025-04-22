@@ -8,10 +8,11 @@ import Hero from '@/Components/Landing/Hero';
 import AdvisorsSection from '@/Components/Landing/AdvisorsSection';
 import ProductSection from '@/Components/Landing/ProductSection';
 import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
+import CaseStudySection from '@/Components/Landing/CaseStudySection';
 import Footer from '@/Components/Landing/Footer';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
-
+import Faq from '@/Components/Landing/Faq';
 export default function Welcome() {
   return (
     <>
@@ -31,10 +32,12 @@ export default function Welcome() {
             <div className="pt-[120px]">
               <Hero />
             </div>
-            <div className="layout:box-container pb-[220px] pt-[120px]">
+            <div className="layout:box-container pb-[180px] pt-[120px]">
               <DotGrid />
               <AdvisorsSection className="mb-40" />
               <ProductSection />
+              <CaseStudySection className="mb-40" />
+              <Faq className="mb-40" />
               <RequestDemoSection />
             </div>
             <Footer />

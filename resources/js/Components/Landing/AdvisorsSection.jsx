@@ -4,7 +4,7 @@ export default function AdvisorsSection(props) {
       name: 'Dara Byrne',
       role: 'Google.org',
       image: {
-        url: '/images/advisor-1.png',
+        url: '/images/landing/advisor-1.png',
         alt: 'Dara Byrne',
       },
       quotes: [
@@ -16,7 +16,7 @@ export default function AdvisorsSection(props) {
       name: 'Hanna Gentry',
       role: 'Student advisor at John Jay College',
       image: {
-        url: '/images/advisor-2.png',
+        url: '/images/landing/advisor-2.png',
         alt: 'Hanna Gentry',
       },
       quotes: [
@@ -28,7 +28,7 @@ export default function AdvisorsSection(props) {
       name: 'Osian Sampson',
       role: 'Student advisor / Institution',
       image: {
-        url: '/images/advisor-3.png',
+        url: '/images/landing/advisor-3.png',
         alt: 'Osian Sampson',
       },
       quotes: [
@@ -62,7 +62,7 @@ export default function AdvisorsSection(props) {
             style={{ gridColumnStart: colStarts[index] }}
           >
             <div className="relative">
-              <div className="rounded-t-[40px] overflow-hidden relative z-10 aspect-[396/360] max-h-[400px] w-full">
+              <div className="relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden rounded-t-[40px]">
                 {testimony.image.url && (
                   <img
                     src={testimony.image.url}
@@ -71,15 +71,15 @@ export default function AdvisorsSection(props) {
                   />
                 )}
               </div>
-              <div className="mt-[-40px] relative z-40 bg-[#EEF2F6] rounded-[40px] pb-12 pl-7 pt-7 pr-14">
-                <div className="flex mb-6 gap-5">
-                  <div className="w-[34px] h-[34px] bg-landing-orange rounded-full flex items-center justify-center">
-                    <span className="text-[28px] font-secondary leading-none relative top-[4px]">
+              <div className="relative z-40 mt-[-40px] rounded-[40px] bg-[#EEF2F6] pb-12 pl-7 pr-14 pt-7">
+                <div className="mb-6 flex gap-5">
+                  <div className="bg-landing-orange flex h-[34px] w-[34px] items-center justify-center rounded-full">
+                    <span className="font-secondary relative top-[4px] text-[28px] leading-none">
                       “
                     </span>
                   </div>
                   <div className="mt-1">
-                    <h3 className="text-[22px] font-light leading-none mb-1.5">
+                    <h3 className="mb-1.5 text-[22px] font-light leading-none">
                       {testimony.name}
                     </h3>
                     <p className="text-base font-light leading-none">
@@ -87,11 +87,11 @@ export default function AdvisorsSection(props) {
                     </p>
                   </div>
                 </div>
-                <div className="space-y-4 text-gray-700 text-lg">
+                <div className="space-y-4 text-lg text-gray-700">
                   {testimony.quotes.map(quote => (
                     <p
                       key={quote.substring(0, 20)}
-                      className="font-light text-[18px] text-[#4F4F4F] leading-tight"
+                      className="text-[18px] font-light leading-tight text-[#4F4F4F]"
                     >
                       {quote}
                     </p>

@@ -3,18 +3,18 @@ export default function ProductSection() {
     {
       name: 'Tailored alerts',
       description: 'See indicators specific to your institution and students.',
-      media: '/images/product-placeholder.png',
+      media: '/images/landing/product-placeholder.png',
     },
     {
       name: 'Smart guidance',
       description:
         'Know when to intervene — and how to best support each student.',
-      media: '/images/product-placeholder.png',
+      media: '/images/landing/product-placeholder.png',
     },
     {
       name: 'Clear insights',
       description: 'Use dashboards that highlight what matters most.',
-      media: '/images/product-placeholder.png',
+      media: '/images/landing/product-placeholder.png',
     },
   ];
 
@@ -34,25 +34,25 @@ export default function ProductSection() {
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper col-start-1 col-end-[-1] space-y-32 relative">
+        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-32">
           {products.map((product, index) => (
             <div
-              className="product rounded-[40px] overflow-hidden flex h-[625px] items-stretch w-full sticky top-0"
+              className="product sticky top-0 flex h-[625px] w-full items-stretch overflow-hidden rounded-[40px]"
               key={product.name}
             >
-              <div className="product-copy bg-[#1E343F] text-white p-12 basis-[42%] min-w-[380px] max-w-[580px]">
-                <h3 className="product-title text-[22px] font-light mb-10">
+              <div className="product-copy min-w-[380px] max-w-[580px] basis-[42%] bg-[#1E343F] p-12 text-white">
+                <h3 className="product-title mb-10 text-[22px] font-light">
                   {product.name}
                 </h3>
-                <p className="product-number font-secondary text-[240px] tracking-[-0.05em] leading-none mb-10">
+                <p className="product-number font-secondary mb-10 text-[240px] leading-none tracking-[-0.05em]">
                   0{index + 1}
                 </p>
-                <p className="product-description text-[22px] font-light max-w-[300px]">
+                <p className="product-description max-w-[300px] text-[22px] font-light">
                   {product.description}
                 </p>
               </div>
-              <div className="product-media bg-[#EEF2F6] flex-1 flex items-center justify-center p-6">
-                <div className="media-wrapper rounded-[20px] overflow-hidden">
+              <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
+                <div className="media-wrapper overflow-hidden rounded-[20px]">
                   <img src={product.media} alt={product.name} />
                 </div>
               </div>

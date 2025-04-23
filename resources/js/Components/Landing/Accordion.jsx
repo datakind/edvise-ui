@@ -5,7 +5,7 @@ export default function Accordion({ className, children }) {
   return (
     <div
       className={clx(
-        'landing-rounded-md min-h-[62px] transition-all duration-300',
+        'landing-rounded-md min-h-[62px] transition-all duration-300 sm:min-h-[86px]',
         {
           'bg-[#D5E5EE]': open,
           'bg-[#EEF2F6]': !open,

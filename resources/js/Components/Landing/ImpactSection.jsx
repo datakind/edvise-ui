@@ -57,7 +57,7 @@ export default function ImpactSection(props) {
   return (
     <div className={`impact-section relative ${props.className}`}>
       <div className="absolute top-0 z-0 grid aspect-video w-full place-items-center">
-        {/* <DotCanvas /> */}
+        <DotCanvas />
       </div>
       <div className="z-1 relative">
         <div className="layout:grid mb-64">
@@ -68,9 +68,9 @@ export default function ImpactSection(props) {
             </h2>
           </div>
         </div>
-        <div className="layout:grid mb-28 grid-rows-[repeat(4,_auto)] gap-x-2">
+        <div className="layout:grid mb-28 grid-rows-[repeat(4,_auto)] gap-y-2 sm:gap-x-2">
           {cards.map((card, index) => (
-            <div className="col-span-4 row-span-full grid cursor-pointer grid-rows-subgrid rounded-[40px] bg-[#EEF2F6] px-6 pb-6 pt-8 font-light transition-colors duration-100 hover:bg-[#D5E5EE]">
+            <div className="col-span-full grid cursor-pointer rounded-[40px] bg-[#EEF2F6] px-6 pb-6 pt-8 font-light transition-colors duration-100 hover:bg-[#D5E5EE] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid">
               <div className="mb-4">{card.label}</div>
               <div className="font-secondary mb-6 text-7xl">{card.title}</div>
               <div className="mb-7 text-lg">{card.description}</div>

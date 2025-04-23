@@ -33,7 +33,7 @@ export default function Welcome() {
             <div className="pt-[180px]">
               <Hero />
             </div>
-            <div className="layout:box-container landing-rounded-lg bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
+            <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
               <DotGrid />
               <div className="z-1 relative">
                 <AdvisorsSection className="mb-24 sm:mb-40" />

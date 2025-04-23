@@ -27,7 +27,7 @@ export default function Footer() {
 
   return (
     <div className="footer pt-20 sm:pt-36">
-      <div className="layout:grid mb-24 sm:mb-64">
+      <div className="layout:grid mb-24 sm:mb-56">
         <div className="col-span-full mb-12 sm:col-span-2 sm:col-start-1">
           <div className="mx-auto max-w-[100px] sm:mx-0">
             <img

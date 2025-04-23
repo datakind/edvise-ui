@@ -39,7 +39,7 @@ export default function Footer() {
         <div className="col-span-full mb-6 sm:col-span-4 sm:col-start-5">
           <ul>
             {footerLinksOne.map(link => (
-              <li key={link.href}>
+              <li key={`footer-link-${link.label}`}>
                 <a
                   href={link.href}
                   className="text-base leading-[160%] text-[#000] underline"
@@ -53,7 +53,7 @@ export default function Footer() {
         <div className="col-span-full sm:col-span-4 sm:col-start-11">
           <ul>
             {footerLinksTwo.map(link => (
-              <li key={link.href}>
+              <li key={`footer-link-${link.label}`}>
                 <a
                   href={link.href}
                   className="text-base leading-[160%] text-[#000] underline"

@@ -88,11 +88,12 @@ export default function ImpactSection(props) {
                     width="24px"
                     fill="currentColor"
                   >
+                    <title>Arrow</title>
                     <path d="m553.85-253.85-42.16-43.38L664.46-450H180v-60h484.46L511.69-662.77l42.16-43.38L780-480 553.85-253.85Z" />
                   </svg>
                 </div>
                 <div className="h-1 grow overflow-hidden rounded-full bg-white opacity-0">
-                  <div className="h-full w-5 rounded-full bg-[#4F4F4F]"></div>
+                  <div className="h-full w-5 rounded-full bg-[#4F4F4F]" />
                 </div>
               </div>
             </div>

@@ -65,7 +65,7 @@ export default function Header() {
                 <nav className="col-span-full pt-36">
                   <ul className="space-y-4">
                     {navLinks.map(link => (
-                      <li key={link.href}>
+                      <li key={`header-link-${link.label}`}>
                         <a
                           href={link.href}
                           className={classNames(

@@ -21,7 +21,7 @@ export default function Hero() {
       <div className="hero-image m-full relative">
         <div className="landing-rounded-lg relative aspect-[343/343] md:aspect-[1380/847]">
           <img
-            src="/images/landing/landing-hero-image.png"
+            src="/images/landing/landing-hero-image.jpg"
             alt="Hero"
             className="h-full w-full object-cover object-center"
           />

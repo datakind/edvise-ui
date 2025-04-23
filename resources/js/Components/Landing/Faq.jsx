@@ -66,8 +66,8 @@ export default function Faq({ className }) {
                   {section.description}
                 </p>
                 <div className="space-y-5">
-                  {section.faqs.map(faq => (
-                    <div key={faq.question}>
+                  {section.faqs.map((faq, index) => (
+                    <div key={faq.question + `-${index}`}>
                       <Accordion />
                     </div>
                   ))}

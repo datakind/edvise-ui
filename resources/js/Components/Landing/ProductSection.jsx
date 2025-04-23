@@ -3,18 +3,18 @@ export default function ProductSection(props) {
     {
       name: 'Tailored alerts',
       description: 'See indicators specific to your institution and students.',
-      media: '/images/landing/product-placeholder.png',
+      media: '/images/landing/product-placeholder.jpg',
     },
     {
       name: 'Smart guidance',
       description:
         'Know when to intervene — and how to best support each student.',
-      media: '/images/landing/product-placeholder.png',
+      media: '/images/landing/product-placeholder-2.jpg',
     },
     {
       name: 'Clear insights',
       description: 'Use dashboards that highlight what matters most.',
-      media: '/images/landing/product-placeholder.png',
+      media: '/images/landing/product-placeholder-3.jpg',
     },
   ];
 
@@ -52,7 +52,7 @@ export default function ProductSection(props) {
                 </p>
               </div>
               <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
-                <div className="media-wrapper overflow-hidden rounded-[8px] sm:rounded-[20px]">
+                <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] sm:rounded-[20px]">
                   <img src={product.media} alt={product.name} />
                 </div>
               </div>

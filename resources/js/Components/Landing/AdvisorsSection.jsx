@@ -4,7 +4,7 @@ export default function AdvisorsSection(props) {
       name: 'Dara Byrne',
       role: 'Google.org',
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/advisor-1.jpg',
         alt: 'Dara Byrne',
       },
       quotes: [
@@ -16,7 +16,7 @@ export default function AdvisorsSection(props) {
       name: 'Hanna Gentry',
       role: 'Student advisor at John Jay College',
       image: {
-        url: '/images/landing/advisor-2.png',
+        url: '/images/landing/advisor-2.jpg',
         alt: 'Hanna Gentry',
       },
       quotes: [
@@ -28,7 +28,7 @@ export default function AdvisorsSection(props) {
       name: 'Osian Sampson',
       role: 'Student advisor / Institution',
       image: {
-        url: '/images/landing/advisor-3.png',
+        url: '/images/landing/advisor-3.jpg',
         alt: 'Osian Sampson',
       },
       quotes: [
@@ -40,7 +40,7 @@ export default function AdvisorsSection(props) {
 
   return (
     <div className={`landing-advisors-section ${props.className}`}>
-      <style jsx>{`
+      <style>{`
         @media screen and (min-width: 576px) {
           .landing-advisors-section .advisor-section-grid div:nth-child(2) {
             grid-column-start: 8;

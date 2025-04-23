@@ -68,3 +68,9 @@
     @apply flex items-stretch;
   }
 }
+
+.bg-grid {
+  background-image: url('./images/landing/dot.svg');
+  background-size: 4.978%;
+  background-position: 0 20px;
+}

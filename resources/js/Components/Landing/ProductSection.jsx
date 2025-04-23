@@ -1,4 +1,4 @@
-export default function ProductSection() {
+export default function ProductSection(props) {
   const products = [
     {
       name: 'Tailored alerts',
@@ -19,7 +19,7 @@ export default function ProductSection() {
   ];
 
   return (
-    <div className="product-section">
+    <div className={`production-section ${props.className}`}>
       <div className="layout:grid mb-28">
         <div className="col-span-8">
           <p className="type:section-label mb-12">The product</p>

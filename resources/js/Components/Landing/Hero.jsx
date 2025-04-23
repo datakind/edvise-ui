@@ -19,7 +19,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="hero-image m-full relative overflow-hidden rounded-[50px]">
-        <div class="relative">
+        <div className="relative">
           <img src="/images/landing/landing-hero-image.png" alt="Hero" />
         </div>
 

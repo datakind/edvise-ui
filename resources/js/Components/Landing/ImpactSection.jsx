@@ -70,10 +70,15 @@ export default function ImpactSection(props) {
         </div>
         <div className="layout:grid mb-28 grid-rows-[repeat(4,_auto)] gap-y-2 sm:gap-x-2">
           {cards.map((card, index) => (
-            <div className="col-span-full grid cursor-pointer rounded-[40px] bg-[#EEF2F6] px-6 pb-6 pt-8 font-light transition-colors duration-100 hover:bg-[#D5E5EE] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid">
+            <div
+              key={card.label}
+              className="col-span-full grid cursor-pointer rounded-[40px] bg-[#EEF2F6] px-6 pb-6 pt-8 font-light transition-colors duration-100 hover:bg-[#D5E5EE] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid"
+            >
               <div className="mb-4">{card.label}</div>
-              <div className="font-secondary mb-6 text-7xl">{card.title}</div>
-              <div className="mb-7 text-lg">{card.description}</div>
+              <div className="font-secondary mb-6 text-5xl md:text-5xl lg:text-7xl">
+                {card.title}
+              </div>
+              <div className="mb-7 lg:text-lg">{card.description}</div>
               <div className="flex items-center gap-5">
                 <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full">
                   <svg

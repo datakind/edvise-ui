@@ -18,6 +18,8 @@ export default function DotCanvas() {
       canvas.height = canvas.clientHeight * dpr;
       ctx.scale(dpr, dpr); // Scale drawing for high-DPI screens
 
+      const padding = 40;
+
       const availableWidth = canvas.clientWidth - padding * 2;
       const availableHeight = canvas.clientHeight - padding * 2;
 

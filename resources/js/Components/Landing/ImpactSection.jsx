@@ -56,7 +56,7 @@ export default function ImpactSection(props) {
 
   return (
     <div className={`impact-section relative ${props.className}`}>
-      <div className="absolute top-0 z-0 grid aspect-video w-full place-items-center">
+      <div className="absolute top-0 z-0 grid aspect-video w-full place-items-center bg-blue-200">
         <DotCanvas />
       </div>
       <div className="z-1 relative">

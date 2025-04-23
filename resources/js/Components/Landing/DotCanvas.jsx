@@ -9,7 +9,7 @@ export default function DotCanvas() {
     const dpr = Math.min(window.devicePixelRatio, 2);
 
     let animationFrameId;
-    const spacing = 30;
+    const spacing = 68;
     const baseRadius = 3;
     let dots = [];
 
@@ -18,7 +18,7 @@ export default function DotCanvas() {
       canvas.height = canvas.clientHeight * dpr;
       ctx.scale(dpr, dpr); // Scale drawing for high-DPI screens
 
-      const padding = 40;
+      const padding = 4;
 
       const availableWidth = canvas.clientWidth - padding * 2;
       const availableHeight = canvas.clientHeight - padding * 2;

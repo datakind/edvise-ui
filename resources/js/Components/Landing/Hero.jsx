@@ -19,7 +19,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="hero-image m-full relative">
-        <div class="landing-rounded-lg relative aspect-[343/343] md:aspect-[1380/847]">
+        <div className="landing-rounded-lg relative aspect-[343/343] md:aspect-[1380/847]">
           <img
             src="/images/landing/landing-hero-image.png"
             alt="Hero"
@@ -28,14 +28,14 @@ export default function Hero() {
         </div>
 
         <div className="hero-image-overlay landing-rounded-lg absolute left-0 right-0 top-[calc(100%)] flex -translate-y-full flex-col bg-[#D5E5EE] px-4 py-4 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
-          <div className="mb-3 mr-8">
+          <div className="mb-3 mr-8 sm:mb-0">
             <img src="/images/landing/NYt-logo.svg" alt="NYT Logo" />
           </div>
           <p className="text-[18px] font-light leading-tight">
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white">
+          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white sm:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

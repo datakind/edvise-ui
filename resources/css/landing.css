@@ -111,8 +111,9 @@
   }
 }
 
-/* @media screen and (min-width: 576px) {
-  .landing-advisors-section .advisors-section-grid div:nth-child(2) {
-    grid-column-start: 8;
-  }
-} */
+.bg-grid {
+  background-image: url('./images/landing/dot.svg');
+  background-size: 4.978%;
+  background-position: 0 20px;
+  opacity: 0;
+}

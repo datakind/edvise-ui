@@ -7,28 +7,31 @@ export default function DotCanvas() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
-    // Set canvas dimensions to match element size
-    canvas.width = canvas.clientWidth * 2;
-    canvas.height = canvas.clientHeight * 2;
+    function resize() {
+      console.log('resize');
 
-    // Grid settings
-    const spacing = 68 * 2; // distance between dots
-    const radius = 3; // radius of each dot
+      canvas.width = canvas.clientWidth * 2;
+      canvas.height = canvas.clientHeight * 2;
 
-    for (let y = 0; y < canvas.height; y += spacing) {
-      for (let x = 0; x < 1328 * 2; x += spacing) {
-        const offsetX = 28 * 2 + 6;
-        const offsetY = 5;
+      const padding = 28;
 
-        const finalX = x + offsetX;
-        const finalY = y + offsetY;
+      // Grid settings
+      const spacing = 30; // distance between dots
+      const radius = 3; // radius of each dot
 
-        ctx.beginPath();
-        ctx.arc(finalX, finalY, radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'black';
-        ctx.fill();
+      for (let y = 0; y < canvas.height; y += spacing) {
+        for (let x = 0; x < canvas.width; x += spacing) {
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'black';
+          ctx.fill();
+        }
       }
     }
+
+    resize();
+
+    window.addEventListener('resize', resize);
   }, []);
 
   return <canvas ref={canvasRef} className="h-full w-full"></canvas>;

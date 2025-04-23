@@ -9,7 +9,7 @@ const Button = ({
   ...rest
 }) => {
   const baseStyles =
-    'group relative h-[38px] inline-block overflow-hidden px-6 py-[6px] rounded-full bg-white font-regular transition cursor-pointer text-center z-0 no-underline text-black';
+    'whitespace-nowrap group relative h-[38px] inline-block overflow-hidden px-3 sm:px-6 py-[6px] rounded-full bg-white font-regular transition cursor-pointer text-center z-0 no-underline text-black';
 
   const primaryStyles = 'bg-landing-orange';
   const secondaryStyles = 'bg-white';

@@ -20,9 +20,9 @@ export default function ProductSection() {
 
   return (
     <div className="product-section">
-      <div className="layout:grid mb-28">
+      <div className="layout:grid mb-14 sm:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label mb-12">The product</p>
+          <p className="type:section-label mb-9 sm:mb-12">The product</p>
           <h2 className="type:section-title mb-7">
             Get relevant, data-informed recommendations to keep students on
             their learning paths
@@ -34,25 +34,25 @@ export default function ProductSection() {
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-32">
+        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 sm:space-y-32">
           {products.map((product, index) => (
             <div
-              className="product sticky top-0 flex h-[625px] w-full items-stretch overflow-hidden rounded-[40px]"
+              className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden sm:h-[625px] sm:flex-row"
               key={product.name}
             >
-              <div className="product-copy min-w-[380px] max-w-[580px] basis-[42%] bg-[#1E343F] p-12 text-white">
-                <h3 className="product-title mb-10 text-[22px] font-light">
+              <div className="product-copy bg-[#1E343F] p-6 text-white sm:min-w-[380px] sm:max-w-[580px] sm:basis-[42%] sm:p-12">
+                <h3 className="product-title mb-4 text-[22px] font-light sm:mb-10">
                   {product.name}
                 </h3>
-                <p className="product-number font-secondary mb-10 text-[240px] leading-none tracking-[-0.05em]">
+                <p className="product-number font-secondary mb-8 text-[150px] leading-none tracking-[-0.05em] sm:mb-10 sm:text-[240px]">
                   0{index + 1}
                 </p>
-                <p className="product-description max-w-[300px] text-[22px] font-light">
+                <p className="product-description max-w-[300px] text-base font-light leading-[120%] sm:text-[22px]">
                   {product.description}
                 </p>
               </div>
               <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
-                <div className="media-wrapper overflow-hidden rounded-[20px]">
+                <div className="media-wrapper overflow-hidden rounded-[8px] sm:rounded-[20px]">
                   <img src={product.media} alt={product.name} />
                 </div>
               </div>

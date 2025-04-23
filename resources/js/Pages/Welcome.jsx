@@ -16,7 +16,6 @@ import Faq from '@/Components/Landing/Faq';
 export default function Welcome() {
   return (
     <>
-      {/* Add google font to the page */}
       <Head title="Deemia">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,15 +28,15 @@ export default function Welcome() {
         <main className="main min-h-screen bg-[#EEF2F6] pb-10">
           <div className="layout:max-width">
             <Header />
-            <div className="pt-[120px]">
+            <div className="pt-[180px]">
               <Hero />
             </div>
-            <div className="layout:box-container pb-[180px] pt-[120px]">
+            <div className="layout:box-container landing-rounded-lg bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
               <DotGrid />
-              <AdvisorsSection className="mb-40" />
+              <AdvisorsSection className="mb-24 sm:mb-40" />
               <ProductSection />
-              <CaseStudySection className="mb-40" />
-              <Faq className="mb-40" />
+              <CaseStudySection className="mb-24 sm:mb-40" />
+              <Faq className="mb-24 sm:mb-40" />
               <RequestDemoSection />
             </div>
             <Footer />

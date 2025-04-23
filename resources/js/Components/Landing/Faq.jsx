@@ -55,12 +55,14 @@ export default function Faq({ className }) {
     <section className={className}>
       <div className="layout:grid">
         <div className="col-span-14">
-          <p className="type:section-label mb-12">FAQ</p>
-          <div className="w-full space-y-32">
+          <p className="type:section-label mb-9 sm:mb-12">FAQ</p>
+          <div className="w-full space-y-16 sm:space-y-32">
             {faqSections.map(section => (
               <div key={section.title} className="w-full">
-                <h3 className="type:section-title mb-10">{section.title}</h3>
-                <p className="mb-16 text-base font-light leading-[120%]">
+                <h3 className="type:section-title mb-7 sm:mb-10">
+                  {section.title}
+                </h3>
+                <p className="mb-8 text-base font-light leading-[120%] sm:mb-16">
                   {section.description}
                 </p>
                 <div className="space-y-5">

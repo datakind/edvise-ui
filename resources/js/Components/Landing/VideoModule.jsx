@@ -33,18 +33,19 @@ export default function VideoModule(props) {
             setIsOpen(true);
           }
         }}
-        tabIndex={0}
         role="button"
+        tabIndex={0}
+        aria-label="Watch video"
       >
-        <div className="video-poster relative aspect-[792/569] overflow-hidden rounded-[54px]">
+        <div className="video-poster landing-rounded-md relative aspect-[792/569] overflow-hidden">
           <img
             className="h-full w-full object-cover object-center"
             src="/images/landing/landing-video-poster.jpg"
             alt="John Jay College"
           />
         </div>
-        <div className="video-cta-bar absolute bottom-0 left-0 right-0 flex items-center gap-6 rounded-full bg-[#F5CA9E] py-7 pl-7 pr-10">
-          <div className="video-cta-icon bg-landing-orange flex h-10 w-10 items-center justify-center rounded-full">
+        <div className="video-cta-bar landing-rounded-md absolute bottom-0 left-0 right-0 flex items-center gap-4 bg-[#F5CA9E] p-3 sm:gap-6 sm:py-7 sm:pl-7 sm:pr-10">
+          <div className="video-cta-icon bg-landing-orange flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"

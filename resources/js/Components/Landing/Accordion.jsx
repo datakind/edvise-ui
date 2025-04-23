@@ -5,7 +5,7 @@ export default function Accordion({ className, children }) {
   return (
     <div
       className={clx(
-        'min-h-[86px] rounded-[40px] transition-all duration-300',
+        'landing-rounded-md min-h-[62px] transition-all duration-300',
         {
           'bg-[#D5E5EE]': open,
           'bg-[#EEF2F6]': !open,
@@ -15,7 +15,7 @@ export default function Accordion({ className, children }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between p-7 text-[20px]"
+        className="flex min-h-[62px] w-full items-center justify-between px-6 text-base sm:min-h-[86px] sm:p-7 sm:text-[20px]"
       >
         <span>What does the SST model do?</span>
         <div className="plus-icon relative h-[18px] w-[18px]">
@@ -32,7 +32,7 @@ export default function Accordion({ className, children }) {
       </button>
       <div
         className={clx(
-          'mt-[-15px] grid grid-rows-[0fr] transition-all duration-300',
+          'grid grid-rows-[0fr] transition-all duration-300 sm:mt-[-15px]',
           {
             'grid-rows-[1fr]': open,
           },

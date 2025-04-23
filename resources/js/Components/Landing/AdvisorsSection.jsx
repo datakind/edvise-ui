@@ -38,13 +38,21 @@ export default function AdvisorsSection(props) {
     },
   ];
 
-  const colStarts = [1, 8, 15];
-
   return (
-    <div className={`advisors-section ${props.className}`}>
-      <div className="layout:grid mb-28">
+    <div className={`landing-advisors-section ${props.className}`}>
+      <style jsx>{`
+        @media screen and (min-width: 576px) {
+          .landing-advisors-section .advisor-section-grid div:nth-child(2) {
+            grid-column-start: 8;
+          }
+          .landing-advisors-section .advisor-section-grid div:nth-child(3) {
+            grid-column-start: 15;
+          }
+        }
+      `}</style>
+      <div className="layout:grid mb-14 sm:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label mb-12">
+          <p className="type:section-label mb-9 sm:mb-12">
             Hear from advisors already using Deemia
           </p>
           <h2 className="type:section-title">
@@ -54,15 +62,11 @@ export default function AdvisorsSection(props) {
         </div>
       </div>
 
-      <div className="layout:grid">
+      <div className="layout:grid advisor-section-grid gap-y-7 sm:gap-y-0">
         {testimonies.map((testimony, index) => (
-          <div
-            key={testimony.name}
-            className="col-span-6"
-            style={{ gridColumnStart: colStarts[index] }}
-          >
+          <div key={testimony.name} className="col-span-full sm:col-span-6">
             <div className="relative">
-              <div className="relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden rounded-t-[40px]">
+              <div className="landing-rounded-md relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden !rounded-b-none">
                 {testimony.image.url && (
                   <img
                     src={testimony.image.url}
@@ -71,9 +75,9 @@ export default function AdvisorsSection(props) {
                   />
                 )}
               </div>
-              <div className="relative z-40 mt-[-40px] rounded-[40px] bg-[#EEF2F6] pb-12 pl-7 pr-14 pt-7">
+              <div className="landing-rounded-md relative z-40 mt-[-40px] bg-[#EEF2F6] p-6 sm:pb-12 sm:pl-7 sm:pr-14 sm:pt-7">
                 <div className="mb-6 flex gap-5">
-                  <div className="bg-landing-orange flex h-[34px] w-[34px] items-center justify-center rounded-full">
+                  <div className="bg-landing-orange flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full">
                     <span className="font-secondary relative top-[4px] text-[28px] leading-none">
                       “
                     </span>

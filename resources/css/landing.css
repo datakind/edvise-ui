@@ -1,13 +1,21 @@
 .layout\:max-width {
-  @apply mx-auto max-w-[1600px] px-8;
+  @apply mx-auto max-w-[1600px] px-4;
+}
+
+@media screen and (min-width: 834px) {
+  .layout\:max-width {
+    @apply px-8;
+  }
 }
 
 .layout\:grid {
-  @apply grid grid-cols-[repeat(20,1fr)] px-8;
+  @apply grid grid-cols-[repeat(6,1fr)] px-4;
 }
 
-.layout\:box-container {
-  @apply overflow-hidden rounded-[50px] bg-white;
+@media screen and (min-width: 834px) {
+  .layout\:grid {
+    @apply grid grid-cols-[repeat(20,1fr)] px-8;
+  }
 }
 
 .type\:section-label {
@@ -16,6 +24,40 @@
 
 .type\:section-title {
   @apply text-[34px] font-light leading-[100%] text-[#000000];
+}
+
+.landing-rounded-lg {
+  @apply overflow-hidden rounded-[25px];
+}
+
+.landing-rounded-md {
+  @apply overflow-hidden rounded-[25px];
+}
+
+@media screen and (min-width: 834px) {
+  .landing-rounded-lg {
+    @apply overflow-hidden rounded-[50px];
+  }
+
+  .landing-rounded-md {
+    @apply overflow-hidden rounded-[40px];
+  }
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:
+    url('/fonts/HelveticaNeueLight.woff2') format('woff2'),
+    url('/fonts/HelveticaNeueLight.woff') format('woff');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:
+    url('/fonts/HelveticaNeueRoman.woff2') format('woff2'),
+    url('/fonts/HelveticaNeueRoman.woff') format('woff');
+  font-weight: 400;
 }
 
 :root {
@@ -68,3 +110,9 @@
     @apply flex items-stretch;
   }
 }
+
+/* @media screen and (min-width: 576px) {
+  .landing-advisors-section .advisors-section-grid div:nth-child(2) {
+    grid-column-start: 8;
+  }
+} */

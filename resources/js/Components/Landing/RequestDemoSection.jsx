@@ -4,15 +4,15 @@ export default function RequestDemoSection() {
     <div className="request-demo-section">
       <div className="layout:grid">
         <div className="col-span-6">
-          <p className="type:section-label mb-12">Request a Demo</p>
-          <h2 className="type:section-title mb-32">
+          <p className="type:section-label mb-9 sm:mb-12">Request a Demo</p>
+          <h2 className="type:section-title mb-9 sm:mb-32">
             How to get started with Student Success Tool
           </h2>
-          <div className="overflow-hidden rounded-[40px]">
+          <div className="hidden overflow-hidden rounded-[40px] sm:block">
             <img src="/images/landing/form-thumbnail.png" alt="Request Demo" />
           </div>
         </div>
-        <div className="col-span-9 col-start-9 pt-14">
+        <div className="col-span-full sm:col-span-9 sm:col-start-9 sm:pt-14">
           <DemoForm formId="request-demo-form" className="w-full" />
         </div>
       </div>

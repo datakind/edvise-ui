@@ -7,6 +7,7 @@ export default function DemoForm({ className, formId }) {
     id,
     name,
     errorMessage,
+    placeholder = '',
     className = '',
     required = false,
   ) => {
@@ -20,7 +21,7 @@ export default function DemoForm({ className, formId }) {
       >
         <label
           htmlFor={inputId}
-          className="ml-5 block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 sm:ml-5"
         >
           {label}
           {required && <span className="text-current"> *</span>}
@@ -31,6 +32,7 @@ export default function DemoForm({ className, formId }) {
           name={name}
           className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-4 focus:border-[#F79122] focus:ring-[#F79122]"
           required={required}
+          placeholder={placeholder}
         />
         {/* {errorMessage && (
           <p className="absolute left-4 top-[calc(100%_-_4px)] text-[#F52020] opacity-0 peer-invalid:opacity-100">
@@ -80,17 +82,18 @@ export default function DemoForm({ className, formId }) {
   };
 
   return (
-    <form className={clx(className, 'space-y-6')}>
+    <form className={clx(className, 'space-y-7 sm:space-y-6')}>
       {renderInputText(
         'Name',
         'name',
         'name',
         'Please input your name',
+        'E.g. John Johnson',
         '',
         true,
       )}
 
-      <div className="ml-5">
+      <div className="sm:ml-5">
         <label
           className="mb-4 block text-sm font-medium text-gray-700"
           htmlFor="focus-options"
@@ -113,6 +116,7 @@ export default function DemoForm({ className, formId }) {
         'email',
         'email',
         'Please input your email so we can reach to you',
+        'Your email',
         '',
         true,
       )}
@@ -121,6 +125,7 @@ export default function DemoForm({ className, formId }) {
         'institution',
         'institution',
         'Please input the institution you represent',
+        'Your institution',
         '',
         true,
       )}
@@ -128,17 +133,19 @@ export default function DemoForm({ className, formId }) {
       <div className="pt-4">
         <Button type="submit">Submit request</Button>
       </div>
+      <div>
+        <p className="mb-3 mt-4 text-base">
+          We will reach out to you via email within 1 business to schedule a
+          time
+        </p>
 
-      <p className="mt-4 text-base">
-        We will reach out to you via email within 1 business to schedule a time
-      </p>
-
-      <p className="text-sm text-[#4F4F4F]">
-        <a href="/privacy-policy" className="text-[#4F4F4F] underline">
-          Privacy policy
-        </a>{' '}
-        of how we handle your data
-      </p>
+        <p className="text-sm text-[#4F4F4F]">
+          <a href="/privacy-policy" className="text-[#4F4F4F] underline">
+            Privacy policy
+          </a>{' '}
+          of how we handle your data
+        </p>
+      </div>
     </form>
   );
 }

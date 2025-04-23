@@ -5,9 +5,10 @@ export default function DemoFormModal({ open, setOpen }) {
     <Dialog
       open={open}
       onClose={() => setOpen(false)}
-      className="relative z-50"
+      className="data-lenis-prevent pointer-events-auto relative z-50"
+      data-lenis-prevent
     >
-      <div className="landing-modal fixed inset-0 flex w-screen items-center justify-center bg-black/50 p-4">
+      <div className="landing-modal fixed inset-0 flex w-screen items-center justify-center bg-black/70 p-4">
         <DialogPanel className="layout:max-width landing-rounded-md relative w-full !overflow-y-auto bg-white py-8 sm:py-12">
           <button
             onClick={() => setOpen(false)}

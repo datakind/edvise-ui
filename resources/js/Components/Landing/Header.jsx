@@ -3,9 +3,11 @@ import Button from '@/Components/Landing/Button';
 import classNames from 'classnames';
 import clx from 'classnames';
 import DemoFormModal from '@/Components/Landing/DemoFormModal';
+import { useLenis } from './LenisProvider';
 export default function Header() {
   const [isFormModalOpen, setFormModalOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const lenis = useLenis();
   const navLinks = useMemo(
     () => [
       {
@@ -52,7 +54,13 @@ export default function Header() {
     if (isFormModalOpen && isMenuOpen) {
       setMenuOpen(false);
     }
-  }, [isFormModalOpen, isMenuOpen]);
+
+    if (isFormModalOpen || isMenuOpen) {
+      lenis && lenis.stop();
+    } else {
+      lenis && lenis.start();
+    }
+  }, [isFormModalOpen, isMenuOpen, lenis]);
 
   return (
     <>

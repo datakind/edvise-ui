@@ -261,7 +261,7 @@ export default function Header() {
                   })}
                 />
               </button>
-              <Button kind="secondary" href="#" className="hidden sm:block">
+              <Button kind="secondary" href="/login" className="hidden sm:block">
                 Log in
               </Button>
             </div>

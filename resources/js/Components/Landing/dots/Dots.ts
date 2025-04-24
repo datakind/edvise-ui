@@ -268,10 +268,10 @@ class Dots {
 		}
 	}
 
-	kill() {
+	kill = () => {
 		window.removeEventListener("resize", this.resize);
 		cancelAnimationFrame(this.#animationFrameId);
-	}
+	};
 }
 
 export default Dots;

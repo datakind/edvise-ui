@@ -67,7 +67,7 @@ export default function ImpactSection(props) {
         <DotCanvas animation={activeCardIndex} />
       </div>
       <div className="z-1 relative">
-        <div className="layout:grid mb-64">
+        <div className="layout:grid mb-32">
           <div className="col-span-8">
             <p className="type:section-label mb-12">Our impact</p>
             <h2 className="type:section-title mb-7">
@@ -75,42 +75,51 @@ export default function ImpactSection(props) {
             </h2>
           </div>
         </div>
-        <div className="layout:grid mb-28 grid-rows-[repeat(4,_auto)] gap-y-2 sm:gap-x-2">
+        <div className="layout:grid mb-28 grid-rows-[repeat(4,_auto)] sm:gap-x-2">
           {cards.map((card, index) => (
             <div
               key={card.label}
-              className={`col-span-full grid cursor-pointer rounded-[40px] px-5 pb-6 pt-8 font-light leading-[normal] transition-colors duration-100 ${
-                activeCardIndex === index
-                  ? 'bg-[#D5E5EE]'
-                  : 'bg-[#EEF2F6] hover:bg-[#D5E5EE]'
+              className={`group relative col-span-full grid cursor-pointer font-light leading-[normal] ${
+                activeCardIndex === index ? 'active' : ''
               } sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid`}
               onClick={() => onCardClick(index)}
             >
-              <div className="mb-4">{card.label}</div>
-              <div className="font-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
-                {card.title}
+              <div className="relative z-[0] h-48 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[100%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
+                <img
+                  className="h-full w-full object-cover"
+                  src={`/images/landing/impact-${index + 1}.png`}
+                  alt=""
+                />
               </div>
-              <div className="mb-7 text-[18px] leading-[120%]">
-                {card.description}
-              </div>
-              <div className="flex items-center gap-5">
-                <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="currentColor"
-                  >
-                    <title>Arrow</title>
-                    <path d="m553.85-253.85-42.16-43.38L664.46-450H180v-60h484.46L511.69-662.77l42.16-43.38L780-480 553.85-253.85Z" />
-                  </svg>
+              <div
+                className={`${activeCardIndex === index ? 'active bg-[#D5E5EE]' : 'bg-[#EEF2F6] hover:bg-[#D5E5EE]'} relative z-[1] rounded-[40px] px-5 pb-6 pt-8 transition-colors duration-100 ease-out`}
+              >
+                <div className="mb-4">{card.label}</div>
+                <div className="font-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
+                  {card.title}
                 </div>
-                {/* <div */}
-                {/*   className={`h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`} */}
-                {/* > */}
-                {/*   <div className="h-full w-5 rounded-full bg-[#4F4F4F]" /> */}
-                {/* </div> */}
+                <div className="mb-7 text-[18px] leading-[120%]">
+                  {card.description}
+                </div>
+                <div className="flex items-center gap-5">
+                  <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="currentColor"
+                    >
+                      <title>Arrow</title>
+                      <path d="m553.85-253.85-42.16-43.38L664.46-450H180v-60h484.46L511.69-662.77l42.16-43.38L780-480 553.85-253.85Z" />
+                    </svg>
+                  </div>
+                  {/* <div */}
+                  {/*   className={`h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`} */}
+                  {/* > */}
+                  {/*   <div className="h-full w-5 rounded-full bg-[#4F4F4F]" /> */}
+                  {/* </div> */}
+                </div>
               </div>
             </div>
           ))}

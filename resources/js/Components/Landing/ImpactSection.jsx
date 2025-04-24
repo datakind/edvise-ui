@@ -11,7 +11,7 @@ export default function ImpactSection(props) {
       description:
         'Every 100 additional grads inject up to $90 million in lifetime earnings into the economy.',
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/impact-1.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -21,7 +21,7 @@ export default function ImpactSection(props) {
       description:
         "A bachelor's degree can boost a student's earnings by nearly a million dollars over their lifetime.",
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/impact-2.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -31,7 +31,7 @@ export default function ImpactSection(props) {
       description:
         'There is a 2.2% unemployment rate for college grads – less than half the rate of those without a degree.',
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/impact-3.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -41,7 +41,7 @@ export default function ImpactSection(props) {
       description:
         '3x more likely to have health coverage Graduates are three times more likely to have employer-provided health insurance.',
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/impact-4.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -51,7 +51,7 @@ export default function ImpactSection(props) {
       description:
         'College grads are 2x more likely to be "very happy". Higher education is linked to greater life satisfaction.',
       image: {
-        url: '/images/landing/advisor-1.png',
+        url: '/images/landing/impact-5.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -84,11 +84,11 @@ export default function ImpactSection(props) {
               } sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid`}
               onClick={() => onCardClick(index)}
             >
-              <div className="relative z-[0] h-48 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[100%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
+              <div className="relative z-[0] h-48 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
                 <img
                   className="h-full w-full object-cover"
-                  src={`/images/landing/impact-${index + 1}.png`}
-                  alt=""
+                  src={card.image.url}
+                  alt={card.image.alt}
                 />
               </div>
               <div
@@ -114,11 +114,11 @@ export default function ImpactSection(props) {
                       <path d="m553.85-253.85-42.16-43.38L664.46-450H180v-60h484.46L511.69-662.77l42.16-43.38L780-480 553.85-253.85Z" />
                     </svg>
                   </div>
-                  {/* <div */}
-                  {/*   className={`h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`} */}
-                  {/* > */}
-                  {/*   <div className="h-full w-5 rounded-full bg-[#4F4F4F]" /> */}
-                  {/* </div> */}
+                  <div
+                    className={`hidden h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
+                  >
+                    <div className="h-full w-full rounded-full bg-[#4F4F4F]" />
+                  </div>
                 </div>
               </div>
             </div>

@@ -92,7 +92,7 @@ export default function ImpactSection(props) {
                 />
               </div>
               <div
-                className={`${activeCardIndex === index ? 'active bg-[#D5E5EE]' : 'bg-[#EEF2F6] hover:bg-[#D5E5EE]'} relative z-[1] rounded-[40px] px-5 pb-6 pt-8 transition-colors duration-100 ease-out`}
+                className={`${activeCardIndex === index ? 'active bg-[#D5E5EE]' : 'bg-[#EEF2F6] hover:bg-[#D5E5EE]'} relative z-[1] grid rounded-[40px] px-5 pb-5 pt-8 transition-colors duration-100 ease-out`}
               >
                 <div className="mb-4">{card.label}</div>
                 <div className="font-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">

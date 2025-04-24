@@ -1,8 +1,11 @@
 import DotCanvas from '@/Components/Landing/DotCanvas';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function ImpactSection(props) {
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const intervalRef = useRef(null);
+  const sectionRef = useRef(null);
 
   const cards = [
     {
@@ -59,10 +62,64 @@ export default function ImpactSection(props) {
 
   function onCardClick(index) {
     setActiveCardIndex(index);
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    if (isVisible) {
+      intervalRef.current = setInterval(() => {
+        setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
+      }, 4000);
+    }
   }
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        const [entry] = entries;
+        setIsVisible(entry.isIntersecting);
+        
+        if (entry.isIntersecting) {
+          // Start with the first card when section becomes visible
+          setActiveCardIndex(0);
+          
+          // Start autoplay when section becomes visible
+          intervalRef.current = setInterval(() => {
+            setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
+          }, 4000);
+        } else {
+          // Clear interval when section is not visible
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
+          // Reset active card index when section is not visible
+          setActiveCardIndex(null);
+        }
+      },
+      { threshold: 0.2 }, // Trigger when at least 20% of the section is visible
+    );
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className={`impact-section relative ${props.className}`}>
+    <div
+      className={`impact-section relative ${props.className}`}
+      ref={sectionRef}
+    >
       <div className="absolute top-0 z-0 grid aspect-video w-full translate-y-[-60px] place-items-center opacity-0 md:opacity-100">
         <DotCanvas animation={activeCardIndex} />
       </div>
@@ -79,9 +136,9 @@ export default function ImpactSection(props) {
           {cards.map((card, index) => (
             <div
               key={card.label}
-              className={`group relative col-span-full grid cursor-pointer font-light leading-[normal] ${
+              className={`test group relative col-span-full grid cursor-pointer font-light leading-[normal] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid ${
                 activeCardIndex === index ? 'active' : ''
-              } sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid`}
+              } `}
               onClick={() => onCardClick(index)}
             >
               <div className="relative z-[0] h-48 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
@@ -101,9 +158,10 @@ export default function ImpactSection(props) {
                 <div className="mb-7 text-[18px] leading-[120%]">
                   {card.description}
                 </div>
-                <div className="flex items-center gap-5">
-                  <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full">
+                <div className="flex items-center gap-4">
+                  <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full transition-transform duration-300 ease-out md:group-[.active]:scale-[0.25]">
                     <svg
+                      className="transition-opacity duration-200 ease-out md:group-[.active]:opacity-0"
                       xmlns="http://www.w3.org/2000/svg"
                       height="20px"
                       viewBox="0 -960 960 960"
@@ -115,9 +173,11 @@ export default function ImpactSection(props) {
                     </svg>
                   </div>
                   <div
-                    className={`hidden h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
+                    className={`mr-4 h-1 grow overflow-hidden rounded-full bg-white transition-opacity ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
                   >
-                    <div className="h-full w-full rounded-full bg-[#4F4F4F]" />
+                    <div
+                      className={`h-full w-full translate-x-[-100%] rounded-full bg-[#4F4F4F] transition-transform ${activeCardIndex === index ? 'translate-x-[0] transition-transform duration-[4000ms] ease-linear' : 'translate-x-[-100%]'}`}
+                    />
                   </div>
                 </div>
               </div>

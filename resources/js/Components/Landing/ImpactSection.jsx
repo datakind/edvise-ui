@@ -1,6 +1,9 @@
 import DotCanvas from '@/Components/Landing/DotCanvas';
+import { useState } from 'react';
 
 export default function ImpactSection(props) {
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+
   const cards = [
     {
       label: 'Transformative earning potential',
@@ -16,7 +19,7 @@ export default function ImpactSection(props) {
       label: 'A smart investment',
       title: '$900K',
       description:
-        'A bachelor’s degree can boost a student’s earnings by nearly a million dollars over their lifetime.',
+        "A bachelor's degree can boost a student's earnings by nearly a million dollars over their lifetime.",
       image: {
         url: '/images/landing/advisor-1.png',
         alt: 'Dara Byrne',
@@ -46,7 +49,7 @@ export default function ImpactSection(props) {
       label: 'Better life outcomes',
       title: '2x',
       description:
-        'College grads are 2x more likely to be “very happy”. Higher education is linked to greater life satisfaction.',
+        'College grads are 2x more likely to be "very happy". Higher education is linked to greater life satisfaction.',
       image: {
         url: '/images/landing/advisor-1.png',
         alt: 'Dara Byrne',
@@ -54,10 +57,14 @@ export default function ImpactSection(props) {
     },
   ];
 
+  function onCardClick(index) {
+    setActiveCardIndex(index);
+  }
+
   return (
     <div className={`impact-section relative ${props.className}`}>
-      <div className="absolute top-0 z-0 grid aspect-video w-full place-items-center">
-        {/* <DotCanvas /> */}
+      <div className="absolute top-0 z-0 grid aspect-video w-full translate-y-[-60px] place-items-center">
+        <DotCanvas animation={activeCardIndex} />
       </div>
       <div className="z-1 relative">
         <div className="layout:grid mb-64">
@@ -72,13 +79,20 @@ export default function ImpactSection(props) {
           {cards.map((card, index) => (
             <div
               key={card.label}
-              className="col-span-full grid cursor-pointer rounded-[40px] bg-[#EEF2F6] px-6 pb-6 pt-8 font-light transition-colors duration-100 hover:bg-[#D5E5EE] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid"
+              className={`col-span-full grid cursor-pointer rounded-[40px] px-5 pb-6 pt-8 font-light leading-[normal] transition-colors duration-100 ${
+                activeCardIndex === index
+                  ? 'bg-[#D5E5EE]'
+                  : 'bg-[#EEF2F6] hover:bg-[#D5E5EE]'
+              } sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid`}
+              onClick={() => onCardClick(index)}
             >
               <div className="mb-4">{card.label}</div>
-              <div className="font-secondary mb-6 text-5xl md:text-5xl lg:text-7xl">
+              <div className="font-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
                 {card.title}
               </div>
-              <div className="mb-7 lg:text-lg">{card.description}</div>
+              <div className="mb-7 text-[18px] leading-[120%]">
+                {card.description}
+              </div>
               <div className="flex items-center gap-5">
                 <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full">
                   <svg
@@ -92,9 +106,11 @@ export default function ImpactSection(props) {
                     <path d="m553.85-253.85-42.16-43.38L664.46-450H180v-60h484.46L511.69-662.77l42.16-43.38L780-480 553.85-253.85Z" />
                   </svg>
                 </div>
-                <div className="h-1 grow overflow-hidden rounded-full bg-white opacity-0">
-                  <div className="h-full w-5 rounded-full bg-[#4F4F4F]" />
-                </div>
+                {/* <div */}
+                {/*   className={`h-1 grow overflow-hidden rounded-full bg-white ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`} */}
+                {/* > */}
+                {/*   <div className="h-full w-5 rounded-full bg-[#4F4F4F]" /> */}
+                {/* </div> */}
               </div>
             </div>
           ))}

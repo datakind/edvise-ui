@@ -49,8 +49,8 @@ export default function Hero() {
               />
             </svg>
           </a>
-          <Button className="hidden md:ml-auto md:block">
-            Read the article
+          <Button className="hidden md:ml-auto md:block" kind="dark">
+            Link
           </Button>
         </div>
       </div>

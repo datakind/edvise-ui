@@ -180,11 +180,13 @@ export default function Header() {
               </svg>
             </span>
             <div className="col-span-2 sm:col-span-4">
-              <img
-                className="max-w-[110px]"
-                src="/images/landing/deemia-logo.svg"
-                alt="Deemia Logo"
-              />
+              <a href="/">
+                <img
+                  className="max-w-[110px] sm:max-w-[140px]"
+                  src="/images/landing/deemia-logo.svg"
+                  alt="Deemia Logo"
+                />
+              </a>
             </div>
             <div className="hidden sm:col-span-6 sm:col-start-7 sm:block">
               <nav>
@@ -200,7 +202,9 @@ export default function Header() {
                         )}
                         href={link.href}
                       >
-                        {link.label}
+                        <span className="relative top-[0.125em]">
+                          {link.label}
+                        </span>
                         {link.external && (
                           <span className="text-[#000]">
                             <svg

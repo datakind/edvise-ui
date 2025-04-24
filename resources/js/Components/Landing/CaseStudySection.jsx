@@ -1,8 +1,6 @@
 import VideoModule from '@/Components/Landing/VideoModule';
 import { useState } from 'react';
 export default function CaseStudySection({ className }) {
-  let [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
       <section className={className}>
@@ -25,17 +23,7 @@ export default function CaseStudySection({ className }) {
             </p>
           </div>
           <div className="col-span-full sm:col-span-12 sm:col-start-9">
-            <div
-              className="case-study-video"
-              onClick={() => setIsOpen(true)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setIsOpen(true);
-                }
-              }}
-              tabIndex={0}
-              role="button"
-            >
+            <div>
               <VideoModule />
             </div>
           </div>

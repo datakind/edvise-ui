@@ -30,7 +30,7 @@ export default function DemoForm({ className, formId }) {
           type="text"
           id={inputId}
           name={name}
-          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-4 focus:border-[#F79122] focus:ring-[#F79122]"
+          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-4 pt-[calc(8px_+_0.125em)] focus:border-[#F79122] focus:ring-[#F79122]"
           required={required}
           placeholder={placeholder}
         />
@@ -140,7 +140,7 @@ export default function DemoForm({ className, formId }) {
         </p>
 
         <p className="text-sm text-[#4F4F4F]">
-          <a href="/privacy-policy" className="text-[#4F4F4F] underline">
+          <a href="/privacy-policy" className="text-black underline">
             Privacy policy
           </a>{' '}
           of how we handle your data

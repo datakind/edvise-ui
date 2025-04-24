@@ -3,18 +3,18 @@ export default function ProductSection(props) {
     {
       name: 'Tailored alerts',
       description: 'See indicators specific to your institution and students.',
-      media: '/images/landing/product-placeholder.jpg',
+      media: '/images/landing/product-placeholder.png',
     },
     {
       name: 'Smart guidance',
       description:
         'Know when to intervene — and how to best support each student.',
-      media: '/images/landing/product-placeholder-2.jpg',
+      media: '/images/landing/product-placeholder-2.png',
     },
     {
       name: 'Clear insights',
       description: 'Use dashboards that highlight what matters most.',
-      media: '/images/landing/product-placeholder-3.jpg',
+      media: '/images/landing/product-placeholder-3.png',
     },
   ];
 
@@ -34,7 +34,7 @@ export default function ProductSection(props) {
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 sm:space-y-32">
+        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 sm:space-y-20">
           {products.map((product, index) => (
             <div
               className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden sm:h-[625px] sm:flex-row"

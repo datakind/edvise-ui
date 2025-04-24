@@ -1,11 +1,11 @@
 import clx from 'classnames';
 import { useState } from 'react';
-export default function Accordion({ className, children }) {
+export default function Accordion({ className, children, title }) {
   const [open, setOpen] = useState(false);
   return (
     <div
       className={clx(
-        'landing-rounded-md min-h-[62px] transition-all duration-300 sm:min-h-[86px]',
+        'landing-rounded-md min-h-[62px] transition-all duration-300 hover:bg-[#D5E5EE] sm:min-h-[86px]',
         {
           'bg-[#D5E5EE]': open,
           'bg-[#EEF2F6]': !open,
@@ -17,7 +17,7 @@ export default function Accordion({ className, children }) {
         onClick={() => setOpen(!open)}
         className="flex min-h-[62px] w-full items-center justify-between px-6 text-base sm:min-h-[86px] sm:p-7 sm:text-[20px]"
       >
-        <span>What does the SST model do?</span>
+        <span className="relative top-[0.125em] text-left">{title}</span>
         <div className="plus-icon relative h-[18px] w-[18px]">
           <div className="plus-icon-line absolute left-1/2 top-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 bg-black" />
           <div
@@ -39,11 +39,7 @@ export default function Accordion({ className, children }) {
         )}
       >
         <div className="inner overflow-hidden">
-          <p className="p-7 pt-0 text-[20px] font-light">
-            Student-Success-Tool is a data-assisted advising product to help
-            schools identify the students, programs and opportunities to
-            increase graduation rates.
-          </p>
+          <div className="p-7 pt-0">{children}</div>
         </div>
       </div>
     </div>

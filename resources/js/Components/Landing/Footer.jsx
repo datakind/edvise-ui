@@ -25,6 +25,9 @@ export default function Footer() {
     },
   ];
 
+  const linkHoverClass = 'transition-colors duration-100 hover:text-black/60';
+  const linkClass = 'text-base leading-[160%] text-[#000] underline ';
+
   return (
     <div className="footer pt-20 sm:pt-36">
       <div className="layout:grid mb-24 sm:mb-56">
@@ -42,7 +45,7 @@ export default function Footer() {
               <li key={`footer-link-${link.label}`}>
                 <a
                   href={link.href}
-                  className="text-base leading-[160%] text-[#000] underline"
+                  className={`${linkClass} ${linkHoverClass}`}
                 >
                   {link.label}
                 </a>
@@ -56,7 +59,7 @@ export default function Footer() {
               <li key={`footer-link-${link.label}`}>
                 <a
                   href={link.href}
-                  className="text-base leading-[160%] text-[#000] underline"
+                  className={`${linkClass} ${linkHoverClass}`}
                 >
                   {link.label}
                 </a>
@@ -70,12 +73,12 @@ export default function Footer() {
           <p>© 2025 DataKind</p>
         </div>
         <div className="col-span-6 row-start-1 sm:col-start-5">
-          <a href="#" className="text-base text-[#000] underline">
+          <a href="#" className={`${linkClass} ${linkHoverClass}`}>
             Terms of Use
           </a>
         </div>
         <div className="sm:row-start-0 col-span-3 col-start-1 row-start-2 sm:col-start-11 sm:row-start-1">
-          <a href="#" className="text-base text-[#000] underline">
+          <a href="#" className={`${linkClass} ${linkHoverClass}`}>
             Privacy Policy
           </a>
         </div>

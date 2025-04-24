@@ -9,14 +9,16 @@ const Button = ({
   ...rest
 }) => {
   const baseStyles =
-    'whitespace-nowrap group relative h-[38px] inline-block overflow-hidden px-3 sm:px-6 py-[6px] rounded-full bg-white font-regular transition cursor-pointer text-center z-0 no-underline text-black';
+    'whitespace-nowrap group relative h-[38px] inline-block overflow-hidden px-3 sm:px-6 py-[6px] rounded-full font-regular transition cursor-pointer text-center z-0 no-underline text-black';
 
-  const primaryStyles = 'bg-landing-orange';
+  const primaryStyles = 'bg-primary hover:bg-primary/70';
   const secondaryStyles = 'bg-white';
+  const darkStyles = 'bg-black text-white hover:bg-white hover:text-black';
 
   const kindStyles = {
     primary: primaryStyles,
     secondary: secondaryStyles,
+    dark: darkStyles,
   };
 
   const combinedClassName =
@@ -28,11 +30,15 @@ const Button = ({
 
   return (
     <Tag className={combinedClassName} {...specificProps} {...rest}>
-      <span
-        className="bg-landing-orange absolute inset-y-0 left-0 -z-10 w-0 rounded-full transition-all duration-300 ease-in-out group-hover:w-full"
-        aria-hidden="true"
-      ></span>
-      <span className="relative z-10 duration-300 ease-in-out">{children}</span>
+      {kind === 'secondary' && (
+        <span
+          className="absolute inset-y-0 left-0 -z-10 w-0 rounded-full bg-primary transition-all duration-300 ease-in-out group-hover:w-full"
+          aria-hidden="true"
+        />
+      )}
+      <span className="relative top-[0.125em] z-10 duration-300 ease-in-out">
+        {children}
+      </span>
     </Tag>
   );
 };

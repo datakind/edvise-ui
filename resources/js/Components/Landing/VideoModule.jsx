@@ -1,17 +1,29 @@
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLenis } from './LenisProvider';
+
 export default function VideoModule(props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (isModalOpen) {
+      lenis?.stop();
+    } else {
+      lenis?.start();
+    }
+  }, [isModalOpen, lenis]);
+
   return (
     <>
       <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         className="relative z-50"
       >
         <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/90 p-4">
           <button
-            onClick={() => setOpen(false)}
+            onClick={() => setIsModalOpen(false)}
             className="absolute right-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2 focus:outline-[var(--landing-color-orange)]"
             type="button"
           >
@@ -44,16 +56,15 @@ export default function VideoModule(props) {
           </DialogPanel>
         </div>
       </Dialog>
-      <div
+      <button
         className="video-wrapper relative w-full"
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsModalOpen(true)}
         onKeyDown={e => {
           if (e.key === 'Enter' || e.key === ' ') {
-            setIsOpen(true);
+            setIsModalOpen(true);
           }
         }}
-        role="button"
-        tabIndex={0}
+        type="button"
         aria-label="Watch video"
       >
         <div className="video-poster landing-rounded-md relative aspect-[792/569] overflow-hidden">
@@ -80,12 +91,12 @@ export default function VideoModule(props) {
               />
             </svg>
           </div>
-          <p className="video-title max-w-[130px] text-base font-light leading-[100%]">
+          <p className="video-title max-w-[130px] text-base font-light leading-[100%] sm:max-w-full">
             In partnership with Google.org
           </p>
-          <p className="video-duration ml-auto text-base font-light">00:38</p>
+          <p className="video-duration ml-auto text-base font-light">01:23</p>
         </div>
-      </div>
+      </button>
     </>
   );
 }

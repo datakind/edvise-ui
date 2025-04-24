@@ -19,7 +19,7 @@
 }
 
 .type\:section-label {
-  @apply text-[16px] font-normal leading-[100%] text-[#6E6D6C];
+  @apply text-landing-gray text-[16px] font-normal leading-[100%];
 }
 
 .type\:section-title {
@@ -64,12 +64,12 @@
   --landing-foreground: #000000;
   --landing-color-orange: #f79122;
   --landing-color-gray: #eef2f6;
-  --font-primary: 'Helvetica Neue', sans-serif;
-  --font-secondary: 'Playfair Display', serif;
+  --landing-font-primary: 'Helvetica Neue', sans-serif;
+  --landing-font-secondary: 'Playfair Display', serif;
 }
 
 .main {
-  font-family: var(--font-primary);
+  font-family: var(--landing-font-primary);
   color: var(--landing-foreground);
 }
 
@@ -85,8 +85,11 @@
   background-color: var(--landing-color-gray);
 }
 
-.font-secondary {
-  font-family: var(--font-secondary);
+.font-landing-primary {
+  font-family: var(--landing-font-primary);
+}
+.font-landing-secondary {
+  font-family: var(--landing-font-secondary);
 }
 
 .col-span-14 {

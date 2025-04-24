@@ -24,7 +24,7 @@ export default function CaseStudySection({ className }) {
           </div>
           <div className="col-span-full sm:col-span-12 sm:col-start-9">
             <div>
-              <VideoModule />
+              <VideoModule videoUrl="https://www.youtube.com/watch?v=EfWgRAX0ICw" />
             </div>
           </div>
         </div>

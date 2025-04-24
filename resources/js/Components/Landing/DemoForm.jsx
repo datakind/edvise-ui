@@ -21,7 +21,7 @@ export default function DemoForm({ className, formId }) {
       >
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 sm:ml-5"
+          className="block text-sm font-medium text-black sm:ml-5"
         >
           {label}
           {required && <span className="text-current"> *</span>}
@@ -30,7 +30,7 @@ export default function DemoForm({ className, formId }) {
           type="text"
           id={inputId}
           name={name}
-          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-4 pt-[calc(8px_+_0.125em)] focus:border-[#F79122] focus:ring-[#F79122]"
+          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-5 pt-[calc(8px_+_0.125em)] focus:border-[#F79122] focus:ring-[#F79122]"
           required={required}
           placeholder={placeholder}
         />
@@ -58,7 +58,7 @@ export default function DemoForm({ className, formId }) {
             value={value}
             className="peer sr-only"
           />
-          <span className="checkmark block flex h-6 w-6 items-center justify-center rounded-[4px] border-2 border-[#949494]">
+          <span className="checkmark border-landing-gray block flex h-6 w-6 items-center justify-center rounded-[4px] border-2">
             <svg
               width="14"
               height="11"
@@ -139,8 +139,8 @@ export default function DemoForm({ className, formId }) {
           time
         </p>
 
-        <p className="text-sm text-[#4F4F4F]">
-          <a href="/privacy-policy" className="text-black underline">
+        <p className="text-base text-[#4F4F4F]">
+          <a href="/privacy-policy" className="text-[#4F4F4F] underline">
             Privacy policy
           </a>{' '}
           of how we handle your data

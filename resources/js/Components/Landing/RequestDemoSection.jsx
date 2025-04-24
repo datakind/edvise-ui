@@ -4,7 +4,7 @@ export default function RequestDemoSection() {
     <div className="request-demo-section">
       <div className="layout:grid">
         <div className="col-span-6">
-          <p className="type:section-label mb-9 sm:mb-12">Request a Demo</p>
+          <p className="type:section-label mb-9 sm:mb-12">Request demo</p>
           <h2 className="type:section-title mb-9 sm:mb-32">
             How to get started with Student Success Tool
           </h2>

@@ -11,7 +11,7 @@ export default function Header() {
   const navLinks = useMemo(
     () => [
       {
-        label: 'The Product',
+        label: 'The product',
         href: '/',
         external: false,
       },
@@ -228,7 +228,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-start-14 col-span-4 flex justify-end gap-1 sm:col-span-7 sm:gap-8">
+            <div className="col-start-14 col-span-4 flex justify-end gap-1 sm:col-span-8 sm:gap-8">
               <Button
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"

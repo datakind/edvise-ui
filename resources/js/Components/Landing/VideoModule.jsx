@@ -1,8 +1,9 @@
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useState, useEffect } from 'react';
 import { useLenis } from './LenisProvider';
+import ReactPlayer from 'react-player';
 
-export default function VideoModule(props) {
+export default function VideoModule({ videoUrl }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const lenis = useLenis();
 
@@ -42,16 +43,18 @@ export default function VideoModule(props) {
             </svg>
           </button>
           <DialogPanel className="layout:max-width w-full">
-            <iframe
-              width="1020"
-              height="630"
-              src="https://www.youtube.com/embed/EfWgRAX0ICw?si=G9l0_VjqavBBZh3n"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-              className="aspect-[16/9] h-auto w-full"
+            <ReactPlayer
+              url={videoUrl}
+              playing={isModalOpen}
+              controls
+              playsinline
+              width="100%"
+              height="100%"
+              style={{
+                aspectRatio: '16/9',
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </DialogPanel>
         </div>

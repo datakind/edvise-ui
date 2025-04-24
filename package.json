@@ -10,7 +10,7 @@
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@popperjs/core": "^2.11.6",
-    "@prettier/plugin-php": "^0.18.9",
+    "@prettier/plugin-php": "^0.22.4",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@types/lodash": "^4.14.201",
@@ -55,6 +55,7 @@
     "react-google-charts": "^5.2.1",
     "react-map-gl": "^7.1.7",
     "react-map-gl-geocoder": "^2.2.0",
+    "react-player": "^2.16.0",
     "react-range-slider-input": "^3.0.7",
     "turf-polygon": "^1.0.3",
     "xlsx": "^0.18.5",

@@ -52,20 +52,23 @@ export default function AdvisorsSection(props) {
       `}</style>
       <div className="layout:grid mb-14 sm:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label mb-9 sm:mb-12">
-            Hear from advisors already using Deemia
+          <p className="type:section-label text-landing-gray mb-9 sm:mb-12">
+            Hear from advisors already using Student Success Tool
           </p>
           <h2 className="type:section-title">
-            Identify students in need of timely intervention and{' '}
-            <span>develop personalized success plans</span>
+            Identify students in need of timely intervention and develop
+            personalized success plans
           </h2>
         </div>
       </div>
 
       <div className="layout:grid advisor-section-grid gap-y-7 sm:gap-y-0">
         {testimonies.map((testimony, index) => (
-          <div key={testimony.name} className="col-span-full sm:col-span-6">
-            <div className="relative">
+          <div
+            key={testimony.name}
+            className="col-span-full items-stretch sm:col-span-6"
+          >
+            <div className="relative flex h-full flex-col">
               <div className="landing-rounded-md relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden !rounded-b-none">
                 {testimony.image.url && (
                   <img
@@ -75,14 +78,14 @@ export default function AdvisorsSection(props) {
                   />
                 )}
               </div>
-              <div className="landing-rounded-md relative z-40 mt-[-40px] bg-[#EEF2F6] p-6 sm:pb-12 sm:pl-7 sm:pr-14 sm:pt-7">
+              <div className="landing-rounded-md relative z-40 mt-[-40px] flex-1 bg-[#EEF2F6] p-6 sm:pb-12 sm:pl-7 sm:pr-14 sm:pt-7">
                 <div className="mb-6 flex gap-5">
                   <div className="bg-landing-orange flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full">
-                    <span className="font-secondary relative top-[4px] text-[28px] leading-none">
+                    <span className="font-landing-secondary relative top-[4px] text-[28px] leading-none">
                       “
                     </span>
                   </div>
-                  <div className="mt-1">
+                  <div className="mt-[8px]">
                     <h3 className="mb-1.5 text-[22px] font-light leading-none">
                       {testimony.name}
                     </h3>

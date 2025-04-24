@@ -5,14 +5,14 @@ export default function DemoFormModal({ open, setOpen }) {
     <Dialog
       open={open}
       onClose={() => setOpen(false)}
-      className="data-lenis-prevent pointer-events-auto relative z-50"
+      className="data-lenis-prevent font-landing-primary pointer-events-auto relative z-50"
       data-lenis-prevent
     >
       <div className="landing-modal fixed inset-0 flex w-screen items-center justify-center bg-black/70 p-4">
         <DialogPanel className="layout:max-width landing-rounded-md relative w-full !overflow-y-auto bg-white py-8 sm:py-12">
           <button
             onClick={() => setOpen(false)}
-            className="absolute right-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-[#1E343F] p-2 focus:outline-[var(--landing-color-orange)]"
+            className="absolute right-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black p-2 transition-colors duration-200 hover:bg-[#1E343F] focus:outline-[var(--landing-color-orange)]"
             type="button"
           >
             <svg
@@ -31,7 +31,7 @@ export default function DemoFormModal({ open, setOpen }) {
           </button>
           <div className="layout:grid relative z-30">
             <div className="col-span-full sm:col-span-6">
-              <p className="type:section-label mb-12">Request a demo</p>
+              <p className="type:section-label mb-12">Request demo</p>
               <p className="type:section-title">
                 How to get started with Student Success Tool
               </p>

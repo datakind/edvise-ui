@@ -1,0 +1,121 @@
+.layout\:max-width {
+  @apply mx-auto max-w-[1600px] px-4;
+}
+
+@media screen and (min-width: 834px) {
+  .layout\:max-width {
+    @apply px-8;
+  }
+}
+
+.layout\:grid {
+  @apply grid grid-cols-[repeat(6,1fr)] px-4;
+}
+
+@media screen and (min-width: 834px) {
+  .layout\:grid {
+    @apply grid grid-cols-[repeat(20,1fr)] px-8;
+  }
+}
+
+.type\:section-label {
+  @apply text-landing-gray text-[16px] font-normal leading-[100%];
+}
+
+.type\:section-title {
+  @apply text-[34px] font-light leading-[100%] text-[#000000];
+}
+
+.landing-rounded-lg {
+  @apply overflow-hidden rounded-[25px];
+}
+
+.landing-rounded-md {
+  @apply overflow-hidden rounded-[25px];
+}
+
+@media screen and (min-width: 834px) {
+  .landing-rounded-lg {
+    @apply overflow-hidden rounded-[50px];
+  }
+
+  .landing-rounded-md {
+    @apply overflow-hidden rounded-[40px];
+  }
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:
+    url('/fonts/HelveticaNeueLight.woff2') format('woff2'),
+    url('/fonts/HelveticaNeueLight.woff') format('woff');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:
+    url('/fonts/HelveticaNeueRoman.woff2') format('woff2'),
+    url('/fonts/HelveticaNeueRoman.woff') format('woff');
+  font-weight: 400;
+}
+
+:root {
+  --landing-foreground: #000000;
+  --landing-color-orange: #f79122;
+  --landing-color-gray: #eef2f6;
+  --landing-font-primary: 'Helvetica Neue', sans-serif;
+  --landing-font-secondary: 'Playfair Display', serif;
+}
+
+.main {
+  font-family: var(--landing-font-primary);
+  color: var(--landing-foreground);
+}
+
+.bg-landing-orange {
+  background-color: var(--landing-color-orange);
+}
+
+.text-landing-orange {
+  color: var(--landing-color-orange);
+}
+
+.bg-landing-gray {
+  background-color: var(--landing-color-gray);
+}
+
+.font-landing-primary {
+  font-family: var(--landing-font-primary);
+}
+.font-landing-secondary {
+  font-family: var(--landing-font-secondary);
+}
+
+.col-span-14 {
+  grid-column: span 14 / span 14;
+}
+
+.landing-checkbox input[type='checkbox']:checked + .checkmark svg {
+  opacity: 1;
+}
+
+.landing-checkbox input[type='checkbox']:focus + .checkmark {
+  border-color: var(--landing-color-orange);
+}
+
+.landing-modal {
+  @apply flex items-center justify-center;
+}
+
+@media screen and (max-height: 780px) {
+  .landing-modal {
+    @apply flex items-stretch;
+  }
+}
+
+.bg-grid {
+  background-image: url('./images/landing/dot.svg');
+  background-size: 4.978%;
+  background-position: 0 20px;
+}

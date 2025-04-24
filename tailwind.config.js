@@ -55,6 +55,10 @@ export default {
           DEFAULT: '#f1f1f1',
           light: '#ffffff',
         },
+        landing: {
+          gray: '#767676',
+          'light-blue': '#EEF2F6',
+        },
       },
     },
   },

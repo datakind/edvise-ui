@@ -37,7 +37,7 @@ export default function Welcome() {
               {/* <DotGrid /> */}
               <div className="z-1 relative">
                 <AdvisorsSection className="mb-24 sm:mb-40" />
-                <ProductSection className="mb-40" />
+
                 <ImpactSection />
 
                 <CaseStudySection className="mb-24 sm:mb-40" />

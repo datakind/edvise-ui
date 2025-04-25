@@ -56,15 +56,7 @@ export default function ProductSection(props) {
               </div>
               <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
                 <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] sm:rounded-[20px]">
-                  <ReactPlayer
-                    url={product.media}
-                    muted
-                    loop
-                    playsinline
-                    playing
-                    width="100%"
-                    height="100%"
-                  />
+
                 </div>
               </div>
             </div>

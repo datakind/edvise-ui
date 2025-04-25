@@ -47,16 +47,16 @@
 @font-face {
   font-family: 'Helvetica Neue';
   src:
-    url('/fonts/HelveticaNeueLight.woff2') format('woff2'),
-    url('/fonts/HelveticaNeueLight.woff') format('woff');
+    url('/HelveticaNeueLight.woff2') format('woff2'),
+    url('/HelveticaNeueLight.woff') format('woff');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Helvetica Neue';
   src:
-    url('/fonts/HelveticaNeueRoman.woff2') format('woff2'),
-    url('/fonts/HelveticaNeueRoman.woff') format('woff');
+    url('/HelveticaNeueRoman.woff2') format('woff2'),
+    url('/HelveticaNeueRoman.woff') format('woff');
   font-weight: 400;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .bg-grid {
-  background-image: url('./images/landing/dot.svg');
+  background-image: url('./dot.svg');
   background-size: 4.978%;
   background-position: 0 20px;
 }

@@ -137,7 +137,7 @@ export default function Header() {
                 <div className="col-span-2">
                   <img
                     className="mt-4"
-                    src="/images/landing/deemia-logo-footer.svg"
+                    src="/deemia-logo-footer.svg"
                     alt="Deemia Logo"
                   />
                 </div>
@@ -183,7 +183,7 @@ export default function Header() {
               <a href="/">
                 <img
                   className="max-w-[110px] sm:max-w-[140px]"
-                  src="/images/landing/deemia-logo.svg"
+                  src="/deemia-logo.svg"
                   alt="Deemia Logo"
                 />
               </a>

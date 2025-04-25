@@ -79,32 +79,28 @@ export default function ImpactSection(props) {
       entries => {
         const [entry] = entries;
         setIsVisible(entry.isIntersecting);
-        
+
         if (entry.isIntersecting) {
-          // Start with the first card when section becomes visible
           setActiveCardIndex(0);
-          
-          // Start autoplay when section becomes visible
+
           intervalRef.current = setInterval(() => {
             setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
           }, 4000);
         } else {
-          // Clear interval when section is not visible
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
           }
-          // Reset active card index when section is not visible
           setActiveCardIndex(null);
         }
       },
-      { threshold: 0.2 }, // Trigger when at least 20% of the section is visible
+      { threshold: 0.2 },
     );
-    
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-    
+
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
@@ -124,7 +120,7 @@ export default function ImpactSection(props) {
         <DotCanvas animation={activeCardIndex} />
       </div>
       <div className="z-1 relative">
-        <div className="layout:grid mb-32">
+        <div className="layout:grid mb-16">
           <div className="col-span-8">
             <p className="type:section-label mb-12">Our impact</p>
             <h2 className="type:section-title mb-7">
@@ -141,7 +137,7 @@ export default function ImpactSection(props) {
               } `}
               onClick={() => onCardClick(index)}
             >
-              <div className="relative z-[0] h-48 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
+              <div className="relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
                 <img
                   className="h-full w-full object-cover"
                   src={card.image.url}

@@ -85,13 +85,17 @@ class Dots {
 		const space =
 			(this.#canvas.width / this.#dpr - this.#padding * 2) / this.#columns;
 
-		// place dots in a grid
 		for (let i = 0; i < this.#dots.length; i++) {
 			const columns = this.#columns + 1;
 			const col = i % columns;
-			this.#dots[i].x = col * space + this.#padding;
-			const row = Math.floor(i / columns);
-			this.#dots[i].y = row * space + space / 2;
+
+			const x = col * space + this.#padding;
+			const y = Math.floor(i / columns) * space + space / 2;
+
+			this.#dots[i].x = x;
+			this.#dots[i].y = y;
+
+			// console.log("x", x / (this.#canvas.width / this.#dpr));
 		}
 	}
 
@@ -149,10 +153,6 @@ class Dots {
 			this.#canvas.height / this.#dpr,
 		);
 
-		const pulseSpeed = 10000;
-		const pulseProgress = (time % 3000) / pulseSpeed;
-		const pulseRadius = maxDistance * pulseProgress;
-
 		for (const dot of this.#dots) {
 			const distance = this.#calculateDistance(
 				dot.x,
@@ -161,11 +161,17 @@ class Dots {
 				center.y - 30,
 			);
 
+			const speed = time * 0.005;
+			const y = dot.y / (this.#canvas.height / this.#dpr);
+			const value = Math.abs(y * 0.7 * 15 + speed);
+
+			const wave = Math.sin(value + Math.PI * 1.5) * 0.5 + 0.5;
+			const clamp = Math.floor((value * (1 / Math.PI) * 0.5) % 2);
+			const final = wave * clamp;
+
 			let radius = distance / maxDistance;
-
-			const wave = Math.sin(dot.y / this.#rows / 4 + time * 0.0025) * 0.5 + 0.5;
-
-			radius = radius > 0.205 ? this.#baseRadius : 12 * wave + this.#baseRadius;
+			radius =
+				radius > 0.205 ? this.#baseRadius : lerp(this.#baseRadius, 10, final);
 
 			this.#ctx.beginPath();
 			this.#ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
@@ -182,18 +188,21 @@ class Dots {
 			this.#canvas.width / this.#dpr,
 			this.#canvas.height / this.#dpr,
 		);
-		const pulseSpeed = 10000;
-		const pulseProgress = (time % 3000) / pulseSpeed;
-		const pulseRadius = maxDistance * pulseProgress;
 
 		for (const dot of this.#dots) {
 			const distance = this.#calculateDistance(dot.x, 0, center.x, 0);
 
+			const speed = time * 0.005;
+			const y = dot.y / (this.#canvas.height / this.#dpr);
+			const value = Math.abs(y * 0.7 * 15 + speed);
+
+			const wave = Math.sin(value + Math.PI * 1.5) * 0.5 + 0.5;
+			const clamp = Math.floor((value * (1 / Math.PI) * 0.5) % 2);
+			const final = wave * clamp;
+
 			let radius = distance / maxDistance;
-
-			const wave = Math.sin(dot.y / this.#rows / 4 + time * 0.0025) * 0.5 + 0.5;
-
-			radius = radius > 0.205 ? this.#baseRadius : 12 * wave + this.#baseRadius;
+			radius =
+				radius > 0.205 ? this.#baseRadius : lerp(this.#baseRadius, 10, final);
 
 			this.#ctx.beginPath();
 			this.#ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
@@ -203,20 +212,18 @@ class Dots {
 	}
 
 	#updateRainAnimation(time: number) {
-		const height = this.#canvas.height / this.#dpr;
-
-		const waveSpeed = 0.002;
-		const waveFrequency = 0.1;
-		const waveAmplitude = 10;
-
 		for (const dot of this.#dots) {
-			const diagonalPosition = dot.x + height - dot.y;
+			const x = dot.x / (this.#canvas.width / this.#dpr);
+			const y = dot.y / (this.#canvas.height / this.#dpr);
 
-			const wave =
-				Math.sin(diagonalPosition * waveFrequency + time * waveSpeed) * 0.5 +
-				0.5;
+			const speed = time * 0.0025;
+			const value = Math.abs((x - y * 3) * 4 + speed);
+			const wave = Math.sin(value + Math.PI * 1.5) * 0.5 + 0.5;
+			const clamp = Math.floor((value * (1 / Math.PI) * 0.5) % 2);
 
-			const radius = lerp(this.#baseRadius, waveAmplitude, wave);
+			const final = wave * clamp;
+
+			const radius = lerp(this.#baseRadius, 10, final);
 
 			this.#ctx.beginPath();
 			this.#ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
@@ -243,23 +250,20 @@ class Dots {
 	}
 
 	#updateShimmerAnimation(time: number) {
-		const width = this.#canvas.width / this.#dpr;
-		const height = this.#canvas.height / this.#dpr;
-
-		const waveSpeed = 0.002; // Controls how fast the wave moves
-		const waveFrequency = 0.1; // Controls spacing between waves
-		const waveAmplitude = 10; // Max radius variation
-
 		for (const dot of this.#dots) {
-			// Project dot position along diagonal axis (bottom-left to top-right)
-			const diagonalPosition = dot.x + height - dot.y;
+			const x = dot.x / (this.#canvas.width / this.#dpr);
+			const y = dot.y / (this.#canvas.height / this.#dpr);
 
-			// Animate wave phase over time
-			const wave =
-				Math.sin(diagonalPosition * waveFrequency - time * waveSpeed) * 0.5 +
-				0.5;
+			const speed = time * 0.0025;
 
-			const radius = lerp(this.#baseRadius, waveAmplitude, wave);
+			const value = Math.abs((x - y * 0.7) * 15 - speed);
+
+			const wave = Math.sin(value + Math.PI * 1.5) * 0.5 + 0.5;
+			const clamp = Math.floor((value * (1 / Math.PI) * 0.5) % 2);
+
+			const final = wave * clamp;
+
+			const radius = lerp(this.#baseRadius, 10, final);
 
 			this.#ctx.beginPath();
 			this.#ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);

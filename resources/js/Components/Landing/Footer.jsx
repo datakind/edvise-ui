@@ -13,15 +13,15 @@ export default function Footer() {
   const footerLinksTwo = [
     {
       label: 'X',
-      href: '#',
+      href: 'https://x.com/DataKind',
     },
     {
       label: 'Facebook',
-      href: '#',
+      href: 'https://www.facebook.com/DataKindOrg',
     },
     {
       label: 'LinkedIn',
-      href: '#',
+      href: 'https://www.linkedin.com/company/datakind/',
     },
   ];
 
@@ -73,12 +73,18 @@ export default function Footer() {
           <p>© 2025 DataKind</p>
         </div>
         <div className="col-span-6 row-start-1 sm:col-start-5">
-          <a href="#" className={`${linkClass} ${linkHoverClass}`}>
+          <a
+            href="/terms-of-service"
+            className={`${linkClass} ${linkHoverClass}`}
+          >
             Terms of Use
           </a>
         </div>
         <div className="sm:row-start-0 col-span-3 col-start-1 row-start-2 sm:col-start-11 sm:row-start-1">
-          <a href="#" className={`${linkClass} ${linkHoverClass}`}>
+          <a
+            href="/privacy-policy"
+            className={`${linkClass} ${linkHoverClass}`}
+          >
             Privacy Policy
           </a>
         </div>

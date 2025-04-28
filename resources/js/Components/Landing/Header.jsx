@@ -17,7 +17,7 @@ export default function Header() {
       },
       {
         label: 'About us',
-        href: '/about',
+        href: 'https://www.datakind.org',
         external: true,
       },
     ],

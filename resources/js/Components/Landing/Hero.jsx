@@ -55,7 +55,11 @@ export default function Hero() {
               />
             </svg>
           </a>
-          <Button className="hidden md:ml-auto md:block" kind="dark">
+          <Button
+            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+            className="button hidden md:ml-auto md:block"
+            kind="dark"
+          >
             Link
           </Button>
         </div>

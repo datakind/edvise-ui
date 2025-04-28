@@ -231,7 +231,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-start-14 col-span-4 flex justify-end gap-1 tb:col-span-6 md:col-span-8 md:gap-8">
+            <div className="col-start-14 tb:col-span-6 col-span-4 flex justify-end gap-1 md:col-span-8 md:gap-8">
               <Button
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"

@@ -30,7 +30,7 @@ export default function DemoFormModal({ open, setOpen }) {
             </svg>
           </button>
           <div className="layout:grid relative z-30">
-            <div className="col-span-full sm:col-span-6">
+            <div className="col-span-full mb-12 sm:col-span-6">
               <p className="type:section-label mb-12">Request demo</p>
               <p className="type:section-title">
                 How to get started with Student Success Tool

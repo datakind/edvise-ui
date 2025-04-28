@@ -53,7 +53,9 @@ export default function Faq({ className }) {
                   {section.faqs.map((faq, index) => (
                     <div key={faq.question + `-${index}`}>
                       <Accordion title={faq.question}>
-                        <p className="text-[20px] font-light">{faq.answer}</p>
+                        <p className="font-light tb:text-[20px]">
+                          {faq.answer}
+                        </p>
                       </Accordion>
                     </div>
                   ))}

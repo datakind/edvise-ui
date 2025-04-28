@@ -94,7 +94,7 @@ export default function VideoModule({ videoUrl }) {
               />
             </svg>
           </div>
-          <p className="video-title max-w-[130px] text-base font-light leading-[100%] sm:max-w-full">
+          <p className="video-title max-w-[130px] text-left text-base font-light leading-[100%] sm:max-w-full">
             In partnership with Google.org
           </p>
           <p className="video-duration ml-auto text-base font-light">01:23</p>

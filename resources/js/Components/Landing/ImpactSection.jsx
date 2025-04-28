@@ -70,7 +70,7 @@ export default function ImpactSection(props) {
     if (isVisible) {
       intervalRef.current = setInterval(() => {
         setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
-      }, 4000);
+      }, 5000);
     }
   }
 
@@ -85,7 +85,7 @@ export default function ImpactSection(props) {
 
           intervalRef.current = setInterval(() => {
             setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
-          }, 4000);
+          }, 5000);
         } else {
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
@@ -173,7 +173,7 @@ export default function ImpactSection(props) {
                     className={`mr-4 hidden h-1 grow overflow-hidden rounded-full bg-white transition-opacity md:block ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
                   >
                     <div
-                      className={`h-full w-full translate-x-[-100%] rounded-full bg-[#4F4F4F] transition-transform ${activeCardIndex === index ? 'translate-x-[0] transition-transform duration-[4000ms] ease-linear' : 'translate-x-[-100%]'}`}
+                      className={`h-full w-full translate-x-[-100%] rounded-full bg-[#4F4F4F] transition-transform ${activeCardIndex === index ? 'translate-x-[0] transition-transform duration-[5000ms] ease-linear' : 'translate-x-[-100%]'}`}
                     />
                   </div>
                 </div>

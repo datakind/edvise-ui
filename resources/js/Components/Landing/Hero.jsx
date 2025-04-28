@@ -27,15 +27,15 @@ export default function Hero() {
           />
         </div>
 
-        <div className="hero-image-overlay landing-rounded-lg -translate-y-[calc(100%-1px) absolute left-0 right-0 top-[calc(100%)] flex flex-col bg-[#D5E5EE] px-5 py-6 tb:px-8 md:h-[100px] md:-translate-y-[calc(100%-1px)] md:flex-row md:items-center md:px-10 md:py-0">
-          <div className="mb-3 mr-8 sm:mb-0">
+        <div className="hero-image-overlay landing-rounded-lg tb:px-8 absolute bottom-0 left-0 flex w-full translate-y-[1px] flex-col bg-[#D5E5EE] px-5 py-6 md:h-[100px] md:flex-row md:items-center md:px-10 md:py-0">
+          <div className="mb-2 mr-8 md:mb-0">
             <img src="/images/landing/NYt-logo.svg" alt="NYT Logo" />
           </div>
           <p className="text-[18px] font-light leading-tight">
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden">
+          <a className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -50,7 +50,7 @@ export default function Hero() {
             </svg>
           </a>
           <Button className="hidden md:ml-auto md:block" kind="dark">
-            Link
+            Read more
           </Button>
         </div>
       </div>

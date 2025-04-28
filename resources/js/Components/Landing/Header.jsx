@@ -267,7 +267,7 @@ export default function Header() {
               <Button
                 kind="secondary"
                 href="/login"
-                className="hidden sm:block"
+                className="hidden md:block"
               >
                 Log in
               </Button>

@@ -14,6 +14,12 @@
 
 @media screen and (min-width: 834px) {
   .layout\:grid {
+    @apply grid grid-cols-[repeat(8,1fr)] px-8;
+  }
+}
+
+@media screen and (min-width: 1152px) {
+  .layout\:grid {
     @apply grid grid-cols-[repeat(20,1fr)] px-8;
   }
 }
@@ -114,8 +120,9 @@
   }
 }
 
-.bg-grid {
-  background-image: url('./images/landing/dot.svg');
-  background-size: 4.978%;
-  background-position: 0 20px;
+@media screen and (min-width: 1152px) {
+  .impact-card-wrapper:not(.active)
+    .impact-thumbnail:has(+ .impact-card:hover) {
+    transform: translateY(calc(100% - 20px));
+  }
 }

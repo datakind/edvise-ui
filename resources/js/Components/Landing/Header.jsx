@@ -73,7 +73,10 @@ export default function Header() {
                 <nav className="col-span-full pt-36">
                   <ul className="space-y-4">
                     {navLinks.map(link => (
-                      <li key={`header-link-${link.label}`}>
+                      <li
+                        key={`header-link-${link.label}`}
+                        className="shrink-0"
+                      >
                         <a
                           href={link.href}
                           className={classNames(
@@ -147,7 +150,7 @@ export default function Header() {
         )}
         <div className="layout:max-width relative z-40">
           <div className="layout:grid relative items-center py-4">
-            <span className="absolute left-0 top-[calc(100%_-_2px)] hidden h-[52px] w-[52px] sm:block">
+            <span className="absolute left-0 top-[calc(100%_-_2px)] hidden h-[52px] w-[52px] md:block">
               <svg
                 width="52"
                 height="52"
@@ -163,7 +166,7 @@ export default function Header() {
                 />
               </svg>
             </span>
-            <span className="absolute right-0 top-[calc(100%_-_2px)] hidden h-[52px] w-[52px] sm:block">
+            <span className="absolute right-0 top-[calc(100%_-_2px)] hidden h-[52px] w-[52px] md:block">
               <svg
                 width="52"
                 height="52"
@@ -179,16 +182,16 @@ export default function Header() {
                 />
               </svg>
             </span>
-            <div className="col-span-2 sm:col-span-4">
+            <div className="col-span-2 md:col-span-4">
               <a href="/">
                 <img
-                  className="max-w-[110px] sm:max-w-[140px]"
+                  className="max-w-[110px] md:max-w-[140px]"
                   src="/images/landing/deemia-logo.svg"
                   alt="Deemia Logo"
                 />
               </a>
             </div>
-            <div className="hidden sm:col-span-6 sm:col-start-7 sm:block">
+            <div className="hidden md:col-span-6 md:col-start-7 md:block">
               <nav>
                 <ul className="flex items-center gap-8">
                   {navLinks.map(link => (
@@ -228,7 +231,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-start-14 col-span-4 flex justify-end gap-1 sm:col-span-8 sm:gap-8">
+            <div className="col-start-14 tb:col-span-6 col-span-4 flex justify-end gap-1 md:col-span-8 md:gap-8">
               <Button
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"
@@ -238,7 +241,7 @@ export default function Header() {
               <button
                 type="button"
                 className={clx(
-                  'flex h-[38px] w-[38px] shrink-0 flex-col items-center justify-center gap-[3px] rounded-full bg-white sm:hidden',
+                  'flex h-[38px] w-[38px] shrink-0 flex-col items-center justify-center gap-[3px] rounded-full bg-white md:hidden',
                   {
                     '!bg-[#EEF2F6]': isMenuOpen,
                   },
@@ -261,7 +264,7 @@ export default function Header() {
                   })}
                 />
               </button>
-              <Button kind="secondary" href="#" className="hidden sm:block">
+              <Button kind="secondary" href="#" className="hidden md:block">
                 Log in
               </Button>
             </div>

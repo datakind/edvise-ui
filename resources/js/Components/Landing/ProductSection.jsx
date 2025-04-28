@@ -5,18 +5,21 @@ export default function ProductSection(props) {
     {
       name: 'Tailored alerts',
       description: 'See indicators specific to your institution and students.',
-      media: '/videos/landing/product-placeholder-1.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-1.mp4',
     },
     {
       name: 'Smart guidance',
       description:
         'Know when to intervene — and how to best support each student.',
-      media: '/videos/landing/product-placeholder-2.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-2.mp4',
     },
     {
       name: 'Clear insights',
       description: 'Use dashboards that highlight what matters most.',
-      media: '/videos/landing/product-placeholder-3.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-3.mp4',
     },
   ];
 
@@ -30,7 +33,7 @@ export default function ProductSection(props) {
             <span className="whitespace-nowrap">data-informed</span>{' '}
             recommendations to keep students on their learning paths
           </h2>
-          <p className="text-landing-gray text-base font-light leading-tight">
+          <p className="text-base font-light leading-tight text-landing-gray">
             Deemia offers customized indicators and institution-specific actions
             to improve student outcomes.
           </p>
@@ -55,9 +58,7 @@ export default function ProductSection(props) {
                 </p>
               </div>
               <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
-                <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] sm:rounded-[20px]">
-
-                </div>
+                <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] sm:rounded-[20px]"></div>
               </div>
             </div>
           ))}

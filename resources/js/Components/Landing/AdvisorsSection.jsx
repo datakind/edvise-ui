@@ -4,7 +4,7 @@ export default function AdvisorsSection(props) {
       name: 'Dara Byrne',
       role: 'Google.org',
       image: {
-        url: '/advisor-1.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-1.jpg',
         alt: 'Dara Byrne',
       },
       quotes: [
@@ -16,7 +16,7 @@ export default function AdvisorsSection(props) {
       name: 'Hanna Gentry',
       role: 'Student advisor at John Jay College',
       image: {
-        url: '/advisor-2.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-2.jpg',
         alt: 'Hanna Gentry',
       },
       quotes: [
@@ -28,7 +28,7 @@ export default function AdvisorsSection(props) {
       name: 'Osian Sampson',
       role: 'Student advisor / Institution',
       image: {
-        url: '/advisor-3.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-3.jpg',
         alt: 'Osian Sampson',
       },
       quotes: [
@@ -52,7 +52,7 @@ export default function AdvisorsSection(props) {
       `}</style>
       <div className="layout:grid mb-14 sm:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label text-landing-gray mb-9 sm:mb-12">
+          <p className="type:section-label mb-9 text-landing-gray sm:mb-12">
             Hear from advisors already using Student Success Tool
           </p>
           <h2 className="type:section-title">

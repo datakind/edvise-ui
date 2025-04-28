@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="col-span-full mb-12 sm:col-span-2 sm:col-start-1">
           <div className="mx-auto max-w-[100px] sm:mx-0">
             <img
-              src="/deemia-logo-footer.svg"
+              src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo-footer.svg"
               alt="Deemia Logo"
             />
           </div>

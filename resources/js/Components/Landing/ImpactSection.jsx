@@ -14,7 +14,7 @@ export default function ImpactSection(props) {
       description:
         'Every 100 additional grads inject up to $90 million in lifetime earnings into the economy.',
       image: {
-        url: '/impact-1.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-1.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -24,7 +24,7 @@ export default function ImpactSection(props) {
       description:
         "A bachelor's degree can boost a student's earnings by nearly a million dollars over their lifetime.",
       image: {
-        url: '/impact-2.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-2.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -34,7 +34,7 @@ export default function ImpactSection(props) {
       description:
         'There is a 2.2% unemployment rate for college grads – less than half the rate of those without a degree.',
       image: {
-        url: '/impact-3.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-3.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -44,7 +44,7 @@ export default function ImpactSection(props) {
       description:
         '3x more likely to have health coverage Graduates are three times more likely to have employer-provided health insurance.',
       image: {
-        url: '/impact-4.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-4.jpg',
         alt: 'Dara Byrne',
       },
     },
@@ -54,7 +54,7 @@ export default function ImpactSection(props) {
       description:
         'College grads are 2x more likely to be "very happy". Higher education is linked to greater life satisfaction.',
       image: {
-        url: '/impact-5.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-5.jpg',
         alt: 'Dara Byrne',
       },
     },

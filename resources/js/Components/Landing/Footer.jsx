@@ -32,8 +32,9 @@ export default function Footer() {
     <div className="footer pt-20 sm:pt-36">
       <div className="layout:grid mb-24 sm:mb-56">
         <div className="col-span-full mb-12 sm:col-span-2 sm:col-start-1">
-          <div className="mx-auto max-w-[100px] sm:mx-0">
+          <div className="mx-auto max-w-[100px] sm:mx-0 md:max-w-full">
             <img
+              className="h-full w-full"
               src="/images/landing/deemia-logo-footer.svg"
               alt="Deemia Logo"
             />

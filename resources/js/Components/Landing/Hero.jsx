@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <div className="hero">
       <div className="layout:grid">
-        <div className="hero-title col-span-10 col-start-7 mb-[32px]">
+        <div className="hero-title col-span-6 mb-[32px] md:col-span-10 md:col-start-7">
           <h1 className="mb-14 text-[42px] font-light leading-[103%] sm:text-[48px] md:mb-[72px]">
             Getting students the support they need to succeed
           </h1>
@@ -27,15 +27,15 @@ export default function Hero() {
           />
         </div>
 
-        <div className="hero-image-overlay landing-rounded-lg absolute left-0 right-0 top-[calc(100%)] flex -translate-y-full flex-col bg-[#D5E5EE] px-4 py-4 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
-          <div className="mb-3 mr-8 sm:mb-0">
+        <div className="hero-image-overlay landing-rounded-lg tb:px-8 absolute bottom-0 left-0 flex w-full translate-y-[1px] flex-col bg-[#D5E5EE] px-5 py-6 md:h-[100px] md:flex-row md:items-center md:px-10 md:py-0">
+          <div className="mb-2 mr-8 md:mb-0">
             <img src="/images/landing/NYt-logo.svg" alt="NYT Logo" />
           </div>
           <p className="text-[18px] font-light leading-tight">
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white sm:hidden">
+          <a className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -50,7 +50,7 @@ export default function Hero() {
             </svg>
           </a>
           <Button className="hidden md:ml-auto md:block" kind="dark">
-            Link
+            Read more
           </Button>
         </div>
       </div>

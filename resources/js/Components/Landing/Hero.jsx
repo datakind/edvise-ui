@@ -27,7 +27,7 @@ export default function Hero() {
           />
         </div>
 
-        <div className="hero-image-overlay landing-rounded-lg tb:px-8 absolute left-0 right-0 top-[calc(100%)] flex -translate-y-full flex-col bg-[#D5E5EE] px-5 py-6 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
+        <div className="hero-image-overlay landing-rounded-lg -translate-y-[calc(100%-1px) absolute left-0 right-0 top-[calc(100%)] flex flex-col bg-[#D5E5EE] px-5 py-6 tb:px-8 md:h-[100px] md:-translate-y-[calc(100%-1px)] md:flex-row md:items-center md:px-10 md:py-0">
           <div className="mb-3 mr-8 sm:mb-0">
             <img src="/images/landing/NYt-logo.svg" alt="NYT Logo" />
           </div>
@@ -35,7 +35,7 @@ export default function Hero() {
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden">
+          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

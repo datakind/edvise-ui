@@ -77,7 +77,7 @@ export default function VideoModule({ videoUrl }) {
             alt="John Jay College"
           />
         </div>
-        <div className="video-cta-bar landing-rounded-md absolute bottom-0 left-0 right-0 flex items-center gap-4 bg-[#F5CA9E] p-3 sm:gap-6 sm:py-7 sm:pl-7 sm:pr-10">
+        <div className="video-cta-bar landing-rounded-md absolute bottom-0 left-0 right-0 flex translate-y-[1px] items-center gap-4 bg-[#F5CA9E] p-3 sm:gap-6 sm:py-7 sm:pl-7 sm:pr-10">
           <div className="video-cta-icon bg-landing-orange flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -126,3 +126,7 @@
     transform: translateY(calc(100% - 20px));
   }
 }
+
+.bg-grid {
+  background-color: red;
+}

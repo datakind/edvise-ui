@@ -16,10 +16,16 @@ export default function CaseStudySection({ className }) {
         <div className="layout:grid">
           <div className="col-span-full md:col-span-5">
             <p className="type:body-small mb-6 max-w-80 text-[18px] font-light leading-[120%] sm:mb-0 tb:mb-4 md:mt-36">
-              John Jay College partnered with DataKind to harness Student
-              Success Tool – empowering academic advisors to more efficiently
-              identify at-risk students, reach out, and build personalized plans
-              for their success.
+              <a
+                href="https://www.jjay.cuny.edu/"
+                className="text-inherit underline"
+              >
+                John Jay College
+              </a>{' '}
+              partnered with DataKind to harness the Student Success Tool –
+              empowering academic advisors to more efficiently identify at-risk
+              students, reach out, and build personalized plans for their
+              success.
             </p>
           </div>
           <div className="col-span-full md:col-span-12 md:col-start-9">

@@ -35,7 +35,10 @@ export default function Hero() {
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden">
+          <a
+            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+            className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -49,7 +52,11 @@ export default function Hero() {
               />
             </svg>
           </a>
-          <Button className="hidden md:ml-auto md:block" kind="dark">
+          <Button
+            className="hidden md:ml-auto md:block"
+            kind="dark"
+            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+          >
             Read more
           </Button>
         </div>

@@ -80,6 +80,8 @@ export default function Welcome() {
               <div className="z-1 relative">
                 <AdvisorsSection className="mb-24 sm:mb-40" />
 
+                <ProductSection />
+
                 <ImpactSection />
 
                 <CaseStudySection className="mb-24 sm:mb-40" />

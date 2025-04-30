@@ -4,7 +4,7 @@ export default function AdvisorsSection(props) {
       name: 'Dara Byrne',
       role: 'Google.org',
       image: {
-        url: '/advisor-1.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-1.jpg',
         alt: 'Dara Byrne',
       },
       quotes: [
@@ -16,7 +16,7 @@ export default function AdvisorsSection(props) {
       name: 'Hanna Gentry',
       role: 'Student advisor at John Jay College',
       image: {
-        url: '/advisor-2.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-2.jpg',
         alt: 'Hanna Gentry',
       },
       quotes: [
@@ -28,7 +28,7 @@ export default function AdvisorsSection(props) {
       name: 'Osian Sampson',
       role: 'Student advisor / Institution',
       image: {
-        url: '/advisor-3.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-3.jpg',
         alt: 'Osian Sampson',
       },
       quotes: [

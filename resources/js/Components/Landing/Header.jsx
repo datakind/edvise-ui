@@ -17,7 +17,7 @@ export default function Header() {
       },
       {
         label: 'About us',
-        href: '/about',
+        href: 'https://www.datakind.org',
         external: true,
       },
     ],
@@ -186,7 +186,7 @@ export default function Header() {
               <a href="/">
                 <img
                   className="max-w-[110px] sm:max-w-[140px]"
-                  src="/deemia-logo.svg"
+                  src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
                   alt="Deemia Logo"
                 />
               </a>

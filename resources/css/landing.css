@@ -53,16 +53,16 @@
 @font-face {
   font-family: 'Helvetica Neue';
   src:
-    url('/HelveticaNeueLight.woff2') format('woff2'),
-    url('/HelveticaNeueLight.woff') format('woff');
+    url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff2') format('woff2'),
+    url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff') format('woff');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Helvetica Neue';
   src:
-    url('/HelveticaNeueRoman.woff2') format('woff2'),
-    url('/HelveticaNeueRoman.woff') format('woff');
+    url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff2') format('woff2'),
+    url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
   font-weight: 400;
 }
 

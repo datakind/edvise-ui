@@ -9,7 +9,10 @@ export default function Hero() {
             Getting students the support they need to succeed
           </h1>
           <div className="mb-5">
-            <img src="/deemia-text-logo.svg" alt="Deemia" />
+            <img
+              src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-text-logo.svg"
+              alt="Deemia"
+            />
           </div>
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
             Is a scalable solution that empowers student support teams with
@@ -21,7 +24,7 @@ export default function Hero() {
       <div className="hero-image m-full relative">
         <div className="landing-rounded-lg relative aspect-[343/343] md:aspect-[1380/847]">
           <img
-            src="/landing-hero-image.jpg"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/landing-hero-image.jpg"
             alt="Hero"
             className="h-full w-full object-cover object-center"
           />
@@ -29,7 +32,10 @@ export default function Hero() {
 
         <div className="hero-image-overlay landing-rounded-lg absolute left-0 right-0 top-[calc(100%)] flex -translate-y-full flex-col bg-[#D5E5EE] px-4 py-4 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
           <div className="mb-3 mr-8 sm:mb-0">
-            <img src="/NYt-logo.svg" alt="NYT Logo" />
+            <img
+              src="https://storage.googleapis.com/staging-sst-01-staging-static/NYT-logo.svg"
+              alt="NYT Logo"
+            />
           </div>
           <p className="text-[18px] font-light leading-tight">
             “How A.I. Increased the Graduation Rate at John Jay College by 32

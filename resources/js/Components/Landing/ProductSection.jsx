@@ -5,18 +5,21 @@ export default function ProductSection(props) {
     {
       name: 'Tailored alerts',
       description: 'See indicators specific to your institution and students.',
-      media: '/videos/landing/product-placeholder-1.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-1.mp4',
     },
     {
       name: 'Smart guidance',
       description:
         'Know when to intervene — and how to best support each student.',
-      media: '/videos/landing/product-placeholder-2.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-2.mp4',
     },
     {
       name: 'Clear insights',
       description: 'Use dashboards that highlight what matters most.',
-      media: '/videos/landing/product-placeholder-3.mp4',
+      media:
+        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-3.mp4',
     },
   ];
 

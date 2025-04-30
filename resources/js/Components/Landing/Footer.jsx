@@ -35,7 +35,7 @@ export default function Footer() {
           <div className="mx-auto max-w-[100px] sm:mx-0 md:max-w-full">
             <img
               className="h-full w-full"
-              src="/images/landing/deemia-logo-footer.svg"
+              src="/deemia-logo-footer.svg"
               alt="Deemia Logo"
             />
           </div>

@@ -120,12 +120,6 @@
   }
 }
 
-<<<<<<< HEAD
-.bg-grid {
-  background-image: url('./dot.svg');
-  background-size: 4.978%;
-  background-position: 0 20px;
-=======
 @media screen and (min-width: 1152px) {
   .impact-card-wrapper:not(.active)
     .impact-thumbnail:has(+ .impact-card:hover) {
@@ -135,5 +129,4 @@
 
 .bg-grid {
   background-color: red;
->>>>>>> develop
 }

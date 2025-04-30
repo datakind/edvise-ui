@@ -18,12 +18,55 @@ import { Head } from '@inertiajs/react';
 export default function Welcome() {
   return (
     <>
-      <Head title="Deemia">
+      <Head title="Student Success Tool">
+        <meta
+          name="description"
+          content="Student Success Tool is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
           rel="stylesheet"
+        />
+
+        <link
+          rel="icon"
+          href="/images/landing/favicon-light-mode.ico"
+          type="image/x-icon"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/images/landing/favicon-dark-mode.ico"
+          type="image/x-icon"
+          media="(prefers-color-scheme: dark)"
+        />
+
+        <link
+          rel="icon"
+          href="/images/landing/favicon-light-mode.png"
+          type="image/png"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/images/landing/favicon-dark-mode.png"
+          type="image/png"
+          media="(prefers-color-scheme: dark)"
+        />
+
+        <link
+          rel="icon"
+          href="/images/landing/favicon-light-mode.svg"
+          type="image/svg+xml"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/images/landing/favicon-dark-mode.svg"
+          type="image/svg+xml"
+          media="(prefers-color-scheme: dark)"
         />
       </Head>
       <LenisProvider>
@@ -34,7 +77,6 @@ export default function Welcome() {
               <Hero />
             </div>
             <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
-              {/* <DotGrid /> */}
               <div className="z-1 relative">
                 <AdvisorsSection className="mb-24 sm:mb-40" />
 

@@ -12,7 +12,7 @@ export default function RequestDemoSection() {
             <img src="/form-thumbnail.jpg" alt="Request Demo" />
           </div>
         </div>
-        <div className="col-span-full sm:col-span-9 sm:col-start-9 sm:pt-14">
+        <div className="tb:col-span-6 tb:col-start-2 col-span-full md:col-span-9 md:col-start-9 md:pt-14">
           <DemoForm formId="request-demo-form" className="w-full" />
         </div>
       </div>

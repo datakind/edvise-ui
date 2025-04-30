@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <div className="hero">
       <div className="layout:grid">
-        <div className="hero-title col-span-10 col-start-7 mb-[32px]">
+        <div className="hero-title col-span-6 mb-[32px] md:col-span-10 md:col-start-7">
           <h1 className="mb-14 text-[42px] font-light leading-[103%] sm:text-[48px] md:mb-[72px]">
             Getting students the support they need to succeed
           </h1>
@@ -41,7 +41,10 @@ export default function Hero() {
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
-          <a className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white sm:hidden">
+          <a
+            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+            className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -56,11 +59,11 @@ export default function Hero() {
             </svg>
           </a>
           <Button
-            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
-            className="button hidden md:ml-auto md:block"
+            className="hidden md:ml-auto md:block"
             kind="dark"
+            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
           >
-            Link
+            Read more
           </Button>
         </div>
       </div>

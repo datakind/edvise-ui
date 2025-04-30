@@ -25,9 +25,9 @@ export default function ProductSection(props) {
 
   return (
     <div className={`production-section ${props.className}`}>
-      <div className="layout:grid mb-14 sm:mb-28">
-        <div className="col-span-8">
-          <p className="type:section-label mb-9 sm:mb-12">The product</p>
+      <div className="layout:grid mb-14 md:mb-28">
+        <div className="tb:col-span-4 col-span-8 md:col-span-8">
+          <p className="type:section-label mb-9 md:mb-12">The product</p>
           <h2 className="type:section-title mb-7">
             Get relevant,{' '}
             <span className="whitespace-nowrap">data-informed</span>{' '}
@@ -40,25 +40,35 @@ export default function ProductSection(props) {
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 sm:space-y-20">
+        <div className="products-wrapper tb:col-span-6 tb:col-start-2 relative col-start-1 col-end-[-1] space-y-8 md:col-span-full md:space-y-20">
           {products.map((product, index) => (
             <div
-              className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden sm:h-[625px] sm:flex-row"
+              className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden md:h-[625px] md:flex-row"
               key={product.name}
             >
-              <div className="product-copy bg-[#1E343F] p-6 text-white sm:min-w-[380px] sm:max-w-[580px] sm:basis-[42%] sm:p-12">
-                <h3 className="product-title mb-4 text-[22px] font-light sm:mb-10">
+              <div className="product-copy bg-[#1E343F] p-6 text-white md:min-w-[380px] md:max-w-[580px] md:basis-[42%] md:p-12">
+                <h3 className="product-title mb-4 text-[22px] font-light md:mb-10">
                   {product.name}
                 </h3>
-                <p className="product-number font-landing-secondary mb-8 ml-[-14px] text-[150px] leading-none tracking-[-0.05em] sm:mb-10 sm:text-[240px]">
+                <p className="product-number font-landing-secondary mb-8 ml-[-14px] text-[150px] leading-none tracking-[-0.05em] md:mb-10 md:text-[240px]">
                   0{index + 1}
                 </p>
-                <p className="product-description max-w-[300px] text-base font-light leading-[120%] sm:text-[22px]">
+                <p className="product-description max-w-[300px] text-base font-light leading-[120%] md:text-[22px]">
                   {product.description}
                 </p>
               </div>
               <div className="product-media flex flex-1 items-center justify-center bg-[#EEF2F6] p-6">
-                <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] sm:rounded-[20px]"></div>
+                <div className="media-wrapper max-w-[682px] overflow-hidden rounded-[8px] md:rounded-[20px]">
+                  <ReactPlayer
+                    url={product.media}
+                    muted
+                    loop
+                    playsinline
+                    playing
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
               </div>
             </div>
           ))}

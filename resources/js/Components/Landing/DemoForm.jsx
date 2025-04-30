@@ -98,11 +98,11 @@ export default function DemoForm({ className, formId }) {
           className="mb-4 block text-sm font-medium text-gray-700"
           htmlFor="focus-options"
         >
-          Your focus
+          Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
+          {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox(
             'talk-representative',
             'focus',
@@ -135,15 +135,13 @@ export default function DemoForm({ className, formId }) {
       </div>
       <div>
         <p className="mb-3 mt-4 text-base">
-          We will reach out to you via email within 1 business to schedule a
-          time
+          We will respond within two business days.
         </p>
 
         <p className="text-base text-[#4F4F4F]">
           <a href="/privacy-policy" className="text-[#4F4F4F] underline">
             Privacy policy
-          </a>{' '}
-          of how we handle your data
+          </a>
         </p>
       </div>
     </form>

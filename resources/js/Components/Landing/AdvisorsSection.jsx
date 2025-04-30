@@ -41,7 +41,7 @@ export default function AdvisorsSection(props) {
   return (
     <div className={`landing-advisors-section ${props.className}`}>
       <style>{`
-        @media screen and (min-width: 576px) {
+        @media screen and (min-width: 1152px) {
           .landing-advisors-section .advisor-section-grid div:nth-child(2) {
             grid-column-start: 8;
           }
@@ -50,9 +50,9 @@ export default function AdvisorsSection(props) {
           }
         }
       `}</style>
-      <div className="layout:grid mb-14 sm:mb-28">
+      <div className="layout:grid mb-14 md:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label mb-9 text-landing-gray sm:mb-12">
+          <p className="type:section-label text-landing-gray mb-9 md:mb-12">
             Hear from advisors already using Student Success Tool
           </p>
           <h2 className="type:section-title">
@@ -62,11 +62,11 @@ export default function AdvisorsSection(props) {
         </div>
       </div>
 
-      <div className="layout:grid advisor-section-grid gap-y-7 sm:gap-y-0">
+      <div className="layout:grid advisor-section-grid gap-y-7 md:gap-y-0">
         {testimonies.map((testimony, index) => (
           <div
             key={testimony.name}
-            className="col-span-full items-stretch sm:col-span-6"
+            className="tb:col-span-6 tb:col-start-2 col-span-full items-stretch md:col-span-6"
           >
             <div className="relative flex h-full flex-col">
               <div className="landing-rounded-md relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden !rounded-b-none">
@@ -74,11 +74,11 @@ export default function AdvisorsSection(props) {
                   <img
                     src={testimony.image.url}
                     alt={testimony.image.alt}
-                    className="w-full object-cover"
+                    className="h-full w-full object-cover object-center"
                   />
                 )}
               </div>
-              <div className="landing-rounded-md relative z-40 mt-[-40px] flex-1 bg-[#EEF2F6] p-6 sm:pb-12 sm:pl-7 sm:pr-14 sm:pt-7">
+              <div className="landing-rounded-md relative z-40 mt-[-40px] flex-1 bg-[#EEF2F6] p-6 md:pb-12 md:pl-7 md:pr-14 md:pt-7">
                 <div className="mb-6 flex gap-5">
                   <div className="bg-landing-orange flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full">
                     <span className="font-landing-secondary relative top-[4px] text-[28px] leading-none">

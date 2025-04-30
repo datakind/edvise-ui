@@ -15,11 +15,10 @@ export default function DotCanvas({ animation }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     dots.current = new Dots(canvas);
 
     return () => {
-      dots.kill();
+      dots.current.kill();
     };
   }, []);
 

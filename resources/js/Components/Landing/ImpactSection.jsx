@@ -70,7 +70,7 @@ export default function ImpactSection(props) {
     if (isVisible) {
       intervalRef.current = setInterval(() => {
         setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
-      }, 4000);
+      }, 5000);
     }
   }
 
@@ -85,7 +85,7 @@ export default function ImpactSection(props) {
 
           intervalRef.current = setInterval(() => {
             setActiveCardIndex(prevIndex => (prevIndex + 1) % cards.length);
-          }, 4000);
+          }, 5000);
         } else {
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
@@ -120,7 +120,7 @@ export default function ImpactSection(props) {
         <DotCanvas animation={activeCardIndex} />
       </div>
       <div className="z-1 relative">
-        <div className="layout:grid mb-16">
+        <div className="layout:grid mb-3 md:mb-16">
           <div className="col-span-8">
             <p className="type:section-label mb-12">Our impact</p>
             <h2 className="type:section-title mb-7">
@@ -132,12 +132,12 @@ export default function ImpactSection(props) {
           {cards.map((card, index) => (
             <div
               key={card.label}
-              className={`test group relative col-span-full grid cursor-pointer font-light leading-[normal] sm:col-span-4 sm:row-span-full sm:grid-rows-subgrid ${
+              className={`impact-card-wrapper group relative col-span-full grid font-light leading-[normal] tb:col-span-6 tb:col-start-2 md:col-span-4 md:row-span-full md:grid-rows-subgrid ${
                 activeCardIndex === index ? 'active' : ''
               } `}
-              onClick={() => onCardClick(index)}
             >
-              <div className="relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]">
+              {/* <div className="relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]"> */}
+              <div className="impact-thumbnail relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-[.active]:translate-y-[40px]">
                 <img
                   className="h-full w-full object-cover"
                   src={card.image.url}
@@ -145,16 +145,17 @@ export default function ImpactSection(props) {
                 />
               </div>
               <div
-                className={`${activeCardIndex === index ? 'active bg-[#EEF2F6] lg:bg-[#D5E5EE]' : 'bg-[#EEF2F6] lg:hover:bg-[#D5E5EE]'} relative z-[1] grid rounded-[40px] px-5 pb-5 pt-8 transition-colors duration-100 ease-out`}
+                className={`bg-[#D5E5EE] ${activeCardIndex === index ? 'active md:bg-[#D5E5EE] md:bg-[#EEF2F6]' : 'md:bg-[#EEF2F6] md:hover:bg-[#D5E5EE]'} impact-card relative z-[1] grid cursor-pointer rounded-[40px] px-5 pb-5 pt-8 transition-colors duration-100 ease-out`}
+                onClick={() => onCardClick(index)}
               >
                 <div className="mb-4">{card.label}</div>
-                <div className="font-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
+                <div className="font-landing-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
                   {card.title}
                 </div>
                 <div className="mb-7 text-[18px] leading-[120%]">
                   {card.description}
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="hidden items-center gap-4 md:flex">
                   <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full transition-transform duration-300 ease-out md:group-[.active]:scale-[0.25]">
                     <svg
                       className="transition-opacity duration-200 ease-out md:group-[.active]:opacity-0"
@@ -169,10 +170,10 @@ export default function ImpactSection(props) {
                     </svg>
                   </div>
                   <div
-                    className={`mr-4 h-1 grow overflow-hidden rounded-full bg-white transition-opacity ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
+                    className={`mr-4 hidden h-1 grow overflow-hidden rounded-full bg-white transition-opacity md:block ${activeCardIndex === index ? 'opacity-100' : 'opacity-0'}`}
                   >
                     <div
-                      className={`h-full w-full translate-x-[-100%] rounded-full bg-[#4F4F4F] transition-transform ${activeCardIndex === index ? 'translate-x-[0] transition-transform duration-[4000ms] ease-linear' : 'translate-x-[-100%]'}`}
+                      className={`h-full w-full translate-x-[-100%] rounded-full bg-[#4F4F4F] transition-transform ${activeCardIndex === index ? 'translate-x-[0] transition-transform duration-[5000ms] ease-linear' : 'translate-x-[-100%]'}`}
                     />
                   </div>
                 </div>

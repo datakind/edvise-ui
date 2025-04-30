@@ -7,7 +7,7 @@ export default function Faq({ className }) {
       description: null,
       faqs: [
         {
-          question: 'How the technology works?',
+          question: 'How does the technology works?',
           answer:
             'The Student Success Tool uses predictive analytics to help academic advisors support students more proactively. Below are answers to common questions about how it works and how it fits into existing advising strategies.',
         },
@@ -22,7 +22,7 @@ export default function Faq({ className }) {
             'It predicts future support needs—not just current status—and explains the top reasons behind each student’s risk.',
         },
         {
-          question: 'What kind of information will I see?',
+          question: 'How can advisors use this information?',
           answer:
             'You’ll see a support score (0–1), a "support needed" flag, and five key reasons tailored to each student.',
         },
@@ -53,7 +53,9 @@ export default function Faq({ className }) {
                   {section.faqs.map((faq, index) => (
                     <div key={faq.question + `-${index}`}>
                       <Accordion title={faq.question}>
-                        <p className="text-[20px] font-light">{faq.answer}</p>
+                        <p className="font-light tb:text-[20px]">
+                          {faq.answer}
+                        </p>
                       </Accordion>
                     </div>
                   ))}

@@ -141,7 +141,7 @@ export default function Header() {
                   <img
                     className="mt-4"
                     src="/images/landing/deemia-logo-footer.svg"
-                    alt="Deemia Logo"
+                    alt="Student Success Tool Logo"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export default function Header() {
                 <img
                   className="max-w-[110px] md:max-w-[140px]"
                   src="/images/landing/deemia-logo.svg"
-                  alt="Deemia Logo"
+                  alt="Student Success Tool Logo"
                 />
               </a>
             </div>
@@ -236,7 +236,7 @@ export default function Header() {
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"
               >
-                Request Demo
+                Request demo
               </Button>
               <button
                 type="button"

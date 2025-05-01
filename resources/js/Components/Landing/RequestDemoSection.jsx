@@ -9,7 +9,7 @@ export default function RequestDemoSection() {
             How to get started with Student Success Tool
           </h2>
           <div className="hidden overflow-hidden rounded-[40px] md:block">
-            <img src="/images/landing/form-thumbnail.jpg" alt="Request Demo" />
+            <img src="/images/landing/form-thumbnail.jpg" alt="Request demo" />
           </div>
         </div>
         <div className="col-span-full tb:col-span-6 tb:col-start-2 md:col-span-9 md:col-start-9 md:pt-14">

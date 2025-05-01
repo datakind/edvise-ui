@@ -36,7 +36,7 @@ export default function Footer() {
             <img
               className="h-full w-full"
               src="/images/landing/deemia-logo-footer.svg"
-              alt="Deemia Logo"
+              alt="Student Success Tool Logo"
             />
           </div>
         </div>

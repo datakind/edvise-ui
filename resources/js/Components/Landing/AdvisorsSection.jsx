@@ -32,7 +32,7 @@ export default function AdvisorsSection(props) {
         alt: 'Osian Sampson',
       },
       quotes: [
-        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Deemia is a must-have.',
+        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Student Success Tool is a must-have.',
         'It bridges the gap between students and advisors, ensuring that no student falls through the cracks.',
       ],
     },

@@ -9,7 +9,10 @@ export default function Hero() {
             Getting students the support they need to succeed
           </h1>
           <div className="mb-5">
-            <img src="/images/landing/deemia-text-logo.svg" alt="Deemia" />
+            <img
+              src="/images/landing/deemia-text-logo.svg"
+              alt="Student Success Tool Logo"
+            />
           </div>
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
             Is a scalable solution that empowers student support teams with

@@ -43,7 +43,7 @@ export default function Hero() {
           </p>
           <a
             href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
-            className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden"
+            className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -185,9 +185,15 @@ export default function Header() {
             <div className="col-span-2 md:col-span-4">
               <a href="/">
                 <img
+<<<<<<< HEAD
                   className="max-w-[110px] sm:max-w-[140px]"
                   src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
                   alt="Deemia Logo"
+=======
+                  className="max-w-[110px] md:max-w-[140px]"
+                  src="/images/landing/deemia-logo.svg"
+                  alt="Student Success Tool Logo"
+>>>>>>> victor
                 />
               </a>
             </div>
@@ -236,7 +242,7 @@ export default function Header() {
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"
               >
-                Request Demo
+                Request demo
               </Button>
               <button
                 type="button"

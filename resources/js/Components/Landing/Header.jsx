@@ -12,7 +12,7 @@ export default function Header() {
     () => [
       {
         label: 'The product',
-        href: '/',
+        href: '#product',
         external: false,
       },
       {
@@ -83,7 +83,7 @@ export default function Header() {
                             link.href === window.location.pathname
                               ? 'after:relative after:-top-1 after:ml-2 after:h-2.5 after:w-2.5 after:rounded-full after:bg-[#F79122] after:content-[""]'
                               : 'hover:underline',
-                            'relative flex items-center gap-3 text-[32px] leading-none tracking-[3%] text-black',
+                            'relative flex items-center gap-3 text-[32px] leading-none text-black',
                           )}
                         >
                           {link.label}

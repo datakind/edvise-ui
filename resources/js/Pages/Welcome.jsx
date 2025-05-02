@@ -78,10 +78,8 @@ export default function Welcome() {
             </div>
             <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
               <div className="z-1 relative">
-                <AdvisorsSection className="mb-24 sm:mb-40" />
-
-                <ProductSection />
-
+                <AdvisorsSection />
+                <ProductSection className="mb-40 pt-24 sm:pt-40" />
                 <ImpactSection />
 
                 <CaseStudySection className="mb-24 sm:mb-40" />

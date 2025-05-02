@@ -101,7 +101,7 @@ export default function DemoForm({ className, formId }) {
           Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
+          {renderCheckbox('learn-product', 'focus', 'Learn more')}
           {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox(
             'talk-representative',

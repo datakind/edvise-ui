@@ -24,23 +24,26 @@ export default function ProductSection(props) {
   ];
 
   return (
-    <div className={`production-section ${props.className}`}>
+    <div
+      className={`production-section pt-24 sm:pt-40 ${props.className}`}
+      id="product"
+    >
       <div className="layout:grid mb-14 md:mb-28">
-        <div className="col-span-8 tb:col-span-4 md:col-span-8">
+        <div className="tb:col-span-4 col-span-8 md:col-span-8">
           <p className="type:section-label mb-9 md:mb-12">The product</p>
           <h2 className="type:section-title mb-7">
             Get relevant,{' '}
             <span className="whitespace-nowrap">data-informed</span>{' '}
             recommendations to keep students on their learning paths
           </h2>
-          <p className="text-base font-light leading-tight text-landing-gray">
+          <p className="text-landing-gray text-base font-light leading-tight">
             Student Success Tool offers customized indicators and
             institution-specific actions to improve student outcomes.
           </p>
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 tb:col-span-6 tb:col-start-2 md:col-span-full md:space-y-20">
+        <div className="products-wrapper tb:col-span-6 tb:col-start-2 relative col-start-1 col-end-[-1] space-y-8 md:col-span-full md:space-y-20">
           {products.map((product, index) => (
             <div
               className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden md:h-[625px] md:flex-row"

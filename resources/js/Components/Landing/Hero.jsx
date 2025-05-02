@@ -8,12 +8,27 @@ export default function Hero() {
           <h1 className="mb-14 text-[42px] font-light leading-[103%] sm:text-[48px] md:mb-[72px]">
             Getting students the support they need to succeed
           </h1>
-          <div className="mb-5">
-            <img
-              src="/images/landing/deemia-text-logo.svg"
-              alt="Student Success Tool Logo"
-            />
-          </div>
+        </div>
+      </div>
+      <div className="layout:grid">
+        <div className="bg-landing-orange col-start-5 mt-[-8px] hidden h-10 w-10 items-center justify-center rounded-full md:flex">
+          <svg
+            className="h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#1f1f1f"
+          >
+            <path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z" />
+          </svg>
+        </div>
+        <div className="col-span-6 mb-5 mb-[32px] md:col-span-10 md:col-start-7">
+          <img
+            className="mb-5"
+            src="/images/landing/deemia-text-logo.svg"
+            alt="Student Success Tool Logo"
+          />
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
             Is a scalable solution that empowers student support teams with
             data-driven insights to enhance efficiency and better serve
@@ -30,7 +45,7 @@ export default function Hero() {
           />
         </div>
 
-        <div className="hero-image-overlay landing-rounded-lg tb:px-8 absolute bottom-0 left-0 flex w-full translate-y-[1px] flex-col bg-[#D5E5EE] px-5 py-6 md:h-[100px] md:flex-row md:items-center md:px-10 md:py-0">
+        <div className="hero-image-overlay landing-rounded-lg absolute bottom-0 left-0 flex w-full translate-y-[1px] flex-col bg-[#D5E5EE] px-5 py-6 tb:px-8 md:h-[100px] md:flex-row md:items-center md:px-10 md:py-0">
           <div className="mb-2 mr-8 md:mb-0">
             <img src="/images/landing/NYt-logo.svg" alt="NYT Logo" />
           </div>
@@ -40,7 +55,7 @@ export default function Hero() {
           </p>
           <a
             href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
-            className="tb:right-[26px] tb:top-[26px] absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden"
+            className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

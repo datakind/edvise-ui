@@ -58,7 +58,7 @@ export default function DemoForm({ className, formId }) {
             value={value}
             className="peer sr-only"
           />
-          <span className="checkmark border-landing-gray block flex h-6 w-6 items-center justify-center rounded-[4px] border-2">
+          <span className="checkmark block flex h-6 w-6 items-center justify-center rounded-[4px] border-2 border-landing-gray">
             <svg
               width="14"
               height="11"
@@ -101,7 +101,7 @@ export default function DemoForm({ className, formId }) {
           Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
+          {renderCheckbox('learn-product', 'focus', 'Learn more')}
           {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox(
             'talk-representative',

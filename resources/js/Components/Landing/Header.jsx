@@ -12,7 +12,7 @@ export default function Header() {
     () => [
       {
         label: 'The product',
-        href: '/',
+        href: '#product',
         external: false,
       },
       {
@@ -83,7 +83,7 @@ export default function Header() {
                             link.href === window.location.pathname
                               ? 'after:relative after:-top-1 after:ml-2 after:h-2.5 after:w-2.5 after:rounded-full after:bg-[#F79122] after:content-[""]'
                               : 'hover:underline',
-                            'relative flex items-center gap-3 text-[32px] leading-none tracking-[3%] text-black',
+                            'relative flex items-center gap-3 text-[32px] leading-none text-black',
                           )}
                         >
                           {link.label}
@@ -185,15 +185,9 @@ export default function Header() {
             <div className="col-span-2 md:col-span-4">
               <a href="/">
                 <img
-<<<<<<< Updated upstream
-                  className="max-w-[110px] md:max-w-[140px]"
-                  src="/images/landing/deemia-logo.svg"
-                  alt="Student Success Tool Logo"
-=======
                   className="max-w-[110px] sm:max-w-[140px]"
                   src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
                   alt="Deemia Logo"
->>>>>>> Stashed changes
                 />
               </a>
             </div>
@@ -237,7 +231,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-start-14 col-span-4 flex justify-end gap-1 tb:col-span-6 md:col-span-8 md:gap-8">
+            <div className="col-start-14 tb:col-span-6 col-span-4 flex justify-end gap-1 md:col-span-8 md:gap-8">
               <Button
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"

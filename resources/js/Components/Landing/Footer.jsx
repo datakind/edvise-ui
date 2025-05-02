@@ -2,7 +2,7 @@ export default function Footer() {
   const footerLinksOne = [
     {
       label: 'Contact us',
-      href: '#',
+      href: 'mailto:education@datakind.org',
     },
     {
       label: 'Press and resources',
@@ -16,11 +16,11 @@ export default function Footer() {
       href: '#',
     },
     {
-      label: 'Facebook',
+      label: 'LinkedIn',
       href: '#',
     },
     {
-      label: 'LinkedIn',
+      label: 'Facebook',
       href: '#',
     },
   ];

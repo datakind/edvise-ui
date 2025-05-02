@@ -1,7 +1,53 @@
 import clx from 'classnames';
 import Button from './Button';
+import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { router } from '@inertiajs/react';
 
 export default function DemoForm({ className, formId }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const form = useForm({
+    name: '',
+    email: '',
+    institution: '',
+    focus: [],
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    // Get all checked focus options
+    const focusInputs = document.querySelectorAll(
+      `input[name="focus"]:checked`,
+    );
+    const focusValues = Array.from(focusInputs).map(input => input.value);
+
+    form.post(route('demo.request'), {
+      data: {
+        ...form.data,
+        focus: focusValues,
+      },
+      onSuccess: () => {
+        setSubmitStatus('success');
+        form.reset();
+        // Reset checkboxes
+        focusInputs.forEach(input => (input.checked = false));
+      },
+      onError: () => {
+        setSubmitStatus('error');
+      },
+      onFinish: () => {
+        setIsSubmitting(false);
+      },
+    });
+  };
+
   const renderInputText = (
     label,
     id,
@@ -30,15 +76,17 @@ export default function DemoForm({ className, formId }) {
           type="text"
           id={inputId}
           name={name}
+          value={form.data[name]}
+          onChange={e => form.setData(name, e.target.value)}
           className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-5 pt-[calc(8px_+_0.125em)] focus:border-[#F79122] focus:ring-[#F79122]"
           required={required}
           placeholder={placeholder}
         />
-        {/* {errorMessage && (
-          <p className="absolute left-4 top-[calc(100%_-_4px)] text-[#F52020] opacity-0 peer-invalid:opacity-100">
-            {errorMessage}
+        {form.errors[name] && (
+          <p className="absolute left-4 top-[calc(100%_-_4px)] text-[#F52020]">
+            {form.errors[name]}
           </p>
-        )} */}
+        )}
       </div>
     );
   };
@@ -82,7 +130,10 @@ export default function DemoForm({ className, formId }) {
   };
 
   return (
-    <form className={clx(className, 'space-y-7 sm:space-y-6')}>
+    <form
+      onSubmit={handleSubmit}
+      className={clx(className, 'space-y-7 sm:space-y-6')}
+    >
       {renderInputText(
         'Name',
         'name',
@@ -101,11 +152,22 @@ export default function DemoForm({ className, formId }) {
           Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
-          {renderCheckbox('request-demo', 'focus', 'Request a demo')}
+          {renderCheckbox(
+            'learn-product',
+            'focus',
+            'Learn about the product',
+            'Learn about the product',
+          )}
+          {renderCheckbox(
+            'request-demo',
+            'focus',
+            'Request a demo',
+            'Request a demo',
+          )}
           {renderCheckbox(
             'talk-representative',
             'focus',
+            'Talk to a representative',
             'Talk to a representative',
           )}
         </div>
@@ -131,8 +193,23 @@ export default function DemoForm({ className, formId }) {
       )}
 
       <div className="pt-4">
-        <Button type="submit">Submit request</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit request'}
+        </Button>
       </div>
+
+      {submitStatus === 'success' && (
+        <div className="text-green-600">
+          Thank you for your interest! We will respond within two business days.
+        </div>
+      )}
+
+      {submitStatus === 'error' && (
+        <div className="text-red-600">
+          There was an error submitting your request. Please try again.
+        </div>
+      )}
+
       <div>
         <p className="mb-3 mt-4 text-base">
           We will respond within two business days.
@@ -147,3 +224,8 @@ export default function DemoForm({ className, formId }) {
     </form>
   );
 }
+
+DemoForm.propTypes = {
+  className: PropTypes.string,
+  formId: PropTypes.string.isRequired,
+};

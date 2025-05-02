@@ -73,7 +73,7 @@ export default function VideoModule({ videoUrl }) {
         <div className="video-poster landing-rounded-md relative aspect-[792/569] overflow-hidden">
           <img
             className="h-full w-full object-cover object-center"
-            src="/landing-video-poster.jpg"
+            src="gs://staging-sst-01-staging-static/landing-video-poster.jpg"
             alt="John Jay College"
           />
         </div>

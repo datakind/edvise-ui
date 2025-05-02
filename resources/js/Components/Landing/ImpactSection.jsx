@@ -13,6 +13,7 @@ export default function ImpactSection(props) {
       title: '$90M',
       description:
         'Every 100 additional grads inject up to $90 million in lifetime earnings into the economy.',
+      source: 'SSA.gov',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-1.jpg',
         alt: 'Dara Byrne',
@@ -23,6 +24,7 @@ export default function ImpactSection(props) {
       title: '$900K',
       description:
         "A bachelor's degree can boost a student's earnings by nearly a million dollars over their lifetime.",
+      source: 'SSA.gov',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-2.jpg',
         alt: 'Dara Byrne',
@@ -32,7 +34,8 @@ export default function ImpactSection(props) {
       label: 'Improved employment outcomes',
       title: '2.2%',
       description:
-        'There is a 2.2% unemployment rate for college grads – less than half the rate of those without a degree.',
+        'College grads are far less likely to be unemployed – less than half the rate of those without a degree.',
+      source: 'Bureau of Labor Statistics',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-3.jpg',
         alt: 'Dara Byrne',
@@ -42,7 +45,8 @@ export default function ImpactSection(props) {
       label: 'Stronger health and stability',
       title: '3x',
       description:
-        '3x more likely to have health coverage Graduates are three times more likely to have employer-provided health insurance.',
+        'Graduates are three times more likely to have employer-provided health insurance.',
+      source: 'US Census Bureau',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-4.jpg',
         alt: 'Dara Byrne',
@@ -52,7 +56,8 @@ export default function ImpactSection(props) {
       label: 'Better life outcomes',
       title: '2x',
       description:
-        'College grads are 2x more likely to be "very happy". Higher education is linked to greater life satisfaction.',
+        'Higher education is linked to greater life satisfaction and overall well being.',
+      source: 'Pew Research Center',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-5.jpg',
         alt: 'Dara Byrne',
@@ -137,7 +142,7 @@ export default function ImpactSection(props) {
               } `}
             >
               {/* <div className="relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-hover:translate-y-[calc(100%-20px)] md:group-[.active]:translate-y-[40px]"> */}
-              <div className="impact-thumbnail relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] bg-red transition-transform duration-300 ease-out md:translate-y-[101%] md:group-[.active]:translate-y-[40px]">
+              <div className="impact-thumbnail relative z-[0] h-56 w-full translate-y-[40px] overflow-hidden rounded-t-[40px] transition-transform duration-300 ease-out md:translate-y-[101%] md:group-[.active]:translate-y-[40px]">
                 <img
                   className="h-full w-full object-cover"
                   src={card.image.url}
@@ -152,9 +157,10 @@ export default function ImpactSection(props) {
                 <div className="font-landing-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
                   {card.title}
                 </div>
-                <div className="mb-7 text-[18px] leading-[120%]">
+                <div className="mb-2 text-[18px] leading-[120%]">
                   {card.description}
                 </div>
+                <div className="mb-7 italic opacity-50">{card.source}</div>
                 <div className="hidden items-center gap-4 md:flex">
                   <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full transition-transform duration-300 ease-out md:group-[.active]:scale-[0.25]">
                     <svg

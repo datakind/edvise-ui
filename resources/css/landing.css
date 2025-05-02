@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .layout\:max-width {
   @apply mx-auto max-w-[1600px] px-4;
 }

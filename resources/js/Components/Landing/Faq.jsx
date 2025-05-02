@@ -7,11 +7,6 @@ export default function Faq({ className }) {
       description: null,
       faqs: [
         {
-          question: 'How does the technology works?',
-          answer:
-            'The Student Success Tool uses predictive analytics to help academic advisors support students more proactively. Below are answers to common questions about how it works and how it fits into existing advising strategies.',
-        },
-        {
           question: 'What does it do?',
           answer:
             'It helps advisors identify students who may need support and offers insights into why, so they can intervene early and effectively.',
@@ -31,6 +26,11 @@ export default function Faq({ className }) {
           answer:
             'Use it to prioritize outreach and personalize support, working alongside your existing tools and expertise.',
         },
+        {
+          question: 'How is student information protected?',
+          answer:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        },
       ],
     },
   ];
@@ -40,6 +40,15 @@ export default function Faq({ className }) {
       <div className="layout:grid">
         <div className="col-span-14">
           <p className="type:section-label mb-9 sm:mb-12">FAQ</p>
+          <h2 className="type:section-title mb-4">
+            How does the technology work?
+          </h2>
+          <div className="mb-4 mb-9 text-[#4f4f4f] sm:mb-12">
+            The Student Success Tool uses predictive analytics to help academic
+            advisors support students more proactively. Below are answers to
+            common questions about how it works and how it fits into existing
+            advising strategies.
+          </div>
           <div className="w-full space-y-16 sm:space-y-32">
             {faqSections.map(section => (
               <div key={section.title} className="w-full">
@@ -53,7 +62,7 @@ export default function Faq({ className }) {
                   {section.faqs.map((faq, index) => (
                     <div key={faq.question + `-${index}`}>
                       <Accordion title={faq.question}>
-                        <p className="font-light tb:text-[20px]">
+                        <p className="tb:text-[20px] font-light">
                           {faq.answer}
                         </p>
                       </Accordion>

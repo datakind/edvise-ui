@@ -15,7 +15,7 @@ export default function RequestDemoSection() {
             />
           </div>
         </div>
-        <div className="tb:col-span-6 tb:col-start-2 col-span-full md:col-span-9 md:col-start-9 md:pt-14">
+        <div className="col-span-full tb:col-span-6 tb:col-start-2 md:col-span-9 md:col-start-9 md:pt-14">
           <DemoForm formId="request-demo-form" className="w-full" />
         </div>
       </div>

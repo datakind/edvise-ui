@@ -4,11 +4,11 @@ import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 export default function DemoForm({ className, formId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const { flash = {} } = usePage().props;
 
   const form = useForm({
     name: '',
@@ -20,7 +20,6 @@ export default function DemoForm({ className, formId }) {
   const handleSubmit = e => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
     // Get all checked focus options
     const focusInputs = document.querySelectorAll(
@@ -33,19 +32,29 @@ export default function DemoForm({ className, formId }) {
         ...form.data,
         focus: focusValues,
       },
-      onSuccess: () => {
-        setSubmitStatus('success');
-        form.reset();
-        // Reset checkboxes
-        focusInputs.forEach(input => (input.checked = false));
-      },
-      onError: () => {
-        setSubmitStatus('error');
-      },
       onFinish: () => {
         setIsSubmitting(false);
+        if (flash?.success) {
+          form.reset();
+          // Reset checkboxes
+          focusInputs.forEach(input => (input.checked = false));
+        }
       },
     });
+  };
+
+  const handleCheckboxChange = e => {
+    const { value, checked } = e.target;
+    const currentFocus = form.data.focus || [];
+
+    if (checked) {
+      form.setData('focus', [...currentFocus, value]);
+    } else {
+      form.setData(
+        'focus',
+        currentFocus.filter(item => item !== value),
+      );
+    }
   };
 
   const renderInputText = (
@@ -91,7 +100,7 @@ export default function DemoForm({ className, formId }) {
     );
   };
 
-  const renderCheckbox = (id, name, text, value) => {
+  const renderCheckbox = (id, name, text) => {
     const inputId = `${formId}-${id}`;
     return (
       <div className="flex items-center">
@@ -103,7 +112,9 @@ export default function DemoForm({ className, formId }) {
             type="checkbox"
             id={inputId}
             name={name}
-            value={value}
+            value={text}
+            onChange={handleCheckboxChange}
+            checked={form.data.focus?.includes(text)}
             className="peer sr-only"
           />
           <span className="checkmark block flex h-6 w-6 items-center justify-center rounded-[4px] border-2 border-landing-gray">
@@ -152,12 +163,11 @@ export default function DemoForm({ className, formId }) {
           Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn more')}
+          {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
           {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox(
             'talk-representative',
             'focus',
-            'Talk to a representative',
             'Talk to a representative',
           )}
         </div>
@@ -188,17 +198,9 @@ export default function DemoForm({ className, formId }) {
         </Button>
       </div>
 
-      {submitStatus === 'success' && (
-        <div className="text-green-600">
-          Thank you for your interest! We will respond within two business days.
-        </div>
-      )}
+      {flash?.success && <div className="text-green-600">{flash.success}</div>}
 
-      {submitStatus === 'error' && (
-        <div className="text-red-600">
-          There was an error submitting your request. Please try again.
-        </div>
-      )}
+      {flash?.error && <div className="text-red-600">{flash.error}</div>}
 
       <div>
         <p className="mb-3 mt-4 text-base">

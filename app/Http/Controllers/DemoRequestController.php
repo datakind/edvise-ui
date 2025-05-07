@@ -6,6 +6,8 @@ use App\Mail\DemoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class DemoRequestController extends Controller
 {
@@ -18,15 +20,26 @@ class DemoRequestController extends Controller
             'focus' => 'array',
         ]);
 
+        Log::info('Demo request received', [
+            'name' => $request->name,
+            'email' => $request->email,
+            'institution' => $request->institution,
+            'focus' => $request->focus,
+        ]);
+
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return back()->withErrors($validator->errors());
         }
 
         try {
             Mail::send(new DemoRequest($request->all()));
-            return response()->json(['message' => 'Demo request submitted successfully']);
+            return back()->with('success', 'Demo request submitted successfully');
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to send demo request'], 500);
+            Log::error('Failed to send demo request email', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Failed to send demo request: ' . $e->getMessage());
         }
     }
 }

@@ -31,4 +31,6 @@ return [
 
     'supports_credentials' => false,
 
+    'exposed_headers' => ['x-inertia'],
+
 ];

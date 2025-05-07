@@ -39,7 +39,10 @@ class DemoRequest extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.demo-request',
+            markdown: 'vendor.mail.demo-request',
+            with: [
+                'formData' => $this->formData,
+            ],
         );
     }
 }

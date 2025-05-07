@@ -1,5 +1,8 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import DemoForm from '@/Components/Landing/DemoForm';
+
 export default function DemoFormModal({ open, setOpen }) {
   return (
     <Dialog
@@ -37,7 +40,7 @@ export default function DemoFormModal({ open, setOpen }) {
               </p>
             </div>
             <div className="col-span-full sm:col-span-9 sm:col-start-10">
-              <DemoForm formId="modal-form" />
+              <DemoForm formId="modal-form" onSuccess={() => setOpen(false)} />
             </div>
           </div>
         </DialogPanel>
@@ -45,3 +48,8 @@ export default function DemoFormModal({ open, setOpen }) {
     </Dialog>
   );
 }
+
+DemoFormModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+};

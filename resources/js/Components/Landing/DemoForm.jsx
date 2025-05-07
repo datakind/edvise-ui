@@ -6,9 +6,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { usePage } from '@inertiajs/react';
 
-export default function DemoForm({ className, formId }) {
+export default function DemoForm({ className, formId, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { flash = {} } = usePage().props;
+  const { flash = {}, ziggy = {} } = usePage().props;
 
   const form = useForm({
     name: '',
@@ -32,13 +32,19 @@ export default function DemoForm({ className, formId }) {
         ...form.data,
         focus: focusValues,
       },
+      onSuccess: () => {
+        form.reset();
+        // Reset checkboxes
+        focusInputs.forEach(input => (input.checked = false));
+        // Wait for 2 seconds to show the success message before closing
+        setTimeout(() => {
+          if (onSuccess) {
+            onSuccess();
+          }
+        }, 1000);
+      },
       onFinish: () => {
         setIsSubmitting(false);
-        if (flash?.success) {
-          form.reset();
-          // Reset checkboxes
-          focusInputs.forEach(input => (input.checked = false));
-        }
       },
     });
   };
@@ -192,15 +198,19 @@ export default function DemoForm({ className, formId }) {
         true,
       )}
 
+      {flash?.success && (
+        <div className="font-bold text-green-600">{flash.success}</div>
+      )}
+
+      {flash?.error && (
+        <div className="font-bold text-red-600">{flash.error}</div>
+      )}
+
       <div className="pt-4">
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Submit request'}
         </Button>
       </div>
-
-      {flash?.success && <div className="text-green-600">{flash.success}</div>}
-
-      {flash?.error && <div className="text-red-600">{flash.error}</div>}
 
       <div>
         <p className="mb-3 mt-4 text-base">
@@ -220,4 +230,5 @@ export default function DemoForm({ className, formId }) {
 DemoForm.propTypes = {
   className: PropTypes.string,
   formId: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func,
 };

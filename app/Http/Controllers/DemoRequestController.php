@@ -20,20 +20,13 @@ class DemoRequestController extends Controller
             'focus' => 'array',
         ]);
 
-        Log::info('Demo request received', [
-            'name' => $request->name,
-            'email' => $request->email,
-            'institution' => $request->institution,
-            'focus' => $request->focus,
-        ]);
-
         if ($validator->fails()) {
             return back()->withErrors($validator->errors());
         }
 
         try {
             Mail::send(new DemoRequest($request->all()));
-            return back()->with('success', 'Demo request submitted successfully');
+            return back()->with('success', 'Demo request was submitted successfully');
         } catch (\Exception $e) {
             Log::error('Failed to send demo request email', [
                 'error' => $e->getMessage(),

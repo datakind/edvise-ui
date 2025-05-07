@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use App\Helpers\InstitutionHelper;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\DemoRequestController;
 
 // Main app entrypoint.
 
@@ -259,3 +260,5 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
         return $inst;
     });
 });
+
+Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');

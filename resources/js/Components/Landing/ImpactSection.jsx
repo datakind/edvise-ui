@@ -154,13 +154,15 @@ export default function ImpactSection(props) {
                 onClick={() => onCardClick(index)}
               >
                 <div className="mb-4">{card.label}</div>
-                <div className="font-landing-secondary mb-6 text-5xl md:text-6xl lg:text-7xl">
+                <div className="font-landing-secondary mb-6 text-5xl lg:text-7xl">
                   {card.title}
                 </div>
                 <div className="mb-2 text-[18px] leading-[120%]">
                   {card.description}
                 </div>
-                <div className="mb-7 italic opacity-50">{card.source}</div>
+                <div className="mb-7 text-sm italic opacity-50">
+                  {card.source}
+                </div>
                 <div className="hidden items-center gap-4 md:flex">
                   <div className="bg-landing-orange grid h-8 w-8 place-items-center rounded-full transition-transform duration-300 ease-out md:group-[.active]:scale-[0.25]">
                     <svg

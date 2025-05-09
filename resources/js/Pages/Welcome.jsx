@@ -76,9 +76,9 @@ export default function Welcome() {
             <div className="pt-[180px]">
               <Hero />
             </div>
-            <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 pt-20 sm:pb-44 md:pt-32">
+            <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 sm:pb-44">
               <div className="z-1 relative">
-                <AdvisorsSection />
+                <AdvisorsSection className="pt-20 md:pt-32" />
                 <ProductSection className="mb-40 pt-24 sm:pt-40" />
                 <ImpactSection />
 

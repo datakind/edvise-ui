@@ -39,7 +39,10 @@ export default function AdvisorsSection(props) {
   ];
 
   return (
-    <div className={`landing-advisors-section ${props.className}`}>
+    <div
+      className={`landing-advisors-section ${props.className}`}
+      id="advisors"
+    >
       <style>{`
         @media screen and (min-width: 1152px) {
           .landing-advisors-section .advisor-section-grid div:nth-child(2) {
@@ -52,7 +55,7 @@ export default function AdvisorsSection(props) {
       `}</style>
       <div className="layout:grid mb-14 md:mb-28">
         <div className="col-span-8">
-          <p className="type:section-label text-landing-gray mb-9 md:mb-12">
+          <p className="type:section-label mb-9 text-landing-gray md:mb-12">
             Hear from advisors already using Student Success Tool
           </p>
           <h2 className="type:section-title">
@@ -66,7 +69,7 @@ export default function AdvisorsSection(props) {
         {testimonies.map((testimony, index) => (
           <div
             key={testimony.name}
-            className="tb:col-span-6 tb:col-start-2 col-span-full items-stretch md:col-span-6"
+            className="col-span-full items-stretch tb:col-span-6 tb:col-start-2 md:col-span-6"
           >
             <div className="relative flex h-full flex-col">
               <div className="landing-rounded-md relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden !rounded-b-none">

@@ -28,6 +28,7 @@ export default function DemoForm({ className, formId, onSuccess }) {
     const focusValues = Array.from(focusInputs).map(input => input.value);
 
     form.post(route('demo.request'), {
+      preserveScroll: true,
       data: {
         ...form.data,
         focus: focusValues,
@@ -169,7 +170,7 @@ export default function DemoForm({ className, formId, onSuccess }) {
           Your interest
         </label>
         <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn about the product')}
+          {renderCheckbox('learn-product', 'focus', 'Learn more')}
           {renderCheckbox('request-demo', 'focus', 'Request a demo')}
           {renderCheckbox(
             'talk-representative',
@@ -199,11 +200,11 @@ export default function DemoForm({ className, formId, onSuccess }) {
       )}
 
       {flash?.success && (
-        <div className="font-bold text-green-600">{flash.success}</div>
+        <div className="font-medium text-green-600">{flash.success}</div>
       )}
 
       {flash?.error && (
-        <div className="font-bold text-red-600">{flash.error}</div>
+        <div className="font-medium text-red-600">{flash.error}</div>
       )}
 
       <div className="pt-4">

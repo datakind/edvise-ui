@@ -14,7 +14,7 @@ export default function CaseStudySection({ className }) {
           </div>
         </div>
         <div className="layout:grid">
-          <div className="col-span-full md:col-span-5">
+          <div className="col-span-full mb-8 md:col-span-5">
             <p className="type:body-small mb-6 max-w-80 text-[18px] font-light leading-[120%] sm:mb-0 tb:mb-4 md:mt-36">
               <a
                 href="https://www.jjay.cuny.edu/"

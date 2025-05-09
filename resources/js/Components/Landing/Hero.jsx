@@ -11,7 +11,10 @@ export default function Hero() {
         </div>
       </div>
       <div className="layout:grid">
-        <div className="bg-landing-orange col-start-5 mt-[-8px] hidden h-10 w-10 items-center justify-center rounded-full md:flex">
+        <a
+          href="#advisors"
+          className="bg-landing-orange col-start-5 mt-[-8px] hidden h-10 w-10 items-center justify-center rounded-full md:flex"
+        >
           <svg
             className="h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +25,7 @@ export default function Hero() {
           >
             <path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z" />
           </svg>
-        </div>
+        </a>
         <div className="col-span-6 mb-5 mb-[32px] md:col-span-10 md:col-start-7">
           <img
             className="mb-5"

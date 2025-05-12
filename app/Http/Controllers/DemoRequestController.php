@@ -26,7 +26,7 @@ class DemoRequestController extends Controller
 
         try {
             Mail::send(new DemoRequest($request->all()));
-            return back()->with('success', 'Demo request was submitted successfully');
+            return back()->with('success', 'Thank you! Your request was submitted successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to send demo request email', [
                 'error' => $e->getMessage(),

@@ -27,7 +27,7 @@ export default function Login({ canResetPassword, status }) {
   return (
     <AuthLayout>
       <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
-        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl">
+        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
           <Head title="login" />
           <img
             className="w-1/3 pb-12"
@@ -36,6 +36,7 @@ export default function Login({ canResetPassword, status }) {
           />
 
           <div className="pb-8 text-2xl">Welcome! Log in to get started:</div>
+
           {status && (
             <div className="mb-4 text-sm font-medium text-green-600">
               {status}

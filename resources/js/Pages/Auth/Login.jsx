@@ -11,7 +11,7 @@ import InputError from '@/Components/Modals/InputError';
 import AppLayout from '@/Layouts/AppLayout';
 import NewLayout from '@/Layouts/NewLayout';
 import AuthLayout from '@/Layouts/AuthLayout';
-
+import AuthFooter from '@/Components/AuthFooter';
 export default function Login({ canResetPassword, status }) {
   const form = useForm({
     email: '',
@@ -146,6 +146,9 @@ export default function Login({ canResetPassword, status }) {
                 Sign in with Microsoft
               </span>
             </a>
+          </div>
+          <div className="text-center">
+            <AuthFooter />
           </div>
         </div>
       </div>

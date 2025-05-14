@@ -12,6 +12,8 @@ import AppLayout from '@/Layouts/AppLayout';
 import NewLayout from '@/Layouts/NewLayout';
 import AuthLayout from '@/Layouts/AuthLayout';
 import AuthFooter from '@/Components/AuthFooter';
+import Button from '@/Components/Landing/Button';
+
 export default function Login({ canResetPassword, status }) {
   const form = useForm({
     email: '',
@@ -72,57 +74,62 @@ export default function Login({ canResetPassword, status }) {
               <InputError className="mt-2" message={form.errors.password} />
             </div>
 
-            <div className="mt-4">
-              <label className="flex items-center">
-                <Checkbox
-                  name="remember"
-                  checked={form.data.remember === 'on'}
-                  onChange={e =>
-                    form.setData(
-                      'remember',
-                      e.currentTarget.checked ? 'on' : '',
-                    )
-                  }
-                />
-                <span className="ml-2 text-sm text-gray-600">Remember me</span>
-              </label>
-            </div>
+            <div className="mt-4"></div>
 
             <div className="mt-4 flex flex-col space-y-2 md:flex-row md:items-center md:justify-between md:space-y-0">
               {canResetPassword && (
                 <div>
-                  <Link
-                    href={route('password.request')}
-                    className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Forgot your password?
-                  </Link>
+                  <label className="flex items-center">
+                    <Checkbox
+                      name="remember"
+                      checked={form.data.remember === 'on'}
+                      onChange={e =>
+                        form.setData(
+                          'remember',
+                          e.currentTarget.checked ? 'on' : '',
+                        )
+                      }
+                    />
+                    <span className="ml-2 text-sm text-gray-600">
+                      Remember me
+                    </span>
+                  </label>
                 </div>
               )}
 
               <div className="flex items-center justify-end">
                 <Link
-                  href={route('register')}
+                  href={route('password.request')}
                   className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  Need an account?
+                  Forgot your password?
                 </Link>
 
-                <PrimaryButton
+                <Button
+                  type="submit"
                   className={classNames('ml-4', {
                     'opacity-25': form.processing,
                   })}
                   disabled={form.processing}
                 >
                   Log in
-                </PrimaryButton>
+                </Button>
               </div>
             </div>
           </form>
+          <div className="mt-8 grid grid-cols-5 gap-4">
+            <div className="col-span-2 pt-2">
+              <hr></hr>
+            </div>
+            <div className="text-center text-sm text-gray-600">or</div>
+            <div className="col-span-2 pt-2">
+              <hr></hr>
+            </div>
+          </div>
           <div className="mt-12 flex flex-col space-y-4">
             <a
               href="/auth/google"
-              className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
+              className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
@@ -135,7 +142,7 @@ export default function Login({ canResetPassword, status }) {
             </a>
             <a
               href="/auth/azure"
-              className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
+              className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png"

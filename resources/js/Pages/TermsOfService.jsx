@@ -1,12 +1,13 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import NewLayout from '@/Layouts/NewLayout';
 
 const TermsOfService = () => {
   return (
-    <AppLayout title="Terms of Service">
+    <NewLayout title="Terms of Service">
       <Head title="Terms of Service" />
-      <div className="max-w-6xl mx-auto my-12 px-4 sm:px-6 lg:px-8 mb-24">
+      <div className="mx-auto my-12 mb-24 max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="prose lg:prose-xl">
           <h2 className="text-header">
             DataKind’s [AppName] Service Terms and Conditions of Use
@@ -17,7 +18,7 @@ const TermsOfService = () => {
             the “Service” or “Project”) is [AppDescription]
           </p>
           <section className="mb-6">
-            <h3 className="text-2xl font-semibold mb-2">
+            <h3 className="mb-2 text-2xl font-semibold">
               1. USE OF THE SERVICE
             </h3>
             <p>
@@ -32,7 +33,7 @@ const TermsOfService = () => {
             </p>
           </section>
           <section className="mb-6">
-            <h3 className="text-2xl font-semibold mb-2">
+            <h3 className="mb-2 text-2xl font-semibold">
               2. MODIFICATION OF TERMS OF USE
             </h3>
             <p>
@@ -52,7 +53,7 @@ const TermsOfService = () => {
             </p>
           </section>
           <section className="mb-6">
-            <h3 className="text-2xl font-semibold mb-2">
+            <h3 className="mb-2 text-2xl font-semibold">
               3. SITE USER CONDUCT
             </h3>
             <p>
@@ -77,7 +78,7 @@ const TermsOfService = () => {
               DataKind's work, or include our content in derivative works, under
               the following conditions:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>
                 <strong>Attribution:</strong> You must clearly attribute the
                 work to [AppName], and provide a link back to [AppUrl].
@@ -103,7 +104,7 @@ const TermsOfService = () => {
             </p>
           </section>
           <section className="mb-6">
-            <h3 className="text-2xl font-semibold mb-2">
+            <h3 className="mb-2 text-2xl font-semibold">
               4. INTELLECTUAL PROPERTY RIGHTS
             </h3>
             <p>
@@ -126,7 +127,7 @@ const TermsOfService = () => {
           </section>
         </div>
       </div>
-    </AppLayout>
+    </NewLayout>
   );
 };
 

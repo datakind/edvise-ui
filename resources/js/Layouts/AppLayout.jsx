@@ -207,7 +207,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 href={item.href}
                 method="post"
                 as="button"
-                className="hover:bg-gray-50 group flex w-full items-center py-3 gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]"
+                className="text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 py-3 text-left font-semibold text-[#637381] hover:bg-gray-50"
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log
                 out
@@ -217,7 +217,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 href={item.href}
                 className={classNames(
                   item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
-                  'group flex w-full items-center py-3 gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]',
+                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 py-3 text-left font-semibold text-[#637381]',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
@@ -229,7 +229,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <DisclosureButton
                 className={classNames(
                   item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
-                  'group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]',
+                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -249,7 +249,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                         subItem.name == title
                           ? 'text-[#f79222]'
                           : 'text-[#637381] hover:bg-gray-50',
-                        'block font-semibold rounded-md py-2 pl-9 pr-2 text-sm/12',
+                        'text-sm/12 block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
                       {subItem.name}
@@ -263,7 +263,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <DisclosureButton
                 className={classNames(
                   item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
-                  'group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm/12 font-semibold text-[#637381]',
+                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -283,7 +283,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                         subItem.name == title
                           ? 'text-[#f79222]'
                           : 'text-[#637381] hover:bg-gray-50',
-                        'block font-semibold rounded-md py-2 pl-9 pr-2 text-sm/12',
+                        'text-sm/12 block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
                       {subItem.name}
@@ -299,11 +299,15 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   if (isMobile) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <header className="flex items-center justify-between p-4 text-secondary-dark">
-          <AppLogo />
+          <img
+            className="w-full pb-12"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
+            alt="Student Success Tool Logo"
+          />
         </header>
-        <main className="flex flex-col items-center p-6 bg-[#637381] min-h-screen">
+        <main className="flex min-h-screen flex-col items-center bg-[#637381] p-6">
           <p className="text-center text-xl text-white">
             This application is not optimized for mobile devices at this time.
             Please visit the site on desktop.
@@ -314,9 +318,9 @@ export default function AppLayout({ title, renderHeader, children }) {
   }
 
   return (
-    <div className="bg-background flex flex-row">
+    <div className="flex flex-row bg-background">
       <header>
-        <nav className="basis-2/12 bg-white shadow-md flex flex-1 auto w-1/8 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-blue px-6 min-h-full">
+        <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
           <div className="flex flex-col justify-between">
             <ul role="list" className="flex flex-1 flex-col gap-y-12">
               <div
@@ -324,16 +328,20 @@ export default function AppLayout({ title, renderHeader, children }) {
                 key="logo"
               >
                 <a href={route('home')}>
-                  <AppLogo className="h-8 w-auto" />
+                  <img
+                    className="w-full pb-12"
+                    src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
+                    alt="Student Success Tool Logo"
+                  />
                 </a>
               </div>
               <ul>
                 {renderNav(navAboveLine)}
-                <hr className="h-1 my-8 bg-[#dfe4ea] border-0"></hr>
+                <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
                 {renderNav(navigationBelowLine)}
                 {user ? (
                   <div
-                    className="flex items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50 hidden"
+                    className="flex hidden items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50"
                     key="profile"
                   >
                     <span className="sr-only">Your profile</span>
@@ -412,28 +420,28 @@ export default function AppLayout({ title, renderHeader, children }) {
             </ul>
             {user ? (
               <a href={route('profile.edit')} className="">
-                <div className="flex pr-4 pl-4 pt-6 pb-6 items-left justify-between text-[#637381] flex-col">
-                  <div className="text-black font-semibold">{user.name}</div>
+                <div className="items-left flex flex-col justify-between pb-6 pl-4 pr-4 pt-6 text-[#637381]">
+                  <div className="font-semibold text-black">{user.name}</div>
                   <div>{user.email}</div>
                 </div>
               </a>
             ) : (
               <div
-                className="flex pr-6 pl-6 pt-6 pb-6 items-center justify-between"
+                className="flex items-center justify-between pb-6 pl-6 pr-6 pt-6"
                 id="login-register"
               >
                 <a
                   href={route('login')}
-                  className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]"
+                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
                 >
                   Login
                 </a>
-                <div className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]">
+                <div className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline">
                   &middot;
                 </div>
                 <a
                   href={route('register')}
-                  className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]"
+                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
                 >
                   Register
                 </a>
@@ -442,29 +450,39 @@ export default function AppLayout({ title, renderHeader, children }) {
           </div>
         </nav>
       </header>
-      <div className="basis-10/12 min-h-screen flex-col justify-between">
-        <main className="h-[90%] flex pt-12">{children}</main>
-        <footer className="h-[10%] flex justify-center gap-x-6 pb-12 flex items-end pr-6">
-          <a
-            href={route('privacy-policy')}
-            className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href={route('terms-of-service')}
-            className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]"
-          >
-            Terms of Service
-          </a>
-          <a
-            href={route('license')}
-            className="hover:underline flex rounded-md text-sm/12 font-semibold text-[#637381]"
-          >
-            License
-          </a>
-          <div>|</div>
-          <div>&copy; 2025 Datakind</div>
+      <div className="min-h-screen basis-10/12 flex-col justify-between">
+        <main className="flex h-[90%] pt-12">{children}</main>
+        <footer className="flex grid h-[10%] grid-cols-4 items-end justify-center pb-12 pr-6 text-black">
+          <div className="col-span-2">
+            <div className="grid grid-cols-3 gap-1 pl-8">
+              <div>
+                <a
+                  href={route('privacy-policy')}
+                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
+                >
+                  Privacy Policy
+                </a>
+              </div>
+              <div>
+                <a
+                  href={route('terms-of-service')}
+                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
+                >
+                  Terms of Service
+                </a>
+              </div>
+              <div>
+                <a
+                  href={route('license')}
+                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
+                >
+                  License
+                </a>
+              </div>
+            </div>
+          </div>
+          <div></div>
+          <div className="pr-8 text-right">&copy; 2025 Datakind</div>
         </footer>
       </div>
     </div>

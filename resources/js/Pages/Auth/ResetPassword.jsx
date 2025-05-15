@@ -4,10 +4,11 @@ import React from 'react';
 import { router } from '@inertiajs/react';
 import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';
-import AppLayout from '@/Layouts/AppLayout';
+import AuthLayout from '@/Layouts/AuthLayout';
+import Button from '@/Components/Landing/Button';
+import AuthFooter from '@/Components/AuthFooter';
 
 export default function ResetPassword({ token, email }) {
   const form = useForm({
@@ -23,11 +24,16 @@ export default function ResetPassword({ token, email }) {
     });
   }
   return (
-    <AppLayout>
-      <div className="flex">
-        <div className="max-w-2xl mx-auto mt-12 -mb-12">
+    <AuthLayout>
+      <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
+        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
           <Head title="Reset Password" />
-
+          <img
+            className="w-1/3 pb-12"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
+            alt="Student Success Tool Logo"
+          />
+          <div className="pb-8 text-2xl">Please choose a new password:</div>
           <form onSubmit={onSubmit}>
             <div>
               <InputLabel htmlFor="email">Email</InputLabel>
@@ -78,17 +84,19 @@ export default function ResetPassword({ token, email }) {
               />
             </div>
 
-            <div className="flex items-center justify-end mt-4">
-              <PrimaryButton
+            <div className="mt-4 flex items-center justify-end">
+              <Button
+                type="submit"
                 className={classNames({ 'opacity-25': form.processing })}
                 disabled={form.processing}
               >
                 Reset Password
-              </PrimaryButton>
+              </Button>
             </div>
           </form>
+          <AuthFooter />
         </div>
       </div>
-    </AppLayout>
+    </AuthLayout>
   );
 }

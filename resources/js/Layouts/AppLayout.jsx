@@ -324,7 +324,7 @@ export default function AppLayout({ title, renderHeader, children }) {
   }
 
   return (
-    <div className="flex flex-row bg-background">
+    <div className="flex flex-row bg-[#EEF2F6]">
       <header>
         <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
           <div className="flex flex-col justify-between">

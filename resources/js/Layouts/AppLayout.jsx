@@ -64,6 +64,12 @@ var navigationAboveLine = [
     ],
   },
   {
+    name: 'Data Dictionary',
+    href: route('data-dictionary'),
+    icon: BookOpenIcon,
+    visibility_type: VisibilityType.BOTH,
+  },
+  {
     name: 'Admin Actions',
     icon: Cog8ToothIcon,
     visibility_type: VisibilityType.DATAKIND_ONLY,
@@ -100,12 +106,6 @@ var navigationAboveLine = [
       },
     ],
   },
-  /*{
-    name: 'Data Dictionary',
-    href: route('data-dictionary'),
-    icon: BookOpenIcon,
-    visibility_type: VisibilityType.BOTH,
-  },*/
 ];
 
 const navigationBelowLine = [
@@ -215,23 +215,27 @@ export default function AppLayout({ title, renderHeader, children }) {
                 out
               </Link>
             ) : (
-              <a
-                href={item.href}
-                className={classNames(
-                  item.name == title ? 'text-black' : 'hover:text-black',
-                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 py-3 text-left font-semibold text-[#637381]',
-                )}
-              >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
-                {item.name}
-              </a>
+              <div className="relative">
+                <a
+                  href={item.href}
+                  className={classNames(
+                    item.name == title
+                      ? 'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black'
+                      : 'text-[#637381] hover:text-black',
+                    'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                  )}
+                >
+                  <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
+                  {item.name}
+                </a>
+              </div>
             )
           ) : item.children.some(e => e.name === title) ? (
             <Disclosure defaultOpen as="div">
               <DisclosureButton
                 className={classNames(
-                  item.name == title ? 'text-black' : 'hover:text-black',
-                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
+                  'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black',
+                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -241,14 +245,16 @@ export default function AppLayout({ title, renderHeader, children }) {
                   className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-gray-500"
                 />
               </DisclosureButton>
-              <DisclosurePanel as="ul" className="mt-1 px-2">
+              <DisclosurePanel as="ul" className="mt-1">
                 {item.children.map(subItem => (
                   <li key={subItem.name}>
                     <DisclosureButton
                       as="a"
                       href={subItem.href}
                       className={classNames(
-                        subItem.name == title ? 'text-black' : 'text-[#637381]',
+                        subItem.name == title
+                          ? 'text-black'
+                          : 'text-[#637381] hover:text-black',
                         'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
@@ -265,8 +271,8 @@ export default function AppLayout({ title, renderHeader, children }) {
             <Disclosure as="div">
               <DisclosureButton
                 className={classNames(
-                  item.name == title ? 'text-[#637381]' : 'hover:text-black',
-                  'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
+                  'text-[#637381] hover:text-black',
+                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -276,7 +282,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                   className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-black"
                 />
               </DisclosureButton>
-              <DisclosurePanel as="ul" className="mt-1 px-2">
+              <DisclosurePanel as="ul" className="mt-1">
                 {item.children.map(subItem => (
                   <li key={subItem.name}>
                     <DisclosureButton
@@ -284,13 +290,13 @@ export default function AppLayout({ title, renderHeader, children }) {
                       href={subItem.href}
                       className={classNames(
                         subItem.name == title
-                          ? 'text-[#f79222]'
+                          ? 'text-black'
                           : 'text-[#637381] hover:text-black',
-                        'text-sm/12 block rounded-md py-2 pl-9 pr-2 font-semibold',
+                        'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
                       {subItem.name == title && (
-                        <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#f79222]"></span>
+                        <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
                       )}
                       {subItem.name}
                     </DisclosureButton>

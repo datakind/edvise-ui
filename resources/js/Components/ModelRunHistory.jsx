@@ -29,10 +29,9 @@ const ModelRunHistory = props => {
   }, [props]);
 
   return (
-    <div className="w-full flex pt-16 pb-12 flex-col">
-      <div className="w-full flex justify-left">
-        <h3 className="text-lg font-semibold mb-2 flex flex-row gap-x-3">
-          <ArrowUturnLeftIcon aria-hidden="true" className="size-6 shrink-0" />{' '}
+    <div className="full flex flex-col">
+      <div className="flex w-full justify-center">
+        <h3 className="flex flex-row gap-x-3 text-center text-3xl font-semibold">
           Model Run History
         </h3>
       </div>
@@ -41,13 +40,13 @@ const ModelRunHistory = props => {
           <i>No run available yet.</i>
         </div>
       ) : (
-        <div className="w-full flex justify-center">
+        <div className="mt-8 flex w-full justify-center">
           <table
-            className="min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md"
+            className="w-full table-auto rounded-lg bg-white text-left shadow-md"
             id="model-history-table"
           >
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase">
+              <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
                 <th className="p-4 px-6">DATE</th>
                 <th className="p-4 px-6">USER</th>
                 <th className="p-4 px-6">BATCH</th>
@@ -58,7 +57,7 @@ const ModelRunHistory = props => {
             <tbody>
               {err != null ? (
                 <tr
-                  className="border-b border-gray-300 text-gray-700 text-sm font-normal leading-5"
+                  className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
                   key="error"
                 >
                   {err.response.data}
@@ -66,7 +65,7 @@ const ModelRunHistory = props => {
               ) : (
                 dataToDisplay.map((run, index) => (
                   <tr
-                    className="border-b border-gray-300 text-gray-700 text-sm font-normal leading-5"
+                    className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
                     key={run.date}
                   >
                     <td className="p-4 px-6">{run.date}</td>

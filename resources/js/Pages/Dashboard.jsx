@@ -8,8 +8,10 @@ import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import classNames from 'classnames';
+Button;
 
 import { ChartBarIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import Button from '@/Components/Landing/Button';
 
 const histogramOptions = {
   title: 'Distribution of Support Scores',
@@ -193,25 +195,25 @@ export default function Dashboard({ modelname }) {
     <AppLayout
       title="Dashboard"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
           Dashboard
         </h2>
       )}
     >
       {
-        <div className="w-full flex" id="main_area">
+        <div className="flex w-full" id="main_area">
           {loading ? (
-            <div className="flex justify-center w-full">
+            <div className="flex w-full justify-center">
               <Spinner mainMsg="Loading"></Spinner>
             </div>
           ) : error != null &&
             !(error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
             <BigDangerAlert
               mainMsg={'Error: ' + error.message}
-              className="flex h-fit mr-24 ml-24"
+              className="ml-24 mr-24 flex h-fit"
             ></BigDangerAlert>
           ) : (
-            <div className="w-full flex flex-col items-center" id="main_area">
+            <div className="flex w-full flex-col items-center" id="main_area">
               <HeaderLabel
                 className="pl-12"
                 iconObj={
@@ -229,13 +231,13 @@ export default function Dashboard({ modelname }) {
               {error != null &&
               (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
                 <>
-                  <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
-                    <div className="flex flex-row gap-x-2 justify-center items-center">
+                  <div className="flex w-full flex-row justify-between pl-12 pr-12 pt-12">
+                    <div className="flex flex-row items-center justify-center gap-x-2">
                       Run Time: <i>No run available yet.</i>
                     </div>
                   </div>
                   {error.message == 'NO_MODELS' ? (
-                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         Your institution does not have a model yet.
                       </div>
@@ -248,36 +250,36 @@ export default function Dashboard({ modelname }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         This model does not have any predictions available yet.
                       </div>
                       <div className="flex">Click below to begin one.</div>
                       <a
                         href={route('run-inference')}
-                        className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
+                        className="flex items-center justify-center rounded-lg border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
                       >
                         Start Prediction
                       </a>
                     </div>
                   )}
-                  <div className="w-full max-w-[1057px] mx-auto">
+                  <div className="mx-auto w-full max-w-[1057px]">
                     <ModelRunHistory runInfos={[]} />
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="flex flex-row justify-between w-full pr-12 pl-12 pt-12">
+                  <div className="flex w-full flex-row justify-between pl-12 pr-12 pt-12">
                     <form
                       onSubmit={applyDate}
-                      className="flex flex-row gap-x-2 justify-center items-center"
+                      className="flex flex-row items-center justify-center gap-x-2"
                     >
                       <div className="flex">Run Time:</div>
                       <div className="flex">
                         {runDatesToJobDict == undefined ||
                         Object.keys(runDatesToJobDict).length == 0 ? (
                           <select
-                            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+                            className="px-30 flex items-center justify-center rounded-lg border border-gray-200 bg-white py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                             id="run_time"
                           >
                             <option disabled value="">
@@ -286,7 +288,7 @@ export default function Dashboard({ modelname }) {
                           </select>
                         ) : (
                           <select
-                            className="flex bg-white border border-gray-200 text-gray-700 py-2 px-30 rounded-lg focus:outline-none focus:border-gray-500 justify-center items-center"
+                            className="px-30 flex items-center justify-center rounded-lg border border-gray-200 bg-white py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                             id="run_time"
                           >
                             {Object.keys(runDatesToJobDict).map(r => (
@@ -298,7 +300,7 @@ export default function Dashboard({ modelname }) {
 
                       <button
                         type="submit"
-                        className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg justify-center items-center rounded-lg"
+                        className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
                       >
                         Update View
                       </button>
@@ -308,7 +310,7 @@ export default function Dashboard({ modelname }) {
                       onClick={triggerDownload}
                       className={classNames(
                         currentRunCompleted ? 'opacity-100' : 'opacity-50',
-                        'bg-[#f79222] text-white py-2 px-3 rounded-md mb-4 flex flex-row gap-x-2 items-center justify-center',
+                        'mb-4 flex flex-row items-center justify-center gap-x-2 rounded-full bg-[#f79222] px-3 py-2 text-white',
                       )}
                       disabled={!currentRunCompleted}
                     >
@@ -320,8 +322,8 @@ export default function Dashboard({ modelname }) {
                     </button>
                   </div>
                   {currentRunCompleted ? (
-                    <div className="flex justify-between items-center flex-col m-auto">
-                      <div className="flex ml-24 mt-12 mb-12 mr-24 w-3/4 items-center justify-center h-12 border-2 border-dashed rounded-lg border-gray-500">
+                    <div className="m-auto flex flex-col items-center justify-between">
+                      <div className="mb-12 ml-24 mr-24 mt-12 flex h-12 w-3/4 items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
                         <div className="flex font-bold">
                           {outputApproved ? (
                             <>Output review completed.</>
@@ -337,7 +339,7 @@ export default function Dashboard({ modelname }) {
                         width={'800px'}
                         height={'500px'}
                       />
-                      <div className="pl-4 pr-4 pt-4 pb-4 bg-white">
+                      <div className="bg-white pb-4 pl-4 pr-4 pt-4">
                         <div className="flex justify-between">
                           <span className="text-lg">
                             Student Success Predictions
@@ -359,14 +361,14 @@ export default function Dashboard({ modelname }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col ml-24 mt-12 mr-24 w-3/4 items-center justify-center h-32 border-2 border-dashed rounded-lg border-gray-500">
+                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         Run pending. You will recieve an email once the data is
                         available for viewing.
                       </div>
                     </div>
                   )}
-                  <div className="w-full max-w-[1057px] mx-auto">
+                  <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
                     <ModelRunHistory runInfos={runs} />
                   </div>
                 </>
@@ -417,7 +419,7 @@ function PrintableChart({ chartType, data, options, width, height }) {
       {chartWrapper && (
         <a
           onClick={handleDownload}
-          className="text-xs cursor-pointer"
+          className="cursor-pointer text-xs"
           style={{
             position: 'absolute',
             top: '34px',

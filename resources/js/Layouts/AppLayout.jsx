@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
+import Footer from '@/Components/Footer';
 import AppLogo from '@/Components/Icons/AppLogo';
 import {
   Disclosure,
@@ -29,6 +30,7 @@ import {
   PlusCircleIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
+import { subtract } from 'lodash';
 
 const VisibilityType = Object.freeze({
   PUBLIC_ONLY: 'PUBLIC_ONLY',
@@ -216,7 +218,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <a
                 href={item.href}
                 className={classNames(
-                  item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
+                  item.name == title ? 'text-black' : 'hover:text-black',
                   'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 py-3 text-left font-semibold text-[#637381]',
                 )}
               >
@@ -228,7 +230,7 @@ export default function AppLayout({ title, renderHeader, children }) {
             <Disclosure defaultOpen as="div">
               <DisclosureButton
                 className={classNames(
-                  item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
+                  item.name == title ? 'text-black' : 'hover:text-black',
                   'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
                 )}
               >
@@ -246,12 +248,13 @@ export default function AppLayout({ title, renderHeader, children }) {
                       as="a"
                       href={subItem.href}
                       className={classNames(
-                        subItem.name == title
-                          ? 'text-[#f79222]'
-                          : 'text-[#637381] hover:bg-gray-50',
-                        'text-sm/12 block rounded-md py-2 pl-9 pr-2 font-semibold',
+                        subItem.name == title ? 'text-black' : 'text-[#637381]',
+                        'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
+                      {subItem.name == title && (
+                        <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
+                      )}
                       {subItem.name}
                     </DisclosureButton>
                   </li>
@@ -262,7 +265,7 @@ export default function AppLayout({ title, renderHeader, children }) {
             <Disclosure as="div">
               <DisclosureButton
                 className={classNames(
-                  item.name == title ? 'bg-gray-50' : 'hover:bg-gray-50',
+                  item.name == title ? 'text-[#637381]' : 'hover:text-black',
                   'text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 text-left font-semibold text-[#637381]',
                 )}
               >
@@ -270,7 +273,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 {item.name}
                 <ChevronRightIcon
                   aria-hidden="true"
-                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-gray-500"
+                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-black"
                 />
               </DisclosureButton>
               <DisclosurePanel as="ul" className="mt-1 px-2">
@@ -282,10 +285,13 @@ export default function AppLayout({ title, renderHeader, children }) {
                       className={classNames(
                         subItem.name == title
                           ? 'text-[#f79222]'
-                          : 'text-[#637381] hover:bg-gray-50',
+                          : 'text-[#637381] hover:text-black',
                         'text-sm/12 block rounded-md py-2 pl-9 pr-2 font-semibold',
                       )}
                     >
+                      {subItem.name == title && (
+                        <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#f79222]"></span>
+                      )}
                       {subItem.name}
                     </DisclosureButton>
                   </li>
@@ -452,38 +458,7 @@ export default function AppLayout({ title, renderHeader, children }) {
       </header>
       <div className="min-h-screen basis-10/12 flex-col justify-between">
         <main className="flex h-[90%] pt-12">{children}</main>
-        <footer className="flex grid h-[10%] grid-cols-4 items-end justify-center pb-12 pr-6 text-black">
-          <div className="col-span-2">
-            <div className="grid grid-cols-3 gap-1 pl-8">
-              <div>
-                <a
-                  href={route('privacy-policy')}
-                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
-                >
-                  Privacy Policy
-                </a>
-              </div>
-              <div>
-                <a
-                  href={route('terms-of-service')}
-                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
-                >
-                  Terms of Service
-                </a>
-              </div>
-              <div>
-                <a
-                  href={route('license')}
-                  className="text-sm/12 flex rounded-md font-semibold text-black hover:underline"
-                >
-                  License
-                </a>
-              </div>
-            </div>
-          </div>
-          <div></div>
-          <div className="pr-8 text-right">&copy; 2025 Datakind</div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

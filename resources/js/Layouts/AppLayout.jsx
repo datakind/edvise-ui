@@ -48,13 +48,13 @@ var navigationAboveLine = [
   },
 
   {
-    name: 'Dashboard',
+    name: 'Model Results',
     icon: ChartBarIcon,
     href: route('dashboard'),
     visibility_type: VisibilityType.PRIVATE_ONLY,
   },
   {
-    name: 'Actions',
+    name: 'Data & Actions',
     icon: PlusCircleIcon,
     visibility_type: VisibilityType.PRIVATE_ONLY,
     children: [

@@ -116,22 +116,26 @@ export default function RunInference() {
 
   const renderPredictionParamInputs = currentStep => {
     return (
-      <div className="flex w-full flex-col items-center justify-center">
-        <div className="flex">
+      <div className="flex w-full flex-col items-center justify-center p-12">
+        <div className="mb-12 text-3xl font-thin">Start Prediction</div>
+        <div className="flex text-gray-700">
           For the most up-to-date Student Success Tool predictions we recommend
           starting a new prediction for each semester.
         </div>
-        <div className="flex pb-6">
+        <div className="flex pb-6 text-gray-700">
           Select the model and batch that you would like to run a prediction on.
         </div>
         <form onSubmit={triggerInference}>
-          <div className="flex justify-center py-3 font-bold">
-            Step 1: Please select an existing batch or import new data.
+          <div className="justify-center py-3 font-thin">
+            <span className="text-2xl">Step 1</span> <br />
+            <span className="text-lg">
+              Please select an existing batch or import new data.
+            </span>
           </div>
           <div className="flex w-full flex-row justify-center gap-x-6">
             {batchList == undefined || batchList.length == 0 ? (
               <select
-                className="mb-4 flex w-1/2 rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                className="mb-4 w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                 id="batch_name"
               >
                 <option disabled value="">
@@ -139,30 +143,34 @@ export default function RunInference() {
                 </option>
               </select>
             ) : (
-              <select
-                className="mb-4 flex w-1/2 rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-                id="batch_name"
-              >
-                {batchList.map(b => (
-                  <option>{b.name}</option>
-                ))}
-              </select>
+              <div>
+                <select
+                  className="mb-4 w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                  id="batch_name"
+                >
+                  {batchList.map(b => (
+                    <option>{b.name}</option>
+                  ))}
+                </select>
+              </div>
             )}
-            <span className="flex font-bold text-black">or</span>
+            <span className="flex pt-1 font-thin text-black">or</span>
             <Link
               href={route('file-upload')}
               as="button"
-              className="mb-4 flex rounded-lg border border-[#f79222] bg-white px-6 py-2 font-semibold text-[#f79222]"
+              className="mb-4 flex rounded-full border border-[#f79222] bg-[#f79222] px-6 py-2 text-black"
             >
               Upload Data
             </Link>
           </div>
-          <div className="flex py-3 font-bold">
-            Step 2: Please select a model.
+          <div className="py-3 font-thin">
+            <span className="text-2xl">Step 2</span>
+            <br />
+            <span className="text-lg">Please select a model.</span>
           </div>
           {modelsList == undefined || modelsList.length == 0 ? (
             <select
-              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               <option disabled value="">
@@ -171,7 +179,7 @@ export default function RunInference() {
             </select>
           ) : (
             <select
-              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               {modelsList.map(m => (
@@ -182,7 +190,7 @@ export default function RunInference() {
           <div className="flex w-full items-end justify-end pt-12">
             <button
               type="submit"
-              className="mb-4 flex items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 font-semibold text-white"
+              className="mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 text-black"
             >
               Generate Predictions
             </button>
@@ -201,20 +209,10 @@ export default function RunInference() {
         </h2>
       )}
     >
-      <div className="flex w-full flex-col" id="main_area">
-        <HeaderLabel
-          className="pl-12"
-          iconObj={
-            <PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />
-          }
-          majorTitle="Actions"
-          minorTitle="Start Prediction"
-        ></HeaderLabel>
-        <Steppers
-          currentStep={currentStep}
-          stepsDict={steps}
-          className="pb-12 pt-32"
-        />
+      <div
+        className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white"
+        id="main_area"
+      >
         {triggeredRun
           ? renderResults(result, error)
           : renderPredictionParamInputs(currentStep)}

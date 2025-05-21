@@ -17,7 +17,8 @@ export default function ManageUploads() {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
   const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
-  const [isChangeModalPrimaryBtnDisabled, setIsChangeModalPrimaryBtnDisabled] = useState(true);
+  const [isChangeModalPrimaryBtnDisabled, setIsChangeModalPrimaryBtnDisabled] =
+    useState(true);
 
   const mockUpload1 = {
     batch_id: 'Id1',
@@ -50,8 +51,14 @@ export default function ManageUploads() {
 
   const actions = [
     { label: 'Change batch name', onClick: () => showChangeModal() },
-    { label: 'Add files to batch', onClick: () => console.log('Add files to batch clicked') },
-    { label: 'Delete batch', onClick: () => console.log('Delete batch clicked') },
+    {
+      label: 'Add files to batch',
+      onClick: () => console.log('Add files to batch clicked'),
+    },
+    {
+      label: 'Delete batch',
+      onClick: () => console.log('Delete batch clicked'),
+    },
   ];
 
   useEffect(() => {
@@ -86,11 +93,11 @@ export default function ManageUploads() {
     return <p>Error: {error.message}</p>;
   }
 
-  const handleSort = (column) => {
+  const handleSort = column => {
     sortData(column);
   };
 
-  const sortData = (column) => {
+  const sortData = column => {
     let sortedData = [...data];
 
     if (sortColumn === column && sortDirection === 'asc') {
@@ -122,7 +129,7 @@ export default function ManageUploads() {
 
   const showChangeModal = () => {
     setIsChangeModalOpen(true);
-  }
+  };
 
   const enableChangeModalPrimaryBtn = () => {
     setIsChangeModalPrimaryBtnDisabled(false);
@@ -131,49 +138,62 @@ export default function ManageUploads() {
   const closeChangeModal = () => {
     setIsChangeModalOpen(false);
     setIsChangeModalPrimaryBtnDisabled(true);
-  }
+  };
 
   const changeBatchName = () => {
     //TODO: Make necessary backend calls to update the batch name.
     console.log('Updating batch name....');
     setIsChangeModalOpen(false);
-  }
+  };
 
   if (isChangeModalOpen) {
     return (
       <ActionSection>
-          <DialogModal isOpen={isChangeModalOpen} onClose={closeChangeModal}>
-            <DialogModal.Content title={'Change batch name'}>
-              <div className="mt-4">
-                <TextInput
-                  className="mt-1 block w-3/4"
-                  placeholder="OldBatchName"
-                  onChange={() => enableChangeModalPrimaryBtn()}
-                />
-              </div>
-            </DialogModal.Content>
-            <DialogModal.Footer>
-              <SecondaryButton style={{ 
-                background: 'white', 
-                color: '#f79222', 
-                border: '1px solid #f79222', 
-                textTransform: 'none', 
-                fontFamily: 'Helvetica Neue', 
-                fontSize: '16px', 
-                lineHeight: '24px', 
-                fontWeight: '500', 
-                marginRight: '8px' }} onClick={closeChangeModal}>Cancel</SecondaryButton>
-              <PrimaryButton style={{ 
-                background: '#f79222', 
-                color: 'white', 
+        <DialogModal isOpen={isChangeModalOpen} onClose={closeChangeModal}>
+          <DialogModal.Content title={'Change batch name'}>
+            <div className="mt-4">
+              <TextInput
+                className="mt-1 block w-3/4"
+                placeholder="OldBatchName"
+                onChange={() => enableChangeModalPrimaryBtn()}
+              />
+            </div>
+          </DialogModal.Content>
+          <DialogModal.Footer>
+            <SecondaryButton
+              style={{
+                background: 'white',
+                color: '#f79222',
+                border: '1px solid #f79222',
                 textTransform: 'none',
-                fontFamily: 'Helvetica Neue', 
-                fontSize: '16px', 
-                lineHeight: '24px', 
-                fontWeight: '500', 
-                opacity: isChangeModalPrimaryBtnDisabled ? '0.5' : '1' }} disabled={isChangeModalPrimaryBtnDisabled} onClick={changeBatchName}>Update</PrimaryButton>
-            </DialogModal.Footer>
-          </DialogModal>
+                fontFamily: 'Helvetica Neue',
+                fontSize: '16px',
+                lineHeight: '24px',
+                fontWeight: '500',
+                marginRight: '8px',
+              }}
+              onClick={closeChangeModal}
+            >
+              Cancel
+            </SecondaryButton>
+            <PrimaryButton
+              style={{
+                background: '#f79222',
+                color: 'white',
+                textTransform: 'none',
+                fontFamily: 'Helvetica Neue',
+                fontSize: '16px',
+                lineHeight: '24px',
+                fontWeight: '500',
+                opacity: isChangeModalPrimaryBtnDisabled ? '0.5' : '1',
+              }}
+              disabled={isChangeModalPrimaryBtnDisabled}
+              onClick={changeBatchName}
+            >
+              Update
+            </PrimaryButton>
+          </DialogModal.Footer>
+        </DialogModal>
       </ActionSection>
     );
   }
@@ -182,43 +202,52 @@ export default function ManageUploads() {
     <AppLayout
       title="Manage Uploads"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
           Manage Uploads
         </h2>
       )}
     >
-      <div className="w-full flex flex-col pl-12" id="main_area">
-        <HeaderLabel
-          iconObj={
-            <PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />
-          }
-          majorTitle="Actions"
-          minorTitle="Manage Uploads"
-        ></HeaderLabel>
-        <div className="w-full flex pt-16">
+      <div
+        className="m-12 flex w-full flex-col rounded-3xl bg-white"
+        id="main_area"
+      >
+        <div className="flex w-full pt-16">
           <table
-            className="min-w-[60%] max-w-[90%] table-auto text-left rounded-lg bg-white shadow-md"
+            className="min-w-[60%] max-w-[90%] table-auto rounded-lg bg-white text-left shadow-md"
             id="uploads-table"
           >
             <thead>
-              <tr className='bg-gray-50 border-b border-gray-300 text-gray-500 text-xs font-medium leading-normal tracking-[0.6px] uppercase'>
-                <th className='p-4 px-6'>
+              <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
+                <th className="p-4 px-6">
                   <button onClick={() => handleSort('batch')}>
-                    <span className='inline-flex align-middle pr-2'>BATCH</span><SortIcon />
+                    <span className="inline-flex pr-2 align-middle">BATCH</span>
+                    <SortIcon />
                   </button>
                 </th>
-                <th className='p-4 px-6'>
+                <th className="p-4 px-6">
                   <button onClick={() => handleSort('files')}>
-                    <span className='inline-flex align-middle pr-2'>FILES</span><SortIcon />
-                  </button></th>
-                <th className='p-4 px-6'><button onClick={() => handleSort('modified_by')}>
-                  <span className='inline-flex align-middle pr-2'>MODIFIED BY</span><SortIcon />
-                </button></th>
-                <th className='p-4 px-6'><button onClick={() => handleSort('date_modified')}>
-                  <span className='inline-flex align-middle pr-2'>DATE MODIFIED</span><SortIcon />
-                </button></th>
-                <th className='p-4 px-6'>
-                  <span className='inline-flex align-middle pr-2'>ACTIONS</span>
+                    <span className="inline-flex pr-2 align-middle">FILES</span>
+                    <SortIcon />
+                  </button>
+                </th>
+                <th className="p-4 px-6">
+                  <button onClick={() => handleSort('modified_by')}>
+                    <span className="inline-flex pr-2 align-middle">
+                      MODIFIED BY
+                    </span>
+                    <SortIcon />
+                  </button>
+                </th>
+                <th className="p-4 px-6">
+                  <button onClick={() => handleSort('date_modified')}>
+                    <span className="inline-flex pr-2 align-middle">
+                      DATE MODIFIED
+                    </span>
+                    <SortIcon />
+                  </button>
+                </th>
+                <th className="p-4 px-6">
+                  <span className="inline-flex pr-2 align-middle">ACTIONS</span>
                 </th>
               </tr>
             </thead>
@@ -229,7 +258,7 @@ export default function ManageUploads() {
                   <></>
                 ) : (
                   <tr
-                    className="border-b border-gray-300 text-gray-700 text-sm font-normal leading-5"
+                    className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
                     key={upload.batch_id}
                   >
                     <td className="p-4 px-6">{upload.name}</td>

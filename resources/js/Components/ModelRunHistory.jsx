@@ -31,9 +31,9 @@ const ModelRunHistory = props => {
   return (
     <div className="full flex flex-col">
       <div className="flex w-full justify-center">
-        <h3 className="flex flex-row gap-x-3 text-center text-3xl font-semibold">
+        <div className="flex flex-row gap-x-3 text-center text-3xl font-light">
           Model Run History
-        </h3>
+        </div>
       </div>
       {dataToDisplay.length == 0 ? (
         <div className="flex">

@@ -55,7 +55,7 @@ export default function FileUpload() {
 
   const renderProcessing = () => {
     return (
-      <div className="flex justify-center w-full">
+      <div className="flex w-full justify-center">
         <Spinner mainMsg="Validation in progress"></Spinner>
       </div>
     );
@@ -69,13 +69,13 @@ export default function FileUpload() {
       let msg =
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
-        <div className="flex flex-col pr-24 pl-24">
+        <div className="flex flex-col pl-24 pr-24">
           <BigDangerAlert mainMsg={msg}></BigDangerAlert>
         </div>
       );
     }
     return (
-      <div className="flex flex-col pr-24 pl-24 gap-y-24">
+      <div className="flex flex-col gap-y-24 pl-24 pr-24">
         <BigSuccessAlert
           mainMsg="Prediction initiated!"
           msgDetails={
@@ -94,12 +94,12 @@ export default function FileUpload() {
     if (batchCreationResult !== 'ok') {
       let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
-        <div className="flex flex-col pr-24 pl-24">
+        <div className="flex flex-col pl-24 pr-24">
           <BigDangerAlert mainMsg={msg}></BigDangerAlert>
-          <div className="flex flex-row justify-between w-full items-end pt-48">
+          <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}
-              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              className="mb-4 rounded-lg bg-[#f79222] px-3 px-6 py-2 font-semibold text-white"
             >
               Upload Data
             </Link>
@@ -109,15 +109,15 @@ export default function FileUpload() {
     }
     if (!startPrediction) {
       return (
-        <div className="flex flex-col pr-24 pl-24 gap-y-24">
+        <div className="flex flex-col gap-y-24 pl-24 pr-24">
           <BigSuccessAlert mainMsg="Batch creation successful!"></BigSuccessAlert>
-          <div className="flex justify-end w-full items-end">
+          <div className="flex w-full items-end justify-end">
             <button
               id="button_content"
               onClick={() => setCurrentStep(4)}
               className={classNames(
                 'opacity-100',
-                'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 justify-center flex',
+                'mb-4 flex justify-center rounded-full bg-[#f79222] px-3 px-6 py-2 text-black',
               )}
             >
               Start Prediction
@@ -139,16 +139,16 @@ export default function FileUpload() {
     }
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
-        <div className="flex flex-col pr-24 pl-24">
+        <div className="flex flex-col pl-24 pr-24">
           <BigDangerAlert
             mainMsg="[ERROR] The following files must be re-uploaded"
             msgDict={validationResults}
             excludeValue="ok"
           ></BigDangerAlert>
-          <div className="flex flex-row justify-between w-full items-end pt-48">
+          <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}
-              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              className="mb-4 rounded-lg bg-[#f79222] px-3 px-6 py-2 text-black"
             >
               Back
             </Link>
@@ -157,7 +157,7 @@ export default function FileUpload() {
               href={route('file-upload')}
               as="button"
               disabled={true}
-              className="opacity-50 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-50"
             >
               Next
             </Link>
@@ -166,20 +166,20 @@ export default function FileUpload() {
       );
     }
     return (
-      <div className="flex flex-col pr-24 pl-24">
+      <div className="flex flex-col pl-24 pr-24">
         <BigSuccessAlert
           mainMsg="Data validation successful!"
           msgDetails="Your data has been successfully validated. You can now proceed to name the folder and confirm the upload."
         ></BigSuccessAlert>
-        <div className="flex flex-row justify-between w-full items-end pt-48">
+        <div className="flex w-full flex-row items-end justify-between pt-48">
           <Link
             href={route('file-upload')}
-            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            className="mb-4 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
           >
             Back
           </Link>
           <button
-            className="opacity-100 px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+            className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-100"
             onClick={() => setCurrentStep(3)}
           >
             Next
@@ -191,14 +191,14 @@ export default function FileUpload() {
 
   function validationButtonDisable(disabled) {
     return (
-      <div className="flex w-full justify-end items-end">
+      <div className="flex w-full items-end justify-end">
         <button
           id="button_content"
           onClick={triggerUpload}
           disabled={disabled}
           className={classNames(
             disabled ? 'opacity-50' : 'opacity-100',
-            'px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4',
+            'mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black',
           )}
         >
           Run Validation
@@ -219,29 +219,29 @@ export default function FileUpload() {
 
   const renderUpload = (files, fileStatus) => {
     return (
-      <div>
+      <div className="text-[#4F4F4F]">
         <div className="flex items-center justify-center">
           Please upload both course-level and student semester files to generate
           predictions.
         </div>
-        <div className="flex items-center justify-center w-full">
+        <div className="flex w-full items-center justify-center">
           Data can be uploaded to train a model or start an inference run for
           new dashboard results.
         </div>
-        <div className="flex items-center justify-center w-full items-center justify-center w-full pr-24 pl-24 pt-12">
+        <div className="flex w-full items-center justify-center pl-24 pr-24 pt-12">
           <label
             id="drop-zone"
-            className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 border-gray-300"
+            className="flex min-h-32 w-full cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed border-[#f79222] bg-gray-50 hover:bg-gray-100"
             onDragOver={dragOverImageChange}
             onDragLeave={dragLeaveChange}
             onDrop={dropHandle}
           >
-            <div className="flex flex-col items-center justify-center pt-5 pb-6 gap-y-2">
+            <div className="flex flex-col items-center justify-center gap-y-2 pb-6 pt-5">
               <DocumentDuplicateIcon
                 aria-hidden="true"
                 className="size-6 shrink-0 text-gray-500"
               />
-              <p className="mb-2 text-md text-black font-semibold">
+              <p className="text-md mb-2 font-semibold text-black">
                 Click to upload or drag and drop
               </p>
               <p className="text-xs text-gray-500">CSV (less than 1 GB)</p>
@@ -254,60 +254,76 @@ export default function FileUpload() {
                 multiple="True"
               />
             </div>
+            {files.map((f, idx) => (
+              <li className="list-none flex-col" key={f.name + idx}>
+                <div className="flex w-full justify-between">
+                  <div className="my-3 flex rounded-full bg-[#F79222] px-3 py-1 text-black">
+                    {' '}
+                    {fileStatus[f.name] == undefined ? (
+                      <div className="mr-2">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g clipPath="url(#clip0_961_15637)">
+                            <path
+                              d="M8.99998 0.506248C4.3031 0.506248 0.506226 4.30312 0.506226 9C0.506226 13.6969 4.3031 17.5219 8.99998 17.5219C13.6969 17.5219 17.5219 13.6969 17.5219 9C17.5219 4.30312 13.6969 0.506248 8.99998 0.506248ZM8.99998 16.2562C5.00623 16.2562 1.77185 12.9937 1.77185 9C1.77185 5.00625 5.00623 1.77187 8.99998 1.77187C12.9937 1.77187 16.2562 5.03437 16.2562 9.02812C16.2562 12.9937 12.9937 16.2562 8.99998 16.2562Z"
+                              fill="black"
+                            />
+                            <path
+                              d="M11.4187 6.38437L8.07183 9.64687L6.55308 8.15625C6.29996 7.90312 5.90621 7.93125 5.65308 8.15625C5.39996 8.40937 5.42808 8.80312 5.65308 9.05625L7.45308 10.8C7.62183 10.9687 7.84683 11.0531 8.07183 11.0531C8.29683 11.0531 8.52183 10.9687 8.69058 10.8L12.3187 7.3125C12.5718 7.05937 12.5718 6.66562 12.3187 6.4125C12.0656 6.15937 11.6718 6.15937 11.4187 6.38437Z"
+                              fill="black"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_961_15637">
+                              <rect width="18" height="18" fill="white" />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                    ) : (
+                      <XMarkIcon
+                        aria-hidden="true"
+                        className="inline-block size-5 shrink-0 align-middle font-bold text-red-500"
+                      />
+                    )}{' '}
+                    <DocumentIcon
+                      aria-hidden="true"
+                      className="inline-block size-5 shrink-0 align-middle text-black"
+                    />
+                    {f.name}
+                  </div>{' '}
+                  <button onClick={() => remove(f.name)}>
+                    <TrashIcon
+                      aria-hidden="true"
+                      className="inline-block flex size-5 shrink-0 align-middle"
+                    />
+                  </button>
+                </div>
+              </li>
+            ))}
           </label>
         </div>
-        <div className="flex py-12 w-full mx-auto pl-24 pr-24">
+        <div className="mx-auto flex w-full py-12 pl-24 pr-24">
           {files == undefined || files.length == 0 ? (
             validationButtonDisable(true)
           ) : (
             <ul
-              className="flex flex-col gap-y-1 justify-stretch items-stretch font-semibold text-gray-600 w-full"
+              className="flex w-full flex-col items-stretch justify-stretch gap-y-1 font-semibold text-gray-600"
               id="files-show"
             >
               <div className="flex justify-center pb-6">
-                <SuccessAlert
-                  className="flex"
-                  errDict={fileStatus}
-                  mainMsg="Submission can be uploaded!"
-                ></SuccessAlert>
                 <DangerAlert
                   className="flex"
                   errDict={fileStatus}
                   mainMsg="There were errors with your submission:"
                 ></DangerAlert>
               </div>
-              {files.map((f, idx) => (
-                <li className="flex-col" key={f.name + idx}>
-                  <div className="flex justify-between w-full">
-                    <div className="flex">
-                      {' '}
-                      {fileStatus[f.name] == undefined ? (
-                        <CheckIcon
-                          aria-hidden="true"
-                          className="inline-block align-middle size-5 shrink-0 text-green-400 font-bold"
-                        />
-                      ) : (
-                        <XMarkIcon
-                          aria-hidden="true"
-                          className="inline-block align-middle size-5 shrink-0 text-red-500 font-bold"
-                        />
-                      )}{' '}
-                      <DocumentIcon
-                        aria-hidden="true"
-                        className="inline-block align-middle size-5 shrink-0"
-                      />
-                      {f.name}
-                    </div>{' '}
-                    <button onClick={() => remove(f.name)}>
-                      <TrashIcon
-                        aria-hidden="true"
-                        className="flex inline-block align-middle size-5 shrink-0"
-                      />
-                    </button>
-                  </div>
-                  <hr className="flex h-[2px] my-2 bg-gray-300 w-full border-0"></hr>
-                </li>
-              ))}
+
               {validationButton(files, fileStatus)}
             </ul>
           )}
@@ -559,7 +575,7 @@ export default function FileUpload() {
         <div className="mb-6">
           <label
             htmlFor="batchName"
-            className="block text-md font-medium text-gray-700"
+            className="text-md block font-medium text-gray-700"
           >
             Optional: Give your batch a meaningful name.
           </label>
@@ -567,7 +583,7 @@ export default function FileUpload() {
             type="text"
             name="batchName"
             id="batchName"
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
+            className="mt-1 w-full rounded-md border border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
             value={batchName}
             onChange={e => setBatchName(e.target.value)}
             placeholder="Inference Run 2024 Fall Cohort 1"
@@ -577,16 +593,16 @@ export default function FileUpload() {
             Batch_YYYYMMDD_TIMESTAMP)
           </p>
         </div>
-        <div className="flex flex-row justify-between w-full items-end pt-24">
+        <div className="flex w-full flex-row items-end justify-between pt-24">
           <Link
             href={route('file-upload')}
-            className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4 -ml-24"
+            className="-ml-24 mb-4 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
           >
             Back
           </Link>
-          <div className="flex -mr-24">
+          <div className="-mr-24 flex">
             <button
-              className="px-6 bg-white text-[#f79222] border border-[#f79222] font-semibold py-2 px-3 rounded-lg mb-4 mr-4"
+              className="mb-4 mr-4 rounded-full border border-[#f79222] bg-white px-3 px-6 py-2 font-semibold text-[#f79222]"
               onClick={() => {
                 // Also start the prediction so set it to true.
                 createBatch(true);
@@ -595,7 +611,7 @@ export default function FileUpload() {
               Save and start prediction
             </button>
             <button
-              className="px-6 bg-[#f79222] text-white font-semibold py-2 px-3 rounded-lg mb-4"
+              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
               onClick={() => {
                 // We don't start the prediction so set it to false.
                 createBatch(false);
@@ -647,7 +663,7 @@ export default function FileUpload() {
 
   const renderStartPrediction = () => {
     return (
-      <div className="flex flex-col items-center justify-center w-full">
+      <div className="flex w-full flex-col items-center justify-center">
         <div className="flex">
           For the most up-to-date SST predictions we recommend starting a new
           prediction for each semester.
@@ -659,7 +675,7 @@ export default function FileUpload() {
           <div className="flex py-3 font-bold">Please select a model.</div>
           {modelsList == undefined || modelsList.length == 0 ? (
             <select
-              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               <option disabled value="">
@@ -668,7 +684,7 @@ export default function FileUpload() {
             </select>
           ) : (
             <select
-              className="flex bg-white border border-gray-200 text-gray-700 py-2 px-6 mb-4 w-full rounded-lg focus:outline-none focus:border-gray-500"
+              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               {modelsList.map(m => (
@@ -676,10 +692,10 @@ export default function FileUpload() {
               ))}
             </select>
           )}
-          <div className="flex w-full justify-end items-end pt-12">
+          <div className="flex w-full items-end justify-end pt-12">
             <button
               type="submit"
-              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center font-semibold rounded-lg"
+              className="mb-4 flex items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 font-semibold text-white"
             >
               Generate Predictions
             </button>
@@ -721,24 +737,20 @@ export default function FileUpload() {
     <AppLayout
       title="Upload Data"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
           FileUpload
         </h2>
       )}
     >
-      <div className="w-full flex flex-col" id="main_area">
-        <HeaderLabel
-          className="pl-12"
-          iconObj={
-            <PlusCircleIcon aria-hidden="true" className="size-6 shrink-0" />
-          }
-          majorTitle="Actions"
-          minorTitle="Upload Data"
-        ></HeaderLabel>
+      <div
+        className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"
+        id="main_area"
+      >
+        <div className="text-center text-3xl font-thin">Upload Data</div>
         <Steppers
           currentStep={currentStep}
           stepsDict={steps}
-          className="pt-32 pb-12"
+          className="pb-12 pt-24"
         />
 
         {currentStep === 1

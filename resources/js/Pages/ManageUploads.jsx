@@ -208,12 +208,15 @@ export default function ManageUploads() {
       )}
     >
       <div
-        className="m-12 flex w-full flex-col rounded-3xl bg-white"
+        className="m-12 flex w-full flex-col justify-center rounded-3xl bg-white"
         id="main_area"
       >
-        <div className="flex w-full pt-16">
+        <div className="pb-12 text-center text-3xl font-thin">
+          Manage Uploads
+        </div>
+        <div className="mx-auto flex w-full">
           <table
-            className="min-w-[60%] max-w-[90%] table-auto rounded-lg bg-white text-left shadow-md"
+            className="mx-auto table-auto rounded-lg bg-white text-left shadow-md"
             id="uploads-table"
           >
             <thead>

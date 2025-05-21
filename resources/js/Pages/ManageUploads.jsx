@@ -199,19 +199,12 @@ export default function ManageUploads() {
   }
 
   return (
-    <AppLayout
-      title="Manage Uploads"
-      renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
-          Manage Uploads
-        </h2>
-      )}
-    >
+    <AppLayout title="Manage Uploads">
       <div
-        className="m-12 flex w-full flex-col justify-center rounded-3xl bg-white"
+        className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white"
         id="main_area"
       >
-        <div className="pb-12 text-center text-3xl font-thin">
+        <div className="py-12 text-center text-3xl font-thin">
           Manage Uploads
         </div>
         <div className="mx-auto flex w-full">

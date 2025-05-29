@@ -94,6 +94,17 @@ Route::middleware(array_filter([
     }
 )->name('dashboard');
 
+// The default home page when logged in.
+Route::middleware(array_filter([
+    'auth',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/new-home',
+    function () {
+        return Inertia::render('NewHome');
+    }
+)->name('new-home');
+
 // difficult to get params working with named routes
 Route::middleware(array_filter([
     'auth',

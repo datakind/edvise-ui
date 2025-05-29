@@ -6,6 +6,7 @@ import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
 import AppLogo from '@/Components/Icons/AppLogo';
+import '../../css/landing.css';
 import {
   Disclosure,
   DisclosureButton,
@@ -42,7 +43,7 @@ const VisibilityType = Object.freeze({
 var navigationAboveLine = [
   {
     name: 'Home',
-    href: route('home'),
+    href: route('new-home'),
     icon: HomeIcon,
     visibility_type: VisibilityType.BOTH,
   },
@@ -222,7 +223,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                     item.name == title
                       ? 'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black'
                       : 'text-[#637381] hover:text-black',
-                    'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                    'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
                   )}
                 >
                   <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
@@ -235,7 +236,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <DisclosureButton
                 className={classNames(
                   'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -272,7 +273,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <DisclosureButton
                 className={classNames(
                   'text-[#637381] hover:text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] w-full items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />

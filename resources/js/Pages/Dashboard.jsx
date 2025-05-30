@@ -218,8 +218,10 @@ export default function Dashboard({ modelname }) {
           ) : (
             <div className="flex w-full flex-col items-center" id="main_area">
               <div className="text-center text-5xl font-light">Dashboard</div>
-              <div className="text-centertext-xl mt-6 font-light">
-                {modelInfo == null || modelInfo == {} ? '' : modelInfo.name}
+              <div className="mt-4 text-center text-lg font-light">
+                {modelInfo == null || modelInfo == {}
+                  ? ''
+                  : `Current model: ${modelInfo.name}`}
               </div>
 
               {error != null &&

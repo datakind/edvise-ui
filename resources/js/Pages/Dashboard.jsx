@@ -201,7 +201,10 @@ export default function Dashboard({ modelname }) {
       )}
     >
       {
-        <div className="flex w-full" id="main_area">
+        <div
+          className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"
+          id="main_area"
+        >
           {loading ? (
             <div className="flex w-full justify-center">
               <Spinner mainMsg="Loading"></Spinner>
@@ -214,19 +217,10 @@ export default function Dashboard({ modelname }) {
             ></BigDangerAlert>
           ) : (
             <div className="flex w-full flex-col items-center" id="main_area">
-              <HeaderLabel
-                className="pl-12"
-                iconObj={
-                  <ChartBarIcon
-                    aria-hidden="true"
-                    className="size-6 shrink-0"
-                  />
-                }
-                majorTitle="Dashboard"
-                minorTitle={
-                  modelInfo == null || modelInfo == {} ? '' : modelInfo.name
-                }
-              ></HeaderLabel>
+              <div className="text-center text-5xl font-light">Dashboard</div>
+              <div className="text-centertext-xl mt-6 font-light">
+                {modelInfo == null || modelInfo == {} ? '' : modelInfo.name}
+              </div>
 
               {error != null &&
               (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
@@ -242,7 +236,7 @@ export default function Dashboard({ modelname }) {
                         Your institution does not have a model yet.
                       </div>
                       <div className="flex">
-                        Please contact Datakind to set up your model at{' '}
+                        Please contact Datakind to set up your model at&nbsp;
                         <a href="mailto:education@datakind.org?subject=SST%20Inquiry">
                           education@datakind.org
                         </a>

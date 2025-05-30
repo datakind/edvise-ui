@@ -246,14 +246,14 @@ export default function Dashboard({ modelname }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
+                    <div className="my-12 ml-24 mr-24 flex h-32 w-3/4 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         This model does not have any predictions available yet.
                       </div>
                       <div className="flex">Click below to begin one.</div>
                       <a
                         href={route('run-inference')}
-                        className="flex items-center justify-center rounded-lg border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
+                        className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
                       >
                         Start Prediction
                       </a>

@@ -54,7 +54,7 @@ export default function AdvisorsSection(props) {
         }
       `}</style>
       <div
-        className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"
+        className="mx-12 mb-12 flex w-[93%] flex-col rounded-3xl bg-white p-12"
         id="main_area"
       >
         <div className="pb-12 text-center text-3xl font-thin">

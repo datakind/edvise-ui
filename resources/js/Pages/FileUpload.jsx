@@ -148,7 +148,7 @@ export default function FileUpload() {
           <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}
-              className="mb-4 rounded-lg bg-[#f79222] px-3 px-6 py-2 text-black"
+              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
             >
               Back
             </Link>
@@ -684,7 +684,7 @@ export default function FileUpload() {
             </select>
           ) : (
             <select
-              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               {modelsList.map(m => (
@@ -695,7 +695,7 @@ export default function FileUpload() {
           <div className="flex w-full items-end justify-end pt-12">
             <button
               type="submit"
-              className="mb-4 flex items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 font-semibold text-white"
+              className="mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 font-semibold text-white"
             >
               Generate Predictions
             </button>

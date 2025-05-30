@@ -117,6 +117,12 @@ const navigationBelowLine = [
     visibility_type: VisibilityType.BOTH,
   },*/
   {
+    name: 'Settings',
+    href: route('profile.edit'),
+    icon: Cog8ToothIcon,
+    visibility_type: VisibilityType.PRIVATE_ONLY,
+  },
+  {
     name: 'Logout',
     href: route('logout'),
     icon: ArrowRightStartOnRectangleIcon,
@@ -210,7 +216,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 href={item.href}
                 method="post"
                 as="button"
-                className="text-sm/12 group flex w-full items-center gap-x-3 rounded-md p-2 py-3 text-left font-semibold text-[#637381] hover:bg-gray-50"
+                className="text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold text-[#637381] hover:text-black"
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log
                 out
@@ -432,12 +438,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               </ul>
             </ul>
             {user ? (
-              <a href={route('profile.edit')} className="">
-                <div className="items-left flex flex-col justify-between pb-6 pl-4 pr-4 pt-6 text-[#637381]">
-                  <div className="font-semibold text-black">{user.name}</div>
-                  <div>{user.email}</div>
-                </div>
-              </a>
+              <div></div>
             ) : (
               <div
                 className="flex items-center justify-between pb-6 pl-6 pr-6 pt-6"

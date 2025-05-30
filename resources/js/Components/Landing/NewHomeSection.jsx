@@ -57,7 +57,7 @@ export default function AdvisorsSection(props) {
         className="mx-12 mb-12 flex w-[93%] flex-col rounded-3xl bg-white p-12"
         id="main_area"
       >
-        <div className="pb-12 text-center text-3xl font-thin">
+        <div className="pb-12 text-center text-5xl font-light">
           Welcome to the Student Success Tool!
         </div>
         <div className="mx-auto w-3/4 justify-center">

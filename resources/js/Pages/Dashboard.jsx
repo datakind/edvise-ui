@@ -217,7 +217,7 @@ export default function Dashboard({ modelname }) {
             ></BigDangerAlert>
           ) : (
             <div className="flex w-full flex-col items-center" id="main_area">
-              <div className="text-center text-5xl font-light">Dashboard</div>
+              <h1 className="text-center text-5xl font-light">Dashboard</h1>
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}
                   ? ''

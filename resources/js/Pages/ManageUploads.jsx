@@ -204,9 +204,9 @@ export default function ManageUploads() {
         className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white"
         id="main_area"
       >
-        <div className="py-12 text-center text-5xl font-light">
+        <h1 className="py-12 text-center text-5xl font-light">
           Manage Uploads
-        </div>
+        </h1>
         <div className="mx-auto flex w-full justify-center">
           <table
             className="mx-6 w-[93%] table-auto rounded-lg bg-white text-left shadow-md"

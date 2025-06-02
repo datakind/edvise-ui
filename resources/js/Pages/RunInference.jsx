@@ -117,7 +117,7 @@ export default function RunInference() {
   const renderPredictionParamInputs = currentStep => {
     return (
       <div className="flex w-full flex-col items-center justify-center p-12">
-        <div className="mb-12 text-5xl font-light">Start Prediction</div>
+        <h1 className="mb-12 text-5xl font-light">Start Prediction</h1>
         <div className="flex text-gray-700">
           For the most up-to-date Student Success Tool predictions we recommend
           starting a new prediction for each semester.

@@ -44,7 +44,7 @@ class LoginController extends Controller
                 // Log the existing user in
                 Auth::login($existingUser);
 
-                return redirect('/');
+                return redirect('/dashboard');
             } else {
                 // If no user is found, create a new one
                 $newUser = User::create([
@@ -69,7 +69,7 @@ class LoginController extends Controller
                 // Log the new user in
                 Auth::login($newUser);
 
-                return redirect('/');
+                return redirect('/dashboard');
             }
         } catch (Exception $e) {
             dd($e->getMessage());
@@ -110,7 +110,7 @@ class LoginController extends Controller
                 // Log the existing user in
                 Auth::login($existingUser);
 
-                return redirect('/');
+                return redirect('/dashboard');
             } else {
                 // If no user is found, create a new one
                 $newUser = User::create([
@@ -135,7 +135,7 @@ class LoginController extends Controller
                 // Log the new user in
                 Auth::login($newUser);
 
-                return redirect('/');
+                return redirect('/dashboard');
             }
         } catch (Exception $e) {
             dd($e->getMessage());

@@ -23,29 +23,8 @@ export default function RocCurve() {
           justifyContent: 'center',
         }}
       >
-        <h2
-          style={{
-            fontWeight: 400,
-            fontSize: 38,
-            marginBottom: 8,
-            letterSpacing: -1,
-          }}
-        >
-          ROC Curve for
-          <br />
-          Test Data
-        </h2>
-        <ul
-          style={{
-            color: '#222',
-            fontSize: 18,
-            fontWeight: 400,
-            marginLeft: 24,
-            marginBottom: 0,
-            paddingLeft: 0,
-            listStyle: 'disc',
-          }}
-        >
+        <h2 className="pb-4 text-2xl font-light">ROC Curve for Test Data</h2>
+        <ul className="list-disc pl-6 text-base text-black">
           <li style={{ marginBottom: 12 }}>
             A Receiver Operating Characteristic Curve (ROC) assesses how well
             the model distinguishes between students who need support and those

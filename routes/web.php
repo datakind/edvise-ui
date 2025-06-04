@@ -273,3 +273,13 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
 });
 
 Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');
+
+Route::middleware(array_filter([
+    'auth',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/model-results-overview',
+    function () {
+        return Inertia::render('ModelResultsOverview');
+    }
+)->name('model-results-overview');

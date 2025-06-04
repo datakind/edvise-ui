@@ -66,8 +66,12 @@ export default function ModelResultsOverview() {
     <AppLayout title="Model Results Overview">
       <div className="w-full px-8 py-6">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-3xl font-semibold">Model Results Overview</h1>
-          <button className="rounded-md bg-[#f79222] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#e67c00]">
+          <h1 className="mx-auto text-5xl font-light">
+            Model Results Overview
+          </h1>
+        </div>
+        <div className="my-6">
+          <button className="rounded-full bg-[#f79222] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#e67c00]">
             Export Data
           </button>
         </div>
@@ -270,12 +274,6 @@ export default function ModelResultsOverview() {
             </div>
           </>
         )}
-        <footer className="mt-8 flex w-full justify-center gap-4 border-t py-4 text-xs text-[#637381]">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
-          <span>License</span>
-          <span className="ml-auto">© 2025 DataKind</span>
-        </footer>
       </div>
     </AppLayout>
   );

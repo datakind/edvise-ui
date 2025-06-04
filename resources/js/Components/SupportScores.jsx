@@ -8,18 +8,7 @@ const placeholderData = Array.from(
 
 export default function SupportScores() {
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: 32,
-        padding: 32,
-        maxWidth: 1000,
-        margin: '40px auto',
-        fontFamily: 'inherit',
-        boxShadow: '0 0 0 8px #000',
-        boxSizing: 'border-box',
-      }}
-    >
+    <div className="mt-6 rounded-3xl bg-white p-8 shadow">
       <h2
         style={{
           fontWeight: 400,

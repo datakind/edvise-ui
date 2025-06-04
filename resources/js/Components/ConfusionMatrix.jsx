@@ -51,22 +51,10 @@ export default function ConfusionMatrix() {
           justifyContent: 'center',
         }}
       >
-        <h2 className="text-4xl font-light">
-          Confusion Matrix for
-          <br />
-          Test Data
+        <h2 className="pb-4 text-2xl font-light">
+          Confusion Matrix for Test Data
         </h2>
-        <ul
-          style={{
-            color: '#222',
-            fontSize: 18,
-            fontWeight: 400,
-            marginLeft: 24,
-            marginBottom: 0,
-            paddingLeft: 0,
-            listStyle: 'disc',
-          }}
-        >
+        <ul className="list-disc pl-6 text-base text-black">
           <li style={{ marginBottom: 12 }}>
             A confusion matrix evaluates how well the model is performing.
           </li>
@@ -147,7 +135,7 @@ export default function ConfusionMatrix() {
             >
               <div
                 style={{
-                  fontSize: 28,
+                  fontSize: 16,
                   fontWeight: 600,
                   color: '#fff',
                   marginBottom: 2,

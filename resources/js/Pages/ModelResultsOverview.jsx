@@ -101,10 +101,13 @@ export default function ModelResultsOverview() {
             <div className="rounded-3xl bg-white p-8 shadow">
               <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 className="mb-1 text-xl font-semibold">
+                  <h2 className="pb-4 text-2xl font-light">
                     Top 10 Areas with the Most Impact
                   </h2>
-                  <div className="text-sm text-[#637381]">
+                  <div className="text-sm text-black">
+                    <div className="mb-1 font-semibold">
+                      How to read these charts
+                    </div>
                     <ul className="ml-5 list-disc">
                       <li>
                         Charts show the features that have the most influence on
@@ -149,7 +152,7 @@ export default function ModelResultsOverview() {
                         className="w-2/3 pb-2 text-center text-xs font-semibold text-[#637381]"
                         colSpan="2"
                       >
-                        <span className="float-left">
+                        <span className="text-grey-700 float-left text-xs">
                           Decreasing likelihood of support needs
                         </span>
                         <span className="float-right">
@@ -162,10 +165,10 @@ export default function ModelResultsOverview() {
                     {features.slice(0, 10).map((feature, idx) => (
                       <tr key={feature.name} className="align-top">
                         <td className="w-1/3 border-b border-t border-[#e5e7eb] py-3 pr-4">
-                          <div className="cursor-pointer font-semibold text-[#1a4b5c] hover:underline">
+                          <div className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline">
                             {feature.name}
                           </div>
-                          <div className="text-xs text-[#637381]">
+                          <div className="text-base text-[#4F4F4F]">
                             {feature.desc}
                           </div>
                         </td>
@@ -176,7 +179,7 @@ export default function ModelResultsOverview() {
                     ))}
                   </tbody>
                 </table>
-                <div className="mt-2 flex justify-between px-2 text-xs text-[#637381]">
+                <div className="text-grey-700 mt-2 flex justify-between px-2 text-xs">
                   <span>Decreasing likelihood of support needs</span>
                   <span>Increasing likelihood of support needs</span>
                 </div>
@@ -191,8 +194,8 @@ export default function ModelResultsOverview() {
           <>
             {/* Introduction Card */}
             <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-              <h2 className="mb-2 text-xl font-semibold">Introduction</h2>
-              <div className="text-base text-[#222]">
+              <h2 className="mb-2 text-2xl font-light">Introduction</h2>
+              <div className="text-xl text-black">
                 This model was built to identify students who may need support
                 to be retained or graduate on time. It's intended to empower
                 academic advisors who provide intervention strategies with
@@ -208,10 +211,10 @@ export default function ModelResultsOverview() {
             </div>
             {/* Feature Value Table */}
             <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-              <h2 className="mb-2 text-xl font-semibold">
+              <h2 className="mb-2 text-2xl font-light">
                 Original Feature Value Table
               </h2>
-              <div className="mb-4 text-base text-[#222]">
+              <div className="mb-4 text-base text-black">
                 The following chart shows how all features are weighted in the
                 model.
               </div>

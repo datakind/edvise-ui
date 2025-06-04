@@ -9,24 +9,10 @@ const placeholderData = Array.from(
 export default function SupportScores() {
   return (
     <div className="mt-6 rounded-3xl bg-white p-8 shadow">
-      <h2
-        style={{
-          fontWeight: 400,
-          fontSize: 38,
-          marginBottom: 8,
-          letterSpacing: -1,
-        }}
-      >
+      <h2 className="pb-4 text-2xl font-light">
         Distribution of Support Scores for Test Data
       </h2>
-      <div
-        style={{
-          color: '#222',
-          fontSize: 18,
-          marginBottom: 24,
-          fontWeight: 400,
-        }}
-      >
+      <div className="text-base text-black">
         This chart provides the distribution of student support scores in the
         test dataset. You can use this plot for reference, to see how the
         distribution has changed from your original dataset to your{' '}

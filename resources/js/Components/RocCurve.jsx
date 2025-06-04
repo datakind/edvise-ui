@@ -11,20 +11,7 @@ const tpr = [
 
 export default function RocCurve() {
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: 32,
-        padding: 32,
-        maxWidth: 1200,
-        margin: '40px auto',
-        fontFamily: 'inherit',
-        boxShadow: '0 0 0 8px #000',
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'stretch',
-      }}
-    >
+    <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       <div
         style={{
           flex: 1,

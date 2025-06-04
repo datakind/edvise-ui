@@ -38,19 +38,7 @@ const cellInfo = [
 
 export default function ConfusionMatrix() {
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: 32,
-        padding: 32,
-        maxWidth: 1100,
-        margin: '40px auto',
-        fontFamily: 'inherit',
-        boxShadow: '0 0 0 4px #E0E6F7',
-        display: 'flex',
-        alignItems: 'stretch',
-      }}
-    >
+    <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
       <div
         style={{
@@ -63,14 +51,7 @@ export default function ConfusionMatrix() {
           justifyContent: 'center',
         }}
       >
-        <h2
-          style={{
-            fontWeight: 400,
-            fontSize: 38,
-            marginBottom: 8,
-            letterSpacing: -1,
-          }}
-        >
+        <h2 className="text-4xl font-light">
           Confusion Matrix for
           <br />
           Test Data

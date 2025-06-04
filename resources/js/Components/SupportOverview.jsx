@@ -16,21 +16,11 @@ export default function SupportOverview() {
   });
 
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: 32,
-        boxShadow: '0 0 0 4px #E0E6F7',
-        padding: 32,
-        maxWidth: 1100,
-        margin: 'auto',
-        fontFamily: 'inherit',
-      }}
-    >
-      <h2 style={{ fontWeight: 500, fontSize: 28, marginBottom: 8 }}>
+    <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+      <h2 className="text-2xl font-light">
         Support Overview - How Many Total Students May Need Extra Support?
       </h2>
-      <div style={{ color: '#4B5B6B', fontSize: 16, marginBottom: 24 }}>
+      <div className="my-8 text-base text-[#4B5B6B]">
         The following graph shows the distribution of support scores for the
         most recent student data uploaded. The higher the support score the more
         likely these students are in need of extra support. See{' '}

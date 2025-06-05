@@ -18,10 +18,10 @@ import { Head } from '@inertiajs/react';
 export default function Welcome() {
   return (
     <>
-      <Head title="Student Success Tool">
+      <Head title="Edvise">
         <meta
           name="description"
-          content="Student Success Tool is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."
+          content="Edvise is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

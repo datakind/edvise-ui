@@ -349,8 +349,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                 <a href={route('home')}>
                   <img
                     className="w-full pb-12"
-                    src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-                    alt="Student Success Tool Logo"
+                    src="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise-Logo-Mark.png"
+                    alt="Edvise Logo"
                   />
                 </a>
               </div>

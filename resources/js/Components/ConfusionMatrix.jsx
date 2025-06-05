@@ -40,25 +40,15 @@ export default function ConfusionMatrix() {
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
-      <div
-        style={{
-          flex: 1,
-          minWidth: 260,
-          maxWidth: 340,
-          marginRight: 32,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
+      <div className="flex min-w-[260px] max-w-[340px] flex-col justify-center">
         <h2 className="pb-4 text-2xl font-light">
           Confusion Matrix for Test Data
         </h2>
         <ul className="list-disc pl-6 text-base text-black">
-          <li style={{ marginBottom: 12 }}>
+          <li className="mb-3">
             A confusion matrix evaluates how well the model is performing.
           </li>
-          <li style={{ marginBottom: 12 }}>
+          <li className="mb-3">
             We compare the model's predictions to the actual outcomes and review
             correct vs. incorrect outputs.
           </li>
@@ -67,14 +57,7 @@ export default function ConfusionMatrix() {
             data you provided that was not used to train the model. More details
             on the test dataset are available in the{' '}
             <b>
-              <a
-                href="#"
-                style={{
-                  color: '#222',
-                  textDecoration: 'underline',
-                  fontWeight: 600,
-                }}
-              >
+              <a href="#" className="text-blue-500 underline">
                 model card
               </a>
             </b>
@@ -83,100 +66,37 @@ export default function ConfusionMatrix() {
         </ul>
       </div>
       {/* Right: Confusion matrix grid */}
-      <div
-        style={{
-          flex: 2,
-          minWidth: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div
-          style={{
-            fontSize: 20,
-            color: '#222',
-            fontWeight: 500,
-            marginBottom: 8,
-          }}
-        >
+      <div className="flex-2 flex min-w-0 flex-col items-center justify-center">
+        <div className="mb-2 text-lg font-semibold text-[#222]">
           Normalized Confusion Matrix
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridTemplateRows: '1fr 1fr',
-            width: 520,
-            height: 340,
-            borderRadius: 32,
-            overflow: 'hidden',
-            position: 'relative',
-            background: '#f7f8fa',
-          }}
-        >
+        <div className="rounded-32 grid h-[340px] w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa]">
           {cellInfo.flat().map((cell, idx) => (
             <div
               key={cell.label}
+              className="relative flex flex-col items-center justify-center bg-[#1796A5] p-0"
               style={{
                 background: cell.color,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-                position: 'relative',
                 borderTopLeftRadius: idx === 0 ? 32 : 0,
                 borderTopRightRadius: idx === 1 ? 32 : 0,
                 borderBottomLeftRadius: idx === 2 ? 32 : 0,
                 borderBottomRightRadius: idx === 3 ? 32 : 0,
               }}
             >
-              <div
-                style={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: '#fff',
-                  marginBottom: 2,
-                }}
-              >
+              <div className="mb-2 text-lg font-semibold text-white">
                 {cell.label}
               </div>
-              <div
-                style={{
-                  fontSize: 72,
-                  fontWeight: 600,
-                  color: '#fff',
-                  lineHeight: 1,
-                }}
-              >
+              <div className="text-7xl font-bold text-white">
                 {cell.percent}
               </div>
               <div
-                style={{
-                  fontSize: 20,
-                  color: '#fff',
-                  textAlign: 'center',
-                  maxWidth: 220,
-                  marginTop: 4,
-                }}
+                className="mt-2 max-w-[220px] text-center text-white"
                 dangerouslySetInnerHTML={{ __html: cell.desc }}
               />
             </div>
           ))}
           {/* Axis labels */}
-          <div
-            style={{
-              position: 'absolute',
-              left: -60,
-              top: '50%',
-              transform: 'translateY(-50%) rotate(-90deg)',
-              fontSize: 20,
-              color: '#222',
-              fontWeight: 500,
-            }}
-          >
+          <div className="absolute left-[-60px] top-[50%] -translate-y-1/2 rotate-[-90deg] text-2xl font-semibold text-[#222]">
             True Label
           </div>
           <div

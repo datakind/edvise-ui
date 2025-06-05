@@ -12,25 +12,15 @@ const tpr = [
 export default function RocCurve() {
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
-      <div
-        style={{
-          flex: 1,
-          minWidth: 320,
-          maxWidth: 420,
-          marginRight: 32,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
+      <div className="mr-8 flex min-w-[320px] max-w-[420px] flex-1 flex-col justify-center">
         <h2 className="pb-4 text-2xl font-light">ROC Curve for Test Data</h2>
         <ul className="list-disc pl-6 text-base text-black">
-          <li style={{ marginBottom: 12 }}>
+          <li className="mb-4">
             A Receiver Operating Characteristic Curve (ROC) assesses how well
             the model distinguishes between students who need support and those
             who do not.
           </li>
-          <li style={{ marginBottom: 12 }}>
+          <li className="mb-4">
             The closer the curve hugs the top-left corner, the <b>better</b> the
             model is at separating the two groups.
           </li>
@@ -39,14 +29,7 @@ export default function RocCurve() {
             you provided that was not used to train the model. More details on
             the test dataset are available in the{' '}
             <b>
-              <a
-                href="#"
-                style={{
-                  color: '#222',
-                  textDecoration: 'underline',
-                  fontWeight: 600,
-                }}
-              >
+              <a href="#" className="font-semibold text-[#222] underline">
                 model card
               </a>
             </b>
@@ -54,7 +37,7 @@ export default function RocCurve() {
           </li>
         </ul>
       </div>
-      <div style={{ flex: 2, minWidth: 0 }}>
+      <div className="flex min-w-0">
         <Plot
           data={[
             // ROC curve

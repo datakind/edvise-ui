@@ -26,46 +26,25 @@ export default function SupportOverview() {
         likely these students are in need of extra support. See{' '}
         <b>About this Model</b> to learn more.
       </div>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32 }}>
+      <div className="flex items-start gap-8">
         {/* At a Glance */}
-        <div style={{ minWidth: 200 }}>
-          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 16 }}>
-            At a Glance
-          </div>
-          <div
-            style={{
-              background: '#E6EEF5',
-              borderRadius: 16,
-              padding: 24,
-              marginBottom: 16,
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 40, fontWeight: 600, color: '#4B5B6B' }}>
-              504
-            </div>
-            <div style={{ color: '#4B5B6B', fontSize: 16, marginTop: 8 }}>
+        <div className="min-w-[200px]">
+          <div className="mb-4 text-lg font-bold">At a Glance</div>
+          <div className="mb-4 rounded-lg bg-[#E6EEF5] p-6 text-center">
+            <div className="text-4xl font-bold text-[#4B5B6B]">504</div>
+            <div className="mt-2 text-base text-[#4B5B6B]">
               Students fall into the <b>higher support</b> category
             </div>
           </div>
-          <div
-            style={{
-              background: '#E6EEF5',
-              borderRadius: 16,
-              padding: 24,
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 40, fontWeight: 600, color: '#4B5B6B' }}>
-              7,304
-            </div>
-            <div style={{ color: '#4B5B6B', fontSize: 16, marginTop: 8 }}>
+          <div className="rounded-lg bg-[#E6EEF5] p-6 text-center">
+            <div className="text-4xl font-bold text-[#4B5B6B]">7,304</div>
+            <div className="mt-2 text-base text-[#4B5B6B]">
               Students fall into the <b>lower support</b> category
             </div>
           </div>
         </div>
         {/* Histogram */}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="min-w-0 flex-1">
           <Plot
             data={[
               {

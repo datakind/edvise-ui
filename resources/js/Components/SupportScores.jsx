@@ -17,14 +17,7 @@ export default function SupportScores() {
         test dataset. You can use this plot for reference, to see how the
         distribution has changed from your original dataset to your{' '}
         <b>
-          <a
-            href="#"
-            style={{
-              color: '#222',
-              textDecoration: 'underline',
-              fontWeight: 600,
-            }}
-          >
+          <a href="#" className="font-semibold text-[#222] underline">
             latest model results
           </a>
         </b>

@@ -6,6 +6,7 @@ import FullResults from '../Components/FullResults';
 import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
+import InterpretChart from '../Components/InterpretChart';
 
 const features = [
   {
@@ -77,28 +78,28 @@ export default function ModelResultsOverview() {
         </div>
         <div className="mb-2 flex items-center gap-4">
           <button
-            className={`px-2 pb-1 font-semibold ${tab === 'results' ? 'border-b-2 border-[#f79222] text-[#222]' : 'text-[#637381]'}`}
+            className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'border-b-2 border-black text-[#222]' : 'text-[#637381]'}`}
             onClick={() => setTab('results')}
           >
             Latest Model Results
           </button>
           <button
-            className={`px-2 pb-1 font-semibold ${tab === 'about' ? 'border-b-2 border-[#f79222] text-[#222]' : 'text-[#637381]'}`}
+            className={`px-2 pb-1 text-xl font-light ${tab === 'about' ? 'border-b-2 border-black text-[#222]' : 'text-[#637381]'}`}
             onClick={() => setTab('about')}
           >
             About this Model
           </button>
         </div>
+        <hr className="-mt-2 mb-4 w-full border-black" />
         {tab === 'results' ? (
           <>
-            <div className="mb-2 text-sm text-[#637381]">
-              Showing model results for:{' '}
-              <span className="font-semibold">students.cohort.2024</span>
+            <div className="mb-4 px-2 text-lg font-light text-black">
+              Showing model results for: students.cohort.2024
             </div>
             <div className="mb-8">
               <SupportOverview />
             </div>
-            <div className="rounded-3xl bg-white p-8 shadow">
+            <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
               <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h2 className="pb-4 text-2xl font-light">
@@ -130,18 +131,9 @@ export default function ModelResultsOverview() {
                     </ul>
                   </div>
                 </div>
-                <div className="max-w-xs rounded-xl bg-[#F5FAFC] p-4 text-sm text-[#637381]">
-                  <div className="mb-1 font-semibold">
-                    How to interpret chart colors
-                  </div>
-                  <div>
-                    Lighter dots show lower student feature values
-                    <br />
-                    Darker dots show higher student feature values
-                  </div>
-                </div>
+                <InterpretChart />
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto bg-white">
                 <table className="w-full border-separate border-spacing-y-2 text-left">
                   <thead>
                     <tr>
@@ -164,7 +156,7 @@ export default function ModelResultsOverview() {
                   <tbody>
                     {features.slice(0, 10).map((feature, idx) => (
                       <tr key={feature.name} className="align-top">
-                        <td className="w-1/3 border-b border-t border-[#e5e7eb] py-3 pr-4">
+                        <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
                           <div className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline">
                             {feature.name}
                           </div>
@@ -179,7 +171,7 @@ export default function ModelResultsOverview() {
                     ))}
                   </tbody>
                 </table>
-                <div className="text-grey-700 mt-2 flex justify-between px-2 text-xs">
+                <div className="text-grey-700 mx-auto mt-2 flex w-1/2 justify-between px-2 text-xs">
                   <span>Decreasing likelihood of support needs</span>
                   <span>Increasing likelihood of support needs</span>
                 </div>

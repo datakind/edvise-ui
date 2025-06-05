@@ -20,52 +20,34 @@ export default function SupportOverview() {
       <h2 className="text-2xl font-light">
         Support Overview - How Many Total Students May Need Extra Support?
       </h2>
-      <div className="my-8 text-base text-[#4B5B6B]">
+      <div className="my-8 text-base text-black">
         The following graph shows the distribution of support scores for the
         most recent student data uploaded. The higher the support score the more
         likely these students are in need of extra support. See{' '}
-        <b>About this Model</b> to learn more.
+        <span className="font-semibold underline">About this Model</span> to
+        learn more.
       </div>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32 }}>
+      <div className="flex items-start gap-8">
         {/* At a Glance */}
-        <div style={{ minWidth: 200 }}>
-          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 16 }}>
+        <div className="min-w-[200px]">
+          <div className="mb-4 text-sm font-bold text-[#1E343F]">
             At a Glance
           </div>
-          <div
-            style={{
-              background: '#E6EEF5',
-              borderRadius: 16,
-              padding: 24,
-              marginBottom: 16,
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 40, fontWeight: 600, color: '#4B5B6B' }}>
-              504
-            </div>
-            <div style={{ color: '#4B5B6B', fontSize: 16, marginTop: 8 }}>
+          <div className="mb-4 rounded-lg bg-[#D5E5EE] p-6 text-center">
+            <div className="text-5xl font-medium text-[#1E343F]">504</div>
+            <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>higher support</b> category
             </div>
           </div>
-          <div
-            style={{
-              background: '#E6EEF5',
-              borderRadius: 16,
-              padding: 24,
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 40, fontWeight: 600, color: '#4B5B6B' }}>
-              7,304
-            </div>
-            <div style={{ color: '#4B5B6B', fontSize: 16, marginTop: 8 }}>
+          <div className="rounded-lg bg-[#D5E5EE] p-6 text-center">
+            <div className="text-5xl font-medium text-[#1E343F]">7,304</div>
+            <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>lower support</b> category
             </div>
           </div>
         </div>
         {/* Histogram */}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="min-w-0 flex-1">
           <Plot
             data={[
               {
@@ -117,16 +99,16 @@ export default function SupportOverview() {
               shapes: [],
               annotations: [
                 {
-                  x: 0.52,
-                  y: 180,
+                  x: 0.7,
+                  y: 200,
                   xref: 'x',
                   yref: 'y',
                   text: 'Students in greater<br>need of support',
                   showarrow: true,
-                  arrowhead: 2,
-                  ax: 60,
-                  ay: -40,
-                  font: { size: 16, color: '#7A869A' },
+                  arrowhead: 3,
+                  ax: -100,
+                  ay: 0,
+                  font: { size: 14, color: '#5F6368' },
                   align: 'left',
                 },
               ],

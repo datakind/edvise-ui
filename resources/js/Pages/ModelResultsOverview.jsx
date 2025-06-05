@@ -76,7 +76,7 @@ export default function ModelResultsOverview() {
             Export Data
           </button>
         </div>
-        <div className="w-full bg-[#F5F5F5] px-6 pl-8">
+        <div className="w-full bg-[#F5F5F5] p-6">
           <div className="mb-2 flex items-center gap-4">
             <button
               className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 text-black' : 'text-[#637381]'}`}
@@ -134,22 +134,52 @@ export default function ModelResultsOverview() {
                   </div>
                   <InterpretChart />
                 </div>
-                <div className="overflow-x-auto bg-white">
+                <div className="-mx-8 -mb-8 overflow-x-auto rounded-b-3xl bg-white">
                   <table className="w-full border-separate border-spacing-y-2 text-left">
                     <thead>
                       <tr>
-                        <th className="w-1/3 pb-2 text-xs font-semibold text-[#3E3E3E]">
+                        <th className="w-1/3 p-2 text-xs font-semibold text-[#3E3E3E]">
                           Click any of the feature names to learn more
                         </th>
                         <th
-                          className="w-2/3 pb-2 text-center text-xs font-semibold text-[#3E3E3E]"
+                          className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
                           colSpan="2"
                         >
                           <span className="text-grey-700 float-left text-xs">
                             Decreasing likelihood of support needs
+                            {/* Left arrow */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="#B2F1F9"
+                              class="size-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                              />
+                            </svg>
                           </span>
                           <span className="float-right">
                             Increasing likelihood of support needs
+                            {/* Right arrow */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="#007C8C"
+                              class="size-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                              />
+                            </svg>
                           </span>
                         </th>
                       </tr>
@@ -173,14 +203,48 @@ export default function ModelResultsOverview() {
                     </tbody>
                   </table>
                   <div className="text-grey-700 mx-auto mt-2 flex w-1/2 justify-between px-2 text-xs">
-                    <span>Decreasing likelihood of support needs</span>
-                    <span>Increasing likelihood of support needs</span>
+                    <span>
+                      {/* Left arrow */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="#B2F1F9"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                        />
+                      </svg>
+                      Decreasing likelihood of support needs
+                    </span>
+                    <span>
+                      {/* Right arrow */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="#007C8C"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                        />
+                      </svg>
+                      Increasing likelihood of support needs
+                    </span>
+                  </div>
+                  <div className="my-8 text-center text-xs text-[#637381]">
+                    Questions about how to interpret these results? Contact your
+                    account representative, and they'd be happy to help!
                   </div>
                 </div>
-              </div>
-              <div className="mt-8 text-center text-xs text-[#637381]">
-                Questions about how to interpret these results? Contact your
-                account representative, and they'd be happy to help!
               </div>
             </>
           ) : (
@@ -195,7 +259,7 @@ export default function ModelResultsOverview() {
                   information on the factors impacting student need for support.
                   The following figures demonstrate the performance of the
                   model. You can also{' '}
-                  <a href="#" className="font-semibold underline">
+                  <a href="#" className="font-semibold text-black underline">
                     download the model card here
                   </a>{' '}
                   for a comprehensive report on the model, including

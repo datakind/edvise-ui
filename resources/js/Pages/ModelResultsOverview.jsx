@@ -276,43 +276,37 @@ export default function ModelResultsOverview() {
                   model.
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px] border-separate border-spacing-y-2 text-left">
+                  <table className="w-3/4 border-separate border-spacing-y-2 text-left">
                     <thead>
-                      <tr>
-                        <th className="pb-2 text-xs font-semibold text-[#637381]">
+                      <tr className="bg-[#F9FAFB]">
+                        <th className="pb-2 text-xs font-medium text-[#6B7280]">
                           Feature Name
                         </th>
-                        <th className="pb-2 text-xs font-semibold text-[#637381]">
-                          Description
-                        </th>
-                        <th className="pb-2 text-xs font-semibold text-[#637381]">
+                        <th className="pb-2 text-xs font-medium text-[#6B7280]">
                           Data Type
                         </th>
-                        <th className="pb-2 text-xs font-semibold text-[#637381]">
+                        <th className="pb-2 text-center text-xs font-medium text-[#6B7280]">
                           Overall Feature Importance
-                        </th>
-                        <th className="pb-2 text-xs font-semibold text-[#637381]">
-                          Range
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {features.map((f, i) => (
                         <tr key={f.name} className="align-top">
-                          <td className="py-2 pr-2 font-semibold text-[#1a4b5c]">
+                          <td className="py-2 pr-2 text-base font-normal text-black">
                             {f.name}
+                            <div className="text-sm font-light text-[#696969]">
+                              {f.desc}
+                            </div>
                           </td>
-                          <td className="py-2 pr-2 text-xs text-[#637381]">
-                            {f.desc}
-                          </td>
-                          <td className="py-2 pr-2 text-xs text-[#637381]">
+                          <td className="py-2 pr-2 text-sm text-black">
                             {f.type}
                           </td>
-                          <td className="py-2 pr-2 text-xs text-[#637381]">
+                          <td className="py-2 pr-2 text-center text-sm text-black">
                             {f.importance}
-                          </td>
-                          <td className="py-2 pr-2 text-xs text-[#637381]">
-                            {f.range}
+                            <div className="text-xs text-[#696969]">
+                              Range is {f.range}
+                            </div>
                           </td>
                         </tr>
                       ))}

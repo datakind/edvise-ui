@@ -34,13 +34,17 @@ export default function SupportOverview() {
             At a Glance
           </div>
           <div className="mb-4 rounded-lg bg-[#D5E5EE] p-6 text-center">
-            <div className="text-5xl font-medium text-[#1E343F]">504</div>
+            <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
+              504
+            </div>
             <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>higher support</b> category
             </div>
           </div>
           <div className="rounded-lg bg-[#D5E5EE] p-6 text-center">
-            <div className="text-5xl font-medium text-[#1E343F]">7,304</div>
+            <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
+              7,304
+            </div>
             <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>lower support</b> category
             </div>

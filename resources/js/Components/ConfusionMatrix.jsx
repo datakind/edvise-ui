@@ -12,12 +12,14 @@ const cellInfo = [
       percent: '75%',
       desc: 'Of students with low support needs were <b>accurately classified</b> by the model',
       color: '#1796A5',
+      text: '#ffffff',
     },
     {
       label: 'False positive',
       percent: '25%',
       desc: 'Of students with low support needs were <b>incorrectly classified</b> as high support need',
       color: '#7ED6E8',
+      text: '#000000',
     },
   ],
   [
@@ -26,12 +28,14 @@ const cellInfo = [
       percent: '29%',
       desc: 'Of students with high support needs were <b>incorrectly classified</b> as low support need',
       color: '#7ED6E8',
+      text: '#000000',
     },
     {
       label: 'True positive',
       percent: '71%',
       desc: 'Of students with high support needs were <b>accurately classified</b> by the model',
       color: '#1796A5',
+      text: '#ffffff',
     },
   ],
 ];
@@ -40,7 +44,7 @@ export default function ConfusionMatrix() {
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
-      <div className="flex min-w-[260px] max-w-[340px] flex-col justify-center">
+      <div className="flex w-1/2 min-w-[260px] flex-col justify-start p-6">
         <h2 className="pb-4 text-2xl font-light">
           Confusion Matrix for Test Data
         </h2>
@@ -57,7 +61,7 @@ export default function ConfusionMatrix() {
             data you provided that was not used to train the model. More details
             on the test dataset are available in the{' '}
             <b>
-              <a href="#" className="text-blue-500 underline">
+              <a href="#" className="text-black underline">
                 model card
               </a>
             </b>
@@ -70,98 +74,31 @@ export default function ConfusionMatrix() {
         <div className="mb-2 text-lg font-semibold text-[#222]">
           Normalized Confusion Matrix
         </div>
-        <div className="rounded-32 grid h-[340px] w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa]">
+        <div className="rounded-32 grid w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa]">
           {cellInfo.flat().map((cell, idx) => (
             <div
               key={cell.label}
               className="relative flex flex-col items-center justify-center bg-[#1796A5] p-0"
               style={{
                 background: cell.color,
+                color: cell.text,
                 borderTopLeftRadius: idx === 0 ? 32 : 0,
                 borderTopRightRadius: idx === 1 ? 32 : 0,
                 borderBottomLeftRadius: idx === 2 ? 32 : 0,
                 borderBottomRightRadius: idx === 3 ? 32 : 0,
               }}
             >
-              <div className="mb-2 text-lg font-semibold text-white">
-                {cell.label}
-              </div>
-              <div className="text-7xl font-bold text-white">
+              <div className="my-2 text-sm font-semibold">{cell.label}</div>
+              <div className="font-[playfair] text-7xl font-medium">
                 {cell.percent}
               </div>
               <div
-                className="mt-2 max-w-[220px] text-center text-white"
+                className="mt-2 max-w-[220px] text-center"
                 dangerouslySetInnerHTML={{ __html: cell.desc }}
               />
             </div>
           ))}
           {/* Axis labels */}
-          <div className="absolute left-[-60px] top-[50%] -translate-y-1/2 rotate-[-90deg] text-2xl font-semibold text-[#222]">
-            True Label
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              left: 40,
-              top: 10,
-              fontSize: 18,
-              color: '#222',
-              fontWeight: 400,
-              transform: 'rotate(-90deg)',
-            }}
-          >
-            False
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              left: 40,
-              bottom: 10,
-              fontSize: 18,
-              color: '#222',
-              fontWeight: 400,
-              transform: 'rotate(-90deg)',
-            }}
-          >
-            True
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: -40,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              fontSize: 20,
-              color: '#222',
-              fontWeight: 500,
-            }}
-          >
-            Predicted Label
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: -10,
-              left: 120,
-              fontSize: 18,
-              color: '#222',
-              fontWeight: 400,
-            }}
-          >
-            False
-          </div>
-          <div
-            style={{
-              position: 'absolute',
-              bottom: -10,
-              right: 120,
-              fontSize: 18,
-              color: '#222',
-              fontWeight: 400,
-            }}
-          >
-            True
-          </div>
         </div>
       </div>
     </div>

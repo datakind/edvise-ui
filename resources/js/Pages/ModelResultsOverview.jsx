@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
-import FullResults from '../Components/FullResults';
 import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
@@ -113,7 +112,7 @@ export default function ModelResultsOverview() {
                       <ul className="ml-5 list-disc">
                         <li>
                           Charts show the features that have the most influence
-                          on this cohort of students' support scores.
+                          on this cohort of students&rsquo; support scores.
                         </li>
                         <li>
                           Features are sorted from top to bottom in order of
@@ -135,7 +134,7 @@ export default function ModelResultsOverview() {
                   <InterpretChart />
                 </div>
                 <div className="-mx-8 -mb-8 overflow-x-auto rounded-b-3xl bg-white">
-                  <table className="w-full border-separate border-spacing-y-2 text-left">
+                  <table className="w-full text-left">
                     <thead>
                       <tr>
                         <th className="w-1/3 p-2 text-xs font-semibold text-[#3E3E3E]">
@@ -152,13 +151,13 @@ export default function ModelResultsOverview() {
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="#B2F1F9"
-                              class="size-6"
+                              className="size-6"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
                               />
                             </svg>
@@ -170,13 +169,13 @@ export default function ModelResultsOverview() {
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="#007C8C"
-                              class="size-6"
+                              className="size-6"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
                               />
                             </svg>
@@ -185,8 +184,11 @@ export default function ModelResultsOverview() {
                       </tr>
                     </thead>
                     <tbody>
-                      {features.slice(0, 10).map((feature, idx) => (
-                        <tr key={feature.name} className="align-top">
+                      {features.slice(0, 10).map(feature => (
+                        <tr
+                          key={feature.name}
+                          className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                        >
                           <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
                             <div className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline">
                               {feature.name}
@@ -209,13 +211,13 @@ export default function ModelResultsOverview() {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke="#B2F1F9"
-                        class="size-6"
+                        className="size-6"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
                         />
                       </svg>
@@ -227,20 +229,20 @@ export default function ModelResultsOverview() {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke="#007C8C"
-                        class="size-6"
+                        className="size-6"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
                         />
                       </svg>
                       Increasing likelihood of support needs
                     </span>
                   </div>
-                  <div className="my-8 text-center text-xs text-[#637381]">
+                  <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">
                     Questions about how to interpret these results? Contact your
                     account representative, and they'd be happy to help!
                   </div>
@@ -268,50 +270,59 @@ export default function ModelResultsOverview() {
               </div>
               {/* Feature Value Table */}
               <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-2 text-2xl font-light">
-                  Original Feature Value Table
-                </h2>
-                <div className="mb-4 text-base text-black">
-                  The following chart shows how all features are weighted in the
-                  model.
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-3/4 border-separate border-spacing-y-2 text-left">
-                    <thead>
-                      <tr className="bg-[#F9FAFB]">
-                        <th className="pb-2 text-xs font-medium text-[#6B7280]">
-                          Feature Name
-                        </th>
-                        <th className="pb-2 text-xs font-medium text-[#6B7280]">
-                          Data Type
-                        </th>
-                        <th className="pb-2 text-center text-xs font-medium text-[#6B7280]">
-                          Overall Feature Importance
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {features.map((f, i) => (
-                        <tr key={f.name} className="align-top">
-                          <td className="py-2 pr-2 text-base font-normal text-black">
-                            {f.name}
-                            <div className="text-sm font-light text-[#696969]">
-                              {f.desc}
-                            </div>
-                          </td>
-                          <td className="py-2 pr-2 text-sm text-black">
-                            {f.type}
-                          </td>
-                          <td className="py-2 pr-2 text-center text-sm text-black">
-                            {f.importance}
-                            <div className="text-xs text-[#696969]">
-                              Range is {f.range}
-                            </div>
-                          </td>
+                <div className="flex flex-col gap-8 md:flex-row">
+                  {/* Left column: heading and description */}
+                  <div className="mb-4 w-full md:mb-0 md:w-1/4">
+                    <h2 className="mb-2 text-2xl font-light">
+                      Original Feature Value Table
+                    </h2>
+                    <div className="mb-4 text-base text-black">
+                      The following chart shows how all features are weighted in
+                      the model.
+                    </div>
+                  </div>
+                  {/* Right column: table */}
+                  <div className="w-full overflow-x-auto md:w-3/4">
+                    <table className="w-full rounded-3xl text-left shadow-md">
+                      <thead>
+                        <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
+                          <th className="p-6 text-xs font-medium text-[#6B7280]">
+                            Feature Name
+                          </th>
+                          <th className="p-6 text-xs font-medium text-[#6B7280]">
+                            Data Type
+                          </th>
+                          <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
+                            Overall Feature Importance
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {features.map(f => (
+                          <tr
+                            key={f.name}
+                            className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                          >
+                            <td className="px-6 text-base font-normal text-black">
+                              {f.name}
+                              <div className="text-sm font-light text-[#696969]">
+                                {f.desc}
+                              </div>
+                            </td>
+                            <td className="py-2 pr-2 text-sm text-black">
+                              {f.type}
+                            </td>
+                            <td className="py-2 pr-2 text-center text-sm text-black">
+                              {f.importance}
+                              <div className="text-xs text-[#696969]">
+                                Range is {f.range}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               {/* Confusion Matrix */}

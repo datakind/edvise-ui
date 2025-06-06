@@ -4,7 +4,7 @@ export default function ApplicationMark(props) {
     <img
       className="w-1/3 pb-12"
       src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-      alt="Student Success Tool Logo"
+      alt="Edvise Logo"
     />
   );
 }

@@ -36,7 +36,7 @@ export default function Register() {
           <img
             className="w-1/3 pb-12"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            alt="Edvise Logo"
           />
 
           <div className="pb-8 text-2xl">

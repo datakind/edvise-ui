@@ -37,7 +37,7 @@ export default function ProductSection(props) {
             recommendations to keep students on their learning paths
           </h2>
           <p className="text-landing-gray text-base font-light leading-tight">
-            Student Success Tool offers customized indicators and
+            Edvise offers customized indicators and
             institution-specific actions to improve student outcomes.
           </p>
         </div>

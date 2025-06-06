@@ -32,7 +32,7 @@ export default function AdvisorsSection(props) {
         alt: 'Osian Sampson',
       },
       quotes: [
-        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Student Success Tool is a must-have.',
+        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Edvise is a must-have.',
         'It bridges the gap between students and advisors, ensuring that no student falls through the cracks.',
       ],
     },
@@ -56,7 +56,7 @@ export default function AdvisorsSection(props) {
       <div className="layout:grid mb-14 md:mb-28">
         <div className="col-span-8">
           <p className="type:section-label mb-9 text-landing-gray md:mb-12">
-            Hear from advisors already using Student Success Tool
+            Hear from advisors already using Edvise
           </p>
           <h2 className="type:section-title">
             Identify students in need of timely intervention and develop

@@ -323,7 +323,7 @@ export default function AppLayout({ title, renderHeader, children }) {
           <img
             className="w-full pb-12"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            alt="Edvise Logo"
           />
         </header>
         <main className="flex min-h-screen flex-col items-center bg-[#637381] p-6">

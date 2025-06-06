@@ -6,7 +6,7 @@ export default function RequestDemoSection() {
         <div className="col-span-6">
           <p className="type:section-label mb-9 sm:mb-12">Request demo</p>
           <h2 className="type:section-title mb-9 sm:mb-20 md:mb-32">
-            How to get started with Student Success Tool
+            How to get started with Edvise
           </h2>
           <div className="hidden overflow-hidden rounded-[40px] md:block">
             <img

@@ -26,7 +26,7 @@ export default function ForgotPassword({ status }) {
           <img
             className="w-1/3 pb-12"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            alt="Edvise Logo"
           />
           <div className="mb-4 text-sm text-gray-600">
             Forgot your password? No problem. Just let us know your email

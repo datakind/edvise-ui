@@ -119,7 +119,7 @@ export default function RunInference() {
       <div className="flex w-full flex-col items-center justify-center p-12">
         <h1 className="mb-12 text-5xl font-light">Start Prediction</h1>
         <div className="flex text-gray-700">
-          For the most up-to-date Student Success Tool predictions we recommend
+          For the most up-to-date Edvise predictions we recommend
           starting a new prediction for each semester.
         </div>
         <div className="flex pb-6 text-gray-700">

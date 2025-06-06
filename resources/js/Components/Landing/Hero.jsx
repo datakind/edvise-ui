@@ -30,7 +30,7 @@ export default function Hero() {
           <img
             className="mb-5"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-text-logo.svg"
-            alt="Student Success Tool Logo"
+            alt="Edvise Logo"
           />
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
             Is a scalable solution that empowers student support teams with

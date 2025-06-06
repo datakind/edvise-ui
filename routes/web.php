@@ -55,7 +55,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 });
 */
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -64,7 +64,7 @@ Route::middleware(array_filter([
 });
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/file-upload',
@@ -74,7 +74,7 @@ Route::middleware(array_filter([
 )->name('file-upload');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/dashboard/{modelname}',
@@ -85,7 +85,7 @@ Route::middleware(array_filter([
 
 // The default dashboard page.
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/dashboard',
@@ -96,7 +96,7 @@ Route::middleware(array_filter([
 
 // The default home page when logged in.
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/new-home',
@@ -107,20 +107,20 @@ Route::middleware(array_filter([
 
 // difficult to get params working with named routes
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/create-batch', [ApiController::class, 'createBatch']);
 Route::middleware(array_filter([
@@ -128,25 +128,25 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->post('/create-model', [ApiController::class, 'createModelApi']);
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/models-api', [ApiController::class, 'getModels']);
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-input-data', [ApiController::class, 'viewInputData']);
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-output-data', [ApiController::class, 'viewOutputData']);
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/run-inference',
@@ -156,7 +156,7 @@ Route::middleware(array_filter([
 )->name('run-inference');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/manage-uploads',
@@ -166,7 +166,7 @@ Route::middleware(array_filter([
 )->name('manage-uploads');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/file-management',
@@ -176,26 +176,26 @@ Route::middleware(array_filter([
 )->name('file-management');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename', '.*');
 
 // Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename', '.*');
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
 // Data dictionary does not require logging in to view.
@@ -220,7 +220,7 @@ Route::get('/terms-of-service', function () {
 })->name('terms-of-service');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
 
@@ -230,9 +230,17 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
+Route::middleware(['auth'])->get('/terms/prompt', function () {
+    return Inertia::render('Auth/AcceptTerms');
+})->name('terms.prompt');
+
+Route::middleware(['auth'])->post('/terms/accept', function () {
+    auth()->user()->update(['accepted_terms' => true]);
+    return redirect()->intended('/');
+})->name('terms.accept');
 
 // The below are datakinder only paths.
-Route::middleware(['auth', 'datakinder'])->group(function () {
+Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/create-inst-api', [ApiController::class, 'createInstApi']);
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
@@ -275,7 +283,7 @@ Route::middleware(['auth', 'datakinder'])->group(function () {
 Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');
 
 Route::middleware(array_filter([
-    'auth',
+    'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/model-results-overview',

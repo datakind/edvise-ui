@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AuthLayout from '@/Layouts/AuthLayout';
 import Button from '@/Components/Landing/Button';
 import AuthFooter from '@/Components/AuthFooter';
 
 export default function AcceptTerms() {
+    const scrollRef = useRef(null);
+    const [scrolledToBottom, setScrolledToBottom] = useState(false);
+
+    const handleScroll = () => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const isBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+        if (isBottom) setScrolledToBottom(true);
+    };
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (el) {
+            el.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (el) {
+                el.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
     const acceptTerms = () => {
         router.post(route('terms.accept'));
     };
@@ -24,9 +46,11 @@ export default function AcceptTerms() {
                     <div className="pb-8 text-2xl">Please review and accept our Terms of Service:</div>
 
                     <div
+                        ref={scrollRef}
                         className="overflow-y-auto max-h-[50vh] rounded border border-gray-200 bg-gray-50 p-6 text-sm shadow-inner space-y-4"
                         data-lenis-prevent
                     >
+                        {/* Your terms content here (unchanged) */}
                         <h2 className="text-lg font-semibold">
                             DataKind’s [AppName] Service Terms and Conditions of Use
                         </h2>
@@ -105,7 +129,11 @@ export default function AcceptTerms() {
                     </div>
 
                     <div className="mt-8 flex items-center justify-end">
-                        <Button onClick={acceptTerms}>I Agree</Button>
+                        <Button onClick={acceptTerms} disabled={!scrolledToBottom}>
+                            I Agree
+                        </Button>
+
+
                     </div>
 
                     <div className="text-center mt-20">

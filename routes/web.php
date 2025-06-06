@@ -236,7 +236,7 @@ Route::middleware(['auth'])->get('/terms/prompt', function () {
 
 Route::middleware(['auth'])->post('/terms/accept', function () {
     auth()->user()->update(['accepted_terms' => true]);
-    return redirect()->intended('/');
+    return redirect()->route('dashboard');
 })->name('terms.accept');
 
 // The below are datakinder only paths.

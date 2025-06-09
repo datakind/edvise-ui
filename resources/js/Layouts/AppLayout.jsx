@@ -322,7 +322,7 @@ export default function AppLayout({ title, renderHeader, children }) {
         <header className="flex items-center justify-between p-4 text-secondary-dark">
           <img
             className="w-full pb-12"
-            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
             alt="Edvise Logo"
           />
         </header>
@@ -349,7 +349,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 <a href={route('home')}>
                   <img
                     className="w-full pb-12"
-                    src="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise-Logo-Mark.png"
+                    src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
                 </a>

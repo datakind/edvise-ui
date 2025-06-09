@@ -39,7 +39,7 @@ export default function AcceptTerms() {
 
                     <img
                         className="w-1/3 pb-12"
-                        src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
+                        src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                         alt="Edvise Logo"
                     />
 

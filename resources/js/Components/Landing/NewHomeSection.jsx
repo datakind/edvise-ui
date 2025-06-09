@@ -32,7 +32,7 @@ export default function AdvisorsSection(props) {
         alt: 'Osian Sampson',
       },
       quotes: [
-        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Student Success Tool is a must-have.',
+        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Edvise is a must-have.',
         'It bridges the gap between students and advisors, ensuring that no student falls through the cracks.',
       ],
     },
@@ -58,7 +58,7 @@ export default function AdvisorsSection(props) {
         id="main_area"
       >
         <h1 className="pb-12 text-center text-5xl font-light">
-          Welcome to the Student Success Tool!
+          Welcome to Edvise!
         </h1>
         <div className="mx-auto w-3/4 justify-center">
           <div className="pb-12 text-center text-lg font-thin">

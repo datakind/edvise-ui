@@ -322,8 +322,8 @@ export default function AppLayout({ title, renderHeader, children }) {
         <header className="flex items-center justify-between p-4 text-secondary-dark">
           <img
             className="w-full pb-12"
-            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
+            alt="Edvise Logo"
           />
         </header>
         <main className="flex min-h-screen flex-col items-center bg-[#637381] p-6">
@@ -349,7 +349,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 <a href={route('home')}>
                   <img
                     className="w-full pb-12"
-                    src="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise-Logo-Mark.png"
+                    src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
                 </a>

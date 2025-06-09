@@ -22,7 +22,7 @@ export default function CaseStudySection({ className }) {
               >
                 John Jay College
               </a>{' '}
-              partnered with DataKind to harness the Student Success Tool –
+              partnered with DataKind to harness Edvise –
               empowering academic advisors to more efficiently identify at-risk
               students, reach out, and build personalized plans for their
               success.

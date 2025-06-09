@@ -186,7 +186,7 @@ export default function Header() {
               <a href="/">
                 <img
                   className="max-w-[110px] sm:max-w-[140px]"
-                  src="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise-Logo-Mark.png"
+                  src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                   alt="Edvise Logo"
                 />
               </a>

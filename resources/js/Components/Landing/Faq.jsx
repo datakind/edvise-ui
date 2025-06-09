@@ -44,7 +44,7 @@ export default function Faq({ className }) {
             How does the technology work?
           </h2>
           <div className="mb-4 mb-9 text-[#4f4f4f] sm:mb-12">
-            The Edvise uses predictive analytics to help academic
+            Edvise uses predictive analytics to help academic
             advisors support students more proactively. Below are answers to
             common questions about how it works and how it fits into existing
             advising strategies.

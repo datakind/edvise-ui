@@ -58,7 +58,7 @@ export default function AdvisorsSection(props) {
         id="main_area"
       >
         <h1 className="pb-12 text-center text-5xl font-light">
-          Welcome to the Edvise!
+          Welcome to Edvise!
         </h1>
         <div className="mx-auto w-3/4 justify-center">
           <div className="pb-12 text-center text-lg font-thin">

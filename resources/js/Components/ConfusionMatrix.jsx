@@ -74,7 +74,7 @@ export default function ConfusionMatrix() {
         <div className="mb-2 text-lg font-semibold text-[#222]">
           Normalized Confusion Matrix
         </div>
-        <div className="rounded-32 grid w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa]">
+        <div className="rounded-32 grid w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa] bg-white">
           {cellInfo.flat().map((cell, idx) => (
             <div
               key={cell.label}

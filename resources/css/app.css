@@ -59,3 +59,10 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
 a {
   @apply text-blue-700;
 }
+
+/* Rounded corners for Plotly tooltips */
+.js-plotly-plot .hoverlayer .hovertext {
+  border-radius: 16px !important;
+  overflow: hidden;
+  padding: 8px !important;
+}

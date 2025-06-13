@@ -350,7 +350,7 @@ export default function ModelResultsOverview() {
               </div>
               {/* Support Scores Histogram */}
               <div className="mb-8">
-                <SupportScores />
+                <SupportScores tab={tab} setTab={setTab} />
               </div>
             </>
           )}

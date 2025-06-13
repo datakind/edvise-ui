@@ -18,7 +18,7 @@ import { Head } from '@inertiajs/react';
 export default function Welcome() {
   return (
     <>
-      <Head title="Edvise">
+      <Head title="Home">
         <meta
           name="description"
           content="Edvise is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."

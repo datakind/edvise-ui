@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff') format('woff');
+        font-weight: 300;
+    }
+
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
+        font-weight: 400;
+    }
+}
+
 [x-cloak] {
   display: none;
 }

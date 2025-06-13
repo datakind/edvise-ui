@@ -6,29 +6,29 @@ export default function InterpretChart() {
       className="flex w-fit flex-col items-center rounded-2xl border-2 border-orange-400 bg-white p-4 shadow-md"
       style={{ minWidth: 400 }}
     >
-      <div className="mb-2 w-full text-left text-lg font-medium text-black">
+      <div className="mb-6 w-full text-left text-lg font-medium text-black">
         How to interpret chart colors
       </div>
       <div className="flex w-full flex-col items-center">
-        {/* Color bar with circles */}
+        {/* Color bar with circles above */}
         <div
-          className="relative flex w-full items-center justify-between"
-          style={{ minWidth: 340, maxWidth: 500 }}
+          className="relative flex w-full flex-col items-center"
+          style={{ minWidth: 340, maxWidth: 500, height: 40 }}
         >
-          {/* Left circle */}
-          <div className="z-10">
-            <div
-              className="h-7 w-7 rounded-full"
-              style={{ background: '#8ee6ef' }}
-            />
-          </div>
-          {/* Gradient bar */}
+          {/* Color bar */}
           <svg
-            width="80%"
+            width="100%"
             height="20"
             viewBox="0 0 320 20"
-            className="mx-2 flex-1"
-            style={{ minWidth: 180, maxWidth: 320 }}
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1,
+              minWidth: 340,
+              maxWidth: 500,
+            }}
           >
             <defs>
               <linearGradient
@@ -53,10 +53,41 @@ export default function InterpretChart() {
             {/* Center divider */}
             <rect x="159" y="0" width="2" height="20" fill="#cfe6ef" />
           </svg>
-          {/* Right circle */}
-          <div className="z-10">
+          {/* Left circle */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: -10,
+              zIndex: 2,
+              width: 28,
+              height: 28,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <div
-              className="h-7 w-7 rounded-full"
+              className="h-5 w-5 rounded-full"
+              style={{ background: '#8ee6ef' }}
+            />
+          </div>
+          {/* Right circle */}
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: -10,
+              zIndex: 2,
+              width: 28,
+              height: 28,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              className="h-5 w-5 rounded-full"
               style={{ background: '#00838f' }}
             />
           </div>
@@ -73,13 +104,13 @@ export default function InterpretChart() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="#B2F1F9"
-              class="size-6"
+              className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
               />
             </svg>
@@ -95,13 +126,13 @@ export default function InterpretChart() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="#007C8C"
-              class="size-6"
+              className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
               />
             </svg>

@@ -6,6 +6,7 @@ import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
+import '../../css/landing.css';
 
 const features = [
   {
@@ -64,27 +65,41 @@ export default function ModelResultsOverview() {
 
   return (
     <AppLayout title="Model Results Overview">
-      <div className="mb-8 w-full">
+      <div className="font-[Helvetica Neue] mb-8 w-full">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="mx-auto text-5xl font-light">
             Model Results Overview
           </h1>
         </div>
         <div className="my-6">
-          <button className="ml-8 rounded-full bg-[#f79222] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#e67c00]">
+          <button className="ml-8 rounded-full bg-[#f79222] px-4 py-2 text-base font-normal text-black shadow hover:bg-[#e67c00]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="mr-2 inline-block size-5 pb-1"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+              />
+            </svg>
             Export Data
           </button>
         </div>
-        <div className="w-full bg-[#F5F5F5] p-6">
+        <div className="w-full bg-[#FAFAFA] p-6">
           <div className="mb-2 flex items-center gap-4">
             <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 text-black' : 'text-[#637381]'}`}
+              className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
               onClick={() => setTab('results')}
             >
               Latest Model Results
             </button>
             <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'about' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 text-black' : 'text-[#637381]'}`}
+              className={`px-2 pb-1 text-xl font-light ${tab === 'about' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
               onClick={() => setTab('about')}
             >
               About this Model
@@ -282,17 +297,17 @@ export default function ModelResultsOverview() {
                     </div>
                   </div>
                   {/* Right column: table */}
-                  <div className="w-full overflow-x-auto md:w-3/4">
-                    <table className="w-full rounded-3xl text-left shadow-md">
+                  <div className="w-full overflow-x-auto rounded-3xl border border-gray-200 shadow-sm md:w-3/4">
+                    <table className="w-full rounded-3xl text-left">
                       <thead>
                         <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
                           <th className="p-6 text-xs font-medium text-[#6B7280]">
                             Feature Name
                           </th>
-                          <th className="p-6 text-xs font-medium text-[#6B7280]">
+                          <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
                             Data Type
                           </th>
-                          <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
+                          <th className="py-6 pr-6 text-left text-xs font-medium text-[#6B7280]">
                             Overall Feature Importance
                           </th>
                         </tr>
@@ -309,10 +324,10 @@ export default function ModelResultsOverview() {
                                 {f.desc}
                               </div>
                             </td>
-                            <td className="py-2 pr-2 text-sm text-black">
+                            <td className="py-2 pr-2 text-center text-sm text-black">
                               {f.type}
                             </td>
-                            <td className="py-2 pr-2 text-center text-sm text-black">
+                            <td className="py-2 pr-2 text-left text-sm text-black">
                               {f.importance}
                               <div className="text-xs text-[#696969]">
                                 Range is {f.range}
@@ -335,7 +350,7 @@ export default function ModelResultsOverview() {
               </div>
               {/* Support Scores Histogram */}
               <div className="mb-8">
-                <SupportScores />
+                <SupportScores tab={tab} setTab={setTab} />
               </div>
             </>
           )}

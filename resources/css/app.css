@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff') format('woff');
+        font-weight: 300;
+    }
+
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
+        font-weight: 400;
+    }
+}
+
 [x-cloak] {
   display: none;
 }
@@ -40,4 +58,11 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
 
 a {
   @apply text-blue-700;
+}
+
+/* Rounded corners for Plotly tooltips */
+.js-plotly-plot .hoverlayer .hovertext {
+  border-radius: 16px !important;
+  overflow: hidden;
+  padding: 8px !important;
 }

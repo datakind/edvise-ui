@@ -199,10 +199,10 @@ export default function ModelResultsOverview() {
                       </tr>
                     </thead>
                     <tbody>
-                      {features.slice(0, 10).map(feature => (
+                      {features.slice(0, 10).map((feature, idx) => (
                         <tr
                           key={feature.name}
-                          className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                          className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
                         >
                           <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
                             <div className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline">

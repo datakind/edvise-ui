@@ -112,7 +112,7 @@ export default function ModelResultsOverview() {
                 Showing model results for: students.cohort.2024
               </div>
               <div className="mb-8">
-                <SupportOverview />
+                <SupportOverview tab={tab} setTab={setTab} />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

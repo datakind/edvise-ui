@@ -6,7 +6,20 @@ const placeholderData = Array.from(
   () => 0.1 + 0.7 * Math.random(),
 );
 
-export default function SupportOverview() {
+// Helper to interpolate between two hex colors
+function interpolateColor(color1, color2, factor) {
+  const c1 = color1.match(/\w\w/g).map(x => parseInt(x, 16));
+  const c2 = color2.match(/\w\w/g).map(x => parseInt(x, 16));
+  const result = c1.map((v, i) => Math.round(v + (c2[i] - v) * factor));
+  return `rgb(${result[0]},${result[1]},${result[2]})`;
+}
+
+const numBins = 30;
+const gradientColors = Array.from({ length: numBins }, (_, i) =>
+  interpolateColor('F9F0E8', 'F79222', i / (numBins - 1)),
+);
+
+export default function SupportOverview({ tab, setTab }) {
   // Histogram bins and counts (placeholder)
   const bins = Array.from({ length: 30 }, (_, i) => 0.1 + (0.7 / 30) * i);
   const counts = Array(30).fill(0);
@@ -24,8 +37,14 @@ export default function SupportOverview() {
         The following graph shows the distribution of support scores for the
         most recent student data uploaded. The higher the support score the more
         likely these students are in need of extra support. See{' '}
-        <span className="font-semibold underline">About this Model</span> to
-        learn more.
+        <a
+          href="#"
+          onClick={() => setTab('about')}
+          className="font-semibold text-[#222] underline"
+        >
+          About this Model
+        </a>{' '}
+        to learn more.
       </div>
       <div className="flex items-start gap-8">
         {/* At a Glance */}
@@ -59,13 +78,14 @@ export default function SupportOverview() {
                 type: 'histogram',
                 xbins: { start: 0.1, end: 0.8, size: 0.7 / 30 },
                 marker: {
-                  color: 'rgba(247,146,34,1)',
-                  line: { color: 'rgba(247,146,34,1)', width: 1 },
+                  color: gradientColors,
                   pattern: { shape: '' },
                   opacity: 0.7,
                 },
                 autobinx: false,
-                hoverinfo: 'x+y',
+                hoverinfo: 'skip',
+                hovertemplate:
+                  '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score between <span style="font-weight:bold;font-size:16px">%{x}</span><extra></extra>',
                 name: 'Support Score',
               },
               // Vertical line annotation as a scatter
@@ -100,7 +120,19 @@ export default function SupportOverview() {
               showlegend: false,
               plot_bgcolor: '#fff',
               paper_bgcolor: '#fff',
-              shapes: [],
+              shapes: [
+                {
+                  type: 'line',
+                  x0: 0.0,
+                  y0: 0,
+                  x1: 1,
+                  y1: 0,
+                  line: {
+                    color: '#80868B',
+                    width: 3,
+                  },
+                },
+              ],
               annotations: [
                 {
                   x: 0.7,
@@ -116,6 +148,14 @@ export default function SupportOverview() {
                   align: 'left',
                 },
               ],
+              hoverlabel: {
+                bgcolor: 'rgba(0,0,0,0.8)',
+                font: {
+                  color: 'white',
+                  size: 16,
+                },
+                align: 'center',
+              },
             }}
             config={{ displayModeBar: false, responsive: true }}
             style={{ width: '100%', height: 400 }}

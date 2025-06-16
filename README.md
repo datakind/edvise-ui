@@ -86,7 +86,7 @@ NOTE: for dev and staging, email verification is turned off. Email verification 
 
 ### Frameworks Used
 
-the Student Success Tool is built on:
+the Edvise is built on:
 
 - Laravel Framework. [Documentation](https://laravel.com/docs)
 

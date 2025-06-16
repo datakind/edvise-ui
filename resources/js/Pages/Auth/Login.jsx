@@ -30,8 +30,8 @@ export default function Login({ canResetPassword, status }) {
           <Head title="login" />
           <img
             className="w-1/3 pb-12"
-            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
+            alt="Edvise Logo"
           />
 
           <div className="pb-8 text-2xl">Welcome! Log in to get started:</div>

@@ -20,8 +20,8 @@ export default function VerifyEmail({ status }) {
           <Head title="Email Verification" />
           <img
             className="w-1/3 pb-12"
-            src="https://storage.googleapis.com/staging-sst-01-staging-static/deemia-logo.svg"
-            alt="Student Success Tool Logo"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
+            alt="Edvise Logo"
           />
           <div className="mb-4 text-sm text-gray-600">
             Before continuing, could you verify your email address by clicking

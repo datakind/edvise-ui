@@ -31,7 +31,12 @@ export default function AdvisorsSection(props) {
         alt: 'Marty Schmidt',
       },
       quotes: [
+<<<<<<< sj-ux
         'At the National Student Clearinghouse, we’re proud to see our Postsecondary Data Partnership (PDP) powering DataKind’s Edvise. By enhancing the PDP’s Analysis-Ready (AR) files, DataKind is accelerating the delivery of actionable insights to institutions—enabling them to make timely, data-informed decisions that improve student outcomes. This collaboration underscores the value and impact of PDP in advancing student success through data.',
+=======
+        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Edvise is a must-have.',
+        'It bridges the gap between students and advisors, ensuring that no student falls through the cracks.',
+>>>>>>> develop
       ],
     },
   ];

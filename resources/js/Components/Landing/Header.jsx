@@ -264,13 +264,7 @@ export default function Header() {
                   })}
                 />
               </button>
-              <Button
-                kind="secondary"
-                href="/login"
-                className="hidden md:block"
-              >
-                Log in
-              </Button>
+              {/* TODO: Replace login button here */}
             </div>
           </div>
         </div>

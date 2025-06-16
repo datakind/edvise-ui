@@ -22,10 +22,16 @@ export default function CaseStudySection({ className }) {
               >
                 John Jay College
               </a>{' '}
+<<<<<<< sj-ux
+              partnered with DataKind to harness Edvise – empowering academic
+              advisors to more efficiently identify at-risk students, reach out,
+              and build personalized plans for their success.
+=======
               partnered with DataKind to harness Edvise –
               empowering academic advisors to more efficiently identify at-risk
               students, reach out, and build personalized plans for their
               success.
+>>>>>>> develop
             </p>
           </div>
           <div className="col-span-full md:col-span-12 md:col-start-9">

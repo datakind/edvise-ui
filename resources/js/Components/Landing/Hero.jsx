@@ -27,13 +27,20 @@ export default function Hero() {
           </svg>
         </a>
         <div className="col-span-6 mb-5 mb-[32px] md:col-span-10 md:col-start-7">
+<<<<<<< sj-ux
+          <img
+            className="mb-5"
+            src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
+            alt="Edvise Logo"
+          />
+=======
           <div className="mb-5 text-2xl">
               Edvise
           </div>
+>>>>>>> develop
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
-            Is a scalable solution that empowers student support teams with
-            data-driven insights to enhance efficiency and better serve
-            students.
+            Empowers student support teams with data-driven insights to enhance
+            efficiency and better serve students.
           </p>
         </div>
       </div>

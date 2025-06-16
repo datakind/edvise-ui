@@ -1,15 +1,14 @@
 export default function AdvisorsSection(props) {
   const testimonies = [
     {
-      name: 'Dara Byrne',
-      role: 'Google.org',
+      name: 'Dara N. Byrne, PhD',
+      role: 'Former Associate Provost for Undergraduate Retention & Dean of Undergraduate Studies, John Jay College of Criminal Justice',
       image: {
-        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-1.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/Dara_Action_Shot.jpeg',
         alt: 'Dara Byrne',
       },
       quotes: [
-        'When you bring data and AI into the mix, you reshape the fundamental way that institutions see these students.',
-        "The data itself can't tell us who these students are. But what it can do is tell us a story about their barriers and reveal pathways to unlock their success.",
+        "Partnering with DataKind showed us what’s possible when data is used not just smartly, but compassionately. Their leadership in data philanthropy helped us boost John Jay's senior graduation rate from 54% to 86% in just two years—transforming lives by turning insight into action. This is what the human side of AI looks like: real people, real progress, and a future driven by purpose.",
       ],
     },
     {
@@ -25,15 +24,14 @@ export default function AdvisorsSection(props) {
       ],
     },
     {
-      name: 'Osian Sampson',
-      role: 'Student advisor / Institution',
+      name: 'Marty Schmidt',
+      role: 'Product Manager, Postsecondary Data Partnership, National Student Clearinghouse',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-3.jpg',
-        alt: 'Osian Sampson',
+        alt: 'Marty Schmidt',
       },
       quotes: [
-        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Edvise is a must-have.',
-        'It bridges the gap between students and advisors, ensuring that no student falls through the cracks.',
+        'At the National Student Clearinghouse, we’re proud to see our Postsecondary Data Partnership (PDP) powering DataKind’s Edvise. By enhancing the PDP’s Analysis-Ready (AR) files, DataKind is accelerating the delivery of actionable insights to institutions—enabling them to make timely, data-informed decisions that improve student outcomes. This collaboration underscores the value and impact of PDP in advancing student success through data.',
       ],
     },
   ];

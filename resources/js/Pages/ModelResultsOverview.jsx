@@ -137,11 +137,14 @@ export default function ModelResultsOverview() {
                         <li>
                           The relation between dot distribution and color tells
                           you how each feature affects student support needs.
-                        </li>
-                        <li>
-                          For example, if darker dots are all clustered further
-                          to the right, that means students with a higher value
-                          for that feature are more likely to need support.
+                          <ul className="ml-5 list-disc">
+                            <li>
+                              For example, if darker dots are all clustered
+                              further to the right, that means students with a
+                              higher value for that feature are more likely to
+                              need support.
+                            </li>
+                          </ul>
                         </li>
                       </ul>
                     </div>
@@ -152,22 +155,23 @@ export default function ModelResultsOverview() {
                   <table className="w-full text-left">
                     <thead>
                       <tr>
-                        <th className="w-1/3 p-2 text-xs font-semibold text-[#3E3E3E]">
+                        <th className="w-1/3 p-2 text-sm text-xs font-bold text-black">
                           Click any of the feature names to learn more
                         </th>
                         <th
                           className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
                           colSpan="2"
                         >
-                          <span className="text-grey-700 float-left text-xs">
-                            Decreasing likelihood of support needs
+                          <span className="text-grey-700 float-left text-xs font-medium">
+                            <span className="font-bold">Decreasing</span>{' '}
+                            likelihood of support needs
                             {/* Left arrow */}
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
                               strokeWidth="1.5"
-                              stroke="#B2F1F9"
+                              stroke="#000"
                               className="size-6"
                             >
                               <path
@@ -177,15 +181,16 @@ export default function ModelResultsOverview() {
                               />
                             </svg>
                           </span>
-                          <span className="float-right">
-                            Increasing likelihood of support needs
+                          <span className="float-right font-medium">
+                            <span className="font-bold">Increasing</span>{' '}
+                            likelihood of support needs
                             {/* Right arrow */}
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
                               strokeWidth="1.5"
-                              stroke="#007C8C"
+                              stroke="#000"
                               className="size-6"
                             >
                               <path
@@ -227,7 +232,7 @@ export default function ModelResultsOverview() {
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke="#B2F1F9"
+                        stroke="#000"
                         className="size-6"
                       >
                         <path
@@ -236,7 +241,8 @@ export default function ModelResultsOverview() {
                           d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
                         />
                       </svg>
-                      Decreasing likelihood of support needs
+                      <span className="font-bold">Decreasing</span> likelihood
+                      of support needs
                     </span>
                     <span>
                       {/* Right arrow */}
@@ -245,7 +251,7 @@ export default function ModelResultsOverview() {
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke="#007C8C"
+                        stroke="#000"
                         className="size-6"
                       >
                         <path
@@ -254,7 +260,8 @@ export default function ModelResultsOverview() {
                           d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
                         />
                       </svg>
-                      Increasing likelihood of support needs
+                      <span className="font-bold">Increasing</span> likelihood
+                      of support needs
                     </span>
                   </div>
                   <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">

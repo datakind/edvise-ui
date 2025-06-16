@@ -12,7 +12,7 @@ const tpr = [
 export default function RocCurve() {
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
-      <div className="mr-8 flex min-w-[320px] max-w-[420px] flex-1 flex-col justify-center">
+      <div className="mr-8 flex min-w-[320px] max-w-[420px] flex-1 flex-col justify-start">
         <h2 className="pb-4 text-2xl font-light">ROC Curve for Test Data</h2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-4">
@@ -83,9 +83,32 @@ export default function RocCurve() {
               zeroline: false,
             },
             showlegend: false,
-            plot_bgcolor: '#f7f8fa',
-            paper_bgcolor: '#f7f8fa',
-            shapes: [],
+            plot_bgcolor: '#EEF2F6',
+            paper_bgcolor: '#fff',
+            shapes: [
+              {
+                type: 'line',
+                x0: 0.0,
+                y0: 0,
+                x1: 1,
+                y1: 0,
+                line: {
+                  color: '#000000',
+                  width: 3,
+                },
+              },
+              {
+                type: 'line',
+                x0: 0,
+                y0: 0,
+                x1: 0,
+                y1: 1,
+                line: {
+                  color: '#000000',
+                  width: 3,
+                },
+              },
+            ],
             annotations: [],
             height: 480,
           }}

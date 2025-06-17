@@ -1,19 +1,23 @@
-import AppLayout from '@/Layouts/AppLayout';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { Head } from '@inertiajs/react';
 
 const PrivacyPolicy = () => {
   return (
-    <AppLayout title="Privacy Policy">
+    <GuestLayout title="Privacy Policy">
       <Head title="Privacy Policy" />
-      <div className="max-w-6xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
-        <div className="prose lg:prose-xl">
-          <h2 className="text-header">Privacy Policy </h2>
-          <section className="mb-6">
+      <div className="mx-auto my-12 max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="prose text-[#4F4F4F] lg:prose-xl">
+          <h1 className="text-5xl font-light text-black">Privacy Policy</h1>
+          <section className="mb-6 text-base font-light">
             <p className="mb-4">
-              <strong>Effective Date:</strong> DATE
+              <span className="font-semibold text-black">Effective Date:</span>{' '}
+              June 17, 2025
             </p>
             <p className="mb-4">
-              <strong>Most Recent Update:</strong> DATE
+              <span className="font-semibold text-black">
+                Most Recent Update:
+              </span>{' '}
+              June 17, 2025
             </p>
             <p className="mb-4">
               DataKind is committed to protecting your online privacy. The
@@ -31,8 +35,10 @@ const PrivacyPolicy = () => {
             </p>
           </section>
 
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">Introduction</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
+              Introduction
+            </h2>
             <p className="mb-4">
               DataKind is a nonprofit registered as a 501(c)3 organization in
               the United States. DataKind UK is a charity registered in England
@@ -45,10 +51,13 @@ const PrivacyPolicy = () => {
               This Privacy Policy is applicable to DataKind (“we,” “our,” or
               “us”) as related to our services, which collectively include:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>
                 The use of{' '}
-                <a href="https://www.datakind.org" className="text-blue-500">
+                <a
+                  href="https://www.datakind.org"
+                  className="font-bold underline"
+                >
                   datakind.org
                 </a>
               </li>
@@ -65,7 +74,7 @@ const PrivacyPolicy = () => {
               This Privacy Policy sets out the essential details relating to
               your personal data relationships with DataKind as:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>A website visitor</li>
               <li>An end user of the application (“end user”)</li>
               <li>A prospective client</li>
@@ -75,8 +84,10 @@ const PrivacyPolicy = () => {
             </ul>
           </section>
 
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">What We Collect</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
+              What We Collect
+            </h2>
             <p className="mb-4">
               DataKind may collect information about you at different stages and
               through various means. We try to collect as little data as
@@ -87,7 +98,7 @@ const PrivacyPolicy = () => {
               collection. Specifically, we collect information in the following
               ways:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>
                 When you sign up on the website or one of our product websites,
                 we may ask for information such as name, occupation, email
@@ -126,8 +137,8 @@ const PrivacyPolicy = () => {
               data you provide to us indefinitely.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
               What We Do with the Information We Gather
             </h2>
             <p className="mb-4">
@@ -135,7 +146,7 @@ const PrivacyPolicy = () => {
               other community members to ensure we can provide the best services
               to you and the organizations we support. In particular:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>We may keep internal records of our users and activities.</li>
               <li>
                 We may use the information to improve our products and services.
@@ -191,8 +202,8 @@ const PrivacyPolicy = () => {
               disclosed or used.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
               Where the Data Is Stored
             </h2>
             <p className="mb-4">
@@ -230,8 +241,8 @@ const PrivacyPolicy = () => {
               transit.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">Security</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">Security</h2>
             <p>
               We are committed to ensuring that your information is secure. In
               order to prevent unauthorized access or disclosure, we use
@@ -242,8 +253,8 @@ const PrivacyPolicy = () => {
               processing practices.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
               Information that we share
             </h2>
             <p>
@@ -251,7 +262,7 @@ const PrivacyPolicy = () => {
               companies, organizations, and individuals outside of DataKind,
               unless one of the following holds:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>We have the user’s explicit consent.</li>
               <li>
                 For sensitive personal information, we have the user’s explicit,
@@ -261,8 +272,8 @@ const PrivacyPolicy = () => {
             </ul>
             <p>We do not sell your information to any third party.</p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
               Cookies and Third Party Tools
             </h2>
             <p>
@@ -274,7 +285,7 @@ const PrivacyPolicy = () => {
             <p className="mb-4">
               The information collected with cookies includes:
             </p>
-            <ul className="list-disc list-inside mb-4">
+            <ul className="mb-4 list-inside list-disc">
               <li>Access times</li>
               <li>The pages you view</li>
               <li>The links you click on</li>
@@ -310,8 +321,8 @@ const PrivacyPolicy = () => {
               websites is not governed by this Privacy Policy.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light text-black">
               Controlling Your Personal Information
             </h2>
             <p>
@@ -342,8 +353,8 @@ const PrivacyPolicy = () => {
               .
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light">
               Supervisory Data Authorities
             </h2>
             <p>
@@ -370,8 +381,8 @@ const PrivacyPolicy = () => {
               .
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light">
               Selecting Your Communication Preferences
             </h2>
             <p>
@@ -387,8 +398,8 @@ const PrivacyPolicy = () => {
               participate.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">Changes</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light">Changes</h2>
             <p>
               Our Privacy Policy may change from time to time. We will post any
               Privacy Policy changes on this page and, if the changes are
@@ -396,8 +407,8 @@ const PrivacyPolicy = () => {
               email notification of Privacy Policy changes.
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2">Contact us</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-4xl font-light">Contact us</h2>
             <p>
               If you have any questions, comments, or requests regarding this
               Privacy Policy, you are welcome to contact us at{' '}
@@ -410,20 +421,20 @@ const PrivacyPolicy = () => {
               .
             </p>
           </section>
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-4">Appendix</h2>
+          <section className="mb-6 text-base font-light">
+            <h2 className="mb-2 text-5xl font-light text-black">Appendix</h2>
 
             <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+              <div className="mb-2 text-lg font-light text-black">
                 A.1 For Individuals Based in the European Economic Area (EEA),
                 United Kingdom (UK) and Switzerland
-              </h3>
+              </div>
               <p>
                 If you are based in one of these jurisdictions, DataKind is the
                 controller of your personal data collected in the following
                 instances:
               </p>
-              <ul className="list-disc ml-6 mb-4">
+              <ul className="mb-4 ml-6 list-disc">
                 <li>When you visit our website datakind.org</li>
                 <li>
                   When we process your personal data for sales and marketing
@@ -442,26 +453,24 @@ const PrivacyPolicy = () => {
                 doing so. The lawful bases applicable to our processing as
                 controller are:
               </p>
-              <ul className="list-disc ml-6 mb-4">
+              <ul className="mb-4 ml-6 list-disc">
                 <li>
-                  <strong>Consent:</strong> We will ask for your express and
-                  informed consent every time we collect your personal data on
-                  this legal basis.
+                  Consent: We will ask for your express and informed consent
+                  every time we collect your personal data on this legal basis.
                 </li>
                 <li>
-                  <strong>Contractual basis:</strong> We process the personal
-                  data as necessary to fulfill our contractual terms with you or
-                  our clients.
+                  Contractual basis: We process the personal data as necessary
+                  to fulfill our contractual terms with you or our clients.
                 </li>
                 <li>
-                  <strong>Legitimate interest:</strong> We process the names,
-                  contact details, job titles, companies of our existing and
-                  prospective clients for our marketing purposes, including
-                  market research and sales leads generation.
+                  Legitimate interest: We process the names, contact details,
+                  job titles, companies of our existing and prospective clients
+                  for our marketing purposes, including market research and
+                  sales leads generation.
                 </li>
               </ul>
               <p>You have the following rights under the GDPR:</p>
-              <ul className="list-disc ml-6 mb-4">
+              <ul className="mb-4 ml-6 list-disc">
                 <li>
                   Be informed about the collection and use of your personal data
                 </li>
@@ -501,21 +510,18 @@ const PrivacyPolicy = () => {
                 You may contact us at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
-                  className="text-blue-500 hover:underline"
+                  className="font-bold hover:underline"
                 >
                   privacy@datakind.org
                 </a>
                 . You may also lodge a complaint with your local supervisory
                 authority:
               </p>
-              <ul className="list-disc ml-6 mb-4">
+              <ul className="mb-4 ml-6 list-disc">
                 <li>
                   EU Data Protection Authorities (DPAs). See their contact
                   details{' '}
-                  <a
-                    href="link-to-dpas"
-                    className="text-blue-500 hover:underline"
-                  >
+                  <a href="link-to-dpas" className="font-bold hover:underline">
                     here
                   </a>
                 </li>
@@ -528,10 +534,10 @@ const PrivacyPolicy = () => {
               </ul>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mb-6 text-base font-light">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2 For Individuals Based in The United States
-              </h3>
+              </div>
               <p>
                 Under the California Privacy Rights Act (‘CPRA’) – which amended
                 and expanded on CCPA, Connecticut Data Privacy Act (‘CTDPA’),
@@ -541,7 +547,7 @@ const PrivacyPolicy = () => {
                 in relation to the personal information about them that we have
                 collected (subject to certain limitations at law):
               </p>
-              <ul className="list-disc ml-6 mb-4">
+              <ul className="mb-4 ml-6 list-disc">
                 <li>
                   The right to access/know any or all of the information
                   relating to your personal information that we have collected,
@@ -613,16 +619,16 @@ const PrivacyPolicy = () => {
               </p>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mb-6 text-base font-light">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2.1 How to Exercise Your Consumer Rights
-              </h3>
+              </div>
               <p>
                 To exercise any of your rights mentioned above, please submit a
                 request by contacting us at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
-                  className="text-blue-500 hover:underline"
+                  className="font-bold hover:underline"
                 >
                   privacy@datakind.org
                 </a>
@@ -670,7 +676,7 @@ const PrivacyPolicy = () => {
                 decision by contacting us at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
-                  className="text-blue-500 hover:underline"
+                  className="font-bold hover:underline"
                 >
                   privacy@datakind.org
                 </a>
@@ -678,10 +684,10 @@ const PrivacyPolicy = () => {
               </p>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mb-6 text-base font-light">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2.2 California’s “Shine the Light” Law
-              </h3>
+              </div>
               <p>
                 California Civil Code Section 1798.83, known as the “Shine the
                 Light” law, permits California residents to request certain
@@ -692,17 +698,17 @@ const PrivacyPolicy = () => {
               </p>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mb-6 text-base font-light">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2.3 California’s “Do Not Track” Disclosure
-              </h3>
+              </div>
               <p>DataKind does not respond to “Do Not Track” (DNT) signals.</p>
             </div>
 
             <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2.4 Data Security
-              </h3>
+              </div>
               <p>
                 DataKind implements reasonable and appropriate technical,
                 administrative, and physical safeguards to protect personal
@@ -714,10 +720,10 @@ const PrivacyPolicy = () => {
               </p>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mb-6 text-base font-light">
+              <div className="mb-2 text-lg font-light text-black">
                 A.2.5 Changes to This Notice
-              </h3>
+              </div>
               <p>
                 We may update this notice from time to time. The updated notice
                 will be posted on our website and we will notify you of
@@ -728,7 +734,7 @@ const PrivacyPolicy = () => {
           </section>
         </div>
       </div>
-    </AppLayout>
+    </GuestLayout>
   );
 };
 

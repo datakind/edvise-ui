@@ -20,11 +20,16 @@ const PrivacyPolicy = () => {
               June 17, 2025
             </p>
             <p className="mb-4">
-              DataKind is committed to protecting your online privacy. The
-              following explains what information we collect about you, how we
-              use it, and what choices you have regarding this information. This
-              policy applies to all information collected from or submitted to
-              getedvise.com.
+              This Privacy Policy sets out how DataKind uses and protects any
+              information that you give DataKind when you use this website and,
+              subsequently, when you interact with DataKind through emails or
+              events. In using our website, digital tools, working or
+              volunteering with us, we might collect personal identifiable
+              information about you. DataKind is committed to protecting your
+              data and your privacy. We only collect the data we need to offer
+              the best possible service to our volunteers and partner
+              organizations (“users” from here on), and always use it in
+              accordance with this Privacy Policy.
             </p>
             <p className="mb-4">
               The information you provide will be held in accordance with the
@@ -63,7 +68,7 @@ const PrivacyPolicy = () => {
               </li>
               <li>
                 The use of any DataKind application websites (datakind.org,
-                playbook.datakind.org, [AppUrl])
+                playbook.datakind.org, getedvise.com)
               </li>
               <li>
                 Social media messages, email newsletter, and marketing campaigns
@@ -672,64 +677,200 @@ const PrivacyPolicy = () => {
               <p>
                 If DataKind does not take action on your Consumer Rights Request
                 within the 45 days, or in the event of an extension, within the
-                time allowed by applicable law, you have the right to appeal our
-                decision by contacting us at{' '}
+                maximum 90-day response period, we will inform you in writing of
+                the reasons for not taking action, as well as provide an
+                explanation of any rights you have to appeal the decision. For
+                opt-out or limit use and disclosure requests submitted under the
+                CCPA, DataKind will respond as soon as feasibly possible, with
+                up to a maximum of 15 days.
+              </p>
+              <p>
+                For consumers residing in Virginia, within 60 days of receipt of
+                an appeal, and for consumers residing in Colorado, within 45
+                days of receipt of an appeal, DataKind will inform the consumer,
+                in writing, of any action taken/not taken in response to the
+                appeal, including an explanation of the reasons for the
+                decisions. If the appeal is denied, DataKind will provide
+                consumers with an online mechanism, if available, or another
+                method which allows the consumer to contact the Attorney General
+                to submit a complaint.
+              </p>
+              <p className="font-bold">Minors Under Age 16</p>
+              <p>
+                Our application and services are intended for business use, and
+                we do not expect them to be of any interest to minors. We do not
+                intentionally collect any personal information of consumers
+                below the age of 13. If you believe that a child under 13 may
+                have provided us their Personal Information, please contact us
+                at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
                   className="font-bold hover:underline"
                 >
                   privacy@datakind.org
                 </a>
-                .
+                . Following contact, DataKind will request the age of the data
+                subject that is minor and get the consent of the holder of the
+                parental responsibility for the minor, where DataKind needs to
+                process that personal information.
               </p>
             </div>
 
             <div className="mb-6 text-base font-light">
               <div className="mb-2 text-lg font-light text-black">
-                A.2.2 California’s “Shine the Light” Law
+                A.3 For Individuals Based in Australia
               </div>
               <p>
-                California Civil Code Section 1798.83, known as the “Shine the
-                Light” law, permits California residents to request certain
-                information regarding our disclosure of personal information to
-                third parties for their direct marketing purposes. DataKind does
-                not disclose personal information to third parties for their
-                direct marketing purposes.
+                This section is applicable to individuals whose personal
+                information is collected, stored, used or disclosed by an APP
+                Entity under the Australian Privacy Principles (“APPs”)
+                contained in the Privacy Act of 1988.
               </p>
             </div>
 
             <div className="mb-6 text-base font-light">
               <div className="mb-2 text-lg font-light text-black">
-                A.2.3 California’s “Do Not Track” Disclosure
+                A.3.1 Providing Anonymous and Pseudonymous Options
               </div>
-              <p>DataKind does not respond to “Do Not Track” (DNT) signals.</p>
+              <p>
+                You have the option of anonymity or using a pseudonym when
+                dealing with DataKind. However, this option may not be made
+                available to you in certain cases, including if it’s impractical
+                for DataKind to allow this option or when DataKind is required
+                or authorized to deal with an identified individual by or under
+                the law.
+              </p>
             </div>
 
             <div className="mb-6">
               <div className="mb-2 text-lg font-light text-black">
-                A.2.4 Data Security
+                A.3.2 Collection, Use and Disclosure of Personal Information
               </div>
               <p>
-                DataKind implements reasonable and appropriate technical,
-                administrative, and physical safeguards to protect personal
-                information against unauthorized access, disclosure,
-                destruction, or alteration. While we strive to protect your
-                personal information, we cannot guarantee the security of any
-                data transmitted to or from our website, and you do so at your
-                own risk.
+                DataKind collects personal information only by lawful and fair
+                means. Additionally, DataKind collects personal information
+                directly from you or your authorized representative, unless we
+                have your consent for collection from another source (i.e.,
+                third parties), it is required or authorized by law, or it is
+                unreasonable to collect the information only from you. DataKind
+                may collect ‘sensitive information’ about you where you have
+                consented to the collection and it is reasonably necessary for
+                one of our functions or activities or if it is required or
+                authorized by law.
               </p>
+              <p>
+                DataKind only uses and discloses your information for the
+                purpose for which it was collected (the primary purpose) unless
+                one or more of the following apply:{' '}
+              </p>
+              <ul className="mb-4 ml-6 list-disc">
+                <li>You have consented</li>
+                <li>You would reasonably expect the secondary purpose </li>
+                <li>It is required or authorized by or under law </li>
+                <li>
+                  DataKind believes that it is reasonably necessary for an
+                  enforcement body’s activities
+                </li>
+              </ul>
+              <p>
+                We disclose your personal information with our service providers
+                in the United States and other jurisdictions. We do not disclose
+                your personal information to any overseas recipients unless one
+                of the following applies:
+              </p>
+              <ul className="mb-4 ml-6 list-disc">
+                <li>You have consented to the disclosure</li>
+                <li>
+                  The recipient is subject to a law or binding scheme
+                  substantially similar to the APPs, and you can enforce that
+                  law/binding scheme{' '}
+                </li>
+                <li>It is required or authorized by law</li>
+                <li>
+                  It is required or authorized by an international agreement
+                  relating to information sharing
+                </li>
+                <li>
+                  It is reasonably necessary for an enforcement body’s or
+                  similar entity’s activities
+                </li>
+              </ul>
+              <p>See the table of our service providers here.</p>
             </div>
 
             <div className="mb-6 text-base font-light">
               <div className="mb-2 text-lg font-light text-black">
-                A.2.5 Changes to This Notice
+                A.3.3 Your Rights Under the APPs
               </div>
               <p>
-                We may update this notice from time to time. The updated notice
-                will be posted on our website and we will notify you of
-                significant changes. We encourage you to review this notice
-                periodically.
+                You have the following rights related to the collection, use and
+                disclosure of your personal data:
               </p>
+              <ul className="mb-4 ml-6 list-disc">
+                <li>
+                  Be informed about the collection and use of your personal data
+                </li>
+                <li>Access your personal information</li>
+                <li>
+                  Correction of your personal information to ensure accuracy and
+                  completeness
+                </li>
+                <li>
+                  Request to not receive direct marketing communications from us
+                  or to not disclose your personal information to others for
+                  direct marketing purposes
+                </li>
+              </ul>
+              <p>
+                If you wish to access your personal information or correct that
+                information, please contact us at{' '}
+                <a
+                  href="mailto:privacy@datakind.org"
+                  className="font-bold hover:underline"
+                >
+                  privacy@datakind.org
+                </a>{' '}
+                You may opt-out (unsubscribe) from receiving marketing
+                communications by using the links provided in our emails. If you
+                are unable to find the opt-out instructions, please contact us
+                at
+                <a
+                  href="mailto:privacy@datakind.org"
+                  className="font-bold hover:underline"
+                >
+                  privacy@datakind.org
+                </a>{' '}
+                for assistance.
+              </p>
+              <p>
+                If you are concerned about DataKind’s handling of your personal
+                information, you may lodge a complaint in writing to
+                <a
+                  href="mailto:privacy@datakind.org"
+                  className="font-bold hover:underline"
+                >
+                  privacy@datakind.org
+                </a>{' '}
+                and we will provide a written response to your complaint within
+                a reasonable time (30 days).
+              </p>
+              <p>
+                If you are not satisfied with our response, you may also
+                complain directly to the Office of the Australian Information
+                Commissioner (OAIC) by:
+              </p>
+              <ul className="mb-4 ml-6 list-disc">
+                <li>
+                  Email: enquiries@oaic.gov.au (be aware that email isn’t
+                  encrypted, if you’re concerned about this, use the online form
+                  on OAIC’s website which is secure)
+                </li>
+                <li>
+                  Mail: GPO Box 5218, Sydney NSW 2001 (send it by registered
+                  mail if you’re concerned about sending it by standard post)
+                </li>
+                <li>Fax: 02 9284 9666</li>
+              </ul>
             </div>
           </section>
         </div>

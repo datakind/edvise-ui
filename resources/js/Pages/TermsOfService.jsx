@@ -1,27 +1,26 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
-import NewLayout from '@/Layouts/NewLayout';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 const TermsOfService = () => {
   return (
-    <NewLayout title="Terms of Service">
+    <GuestLayout title="Terms of Service">
       <Head title="Terms of Service" />
       <div className="mx-auto my-12 mb-24 max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="prose lg:prose-xl">
-          <h2 className="text-header">
-            DataKind’s [AppName] Service Terms and Conditions of Use
-          </h2>
-          <p>
-            DataKind (the “Company”) has developed the [AppName] (available at
-            the entry-point URL [AppUrl]) (the “Site”). [AppName] (“[App]” or
-            the “Service” or “Project”) is [AppDescription]
+          <h1 className="text-5xl font-light text-black">
+            DataKind’s Edvise Service Terms and Conditions of Use
+          </h1>
+          <p className="mb-6 text-base font-light">
+            DataKind (the “Company”) has developed the Edvise (available at the
+            entry-point URL getedvise.com) (the “Site”). Edvise (“App” or the
+            “Service” or “Project”) is [AppDescription]
           </p>
           <section className="mb-6">
-            <h3 className="mb-2 text-2xl font-semibold">
+            <h2 className="text-4xl font-light text-black">
               1. USE OF THE SERVICE
-            </h3>
-            <p>
+            </h2>
+            <p className="mb-6 text-base font-light">
               We will provide you with, and you desire to receive, access to the
               Service during the term of any applicable order for Services
               (“Order”), and subject to your compliance with the terms and
@@ -32,10 +31,10 @@ const TermsOfService = () => {
               USE, YOU ARE NOT PERMITTED TO USE THE SERVICE.
             </p>
           </section>
-          <section className="mb-6">
-            <h3 className="mb-2 text-2xl font-semibold">
+          <section className="mb-6 text-base font-light">
+            <h2 className="text-4xl font-light text-black">
               2. MODIFICATION OF TERMS OF USE
-            </h3>
+            </h2>
             <p>
               We reserve the right to change or modify the Terms of Use at our
               sole discretion at any time. Any change or modification to the
@@ -52,10 +51,10 @@ const TermsOfService = () => {
               date of such notice.
             </p>
           </section>
-          <section className="mb-6">
-            <h3 className="mb-2 text-2xl font-semibold">
+          <section className="mb-6 text-base font-light">
+            <h2 className="text-4xl font-light text-black">
               3. SITE USER CONDUCT
-            </h3>
+            </h2>
             <p>
               In order to access the Site and use the Services, you will need to
               select a login identification (“User Email”) and a user password
@@ -103,10 +102,10 @@ const TermsOfService = () => {
               content, please contact us.
             </p>
           </section>
-          <section className="mb-6">
-            <h3 className="mb-2 text-2xl font-semibold">
+          <section className="mb-6 text-base font-light">
+            <h2 className="text-4xl font-light text-black">
               4. INTELLECTUAL PROPERTY RIGHTS
-            </h3>
+            </h2>
             <p>
               All content or other material available on the Site or through the
               Service, including but not limited to data, code, images, text,
@@ -127,7 +126,7 @@ const TermsOfService = () => {
           </section>
         </div>
       </div>
-    </NewLayout>
+    </GuestLayout>
   );
 };
 

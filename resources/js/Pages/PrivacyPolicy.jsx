@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
               following explains what information we collect about you, how we
               use it, and what choices you have regarding this information. This
               policy applies to all information collected from or submitted to
-              [AppURL].
+              getedvise.com.
             </p>
             <p className="mb-4">
               The information you provide will be held in accordance with the

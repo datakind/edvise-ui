@@ -1,14 +1,14 @@
+import GuestLayout from '@/Layouts/GuestLayout';
 import React from 'react';
-import AppLayout from '@/Layouts/AppLayout';
 
 export default function License() {
   return (
-    <AppLayout title="License">
-      <div className="max-w-6xl mx-auto p-12 border rounded-lg border-gray-200 shadow bg-white">
-        <div className="prose">
-          <h2 className="text-2xl font-bold mb-4">Copyright</h2>
+    <GuestLayout title="License">
+      <div className="mx-auto my-12 max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="prose text-[#4F4F4F] lg:prose-xl">
+          <h1 className="text-5xl font-light text-black">Copyright</h1>
 
-          <p className="mb-4">
+          <p className="mb-6 text-base font-light">
             This site carries a Creative Commons (CC BY 4.0) license, which
             permits re-use of DataKind content when proper attribution is
             provided. This means you are free to copy, display and distribute
@@ -16,27 +16,27 @@ export default function License() {
             the following conditions:
           </p>
 
-          <h3 className="text-xl font-semibold mb-2">Attribution</h3>
-          <p className="mb-4">
+          <h2 className="text-4xl font-light text-black">Attribution</h2>
+          <p className="mb-6 text-base font-light">
             You must clearly attribute the work to DataKind, and provide a link
             back to{' '}
             <a
               href="https://www.datakind.org"
               target="_blank"
-              className="text-blue-600 hover:underline"
+              className="font-bold hover:underline"
             >
               www.datakind.org
             </a>
             .
           </p>
 
-          <p className="mb-4">
+          <p className="mb-6 text-base font-light">
             For the full legal code of this Creative Commons license, please
             click{' '}
             <a
               href="https://creativecommons.org/licenses/by/4.0/"
               target="_blank"
-              className="text-blue-600 hover:underline"
+              className="font-bold hover:underline"
             >
               here
             </a>
@@ -52,6 +52,6 @@ export default function License() {
           </p>
         </div>
       </div>
-    </AppLayout>
+    </GuestLayout>
   );
 }

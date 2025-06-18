@@ -34,7 +34,7 @@ export default function Shap() {
             },
             text: x.map(
               (val, idx) =>
-                `Feature Importance: ${val}<br>Feature Value: ${y[idx]}`,
+                `<b>Student Data</b><br>Feature Importance: ${val}<br>Feature Value: ${y[idx]}`,
             ),
             hoverinfo: 'text',
             hoverlabel: {

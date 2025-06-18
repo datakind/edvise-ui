@@ -32,7 +32,15 @@ export default function Shap() {
               opacity: 0.85,
               line: { width: 0 },
             },
-            hoverinfo: 'skip',
+            text: x.map(
+              (val, idx) =>
+                `Feature Importance: ${val}<br>Feature Value: ${y[idx]}`,
+            ),
+            hoverinfo: 'text',
+            hoverlabel: {
+              bgcolor: 'rgba(0,0,0,0.8)',
+              font: { color: '#fff' },
+            },
           },
         ]}
         layout={{

@@ -1,22 +1,26 @@
 import React from 'react';
 
-const matrix = [
-  [0.75, 0.25], // [TN, FP]
-  [0.29, 0.71], // [FN, TP]
+const cmData = [
+  {
+    true_positive: '0.8441011235955056',
+    false_positive: '0.20485175202156333',
+    true_negative: '0.7951482479784366',
+    false_negative: '0.15589887640449437',
+  },
 ];
 
 const cellInfo = [
   [
     {
       label: 'True negative',
-      percent: '75%',
+      percent: (cmData[0].true_negative * 100).toFixed(0) + '%',
       desc: 'Of students with low support needs were <b>accurately classified</b> by the model',
       color: '#1796A5',
       text: '#ffffff',
     },
     {
       label: 'False positive',
-      percent: '25%',
+      percent: (cmData[0].false_positive * 100).toFixed(0) + '%',
       desc: 'Of students with low support needs were <b>incorrectly classified</b> as high support need',
       color: '#7ED6E8',
       text: '#000000',
@@ -25,14 +29,14 @@ const cellInfo = [
   [
     {
       label: 'False negative',
-      percent: '29%',
+      percent: (cmData[0].false_negative * 100).toFixed(0) + '%',
       desc: 'Of students with high support needs were <b>incorrectly classified</b> as low support need',
       color: '#7ED6E8',
       text: '#000000',
     },
     {
       label: 'True positive',
-      percent: '71%',
+      percent: (cmData[0].true_positive * 100).toFixed(0) + '%',
       desc: 'Of students with high support needs were <b>accurately classified</b> by the model',
       color: '#1796A5',
       text: '#ffffff',

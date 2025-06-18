@@ -1,10 +1,71 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-const placeholderData = Array.from(
-  { length: 1000 },
-  () => 0.1 + 0.7 * Math.random(),
-);
+const inferenceData = [
+  {
+    bin_lower: '0.8',
+    bin_upper: '0.9',
+    support_score: '0.85',
+    count_of_students: '47',
+    pct: '6.71',
+  },
+  {
+    bin_lower: '0.9',
+    bin_upper: '1.0',
+    support_score: '0.95',
+    count_of_students: '19',
+    pct: '2.71',
+  },
+  {
+    bin_lower: '0.2',
+    bin_upper: '0.3',
+    support_score: '0.25',
+    count_of_students: '91',
+    pct: '13.0',
+  },
+  {
+    bin_lower: '0.5',
+    bin_upper: '0.6',
+    support_score: '0.55',
+    count_of_students: '102',
+    pct: '14.57',
+  },
+  {
+    bin_lower: '0.7',
+    bin_upper: '0.8',
+    support_score: '0.75',
+    count_of_students: '68',
+    pct: '9.71',
+  },
+  {
+    bin_lower: '0.1',
+    bin_upper: '0.2',
+    support_score: '0.15',
+    count_of_students: '40',
+    pct: '5.71',
+  },
+  {
+    bin_lower: '0.3',
+    bin_upper: '0.4',
+    support_score: '0.35',
+    count_of_students: '130',
+    pct: '18.57',
+  },
+  {
+    bin_lower: '0.4',
+    bin_upper: '0.5',
+    support_score: '0.45',
+    count_of_students: '128',
+    pct: '18.29',
+  },
+  {
+    bin_lower: '0.6',
+    bin_upper: '0.7',
+    support_score: '0.65',
+    count_of_students: '75',
+    pct: '10.71',
+  },
+];
 
 // Helper to interpolate between two hex colors
 function interpolateColor(color1, color2, factor) {
@@ -19,11 +80,24 @@ const gradientColors = Array.from({ length: numBins }, (_, i) =>
   interpolateColor('F9F0E8', 'F79222', i / (numBins - 1)),
 );
 
+const highSupport = inferenceData
+  .filter(item => parseFloat(item.support_score) >= 0.5)
+  .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
+const lowSupport = inferenceData
+  .filter(item => parseFloat(item.support_score) < 0.5)
+  .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
+
+const yRange =
+  Math.ceil(
+    Math.max(...inferenceData.map(item => parseInt(item.count_of_students))) /
+      10,
+  ) * 10;
+
 export default function SupportOverview({ tab, setTab }) {
   // Histogram bins and counts (placeholder)
   const bins = Array.from({ length: 30 }, (_, i) => 0.1 + (0.7 / 30) * i);
   const counts = Array(30).fill(0);
-  placeholderData.forEach(val => {
+  inferenceData.forEach(val => {
     const idx = Math.min(Math.floor((val - 0.1) / (0.7 / 30)), 29);
     counts[idx]++;
   });
@@ -54,7 +128,7 @@ export default function SupportOverview({ tab, setTab }) {
           </div>
           <div className="mb-4 rounded-lg bg-[#D5E5EE] p-6 text-center">
             <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
-              504
+              {highSupport}
             </div>
             <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>higher support</b> category
@@ -62,7 +136,7 @@ export default function SupportOverview({ tab, setTab }) {
           </div>
           <div className="rounded-lg bg-[#D5E5EE] p-6 text-center">
             <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
-              7,304
+              {lowSupport}
             </div>
             <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>lower support</b> category
@@ -74,27 +148,33 @@ export default function SupportOverview({ tab, setTab }) {
           <Plot
             data={[
               {
-                x: placeholderData,
-                type: 'histogram',
-                xbins: { start: 0.1, end: 0.8, size: 0.7 / 30 },
+                x: inferenceData.map(item => item.support_score),
+                y: inferenceData.map(item => item.count_of_students),
+                type: 'bar',
                 marker: {
-                  color: gradientColors,
-                  pattern: { shape: '' },
-                  opacity: 0.7,
+                  color: inferenceData.map(item => item.support_score),
+                  colorscale: [
+                    [0, '#F9F0E8'],
+                    [1, '#F79222'],
+                  ],
+                  showscale: false,
                 },
-                autobinx: false,
                 hoverinfo: 'skip',
                 hovertemplate:
-                  '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score between <span style="font-weight:bold;font-size:16px">%{x}</span><extra></extra>',
+                  '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score of <span style="font-weight:bold;font-size:16px">%{x}</span><extra></extra>',
                 name: 'Support Score',
               },
-              // Vertical line annotation as a scatter
               {
                 x: [0.5, 0.5],
-                y: [0, 200],
+                y: [0, { yRange }],
+                type: 'scatter',
                 mode: 'lines',
-                line: { color: '#888', width: 2, dash: 'dot' },
-                hoverinfo: 'none',
+                line: {
+                  color: '#1E343F',
+                  width: 1,
+                  dash: 'dash',
+                },
+                hoverinfo: 'skip',
                 showlegend: false,
               },
             ]}
@@ -103,27 +183,31 @@ export default function SupportOverview({ tab, setTab }) {
               xaxis: {
                 title: {
                   text: 'Support Score',
-                  font: { size: 16, family: 'inherit', color: '#4B5B6B' },
+                  font: { size: 18, family: 'inherit', color: '#222' },
                 },
-                range: [0.1, 0.8],
-                tickfont: { size: 16, color: '#4B5B6B' },
+                range: [0, 1],
+                tickfont: { size: 16, color: '#222' },
                 showgrid: false,
+                zeroline: false,
               },
               yaxis: {
                 title: {
-                  text: '# of Students',
-                  font: { size: 16, family: 'inherit', color: '#4B5B6B' },
+                  text: 'Count of Students',
+                  font: { size: 18, family: 'inherit', color: '#222' },
                 },
-                tickfont: { size: 16, color: '#4B5B6B' },
+                range: [0, { yRange }],
+                tickfont: { size: 16, color: '#222' },
                 showgrid: false,
+                zeroline: false,
               },
               showlegend: false,
               plot_bgcolor: '#fff',
               paper_bgcolor: '#fff',
+              bargap: 0,
               shapes: [
                 {
                   type: 'line',
-                  x0: 0.0,
+                  x0: 0,
                   y0: 0,
                   x1: 1,
                   y1: 0,
@@ -132,11 +216,22 @@ export default function SupportOverview({ tab, setTab }) {
                     width: 3,
                   },
                 },
+                ...inferenceData.map(item => ({
+                  type: 'line',
+                  x0: parseFloat(item.bin_lower),
+                  y0: parseInt(item.count_of_students),
+                  x1: parseFloat(item.bin_upper),
+                  y1: parseInt(item.count_of_students),
+                  line: {
+                    color: '#F79222',
+                    width: 3,
+                  },
+                })),
               ],
               annotations: [
                 {
                   x: 0.7,
-                  y: 200,
+                  y: 150,
                   xref: 'x',
                   yref: 'y',
                   text: 'Students in greater<br>need of support',
@@ -158,7 +253,7 @@ export default function SupportOverview({ tab, setTab }) {
               },
             }}
             config={{ displayModeBar: false, responsive: true }}
-            style={{ width: '100%', height: 400 }}
+            style={{ width: '100%', height: 440 }}
           />
         </div>
       </div>

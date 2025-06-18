@@ -32,7 +32,15 @@ export default function Shap() {
               opacity: 0.85,
               line: { width: 0 },
             },
-            hoverinfo: 'skip',
+            text: x.map(
+              (val, idx) =>
+                `<b>Student Data</b><br>Feature Importance: ${val}<br>Feature Value: ${y[idx]}`,
+            ),
+            hoverinfo: 'text',
+            hoverlabel: {
+              bgcolor: 'rgba(0,0,0,0.8)',
+              font: { color: '#fff' },
+            },
           },
         ]}
         layout={{
@@ -51,6 +59,22 @@ export default function Shap() {
           paper_bgcolor: 'rgba(0,0,0,0)',
           showlegend: false,
           height: 120,
+          shapes: [
+            {
+              type: 'line',
+              x0: 0.5,
+              y0: -2,
+              x1: 0.5,
+              y1: 2,
+              xref: 'x',
+              yref: 'y',
+              line: {
+                color: '#D5E5EE',
+                width: 2,
+              },
+              layer: 'below',
+            },
+          ],
         }}
         config={{ displayModeBar: false, responsive: true }}
         style={{ width: '100%', height: 120 }}

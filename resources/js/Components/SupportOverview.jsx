@@ -136,7 +136,7 @@ export default function SupportOverview({ tab, setTab }) {
           </div>
           <div className="rounded-lg bg-[#D5E5EE] p-6 text-center">
             <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
-              {lowSupport} {yRange}
+              {lowSupport}
             </div>
             <div className="mt-2 text-sm text-[#1E343F]">
               Students fall into the <b>lower support</b> category

@@ -357,39 +357,45 @@ export default function ModelResultsOverview() {
             </button>
             <div className="p-8">
               <div className="mb-6">
-                <h2 className="mb-2 text-3xl font-light text-[#007C8C]">
-                  {selectedFeature?.name}
+                <h2 className="mb-2 text-3xl font-medium text-black">
+                  Details: {selectedFeature?.name}
                 </h2>
-                <p className="text-lg text-[#4F4F4F]">
+                <p className="text-xl font-light text-[#4F4F4F]">
                   {selectedFeature?.desc}
                 </p>
               </div>
-
               <div className="mb-6">
-                <h3 className="mb-4 text-xl font-light">
-                  Feature Impact Analysis
-                </h3>
+                <h3 className="mb-2 text-xl font-light">Range</h3>
+                <hr className="mb-4 border-[#4F4F4F]" />
+                <div className="text-sm text-[#4F4F4F]">
+                  This box and whiskers plot shows the minimum, median, maximum,
+                  and quartile points for this feature in the student
+                  dataset.{' '}
+                </div>
+              </div>
+              <div className="mb-6">
+                <h3 className="mb-2 text-xl font-light">Student Plot Chart</h3>
+                <hr className="mb-4 border-[#4F4F4F]" />
+                <div className="mb-4 text-sm text-[#4F4F4F]">
+                  <p className="mb-2">
+                    <strong>How to interpret this chart:</strong>
+                  </p>
+                  <ul className="list-disc space-y-1 pl-5">
+                    <li>Each dot represents a student record</li>
+                    <li>
+                      The horizontal position shows the feature&apos;s impact on
+                      support needs
+                    </li>
+                    <li>Darker colors indicate higher feature values</li>
+                    <li>
+                      Dots further to the right suggest higher likelihood of
+                      needing support
+                    </li>
+                  </ul>
+                </div>
                 <div className="rounded-lg bg-[#F7F9FB] p-6">
                   <Shap />
                 </div>
-              </div>
-
-              <div className="text-sm text-[#4F4F4F]">
-                <p className="mb-2">
-                  <strong>How to interpret this chart:</strong>
-                </p>
-                <ul className="list-disc space-y-1 pl-5">
-                  <li>Each dot represents a student record</li>
-                  <li>
-                    The horizontal position shows the feature&apos;s impact on
-                    support needs
-                  </li>
-                  <li>Darker colors indicate higher feature values</li>
-                  <li>
-                    Dots further to the right suggest higher likelihood of
-                    needing support
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

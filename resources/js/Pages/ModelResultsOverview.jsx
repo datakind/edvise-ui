@@ -6,6 +6,7 @@ import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
+import FeatureValue from '../Components/FeatureValue';
 import '../../css/landing.css';
 
 const features = [
@@ -290,62 +291,9 @@ export default function ModelResultsOverview() {
                   methodology, performance, and bias assessment.
                 </div>
               </div>
-              {/* Feature Value Table */}
-              <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-                <div className="flex flex-col gap-8 md:flex-row">
-                  {/* Left column: heading and description */}
-                  <div className="mb-4 w-full md:mb-0 md:w-1/4">
-                    <h2 className="mb-2 text-2xl font-light">
-                      Original Feature Value Table
-                    </h2>
-                    <div className="mb-4 text-base text-black">
-                      The following chart shows how all features are weighted in
-                      the model.
-                    </div>
-                  </div>
-                  {/* Right column: table */}
-                  <div className="w-full overflow-x-auto rounded-3xl border border-gray-200 shadow-sm md:w-3/4">
-                    <table className="w-full rounded-3xl text-left">
-                      <thead>
-                        <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
-                          <th className="p-6 text-xs font-medium text-[#6B7280]">
-                            Feature Name
-                          </th>
-                          <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
-                            Data Type
-                          </th>
-                          <th className="py-6 pr-6 text-left text-xs font-medium text-[#6B7280]">
-                            Overall Feature Importance
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {features.map(f => (
-                          <tr
-                            key={f.name}
-                            className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                          >
-                            <td className="px-6 text-base font-normal text-black">
-                              {f.name}
-                              <div className="text-sm font-light text-[#696969]">
-                                {f.desc}
-                              </div>
-                            </td>
-                            <td className="py-2 pr-2 text-center text-sm text-black">
-                              {f.type}
-                            </td>
-                            <td className="py-2 pr-2 text-left text-sm text-black">
-                              {f.importance}
-                              <div className="text-xs text-[#696969]">
-                                Range is {f.range}
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+              <div className="mb-8">
+                {/* Feature Value Table */}
+                <FeatureValue features={features} />
               </div>
               {/* Confusion Matrix */}
               <div className="mb-8">

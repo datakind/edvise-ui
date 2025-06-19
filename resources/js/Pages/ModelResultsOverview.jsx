@@ -335,6 +335,26 @@ export default function ModelResultsOverview() {
             onClick={closeModal}
           ></div>
           <div className="relative mx-4 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-2 border-[#F79122] bg-white shadow-xl">
+            <button
+              onClick={closeModal}
+              className="absolute right-4 top-4 text-black hover:opacity-80"
+              aria-label="Close modal"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#F79122"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
             <div className="p-8">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-light text-[#007C8C]">

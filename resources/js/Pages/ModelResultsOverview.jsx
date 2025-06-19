@@ -9,6 +9,7 @@ import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
 import FeatureValue from '../Components/FeatureValue';
 import BoxWhiskerPlot from '../Components/BoxWhiskerPlot';
+import InterpretChartSimple from '../Components/InterpretChartSimple';
 import '../../css/landing.css';
 
 const features = [
@@ -379,24 +380,31 @@ export default function ModelResultsOverview() {
               <div className="mb-6">
                 <h3 className="mb-2 text-xl font-light">Student Plot Chart</h3>
                 <hr className="mb-4 border-[#4F4F4F]" />
-                <div className="mb-4 text-sm text-[#4F4F4F]">
-                  <p className="mb-2">
-                    <strong>How to interpret this chart:</strong>
-                  </p>
-                  <ul className="list-disc space-y-1 pl-5">
-                    <li>Each dot represents a student record</li>
-                    <li>
-                      The horizontal position shows the feature&apos;s impact on
-                      support needs
-                    </li>
-                    <li>Darker colors indicate higher feature values</li>
-                    <li>
-                      Dots further to the right suggest higher likelihood of
-                      needing support
-                    </li>
-                  </ul>
+                <div className="flex gap-8">
+                  <div className="w-1/2">
+                    <div className="text-sm text-[#4F4F4F]">
+                      <p className="mb-2">
+                        <strong>How to interpret this chart:</strong>
+                      </p>
+                      <ul className="list-disc space-y-1 pl-5">
+                        <li>Each dot represents a student record</li>
+                        <li>
+                          The horizontal position shows the feature&apos;s
+                          impact on support needs
+                        </li>
+                        <li>Darker colors indicate higher feature values</li>
+                        <li>
+                          Dots further to the right suggest higher likelihood of
+                          needing support
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="w-1/2">
+                    <InterpretChartSimple />
+                  </div>
                 </div>
-                <div className="rounded-lg bg-[#F7F9FB] p-6">
+                <div className="mt-6 rounded-lg bg-[#F7F9FB] p-6">
                   <Shap />
                 </div>
               </div>

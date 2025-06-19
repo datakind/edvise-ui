@@ -407,7 +407,7 @@ export default function ModelResultsOverview() {
                 <div className="mt-6 border-b border-[#767676] bg-[#F7F9FB] p-6">
                   <Shap />
                 </div>
-                <div className="mt-4 flex justify-between px-2 text-sm text-[#4F4F4F]">
+                <div className="mt-4 flex justify-center gap-16 px-2 text-sm text-[#4F4F4F]">
                   <div className="flex flex-col items-end">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +451,7 @@ export default function ModelResultsOverview() {
                 </div>
                 <div className="mt-4 text-center text-xs font-bold text-[#767676]">
                   Questions about how to interpret these results? Contact your
-                  account representative, and they’d be happy to help!
+                  account representative, and they'd be happy to help!
                 </div>
               </div>
             </div>

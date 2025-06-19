@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Head } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
@@ -63,9 +64,22 @@ const features = [
 
 export default function ModelResultsOverview() {
   const [tab, setTab] = useState('results');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
+  const handleFeatureClick = feature => {
+    setSelectedFeature(feature);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFeature(null);
+  };
 
   return (
     <AppLayout title="Model Results Overview">
+      <Head title="Model Results Overview" />
       <div className="font-[Helvetica Neue] mb-8 w-full">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="mx-auto text-5xl font-light">
@@ -78,13 +92,13 @@ export default function ModelResultsOverview() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="mr-2 inline-block size-5 pb-1"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
               />
             </svg>
@@ -128,7 +142,7 @@ export default function ModelResultsOverview() {
                       <ul className="ml-5 list-disc">
                         <li>
                           Charts show the features that have the most influence
-                          on this cohort of students&rsquo; support scores.
+                          on this cohort of students&apos; support scores.
                         </li>
                         <li>
                           Features are sorted from top to bottom in order of
@@ -211,7 +225,10 @@ export default function ModelResultsOverview() {
                           className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
                         >
                           <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
-                            <div className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline">
+                            <div
+                              className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
+                              onClick={() => handleFeatureClick(feature)}
+                            >
                               {feature.name}
                             </div>
                             <div className="text-base text-[#4F4F4F]">
@@ -267,7 +284,7 @@ export default function ModelResultsOverview() {
                   </div>
                   <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">
                     Questions about how to interpret these results? Contact your
-                    account representative, and they'd be happy to help!
+                    account representative, and they&apos;d be happy to help!
                   </div>
                 </div>
               </div>
@@ -279,11 +296,11 @@ export default function ModelResultsOverview() {
                 <h2 className="mb-2 text-2xl font-light">Introduction</h2>
                 <div className="text-xl text-black">
                   This model was built to identify students who may need support
-                  to be retained or graduate on time. It's intended to empower
-                  academic advisors who provide intervention strategies with
-                  information on the factors impacting student need for support.
-                  The following figures demonstrate the performance of the
-                  model. You can also{' '}
+                  to be retained or graduate on time. It&apos;s intended to
+                  empower academic advisors who provide intervention strategies
+                  with information on the factors impacting student need for
+                  support. The following figures demonstrate the performance of
+                  the model. You can also{' '}
                   <a href="#" className="font-semibold text-black underline">
                     download the model card here
                   </a>{' '}
@@ -311,6 +328,53 @@ export default function ModelResultsOverview() {
           )}
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-80"
+            onClick={closeModal}
+          ></div>
+          <div className="relative mx-4 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-2 border-[#F79122] bg-white shadow-xl">
+            <div className="p-8">
+              <div className="mb-6">
+                <h2 className="mb-2 text-3xl font-light text-[#007C8C]">
+                  {selectedFeature?.name}
+                </h2>
+                <p className="text-lg text-[#4F4F4F]">
+                  {selectedFeature?.desc}
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="mb-4 text-xl font-light">
+                  Feature Impact Analysis
+                </h3>
+                <div className="rounded-lg bg-[#F7F9FB] p-6">
+                  <Shap />
+                </div>
+              </div>
+
+              <div className="text-sm text-[#4F4F4F]">
+                <p className="mb-2">
+                  <strong>How to interpret this chart:</strong>
+                </p>
+                <ul className="list-disc space-y-1 pl-5">
+                  <li>Each dot represents a student record</li>
+                  <li>
+                    The horizontal position shows the feature&apos;s impact on
+                    support needs
+                  </li>
+                  <li>Darker colors indicate higher feature values</li>
+                  <li>
+                    Dots further to the right suggest higher likelihood of
+                    needing support
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </AppLayout>
   );
 }

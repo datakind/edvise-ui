@@ -8,6 +8,7 @@ import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
 import FeatureValue from '../Components/FeatureValue';
+import BoxWhiskerPlot from '../Components/BoxWhiskerPlot';
 import '../../css/landing.css';
 
 const features = [
@@ -343,14 +344,13 @@ export default function ModelResultsOverview() {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#F79122"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
-                class="size-6"
+                className="size-6"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
@@ -367,10 +367,13 @@ export default function ModelResultsOverview() {
               <div className="mb-6">
                 <h3 className="mb-2 text-xl font-light">Range</h3>
                 <hr className="mb-4 border-[#4F4F4F]" />
-                <div className="text-sm text-[#4F4F4F]">
+                <div className="mb-4 text-sm text-[#4F4F4F]">
                   This box and whiskers plot shows the minimum, median, maximum,
                   and quartile points for this feature in the student
                   dataset.{' '}
+                </div>
+                <div className="mb-4">
+                  <BoxWhiskerPlot />
                 </div>
               </div>
               <div className="mb-6">

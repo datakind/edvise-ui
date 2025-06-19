@@ -404,8 +404,54 @@ export default function ModelResultsOverview() {
                     <InterpretChartSimple />
                   </div>
                 </div>
-                <div className="mt-6 rounded-lg bg-[#F7F9FB] p-6">
+                <div className="mt-6 border-b border-[#767676] bg-[#F7F9FB] p-6">
                   <Shap />
+                </div>
+                <div className="mt-4 flex justify-between px-2 text-sm text-[#4F4F4F]">
+                  <div className="flex flex-col items-end">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                      />
+                    </svg>
+                    <span className="mt-1 text-right">
+                      <span className="text-xs font-bold">Decreasing</span>{' '}
+                      likelihood of support needs
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                      />
+                    </svg>
+                    <span className="mt-1 text-left">
+                      <span className="text-xs font-bold">Increasing</span>{' '}
+                      likelihood of support needs
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-4 text-center text-xs font-bold text-[#767676]">
+                  Questions about how to interpret these results? Contact your
+                  account representative, and they’d be happy to help!
                 </div>
               </div>
             </div>

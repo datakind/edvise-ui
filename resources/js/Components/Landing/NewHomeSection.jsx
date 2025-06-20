@@ -12,15 +12,14 @@ export default function AdvisorsSection(props) {
       ],
     },
     {
-      name: 'Hanna Gentry',
-      role: 'Student advisor at John Jay College',
+      name: 'Tyler Walsh',
+      role: 'Director, Center for Higher Education Innovation University of Central Florida',
       image: {
-        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-2.jpg',
-        alt: 'Hanna Gentry',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/Tyler_Walsh_Headshot.jpg',
+        alt: 'Tyler Walsh',
       },
       quotes: [
-        "When you bring data and AI into the mix, you reshape the fundamental way that institutions see these students. The data itself can't tell us who these students are.",
-        'But what it can do is tell us a story about their barriers and reveal pathways to unlock their success',
+        'For any institution looking to enhance student advising, improve retention, and create a more personalized support system, Edvise is a must-have. The actionable insights have influenced more than just how we use data—they’ve enhanced our operations and are transforming how we understand student success and well-being at UCF.',
       ],
     },
     {

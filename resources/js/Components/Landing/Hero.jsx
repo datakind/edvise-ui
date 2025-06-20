@@ -59,7 +59,7 @@ export default function Hero() {
             Points”
           </p>
           <a
-            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+            href="https://bit.ly/44azaeH "
             className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden"
           >
             <svg
@@ -78,7 +78,7 @@ export default function Hero() {
           <Button
             className="hidden md:ml-auto md:block"
             kind="dark"
-            href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html"
+            href="https://bit.ly/44azaeH"
           >
             Read more
           </Button>

@@ -339,7 +339,7 @@ const PrivacyPolicy = () => {
               contact us at the following email address:{' '}
               <a
                 href="mailto:privacy@datakind.org"
-                className="text-blue-600 hover:underline"
+                className="font-bold hover:underline"
               >
                 privacy@datakind.org
               </a>
@@ -349,7 +349,7 @@ const PrivacyPolicy = () => {
               Learn about the GDPR in English and other languages at{' '}
               <a
                 href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2016.119.01.0001.01.ENG"
-                className="text-blue-600 hover:underline"
+                className="font-bold hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -379,7 +379,7 @@ const PrivacyPolicy = () => {
               know by contacting the following email address:{' '}
               <a
                 href="mailto:privacy@datakind.org"
-                className="text-blue-600 hover:underline"
+                className="font-bold hover:underline"
               >
                 privacy@datakind.org
               </a>
@@ -419,7 +419,7 @@ const PrivacyPolicy = () => {
               Privacy Policy, you are welcome to contact us at{' '}
               <a
                 href="mailto:privacy@datakind.org"
-                className="text-blue-500 hover:underline"
+                className="font-bold hover:underline"
               >
                 privacy@datakind.org
               </a>
@@ -833,7 +833,7 @@ const PrivacyPolicy = () => {
                 You may opt-out (unsubscribe) from receiving marketing
                 communications by using the links provided in our emails. If you
                 are unable to find the opt-out instructions, please contact us
-                at
+                at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
                   className="font-bold hover:underline"
@@ -844,7 +844,7 @@ const PrivacyPolicy = () => {
               </p>
               <p>
                 If you are concerned about DataKind’s handling of your personal
-                information, you may lodge a complaint in writing to
+                information, you may lodge a complaint in writing to{' '}
                 <a
                   href="mailto:privacy@datakind.org"
                   className="font-bold hover:underline"

@@ -16,30 +16,9 @@ export default function CreateModel() {
     let schemaConfig = [];
     if (event.target.elements.PDP.checked) {
       schemaConfig.push([
-        { schema_type: 'PDP_COURSE', optional: false, multiple_allowed: false },
-        { schema_type: 'PDP_COHORT', optional: false, multiple_allowed: false },
-        {
-          schema_type: 'SST_PDP_FINANCE',
-          optional: true,
-          multiple_allowed: false,
-        },
-      ]);
-      schemaConfig.push([
-        {
-          schema_type: 'SST_PDP_COHORT',
-          optional: false,
-          multiple_allowed: false,
-        },
-        {
-          schema_type: 'SST_PDP_COURSE',
-          optional: false,
-          multiple_allowed: false,
-        },
-        {
-          schema_type: 'SST_PDP_FINANCE',
-          optional: true,
-          multiple_allowed: false,
-        },
+        { schema_type: 'STUDENT', optional: false, multiple_allowed: false },
+        { schema_type: 'SEMESTER', optional: true, multiple_allowed: false },
+        { schema_type: 'COURSE', optional: false, multiple_allowed: false },
       ]);
     }
     if (event.target.elements.Custom.checked) {
@@ -75,7 +54,7 @@ export default function CreateModel() {
     <AppLayout
       title="Create Model"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
           Create Model
         </h2>
       )}
@@ -94,43 +73,43 @@ export default function CreateModel() {
           onSubmit={handleSubmit}
         >
           <div id="form_contents" className="flex flex-col gap-y-6">
-            <div className="flex flex-row w-full gap-x-6">
-              <div className="flex flex-col w-full">
+            <div className="flex w-full flex-row gap-x-6">
+              <div className="flex w-full flex-col">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
                   id="model_name"
                 >
                   Model Name
                 </label>
                 <input
                   name="model_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="mb-3 block w-full appearance-none rounded border border-red-500 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
                   type="text"
                   placeholder="Model Name (corresponding to the Databricks model name)"
                 ></input>
-                <p className="text-red-500 text-xs italic">Required field.</p>
+                <p className="text-xs italic text-red-500">Required field.</p>
               </div>
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex w-1/2 flex-col">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
                 id="vers_id"
               >
                 Version ID
               </label>
               <input
                 name="vers_id"
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 type="number"
                 min="0"
                 max="10"
                 defaultValue="0"
               ></input>
-              <p className="text-gray-600 text-xs italic">
+              <p className="text-xs italic text-gray-600">
                 Version ID of the model. Use zero for initial version.
               </p>
             </div>
-            <div className="flex flex-row w-1/2 gap-x-3 items-center">
+            <div className="flex w-1/2 flex-row items-center gap-x-3">
               <input
                 type="radio"
                 id="valid"
@@ -141,16 +120,16 @@ export default function CreateModel() {
                 Model is "valid" (i.e. ready for use).
               </label>
             </div>
-            <div className="flex flex-row w-full gap-x-6">
-              <div className="flex flex-col w-1/2">
+            <div className="flex w-full flex-row gap-x-6">
+              <div className="flex w-1/2 flex-col">
                 <fieldset>
                   <legend className="text-base font-semibold text-gray-900">
                     Batch schema configs accepted by this model
                   </legend>
                   <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
                     {schemas.map((schem, idx) => (
-                      <div key={idx} className=" flex gap-3">
-                        <div className="min-w-0 flex-1 text-sm/6 ">
+                      <div key={idx} className="flex gap-3">
+                        <div className="min-w-0 flex-1 text-sm/6">
                           <input
                             defaultChecked={schem.selected}
                             id={`${schem.name}`}
@@ -196,16 +175,16 @@ export default function CreateModel() {
               </div>
             </div>
           </div>
-          <div className="flex w-full justify-center pt-12 gap-x-6">
+          <div className="flex w-full justify-center gap-x-6 pt-12">
             <button
               type="reset"
-              className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+              className="mb-4 flex w-1/3 items-center justify-center rounded-lg border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
             >
               Reset
             </button>
             <button
               type="submit"
-              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+              className="mb-4 flex w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white"
             >
               Submit
             </button>

@@ -833,7 +833,7 @@ const PrivacyPolicy = () => {
                 You may opt-out (unsubscribe) from receiving marketing
                 communications by using the links provided in our emails. If you
                 are unable to find the opt-out instructions, please contact us
-                at
+                at{' '}
                 <a
                   href="mailto:privacy@datakind.org"
                   className="font-bold hover:underline"
@@ -844,7 +844,7 @@ const PrivacyPolicy = () => {
               </p>
               <p>
                 If you are concerned about DataKind’s handling of your personal
-                information, you may lodge a complaint in writing to
+                information, you may lodge a complaint in writing to{' '}
                 <a
                   href="mailto:privacy@datakind.org"
                   className="font-bold hover:underline"

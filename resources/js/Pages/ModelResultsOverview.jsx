@@ -126,7 +126,7 @@ export default function ModelResultsOverview() {
           {tab === 'results' ? (
             <>
               <div className="mb-4 px-2 text-lg font-light text-black">
-                Showing model results for: students.cohort.2024
+                Showing model results for: synthetic_retention_30credits
               </div>
               <div className="mb-8">
                 <SupportOverview tab={tab} setTab={setTab} />

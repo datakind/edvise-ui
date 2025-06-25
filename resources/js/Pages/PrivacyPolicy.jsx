@@ -526,7 +526,11 @@ const PrivacyPolicy = () => {
                 <li>
                   EU Data Protection Authorities (DPAs). See their contact
                   details{' '}
-                  <a href="link-to-dpas" className="font-bold hover:underline">
+                  <a
+                    href="https://www.edpb.europa.eu/about-edpb/about-edpb/members_en"
+                    className="font-bold hover:underline"
+                    target="_blank"
+                  >
                     here
                   </a>
                 </li>

@@ -114,43 +114,48 @@ export default function Login({ canResetPassword, status }) {
               </div>
             </div>
           </form>
-          <div className="mt-8 grid grid-cols-5 gap-4">
-            <div className="col-span-2 pt-2">
-              <hr></hr>
-            </div>
-            <div className="text-center text-sm text-gray-600">or</div>
-            <div className="col-span-2 pt-2">
-              <hr></hr>
-            </div>
-          </div>
-          <div className="mt-12 flex flex-col space-y-4">
-            <a
-              href="/auth/google"
-              className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                alt="Google Logo"
-                className="mr-2 h-5 w-5"
-              />
-              <span className="text-sm font-medium text-gray-700">
-                Sign in with Google
-              </span>
-            </a>
-            <a
-              href="/auth/azure"
-              className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png"
-                alt="Microsoft Logo"
-                className="mr-2 h-5 w-5"
-              />
-              <span className="text-sm font-medium text-gray-700">
-                Sign in with Microsoft
-              </span>
-            </a>
-          </div>
+
+          {window.location.hostname.includes('sst') && (
+            <>
+              <div className="mt-8 grid grid-cols-5 gap-4">
+                <div className="col-span-2 pt-2">
+                  <hr></hr>
+                </div>
+                <div className="text-center text-sm text-gray-600">or</div>
+                <div className="col-span-2 pt-2">
+                  <hr></hr>
+                </div>
+              </div>
+              <div className="mt-12 flex flex-col space-y-4">
+                <a
+                  href="/auth/google"
+                  className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                    alt="Google Logo"
+                    className="mr-2 h-5 w-5"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Sign in with Google
+                  </span>
+                </a>
+                <a
+                  href="/auth/azure"
+                  className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png"
+                    alt="Microsoft Logo"
+                    className="mr-2 h-5 w-5"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Sign in with Microsoft
+                  </span>
+                </a>
+              </div>
+            </>
+          )}
           <div className="text-center">
             <AuthFooter />
           </div>

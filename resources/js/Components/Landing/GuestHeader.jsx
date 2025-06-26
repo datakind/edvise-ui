@@ -11,11 +11,6 @@ export default function Header() {
   const navLinks = useMemo(
     () => [
       {
-        label: 'The product',
-        href: '#product',
-        external: false,
-      },
-      {
         label: 'About us',
         href: 'https://www.datakind.org',
         external: true,

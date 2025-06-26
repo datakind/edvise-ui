@@ -16,7 +16,7 @@ export default function TermsText() {
         help you identify students who may need support and offers insights into
         why, so advisors can intervene early and effectively.
       </p>
-      <section className="mb-6">
+      <section className="mb-6 text-base font-light">
         <h2 className="text-4xl font-light text-black">
           1. USE OF THE SERVICE
         </h2>
@@ -284,7 +284,7 @@ export default function TermsText() {
           Linked Sites from the Site at any time for any reason or for no
           reason.
         </p>
-        <p>
+        <p className="uppercase">
           COMPANY WILL NOT BE LIABLE FOR ANY TRANSACTIONS conducted by you WITH
           THIRD PARTIES through the linked sites nor for ANY LIABILITY ARISING
           FROM the representations OR INFORMATION PROVIDED on such Linked Sites.

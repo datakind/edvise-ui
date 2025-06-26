@@ -4,22 +4,22 @@ export default function ProductSection(props) {
   const products = [
     {
       name: 'Tailored alerts',
-      description: 'See indicators specific to your institution and students.',
+      description:
+        'Know who to prioritize — and how to best support each student.',
       media:
-        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-1.mp4',
+        'https://storage.googleapis.com/staging-sst-01-staging-static/score_cards.mp4',
     },
     {
       name: 'Smart guidance',
-      description:
-        'Know when to intervene — and how to best support each student.',
+      description: 'Use dashboards that highlight what matters most.',
       media:
-        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-2.mp4',
+        'https://storage.googleapis.com/staging-sst-01-staging-static/support%20overview.mp4',
     },
     {
       name: 'Clear insights',
-      description: 'Use dashboards that highlight what matters most.',
+      description: 'See indicators specific to your institution and students.',
       media:
-        'https://storage.googleapis.com/staging-sst-01-staging-static/videos/landing/product-placeholder-3.mp4',
+        'https://storage.googleapis.com/staging-sst-01-staging-static/students_pie_chart.mp4',
     },
   ];
 

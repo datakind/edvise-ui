@@ -6,7 +6,7 @@ export default function Hero() {
       <div className="layout:grid">
         <div className="hero-title col-span-6 mb-[32px] md:col-span-10 md:col-start-7">
           <h1 className="mb-14 text-[42px] font-light leading-[103%] sm:text-[48px] md:mb-[72px]">
-            Getting students the support they need to succeed
+            Empowering advisors, supporting students
           </h1>
         </div>
       </div>

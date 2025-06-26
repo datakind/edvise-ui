@@ -13,7 +13,7 @@ export default function AdvisorsSection(props) {
     },
     {
       name: 'Tyler Walsh',
-      role: 'Director, Center for Higher Education Innovation University of Central Florida',
+      role: 'Director, Center for Higher Education Innovation, University of Central Florida',
       image: {
         url: 'https://storage.googleapis.com/staging-sst-01-staging-static/Tyler_Walsh_Headshot.jpg',
         alt: 'Tyler Walsh',
@@ -26,7 +26,7 @@ export default function AdvisorsSection(props) {
       name: 'Marty Schmidt',
       role: 'Product Manager, Postsecondary Data Partnership, National Student Clearinghouse',
       image: {
-        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-3.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/Marty%20Schmidt%20Headshot.jpg',
         alt: 'Marty Schmidt',
       },
       quotes: [
@@ -53,7 +53,7 @@ export default function AdvisorsSection(props) {
       <div className="layout:grid mb-14 md:mb-28">
         <div className="col-span-8">
           <p className="type:section-label mb-9 text-landing-gray md:mb-12">
-            Hear from advisors already using Edvise
+            Partners already using Edvise
           </p>
           <h2 className="type:section-title">
             Identify students in need of timely intervention and develop

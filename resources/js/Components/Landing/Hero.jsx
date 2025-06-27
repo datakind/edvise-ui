@@ -33,8 +33,8 @@ export default function Hero() {
             alt="Edvise Logo"
           />
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
-            Empowers student support teams with data-driven insights to enhance
-            efficiency and better serve students.
+            Built with and for advisors to identify students in need and take
+            timely, data-informed action—no technical overhaul required.
           </p>
         </div>
       </div>

@@ -7,29 +7,29 @@ export default function Faq({ className }) {
       description: null,
       faqs: [
         {
-          question: 'What does it do?',
+          question: 'What is Edvise?',
           answer:
-            'It helps advisors identify students who may need support and offers insights into why, so they can intervene early and effectively.',
+            'Edvise is an AI-powered platform that helps advisors identify students who may need support - and why - so they can take timely, informed action.',
         },
         {
-          question: 'How is it different?',
+          question: 'How does it work?',
           answer:
-            'It predicts future support needs—not just current status—and explains the top reasons behind each student’s risk.',
+            'Edvise uses predictive analytics to analyze student data and flag those who may be at risk. It highlights key factors driving each prediction to help focus support efforts where they’re needed most.',
         },
         {
-          question: 'How can advisors use this information?',
+          question: 'What makes Edvise different?',
           answer:
-            'You’ll see a support score (0–1), a "support needed" flag, and five key reasons tailored to each student.',
+            'Most tools report on what has already happened. Edvise looks ahead, predicting which students may need support and why, enabling earlier, more proactive interventions.',
         },
         {
-          question: 'How should I use this information?',
+          question: 'What appears in Edvise?',
           answer:
-            'Use it to prioritize outreach and personalize support, working alongside your existing tools and expertise.',
+            'An easy-to-read dashboard showing each student’s support score, a “support needed” flag, and the top reasons behind predicted needs, making it easier to prioritize outreach and tailor support. Edvise complements existing advising tools and workflows.',
         },
         {
-          question: 'How is student information protected?',
+          question: 'Is student data protected?',
           answer:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Yes. Edvise operates on a “Secure By Design” infrastructure aligned with FERPA. In most cases, predictions are generated from de-identified data, which schools re-identify internally, keeping sensitive student information safe.',
         },
       ],
     },
@@ -41,13 +41,11 @@ export default function Faq({ className }) {
         <div className="col-span-14">
           <p className="type:section-label mb-9 sm:mb-12">FAQ</p>
           <h2 className="type:section-title mb-4">
-            How does the technology work?
+            How Edvise works—and how it supports you.
           </h2>
           <div className="mb-4 mb-9 text-[#4f4f4f] sm:mb-12">
-            Edvise uses predictive analytics to help academic advisors support
-            students more proactively. Below are answers to common questions
-            about how it works and how it fits into existing advising
-            strategies.
+            Get quick answers about how Edvise fits into your advising workflow,
+            what it does, and how it protects student data.
           </div>
           <div className="w-full space-y-16 sm:space-y-32">
             {faqSections.map(section => (

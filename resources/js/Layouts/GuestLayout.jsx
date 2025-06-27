@@ -14,6 +14,7 @@ import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
+import NewFooter from '@/Components/Landing/NewFooter';
 
 export default function GuestLayout({ children }) {
   return (
@@ -74,7 +75,7 @@ export default function GuestLayout({ children }) {
           <div className="w-full">
             <GuestHeader />
             <div className="w-full bg-white py-20 sm:pb-44">{children}</div>
-            <Footer />
+            <NewFooter />
           </div>
         </main>
       </LenisProvider>

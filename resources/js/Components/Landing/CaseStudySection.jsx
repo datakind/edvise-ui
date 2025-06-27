@@ -16,15 +16,15 @@ export default function CaseStudySection({ className }) {
         <div className="layout:grid">
           <div className="col-span-full mb-8 md:col-span-5">
             <p className="type:body-small mb-6 max-w-80 text-[18px] font-light leading-[120%] sm:mb-0 tb:mb-4 md:mt-36">
+              As an early adopter of Edvise, developed by DataKind,{' '}
               <a
                 href="https://www.jjay.cuny.edu/"
                 className="text-inherit underline"
               >
                 John Jay College
               </a>{' '}
-              partnered with DataKind to harness Edvise – empowering academic
-              advisors to more efficiently identify at-risk students, reach out,
-              and build personalized plans for their success.
+              equipped advisors with the insights needed to identify students at
+              risk, personalize support, and drive real results.
             </p>
           </div>
           <div className="col-span-full md:col-span-12 md:col-start-9">

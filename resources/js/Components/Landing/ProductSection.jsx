@@ -36,10 +36,6 @@ export default function ProductSection(props) {
             <span className="whitespace-nowrap">data-informed</span>{' '}
             recommendations to keep students on their learning paths
           </h2>
-          <p className="text-base font-light leading-tight text-landing-gray">
-            Edvise offers customized indicators and institution-specific actions
-            to improve student outcomes.
-          </p>
         </div>
       </div>
       <div className="product-list layout:grid">

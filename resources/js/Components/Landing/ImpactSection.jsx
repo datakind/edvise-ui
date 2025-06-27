@@ -127,9 +127,9 @@ export default function ImpactSection(props) {
       <div className="z-1 relative">
         <div className="layout:grid mb-3 md:mb-16">
           <div className="col-span-8">
-            <p className="type:section-label mb-12">Our impact</p>
+            <p className="type:section-label mb-12">The broader impact</p>
             <h2 className="type:section-title mb-7">
-              Proven impact. <br /> Changing lives.
+              Boost student success and unlock lifelong opportunity.
             </h2>
           </div>
         </div>

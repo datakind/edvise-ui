@@ -34,7 +34,7 @@ export default function Hero() {
           />
           <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
             Built with and for advisors to identify students in need and take
-            timely, data-informed action—no technical overhaul required.
+            timely, data-informed action—no technical overhaul required
           </p>
         </div>
       </div>

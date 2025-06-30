@@ -129,7 +129,9 @@ export default function ImpactSection(props) {
           <div className="col-span-8">
             <p className="type:section-label mb-12">The broader impact</p>
             <h2 className="type:section-title mb-7">
-              Boost student success and unlock lifelong opportunity.
+              Boost student success and
+              <br />
+              unlock lifelong opportunity
             </h2>
           </div>
         </div>

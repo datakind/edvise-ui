@@ -18,7 +18,7 @@ createInertiaApp({
       import.meta.glob('./Pages/**/*.jsx'),
     ),
   setup({ el, App, props }) {
-    ReactGA.initialize(import.meta.env.VITE_GTM_ID);
+    ReactGA.initialize('G-5K6031PFQT');
 
     const root = createRoot(el);
 

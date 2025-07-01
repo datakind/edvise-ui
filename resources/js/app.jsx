@@ -5,6 +5,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import ReactGA from 'react-ga4';
 
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -17,6 +18,8 @@ createInertiaApp({
       import.meta.glob('./Pages/**/*.jsx'),
     ),
   setup({ el, App, props }) {
+    ReactGA.initialize(import.meta.env.VITE_GTM_ID);
+
     const root = createRoot(el);
 
     root.render(<App {...props} />);

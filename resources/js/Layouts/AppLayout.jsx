@@ -32,9 +32,6 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { subtract } from 'lodash';
-import ReactGA from 'react-ga4';
-
-ReactGA.initialize(import.meta.env.VITE_GTM_ID);
 
 const VisibilityType = Object.freeze({
   PUBLIC_ONLY: 'PUBLIC_ONLY',

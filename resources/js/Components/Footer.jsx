@@ -8,7 +8,7 @@ export default function Footer() {
           <li>
             <a
               href={route('privacy-policy')}
-              class="text-md me-12 flex font-semibold text-black hover:underline md:me-6"
+              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               Privacy Policy
             </a>
@@ -16,7 +16,7 @@ export default function Footer() {
           <li>
             <a
               href={route('terms-of-service')}
-              class="text-md me-12 flex font-semibold text-black hover:underline md:me-6"
+              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               Terms of Service
             </a>
@@ -24,7 +24,7 @@ export default function Footer() {
           <li>
             <a
               href={route('license')}
-              class="text-md me-12 flex font-semibold text-black hover:underline md:me-6"
+              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               License
             </a>

@@ -15,6 +15,9 @@ import Footer from '@/Components/Landing/Footer';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 import NewFooter from '@/Components/Landing/NewFooter';
+import ReactGA from 'react-ga4';
+
+ReactGA.initialize(import.meta.env.VITE_GTM_ID);
 
 export default function GuestLayout({ children }) {
   return (

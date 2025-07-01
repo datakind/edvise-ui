@@ -583,7 +583,7 @@ export default function FileUpload() {
             type="text"
             name="batchName"
             id="batchName"
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
+            className="mt-1 w-full rounded-full border border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
             value={batchName}
             onChange={e => setBatchName(e.target.value)}
             placeholder="Inference Run 2024 Fall Cohort 1"
@@ -672,10 +672,12 @@ export default function FileUpload() {
           Select the model that you would like to run a prediction on.
         </div>
         <form onSubmit={triggerPredictions}>
-          <div className="flex py-3 font-bold">Please select a model.</div>
+          <div className="flex py-3 text-base font-light">
+            Please select a model:
+          </div>
           {modelsList == undefined || modelsList.length == 0 ? (
             <select
-              className="mb-4 flex w-full rounded-lg border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
             >
               <option disabled value="">
@@ -695,7 +697,7 @@ export default function FileUpload() {
           <div className="flex w-full items-end justify-end pt-12">
             <button
               type="submit"
-              className="mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 font-semibold text-white"
+              className="font-normaltext-black mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2"
             >
               Generate Predictions
             </button>

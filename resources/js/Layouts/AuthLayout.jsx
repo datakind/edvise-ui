@@ -4,9 +4,6 @@ import { LenisProvider } from '@/Components/Landing/LenisProvider';
 import Header from '@/Components/Landing/Header';
 import Footer from '@/Components/Landing/Footer';
 import '../../css/landing.css';
-import ReactGA from 'react-ga4';
-
-ReactGA.initialize(import.meta.env.VITE_GTM_ID);
 
 export default function AuthLayout({ children }) {
   return (

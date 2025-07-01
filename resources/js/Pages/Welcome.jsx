@@ -15,9 +15,6 @@ import Footer from '@/Components/Landing/Footer';
 import NewFooter from '@/Components/Landing/NewFooter';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
-import ReactGA from 'react-ga4';
-
-/* ReactGA.initialize(import.meta.env.VITE_GTM_ID); */
 
 export default function Welcome() {
   return (
@@ -91,7 +88,6 @@ export default function Welcome() {
                 <RequestDemoSection />
               </div>
             </div>
-            {import.meta.env.VITE_GTM_ID}
             <NewFooter />
           </div>
         </main>

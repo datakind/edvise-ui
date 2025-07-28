@@ -321,16 +321,16 @@ export default function FeatureValue({ features }) {
                   key={f.name}
                   className="border-b border-[#E5E7EB] align-top last:border-b-0"
                 >
-                  <td className="px-6 text-base font-normal text-black">
+                  <td className="p-6 text-base font-normal text-black">
                     {f.name}
                     <div className="text-sm font-light text-[#696969]">
                       {f.desc}
                     </div>
                   </td>
-                  <td className="py-2 pr-2 text-center text-sm text-black">
+                  <td className="py-6 pr-2 text-center text-sm text-black">
                     {f.type}
                   </td>
-                  <td className="py-2 pr-2 text-left text-sm text-black">
+                  <td className="py-6 pr-2 text-left text-sm text-black">
                     {f.importance}
                     <div className="text-xs text-[#696969]">
                       Range is {f.range}

@@ -305,13 +305,13 @@ export default function FeatureValue({ features }) {
             <thead>
               <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
                 <th className="p-6 text-xs font-medium text-[#6B7280]">
-                  Feature Name
+                  FEATURE NAME
                 </th>
                 <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
-                  Data Type
+                  DATA TYPE
                 </th>
                 <th className="py-6 pr-6 text-left text-xs font-medium text-[#6B7280]">
-                  Overall Feature Importance
+                  OVERALL FEATURE IMPORTANCE
                 </th>
               </tr>
             </thead>

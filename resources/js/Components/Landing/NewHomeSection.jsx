@@ -26,7 +26,7 @@ export default function AdvisorsSection(props) {
       name: 'Marty Schmidt',
       role: 'Product Manager, Postsecondary Data Partnership, National Student Clearinghouse',
       image: {
-        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/advisor-3.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/Marty_Headshot.png',
         alt: 'Marty Schmidt',
       },
       quotes: [

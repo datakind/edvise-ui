@@ -127,7 +127,7 @@ export default function SupportOverview({ tab, setTab }) {
             At a Glance
           </div>
           <div className="mb-4 rounded-lg bg-[#D5E5EE] p-6 text-center">
-            <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
+            <div className="font-[merriweather] text-5xl font-medium text-[#1E343F]">
               {highSupport}
             </div>
             <div className="mt-2 text-sm text-[#1E343F]">
@@ -135,7 +135,7 @@ export default function SupportOverview({ tab, setTab }) {
             </div>
           </div>
           <div className="rounded-lg bg-[#D5E5EE] p-6 text-center">
-            <div className="font-[playfair] text-5xl font-medium text-[#1E343F]">
+            <div className="font-[merriweather] text-5xl font-medium text-[#1E343F]">
               {lowSupport}
             </div>
             <div className="mt-2 text-sm text-[#1E343F]">

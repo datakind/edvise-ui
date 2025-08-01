@@ -56,6 +56,31 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply font-sans font-[600] text-base;
 }
 
+/* Merriweather font utilities */
+.text-merriweather {
+  @apply font-merriweather;
+}
+
+.text-merriweather-light {
+  @apply font-merriweather font-light;
+}
+
+.text-merriweather-normal {
+  @apply font-merriweather font-normal;
+}
+
+.text-merriweather-bold {
+  @apply font-merriweather font-bold;
+}
+
+.text-merriweather-black {
+  @apply font-merriweather font-black;
+}
+
+.text-merriweather-italic {
+  @apply font-merriweather italic;
+}
+
 a {
   @apply text-blue-700;
 }

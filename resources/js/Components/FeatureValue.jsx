@@ -304,13 +304,13 @@ export default function FeatureValue({ features }) {
           <table className="w-full rounded-3xl text-left">
             <thead>
               <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
-                <th className="p-6 text-xs font-medium text-[#6B7280]">
+                <th className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]">
                   FEATURE NAME
                 </th>
-                <th className="p-6 text-center text-xs font-medium text-[#6B7280]">
+                <th className="pb-2 pt-6 text-center text-xs font-medium text-[#6B7280]">
                   DATA TYPE
                 </th>
-                <th className="py-6 pr-6 text-left text-xs font-medium text-[#6B7280]">
+                <th className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]">
                   OVERALL FEATURE IMPORTANCE
                 </th>
               </tr>

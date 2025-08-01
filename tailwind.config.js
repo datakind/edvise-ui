@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Helvetica Neue', ...defaultTheme.fontFamily.sans],
+        merriweather: ['Merriweather', 'serif'],
       },
       screens: {
         sm: '576px',

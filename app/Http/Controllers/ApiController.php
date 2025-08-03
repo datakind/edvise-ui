@@ -383,7 +383,11 @@ public function EditInstApi(Request $request)
             if ($inst == null || $inst == "") {
                 return response()->json(['error' => $instErr], 401);
             }
-            return response()->json([['m_id' => 'e4862c62829440d8ab4c9c298f02f619', 'name' => 'latest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False]], 200);
+            return response()->json([
+                ['m_id' => 'e4862c62829440d8ab4c9c298f02f620', 'name' => 'oldest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False],
+                ['m_id' => 'e4862c62829440d8ab4c9c298f02f619', 'name' => 'latest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False],
+
+            ], 200);
         }
         return ApiController::constructInstRequest($request, '/models', "GET", null);
     }
@@ -496,7 +500,7 @@ public function EditInstApi(Request $request)
             if ($inst == null || $inst == "") {
                 return response()->json(['error' => $instErr], 401);
             }
-            return response()->json([ 
+            return response()->json([
         "batches"=> [
         [
             "batch_id"=> "1bc27bbe2a124dda983d156fafcca648",

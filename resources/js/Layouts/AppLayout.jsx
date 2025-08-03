@@ -161,13 +161,13 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   function dashboardNavHelper(item, modelData) {
     if (
-      item.name == 'Dashboard' &&
+      item.name == 'Model Results' &&
       modelData != null &&
       modelData.length != 0
     ) {
       // Create a newItem to drop the href that's there by default.
       item = {
-        name: 'Dashboard',
+        name: 'Model Results',
         icon: ChartBarIcon,
         visibility_type: VisibilityType.PRIVATE_ONLY,
         children: [],

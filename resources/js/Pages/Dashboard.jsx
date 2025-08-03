@@ -319,53 +319,6 @@ export default function Dashboard({ modelname }) {
                       Export
                     </button>
                   </div>
-                  {currentRunCompleted ? (
-                    <div className="m-auto flex flex-col items-center justify-between">
-                      <div className="mb-12 ml-24 mr-24 mt-12 flex h-12 w-3/4 items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
-                        <div className="flex font-bold">
-                          {outputApproved ? (
-                            <>Output review completed.</>
-                          ) : (
-                            <>Output review not completed.</>
-                          )}
-                        </div>
-                      </div>
-                      <PrintableChart
-                        chartType="Histogram"
-                        data={chartData}
-                        options={histogramOptions}
-                        width={'800px'}
-                        height={'500px'}
-                      />
-                      <div className="bg-white pb-4 pl-4 pr-4 pt-4">
-                        <div className="flex justify-between">
-                          <span className="text-lg">
-                            Student Success Predictions
-                          </span>
-                          <a
-                            className="text-xs"
-                            href={shapImgBlob}
-                            download="shap_chart.png"
-                          >
-                            Download Chart
-                          </a>
-                        </div>
-                        <img
-                          id="ShapPreview"
-                          style={{ width: 'calc(800px - 2rem)' }}
-                          alt="shap value graph"
-                          src={shapImgBlob}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500">
-                      <div className="flex font-bold">
-                        Run pending. You will recieve an email once the data is
-                        available for viewing.
-                      </div>
-                    </div>
-                  )}
                   <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
                     <ModelRunHistory runInfos={runs} />
                   </div>

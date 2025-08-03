@@ -286,8 +286,8 @@ Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
-    '/model-results-overview',
-    function () {
-        return Inertia::render('ModelResultsOverview');
+    '/model-results-overview/{run_id}',
+    function ($run_id) {
+        return Inertia::render('ModelResultsOverview', ['run_id' => $run_id]);
     }
 )->name('model-results-overview');

@@ -288,7 +288,9 @@ export default function Dashboard({ modelname }) {
                             id="run_time"
                           >
                             {Object.keys(runDatesToJobDict).map(r => (
-                              <option value={r}>{r}</option>
+                              <option key={r} value={r}>
+                                {r}
+                              </option>
                             ))}
                           </select>
                         )}

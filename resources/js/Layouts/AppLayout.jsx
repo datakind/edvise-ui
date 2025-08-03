@@ -160,14 +160,20 @@ export default function AppLayout({ title, renderHeader, children }) {
   const pathname = window.location.pathname;
 
   function dashboardNavHelper(item, modelData) {
+    console.log('Processing item:', item.name, 'with modelData:', modelData);
     if (
-      item.name == 'Dashboard' &&
+      item.name == 'Model Results' &&
       modelData != null &&
       modelData.length != 0
     ) {
+      console.log(
+        'Transforming Model Results item with',
+        modelData.length,
+        'models',
+      );
       // Create a newItem to drop the href that's there by default.
       item = {
-        name: 'Dashboard',
+        name: 'Model Results',
         icon: ChartBarIcon,
         visibility_type: VisibilityType.PRIVATE_ONLY,
         children: [],
@@ -178,6 +184,7 @@ export default function AppLayout({ title, renderHeader, children }) {
         transformedElem.href = route('dashboard_modelname', elem.name);
         transformedElem.visibility_type = VisibilityType.PRIVATE_ONLY;
         item.children.push(transformedElem);
+        console.log('Added child:', transformedElem);
       });
     }
     return item;
@@ -187,9 +194,11 @@ export default function AppLayout({ title, renderHeader, children }) {
     const fetchModels = async () => {
       try {
         const response = await axios.get('/models-api');
+        console.log('Models fetched:', response.data);
         let newNav = navAboveLine.map(item =>
           dashboardNavHelper(item, response.data),
         );
+        console.log('Navigation updated:', newNav);
         setNavAboveLine(newNav);
       } catch (err) {
         //console.log(JSON.stringify(err));

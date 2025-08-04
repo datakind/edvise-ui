@@ -1,14 +1,15 @@
 import React from 'react';
 
 export default function Footer() {
+  const route = window.route;
   return (
     <footer className="flex grid h-[10%] grid-cols-4 items-end justify-center pb-12 pr-6 text-black">
       <div className="col-span-2 text-left">
-        <ul class="items-left justify-left flex flex-wrap pl-12 text-gray-900 dark:text-white">
+        <ul className="items-left justify-left flex flex-wrap pl-12 text-gray-900 dark:text-white">
           <li>
             <a
               href={route('privacy-policy')}
-              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
+              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               Privacy Policy
             </a>
@@ -16,7 +17,7 @@ export default function Footer() {
           <li>
             <a
               href={route('terms-of-service')}
-              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
+              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               Terms of Service
             </a>
@@ -24,7 +25,7 @@ export default function Footer() {
           <li>
             <a
               href={route('license')}
-              class="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
+              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
             >
               License
             </a>

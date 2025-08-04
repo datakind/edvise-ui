@@ -453,7 +453,7 @@ public function EditInstApi(Request $request)
             if ($inst == null || $inst == "") {
                 return response()->json(['error' => $instErr], 401);
             }
-            return response()->json([['run_id' => '123', 'inst_id' => $inst, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed'=>False]], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => $inst, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed'=>True]], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.

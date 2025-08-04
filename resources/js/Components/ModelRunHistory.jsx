@@ -3,6 +3,9 @@ import { usePage } from '@inertiajs/react';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 
+// Access route function from window object
+const route = window.route;
+
 const ModelRunHistory = props => {
   const [dataToDisplay, setDataToDisplay] = useState([]);
   const [err, setErr] = useState(null);
@@ -18,6 +21,7 @@ const ModelRunHistory = props => {
           outputFile: run.completed ? run.output_filename : 'Pending',
           approved: run.output_valid,
           outputLink: run.completed ? run.output_file_link : null,
+          run_id: run.run_id,
         }));
         setDataToDisplay(vals);
       } else {
@@ -50,7 +54,7 @@ const ModelRunHistory = props => {
                 <th className="p-4 px-6">DATE</th>
                 <th className="p-4 px-6">USER</th>
                 <th className="p-4 px-6">BATCH</th>
-                <th className="p-4 px-6">OUTPUT FILE</th>
+                <th className="p-4 px-6">RESULTS</th>
               </tr>
             </thead>
 

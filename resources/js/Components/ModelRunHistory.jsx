@@ -79,9 +79,7 @@ const ModelRunHistory = props => {
                       {run.outputFile == 'Pending' ? (
                         <>Pending</>
                       ) : (
-                        <a href={route('model-results-overview', run.run_id)}>
-                          Available
-                        </a>
+                        <a href={run.outputLink}>Download</a>
                       )}
                     </td>
                   </tr>

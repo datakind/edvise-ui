@@ -59,7 +59,7 @@ export default function ImpactSection(props) {
         'Higher education is linked to greater life satisfaction and overall well being.',
       source: 'Pew Research Center',
       image: {
-        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/impact-5.jpg',
+        url: 'https://storage.googleapis.com/staging-sst-01-staging-static/SST%20-%203.jpg',
         alt: 'Dara Byrne',
       },
     },

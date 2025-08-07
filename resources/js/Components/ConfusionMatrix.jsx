@@ -106,7 +106,7 @@ export default function ConfusionMatrix() {
                 }}
               >
                 <div className="my-2 text-sm font-semibold">{cell.label}</div>
-                <div className="font-[playfair] text-7xl font-medium">
+                <div className="font-[merriweather] text-7xl font-medium">
                   {cell.percent}
                 </div>
                 <div

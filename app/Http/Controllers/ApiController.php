@@ -152,10 +152,18 @@ class ApiController extends Controller
     {
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
         [$tok, $tokErr] = TokenHelper::GetToken($request);
+
+        \Log::info('constructInstRequest - Institution ID: ' . $inst . ', Error: ' . $instErr);
+        \Log::info('constructInstRequest - Token Error: ' . $tokErr);
+        \Log::info('constructInstRequest - URL piece: ' . $url_piece);
+        \Log::info('constructInstRequest - Method: ' . $method);
+
         if ($tok == "") {
+            \Log::error('constructInstRequest - Token is empty');
             return response()->json(['error' => $tokErr], 401);
         }
         if ($inst == null || $inst == "") {
+            \Log::error('constructInstRequest - Institution is empty');
             return response()->json(['error' => $instErr], 401);
         }
         $headers = [
@@ -165,6 +173,7 @@ class ApiController extends Controller
         ];
 
         $url = env('BACKEND_URL').'/institutions/'.$inst.$url_piece;
+        \Log::info('constructInstRequest - Full URL being called: ' . $url);
         $resp = null;
         if ($method == "GET") {
             $resp = Http::withHeaders($headers)->get($url);
@@ -680,8 +689,14 @@ public function EditInstApi(Request $request)
                     ]
                 ], 200);
             }
-            \Log::info('Production request - Making external API call for run_id: ' . $run_id);
-            return ApiController::constructInstRequest($request, '/inference/support-overview/'.$run_id, "GET", null);
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . $instErr);
+
+            $externalUrl = '/inference/support-overview/'.$run_id;
+            \Log::info('Production request - External API URL: ' . $externalUrl);
+            \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+            return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
         }
 
     protected function readDataDictionary(): mixed

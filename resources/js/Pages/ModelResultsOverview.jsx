@@ -65,6 +65,8 @@ const features = [
 ];
 
 export default function ModelResultsOverview({ run_id }) {
+  console.log('ModelResultsOverview - Received run_id:', run_id);
+
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState(null);

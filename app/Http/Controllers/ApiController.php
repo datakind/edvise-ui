@@ -606,9 +606,11 @@ public function EditInstApi(Request $request)
         // Gets support overview data for a given run
         public function getSupportOverview(Request $request, string $run_id)
         {
+            \Log::info('getSupportOverview called with run_id: ' . $run_id);
 
             if (ApiController::isLocalRequest()) {
                 [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . $instErr);
                 if ($inst == null || $inst == "") {
                     return response()->json(['error' => $instErr], 401);
                 }
@@ -678,6 +680,7 @@ public function EditInstApi(Request $request)
                     ]
                 ], 200);
             }
+            \Log::info('Production request - Making external API call for run_id: ' . $run_id);
             return ApiController::constructInstRequest($request, '/inference/support-overview/'.$run_id, "GET", null);
         }
 

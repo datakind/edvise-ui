@@ -81,7 +81,7 @@ const ModelRunHistory = props => {
                         <>Pending</>
                       ) : (
                         <a href={route('model-results-overview', run.run_id)}>
-                          Available
+                          View
                         </a>
                       )}
                     </td>

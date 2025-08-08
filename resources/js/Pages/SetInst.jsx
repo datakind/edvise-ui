@@ -60,12 +60,12 @@ export default function SetInstitution() {
     <AppLayout
       title="Set Institution"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl font-semibold leading-tight text-gray-800">
           SetInst
         </h2>
       )}
     >
-      <div className="w-full flex flex-col items-center" id="main_area">
+      <div className="flex w-full flex-col items-center" id="main_area">
         <HeaderLabel
           className="pl-12"
           iconObj={
@@ -75,9 +75,9 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
-        <div className="py-12 flex">
-          <div className="flex flex-col mx-auto justify-center items-center">
-            <label className="uppercase text-black text-lg font-bold mb-2">
+        <div className="flex py-12">
+          <div className="mx-auto flex flex-col items-center justify-center">
+            <label className="mb-2 text-lg font-bold uppercase text-black">
               All institutions registered in the SST:
             </label>
             <ul>
@@ -98,32 +98,32 @@ export default function SetInstitution() {
           onSubmit={handleSubmit}
         >
           <div id="form_contents" className="flex flex-col">
-            <div className="flex -mx-3 mb-6 justify-center">
-              <div className="w-full px-3 mb-6">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <div className="-mx-3 mb-6 flex justify-center">
+              <div className="mb-6 w-full px-3">
+                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700">
                   The institution ID for the current Datakinder to use.
                 </label>
 
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
                   name="instid"
                   type="text"
                   placeholder="Copy institution id here."
                 ></input>
-                <p className="text-gray-600 text-xs italic">
+                <p className="text-xs italic text-gray-600">
                   Input the institution ID (e.g.
                   "f42c1c43f1f947bb85cf703bc3449c77") without quotes.
                 </p>
               </div>
             </div>
-            <div className="flex -mx-3 mb-6 hidden">
-              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <div className="-mx-3 mb-6 flex hidden">
+              <div className="mb-6 w-full px-3 md:mb-0 md:w-1/3">
+                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700">
                   Institution
                 </label>
                 <div className="relative">
                   <select
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                     id="grid-state"
                   >
                     <option>
@@ -137,7 +137,7 @@ export default function SetInstitution() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+              className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white"
             >
               Submit
             </button>

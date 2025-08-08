@@ -84,18 +84,30 @@ export default function SupportOverview({ tab, setTab, run_id }) {
 
   useEffect(() => {
     const fetchSupportOverview = async () => {
+      console.log('SupportOverview - run_id:', run_id);
+
       if (!run_id) {
+        console.log('SupportOverview - No run_id provided, skipping API call');
         setLoading(false);
         return;
       }
 
       try {
         setLoading(true);
+        console.log(
+          'SupportOverview - Making API call to:',
+          `/support-overview/${run_id}`,
+        );
         const response = await axios.get(`/support-overview/${run_id}`);
+        console.log('SupportOverview - API response:', response.data);
         setInferenceData(response.data);
         setError(null);
       } catch (err) {
-        console.error('Error fetching support overview:', err);
+        console.error(
+          'SupportOverview - Error fetching support overview:',
+          err,
+        );
+        console.error('SupportOverview - Error response:', err.response?.data);
         setError('Failed to load support overview data');
         setInferenceData(mockInferenceData); // Fallback to mock data
       } finally {

@@ -94,11 +94,13 @@ export default function SupportOverview({ tab, setTab, run_id }) {
 
       try {
         setLoading(true);
+        const apiUrl = `/support-overview/${run_id}`;
+        console.log('SupportOverview - Making API call to:', apiUrl);
         console.log(
-          'SupportOverview - Making API call to:',
-          `/support-overview/${run_id}`,
+          'SupportOverview - Full URL:',
+          window.location.origin + apiUrl,
         );
-        const response = await axios.get(`/support-overview/${run_id}`);
+        const response = await axios.get(apiUrl);
         console.log('SupportOverview - API response:', response.data);
         setInferenceData(response.data);
         setError(null);

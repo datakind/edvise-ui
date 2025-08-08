@@ -603,6 +603,84 @@ public function EditInstApi(Request $request)
         return Http::withHeaders($headers)->get(env('DK_API_SUITE_URL').'/'.env('DK_API_SUITE_VERSION').'/'.$endpoint.'?'.$query);
     }
 
+        // Gets support overview data for a given run
+        public function getSupportOverview(Request $request, string $run_id)
+        {
+
+            if (ApiController::isLocalRequest()) {
+                [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+                if ($inst == null || $inst == "") {
+                    return response()->json(['error' => $instErr], 401);
+                }
+                return response()->json([
+                    [
+                        'bin_lower' => '0.8',
+                        'bin_upper' => '0.9',
+                        'support_score' => '0.85',
+                        'count_of_students' => '47',
+                        'pct' => '6.71'
+                    ],
+                    [
+                        'bin_lower' => '0.9',
+                        'bin_upper' => '1.0',
+                        'support_score' => '0.95',
+                        'count_of_students' => '19',
+                        'pct' => '2.71'
+                    ],
+                    [
+                        'bin_lower' => '0.2',
+                        'bin_upper' => '0.3',
+                        'support_score' => '0.25',
+                        'count_of_students' => '91',
+                        'pct' => '13.0'
+                    ],
+                    [
+                        'bin_lower' => '0.5',
+                        'bin_upper' => '0.6',
+                        'support_score' => '0.55',
+                        'count_of_students' => '102',
+                        'pct' => '14.57'
+                    ],
+                    [
+                        'bin_lower' => '0.7',
+                        'bin_upper' => '0.8',
+                        'support_score' => '0.75',
+                        'count_of_students' => '68',
+                        'pct' => '9.71'
+                    ],
+                    [
+                        'bin_lower' => '0.1',
+                        'bin_upper' => '0.2',
+                        'support_score' => '0.15',
+                        'count_of_students' => '40',
+                        'pct' => '5.71'
+                    ],
+                    [
+                        'bin_lower' => '0.3',
+                        'bin_upper' => '0.4',
+                        'support_score' => '0.35',
+                        'count_of_students' => '130',
+                        'pct' => '18.57'
+                    ],
+                    [
+                        'bin_lower' => '0.4',
+                        'bin_upper' => '0.5',
+                        'support_score' => '0.45',
+                        'count_of_students' => '128',
+                        'pct' => '18.29'
+                    ],
+                    [
+                        'bin_lower' => '0.6',
+                        'bin_upper' => '0.7',
+                        'support_score' => '0.65',
+                        'count_of_students' => '75',
+                        'pct' => '10.71'
+                    ]
+                ], 200);
+            }
+            return ApiController::constructInstRequest($request, '/inference/support-overview/'.$run_id, "GET", null);
+        }
+
     protected function readDataDictionary(): mixed
     {
         $response = DataDictionary::all();

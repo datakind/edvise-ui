@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
+import axios from 'axios';
 
-const inferenceData = [
+// Mock data for fallback
+const mockInferenceData = [
   {
     bin_lower: '0.8',
     bin_upper: '0.9',
@@ -75,25 +77,53 @@ function interpolateColor(color1, color2, factor) {
   return `rgb(${result[0]},${result[1]},${result[2]})`;
 }
 
-const numBins = 30;
-const gradientColors = Array.from({ length: numBins }, (_, i) =>
-  interpolateColor('F9F0E8', 'F79222', i / (numBins - 1)),
-);
+export default function SupportOverview({ tab, setTab, run_id }) {
+  const [inferenceData, setInferenceData] = useState(mockInferenceData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const highSupport = inferenceData
-  .filter(item => parseFloat(item.support_score) >= 0.5)
-  .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
-const lowSupport = inferenceData
-  .filter(item => parseFloat(item.support_score) < 0.5)
-  .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
+  useEffect(() => {
+    const fetchSupportOverview = async () => {
+      if (!run_id) {
+        setLoading(false);
+        return;
+      }
 
-const yRange =
-  Math.ceil(
-    Math.max(...inferenceData.map(item => parseInt(item.count_of_students))) /
-      10,
-  ) * 10;
+      try {
+        setLoading(true);
+        const response = await axios.get(`/support-overview/${run_id}`);
+        setInferenceData(response.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching support overview:', err);
+        setError('Failed to load support overview data');
+        setInferenceData(mockInferenceData); // Fallback to mock data
+      } finally {
+        setLoading(false);
+      }
+    };
 
-export default function SupportOverview({ tab, setTab }) {
+    fetchSupportOverview();
+  }, [run_id]);
+
+  const numBins = 30;
+  const gradientColors = Array.from({ length: numBins }, (_, i) =>
+    interpolateColor('F9F0E8', 'F79222', i / (numBins - 1)),
+  );
+
+  const highSupport = inferenceData
+    .filter(item => parseFloat(item.support_score) >= 0.5)
+    .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
+  const lowSupport = inferenceData
+    .filter(item => parseFloat(item.support_score) < 0.5)
+    .reduce((sum, item) => sum + parseInt(item.count_of_students), 0);
+
+  const yRange =
+    Math.ceil(
+      Math.max(...inferenceData.map(item => parseInt(item.count_of_students))) /
+        10,
+    ) * 10;
+
   // Histogram bins and counts (placeholder)
   const bins = Array.from({ length: 30 }, (_, i) => 0.1 + (0.7 / 30) * i);
   const counts = Array(30).fill(0);

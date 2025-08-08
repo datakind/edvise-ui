@@ -64,7 +64,7 @@ const features = [
   },
 ];
 
-export default function ModelResultsOverview() {
+export default function ModelResultsOverview({ run_id }) {
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState(null);
@@ -129,7 +129,7 @@ export default function ModelResultsOverview() {
                 Showing model results for: synthetic_retention_30credits
               </div>
               <div className="mb-8">
-                <SupportOverview tab={tab} setTab={setTab} />
+                <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

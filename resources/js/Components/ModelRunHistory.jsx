@@ -55,6 +55,7 @@ const ModelRunHistory = props => {
                 <th className="p-4 px-6">USER</th>
                 <th className="p-4 px-6">BATCH</th>
                 <th className="p-4 px-6">RESULTS</th>
+                <th className="p-4 px-6">RESULTS .CSV</th>
               </tr>
             </thead>
 
@@ -81,6 +82,19 @@ const ModelRunHistory = props => {
                       ) : (
                         <a href={route('model-results-overview', run.run_id)}>
                           Available
+                        </a>
+                      )}
+                    </td>
+                    <td className="p-4 px-6">
+                      {run.outputFile == 'Pending' ? (
+                        <>Pending</>
+                      ) : (
+                        <a
+                          href={run.outputLink}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Download
                         </a>
                       )}
                     </td>

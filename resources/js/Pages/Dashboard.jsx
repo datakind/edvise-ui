@@ -303,21 +303,6 @@ export default function Dashboard({ modelname }) {
                         Update View
                       </button>
                     </form>
-                    <button
-                      id="button_content"
-                      onClick={triggerDownload}
-                      className={classNames(
-                        currentRunCompleted ? 'opacity-100' : 'opacity-50',
-                        'mb-4 flex flex-row items-center justify-center gap-x-2 rounded-full bg-[#f79222] px-3 py-2 text-white',
-                      )}
-                      disabled={!currentRunCompleted}
-                    >
-                      <ArrowUpTrayIcon
-                        aria-hidden="true"
-                        className="size-6 shrink-0"
-                      />
-                      Export
-                    </button>
                   </div>
                   <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
                     <ModelRunHistory runInfos={runs} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
+import PropTypes from 'prop-types';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
@@ -64,8 +65,10 @@ const features = [
   },
 ];
 
-export default function ModelResultsOverview({ run_id }) {
+function ModelResultsOverview({ run_id, output_file, output_link }) {
   console.log('ModelResultsOverview - Received run_id:', run_id);
+  console.log('ModelResultsOverview - Received output_file:', output_file);
+  console.log('ModelResultsOverview - Received output_link:', output_link);
 
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,6 +84,21 @@ export default function ModelResultsOverview({ run_id }) {
     setSelectedFeature(null);
   };
 
+  const handleExportData = () => {
+    if (output_link) {
+      // Create a temporary link element to trigger the download
+      const link = document.createElement('a');
+      link.href = output_link;
+      link.download = output_file || 'model_results.csv';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error('No output file available for download');
+    }
+  };
+
   return (
     <AppLayout title="Model Results Overview">
       <Head title="Model Results Overview" />
@@ -91,7 +109,15 @@ export default function ModelResultsOverview({ run_id }) {
           </h1>
         </div>
         <div className="my-6">
-          <button className="ml-8 rounded-full bg-[#f79222] px-4 py-2 text-base font-normal text-black shadow hover:bg-[#e67c00]">
+          <button
+            onClick={handleExportData}
+            disabled={!output_link}
+            className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${
+              output_link
+                ? 'bg-[#f79222] hover:bg-[#e67c00]'
+                : 'cursor-not-allowed bg-gray-400'
+            }`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -106,7 +132,7 @@ export default function ModelResultsOverview({ run_id }) {
                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
               />
             </svg>
-            Export Data
+            {output_link ? 'Export Data' : 'No Data Available'}
           </button>
         </div>
         <div className="w-full bg-[#FAFAFA] p-6">
@@ -453,7 +479,7 @@ export default function ModelResultsOverview({ run_id }) {
                 </div>
                 <div className="mt-4 text-center text-xs font-bold text-[#767676]">
                   Questions about how to interpret these results? Contact your
-                  account representative, and they'd be happy to help!
+                  account representative, and they&apos;d be happy to help!
                 </div>
               </div>
             </div>
@@ -463,3 +489,11 @@ export default function ModelResultsOverview({ run_id }) {
     </AppLayout>
   );
 }
+
+ModelResultsOverview.propTypes = {
+  run_id: PropTypes.string.isRequired,
+  output_file: PropTypes.string,
+  output_link: PropTypes.string,
+};
+
+export default ModelResultsOverview;

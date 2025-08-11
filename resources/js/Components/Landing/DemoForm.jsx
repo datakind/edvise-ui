@@ -215,11 +215,25 @@ export default function DemoForm({ className, formId, onSuccess }) {
 
       <div>
         <p className="mb-3 mt-4 text-base">
-          We will respond within two business days.
+          We will respond within two business days." with "Edvise currently
+          serves U.S.-based colleges and universities. We’ll respond to those
+          inquiries within two business days. If you're outside the U.S. and
+          want to learn more about our work, please{' '}
+          <a
+            className="text-[#4F4F4F] underline hover:font-semibold"
+            href="https://www.datakind.org/newsletter/"
+            target="_blank"
+          >
+            sign up for our newsletter
+          </a>
+          .
         </p>
 
         <p className="text-base text-[#4F4F4F]">
-          <a href="/privacy-policy" className="text-[#4F4F4F] underline">
+          <a
+            href="/privacy-policy"
+            className="text-[#4F4F4F] underline hover:font-semibold"
+          >
             Privacy policy
           </a>
         </p>

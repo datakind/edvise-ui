@@ -1,7 +1,22 @@
+import React, { useEffect } from 'react';
 import DemoForm from './DemoForm';
+
 export default function RequestDemoSection() {
+  useEffect(() => {
+    // Check if there's a hash in the URL when the component mounts
+    if (window.location.hash === '#request-demo') {
+      // Small delay to ensure the page is fully rendered
+      setTimeout(() => {
+        const element = document.getElementById('request-demo');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, []);
+
   return (
-    <div className="request-demo-section">
+    <div id="request-demo" className="request-demo-section">
       <div className="layout:grid">
         <div className="col-span-6">
           <p className="type:section-label mb-9 sm:mb-12">Request demo</p>

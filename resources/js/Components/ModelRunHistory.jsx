@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { usePage } from '@inertiajs/react';
-import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
-import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 // Access route function from window object
 const route = window.route;
@@ -68,7 +66,7 @@ const ModelRunHistory = props => {
                   {err.response.data}
                 </tr>
               ) : (
-                dataToDisplay.map((run, index) => (
+                dataToDisplay.map(run => (
                   <tr
                     className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
                     key={run.date}
@@ -80,7 +78,9 @@ const ModelRunHistory = props => {
                       {run.outputFile == 'Pending' ? (
                         <>Pending</>
                       ) : (
-                        <a href={route('model-results-overview', run.run_id)}>
+                        <a
+                          href={`${route('model-results-overview', run.run_id)}?output_file=${encodeURIComponent(run.outputFile)}&output_link=${encodeURIComponent(run.outputLink || '')}`}
+                        >
                           View
                         </a>
                       )}
@@ -107,6 +107,21 @@ const ModelRunHistory = props => {
       )}
     </div>
   );
+};
+
+ModelRunHistory.propTypes = {
+  runInfos: PropTypes.arrayOf(
+    PropTypes.shape({
+      triggered_at: PropTypes.string,
+      created_by: PropTypes.string,
+      batch_name: PropTypes.string,
+      completed: PropTypes.bool,
+      output_filename: PropTypes.string,
+      output_valid: PropTypes.bool,
+      output_file_link: PropTypes.string,
+      run_id: PropTypes.string,
+    }),
+  ),
 };
 
 export default ModelRunHistory;

@@ -172,7 +172,10 @@ export default function AppLayout({ title, renderHeader, children }) {
         visibility_type: VisibilityType.PRIVATE_ONLY,
         children: [],
       };
-      modelData.forEach(elem => {
+      // Filter modelData to only include models where valid is true
+      const validModels = modelData.filter(elem => elem.valid === true);
+
+      validModels.forEach(elem => {
         let transformedElem = {};
         transformedElem.name = elem.name;
         transformedElem.href = route('dashboard_modelname', elem.name);

@@ -395,6 +395,7 @@ public function EditInstApi(Request $request)
             return response()->json([
                 ['m_id' => 'e4862c62829440d8ab4c9c298f02f620', 'name' => 'oldest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False],
                 ['m_id' => 'e4862c62829440d8ab4c9c298f02f619', 'name' => 'latest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => True, 'deleted' => False],
+                ['m_id' => 'e4862c62829440d8ab4c9c298f02f621', 'name' => 'invlaid_enrollment_model', 'created_by' => $request->user()->id, 'valid' => False, 'deleted' => False],
 
             ], 200);
         }

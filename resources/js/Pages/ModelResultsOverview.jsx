@@ -66,6 +66,7 @@ const features = [
 ];
 
 function ModelResultsOverview({ run_id, output_file, output_link }) {
+  console.log('run_id:', run_id);
   console.log('ModelResultsOverview - Received run_id:', run_id);
   console.log('ModelResultsOverview - Received output_file:', output_file);
   console.log('ModelResultsOverview - Received output_link:', output_link);

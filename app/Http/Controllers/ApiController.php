@@ -706,4 +706,29 @@ public function EditInstApi(Request $request)
 
         return $response;
     }
+
+    // Gets run details for a specific model run
+    public function getRunDetails(Request $request, string $inst_id, string $model_name, string $run_id)
+    {
+        if (ApiController::isLocalRequest()) {
+            // Mock return based on run_id 123
+            if ($run_id == '123') {
+                return response()->json([
+                    'run_id' => '123',
+                    'inst_id' => $inst_id,
+                    'm_name' => $model_name,
+                    'triggered_at' => '2025-02-25T19:48:43',
+                    'created_by' => 'John Doe',
+                    'batch_name' => 'test_batch',
+                    'completed' => true,
+                    'output_filename' => 'model_results_123.csv',
+                    'output_valid' => true,
+                ], 200);
+            }
+        }
+
+        // Production: call external API
+        $externalUrl = '/institutions/'.$inst_id.'/models/'.$model_name.'/run/'.$run_id;
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

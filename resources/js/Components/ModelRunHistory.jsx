@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 // Access route function from window object
 const route = window.route;
 
-const ModelRunHistory = props => {
+const ModelRunHistory = ({ runInfos, modelName }) => {
   const [dataToDisplay, setDataToDisplay] = useState([]);
   const [err, setErr] = useState(null);
 
+  console.log('ModelRunHistory - Model Name:', modelName);
+
   useEffect(() => {
-    let runvars = props.runInfos;
+    let runvars = runInfos;
     try {
       if (runvars != undefined && runvars != []) {
         let vals = runvars.map(run => ({
@@ -28,7 +30,11 @@ const ModelRunHistory = props => {
     } catch (err) {
       setErr(err);
     }
-  }, [props]);
+  }, [runInfos]);
+
+  const createViewLink = run => {
+    return route('model-results-overview', [run.run_id, modelName]);
+  };
 
   return (
     <div className="full flex flex-col">
@@ -78,11 +84,7 @@ const ModelRunHistory = props => {
                       {run.outputFile == 'Pending' ? (
                         <>Pending</>
                       ) : (
-                        <a
-                          href={`${route('model-results-overview', run.run_id)}?output_file=${encodeURIComponent(run.outputFile)}&output_link=${encodeURIComponent(run.outputLink || '')}`}
-                        >
-                          View
-                        </a>
+                        <a href={createViewLink(run)}>View</a>
                       )}
                     </td>
                     <td className="p-4 px-6">
@@ -122,6 +124,7 @@ ModelRunHistory.propTypes = {
       run_id: PropTypes.string,
     }),
   ),
+  modelName: PropTypes.string,
 };
 
 export default ModelRunHistory;

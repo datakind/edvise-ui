@@ -260,7 +260,7 @@ export default function Dashboard({ modelname }) {
                     </div>
                   )}
                   <div className="mx-auto w-full max-w-[1057px]">
-                    <ModelRunHistory runInfos={[]} />
+                    <ModelRunHistory runInfos={[]} modelName={modelInfo.name} />
                   </div>
                 </>
               ) : (
@@ -305,7 +305,10 @@ export default function Dashboard({ modelname }) {
                     </form>
                   </div>
                   <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
-                    <ModelRunHistory runInfos={runs} />
+                    <ModelRunHistory
+                      runInfos={runs}
+                      modelName={modelInfo.name}
+                    />
                   </div>
                 </>
               )}

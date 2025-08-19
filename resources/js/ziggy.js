@@ -157,6 +157,11 @@ const Ziggy = {
       uri: 'read-data-dictionary',
       methods: ['GET', 'HEAD'],
     },
+    'model-results-overview': {
+      uri: 'model-results-overview/{run_id}/{modelName}',
+      methods: ['GET', 'HEAD'],
+      parameters: ['run_id', 'modelName'],
+    },
   },
 };
 if (typeof window !== 'undefined' && typeof window.Ziggy !== 'undefined') {

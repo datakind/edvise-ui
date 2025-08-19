@@ -291,12 +291,11 @@ Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
-    '/model-results-overview/{run_id}',
-    function ($run_id, Request $request) {
+    '/model-results-overview/{run_id}/{modelName}',
+    function ($run_id, $modelName, Request $request) {
         return Inertia::render('ModelResultsOverview', [
             'run_id' => $run_id,
-            'output_file' => $request->query('output_file'),
-            'output_link' => $request->query('output_link'),
+            'modelName' => $modelName,
         ]);
     }
 )->name('model-results-overview');

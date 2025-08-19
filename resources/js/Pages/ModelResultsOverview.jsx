@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Head } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '../Layouts/AppLayout';
@@ -65,11 +66,32 @@ const features = [
   },
 ];
 
-function ModelResultsOverview({ run_id, output_file, output_link }) {
+function ModelResultsOverview({ run_id, output_file, output_link, modelName }) {
   console.log('run_id:', run_id);
   console.log('ModelResultsOverview - Received run_id:', run_id);
   console.log('ModelResultsOverview - Received output_file:', output_file);
   console.log('ModelResultsOverview - Received output_link:', output_link);
+  console.log('ModelResultsOverview - Received modelName:', modelName);
+
+  const [inst_id, setInstId] = useState(null);
+
+  // Get institution ID when component mounts
+  useEffect(() => {
+    const fetchInstitutionId = async () => {
+      try {
+        const response = await axios.get('/user-current-inst-api');
+        if (response.data && response.data.length > 0) {
+          setInstId(response.data[0]); // First element is the institution ID
+        }
+      } catch (error) {
+        console.error('Error fetching institution ID:', error);
+      }
+    };
+
+    fetchInstitutionId();
+  }, []);
+
+  console.log('ModelResultsOverview - Fetched inst_id:', inst_id);
 
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -155,7 +177,7 @@ function ModelResultsOverview({ run_id, output_file, output_link }) {
           {tab === 'results' ? (
             <>
               <div className="mb-4 px-2 text-lg font-light text-black">
-                Showing model results for: synthetic_retention_30credits
+                Showing model results for: {modelName}
               </div>
               <div className="mb-8">
                 <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
@@ -495,6 +517,7 @@ ModelResultsOverview.propTypes = {
   run_id: PropTypes.string.isRequired,
   output_file: PropTypes.string,
   output_link: PropTypes.string,
+  modelName: PropTypes.string,
 };
 
 export default ModelResultsOverview;

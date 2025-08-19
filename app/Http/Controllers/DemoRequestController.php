@@ -17,7 +17,7 @@ class DemoRequestController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'institution' => 'required|string|max:255',
-            'focus' => 'array',
+            'title' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {

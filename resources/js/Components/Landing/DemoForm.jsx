@@ -14,29 +14,17 @@ export default function DemoForm({ className, formId, onSuccess }) {
     name: '',
     email: '',
     institution: '',
-    focus: [],
+    title: '',
   });
 
   const handleSubmit = e => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Get all checked focus options
-    const focusInputs = document.querySelectorAll(
-      `input[name="focus"]:checked`,
-    );
-    const focusValues = Array.from(focusInputs).map(input => input.value);
-
     form.post(route('demo.request'), {
       preserveScroll: true,
-      data: {
-        ...form.data,
-        focus: focusValues,
-      },
       onSuccess: () => {
         form.reset();
-        // Reset checkboxes
-        focusInputs.forEach(input => (input.checked = false));
         // Wait for 2 seconds to show the success message before closing
         setTimeout(() => {
           if (onSuccess) {
@@ -48,20 +36,6 @@ export default function DemoForm({ className, formId, onSuccess }) {
         setIsSubmitting(false);
       },
     });
-  };
-
-  const handleCheckboxChange = e => {
-    const { value, checked } = e.target;
-    const currentFocus = form.data.focus || [];
-
-    if (checked) {
-      form.setData('focus', [...currentFocus, value]);
-    } else {
-      form.setData(
-        'focus',
-        currentFocus.filter(item => item !== value),
-      );
-    }
   };
 
   const renderInputText = (
@@ -107,46 +81,6 @@ export default function DemoForm({ className, formId, onSuccess }) {
     );
   };
 
-  const renderCheckbox = (id, name, text) => {
-    const inputId = `${formId}-${id}`;
-    return (
-      <div className="flex items-center">
-        <label
-          htmlFor={inputId}
-          className="landing-checkbox group flex cursor-pointer items-center text-gray-600"
-        >
-          <input
-            type="checkbox"
-            id={inputId}
-            name={name}
-            value={text}
-            onChange={handleCheckboxChange}
-            checked={form.data.focus?.includes(text)}
-            className="peer sr-only"
-          />
-          <span className="checkmark block flex h-6 w-6 items-center justify-center rounded-[4px] border-2 border-landing-gray">
-            <svg
-              width="14"
-              height="11"
-              viewBox="0 0 14 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-[12px] opacity-0 group-[.checked]:opacity-100"
-            >
-              <title>Checkmark</title>
-              <path
-                d="M1.5 5.5L5.1001 9.1501L12.9001 1.3501"
-                stroke="black"
-                strokeWidth="2"
-              />
-            </svg>
-          </span>
-          <span className="ml-3">{text}</span>
-        </label>
-      </div>
-    );
-  };
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -161,24 +95,6 @@ export default function DemoForm({ className, formId, onSuccess }) {
         '',
         true,
       )}
-
-      <div className="sm:ml-5">
-        <label
-          className="mb-4 block text-sm font-medium text-gray-700"
-          htmlFor="focus-options"
-        >
-          Your interest
-        </label>
-        <div className="mt-2 space-y-4" id="focus-options">
-          {renderCheckbox('learn-product', 'focus', 'Learn more')}
-          {renderCheckbox('request-demo', 'focus', 'Request a demo')}
-          {renderCheckbox(
-            'talk-representative',
-            'focus',
-            'Talk to a representative',
-          )}
-        </div>
-      </div>
 
       {renderInputText(
         'Email',
@@ -195,6 +111,15 @@ export default function DemoForm({ className, formId, onSuccess }) {
         'institution',
         'Please input the institution you represent',
         'Your institution',
+        '',
+        true,
+      )}
+      {renderInputText(
+        'Title',
+        'title',
+        'title',
+        'Please input your job title',
+        'Your job title',
         '',
         true,
       )}

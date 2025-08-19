@@ -287,6 +287,8 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
 
 Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');
 
+Route::get('/institutions/{inst_id}/models/{model_name}/run/{run_id}', [ApiController::class, 'getRunDetails']);
+
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,

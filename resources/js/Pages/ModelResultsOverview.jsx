@@ -66,14 +66,13 @@ const features = [
   },
 ];
 
-function ModelResultsOverview({ run_id, output_file, output_link, modelName }) {
+function ModelResultsOverview({ run_id, modelName }) {
   console.log('run_id:', run_id);
   console.log('ModelResultsOverview - Received run_id:', run_id);
-  console.log('ModelResultsOverview - Received output_file:', output_file);
-  console.log('ModelResultsOverview - Received output_link:', output_link);
   console.log('ModelResultsOverview - Received modelName:', modelName);
 
   const [inst_id, setInstId] = useState(null);
+  const [runDetails, setRunDetails] = useState(null);
 
   // Get institution ID when component mounts
   useEffect(() => {
@@ -91,7 +90,34 @@ function ModelResultsOverview({ run_id, output_file, output_link, modelName }) {
     fetchInstitutionId();
   }, []);
 
+  // Get run details when we have both inst_id and run_id
+  useEffect(() => {
+    const fetchRunDetails = async () => {
+      if (!inst_id || !run_id) return;
+
+      try {
+        const response = await axios.get(
+          `/institutions/${inst_id}/models/${modelName}/run/${run_id}`,
+        );
+        setRunDetails(response.data);
+        console.log('Run details fetched:', response.data);
+      } catch (error) {
+        console.error('Error fetching run details:', error);
+      }
+    };
+
+    fetchRunDetails();
+  }, [inst_id, run_id, modelName]);
+
+  // Create output_link and get output_filename from run details
+  const output_link = runDetails
+    ? `${run_id}/${runDetails.output_filename}`
+    : null;
+  const output_filename = runDetails ? runDetails.output_filename : null;
+
   console.log('ModelResultsOverview - Fetched inst_id:', inst_id);
+  console.log('ModelResultsOverview - Run details:', runDetails);
+  console.log('ModelResultsOverview - Constructed output_link:', output_link);
 
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,7 +138,7 @@ function ModelResultsOverview({ run_id, output_file, output_link, modelName }) {
       // Create a temporary link element to trigger the download
       const link = document.createElement('a');
       link.href = output_link;
-      link.download = output_file || 'model_results.csv';
+      link.download = output_filename || 'model_results.csv';
       link.target = '_blank';
       document.body.appendChild(link);
       link.click();
@@ -515,7 +541,6 @@ function ModelResultsOverview({ run_id, output_file, output_link, modelName }) {
 
 ModelResultsOverview.propTypes = {
   run_id: PropTypes.string.isRequired,
-  output_file: PropTypes.string,
   output_link: PropTypes.string,
   modelName: PropTypes.string,
 };

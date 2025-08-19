@@ -6,15 +6,7 @@
     **Name:** {{ $formData['name'] }}
     **Email:** {{ $formData['email'] }}
     **Institution:** {{ $formData['institution'] }}
-
-    **Interests:**
-    @if(isset($formData['focus']) && is_array($formData['focus']))
-    @foreach($formData['focus'] as $interest)
-    - {{ $interest }}
-    @endforeach
-    @else
-    - No specific interests selected
-    @endif
+    **Title:** {{ $formData['title'] }}
 
     Please respond to this request within two business days.
 

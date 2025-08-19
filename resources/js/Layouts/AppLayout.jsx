@@ -175,7 +175,12 @@ export default function AppLayout({ title, renderHeader, children }) {
       // Filter modelData to only include models where valid is true
       const validModels = modelData.filter(elem => elem.valid === true);
 
-      validModels.forEach(elem => {
+      // Sort validModels alphabetically by name
+      const sortedValidModels = validModels.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+
+      sortedValidModels.forEach(elem => {
         let transformedElem = {};
         transformedElem.name = elem.name;
         transformedElem.href = route('dashboard_modelname', elem.name);

@@ -52,10 +52,6 @@ export default function ManageUploads() {
   const actions = [
     { label: 'Change batch name', onClick: () => showChangeModal() },
     {
-      label: 'Add files to batch',
-      onClick: () => console.log('Add files to batch clicked'),
-    },
-    {
       label: 'Delete batch',
       onClick: () => console.log('Delete batch clicked'),
     },

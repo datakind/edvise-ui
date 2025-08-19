@@ -103,10 +103,10 @@ export default function CreateModel() {
                 type="number"
                 min="0"
                 max="10"
-                defaultValue="0"
+                defaultValue="1"
               ></input>
               <p className="text-xs italic text-gray-600">
-                Version ID of the model. Use zero for initial version.
+                Version ID of the model. Use one (1) for initial version.
               </p>
             </div>
             <div className="flex w-1/2 flex-row items-center gap-x-3">
@@ -115,6 +115,7 @@ export default function CreateModel() {
                 id="valid"
                 name="model_valid"
                 defaultValue="Valid"
+                defaultChecked={true}
               ></input>
               <label htmlFor="valid">
                 Model is "valid" (i.e. ready for use).

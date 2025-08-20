@@ -55,11 +55,21 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
           >
             <thead>
               <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
-                <th className="p-4 px-6">DATE</th>
-                <th className="p-4 px-6">USER</th>
-                <th className="p-4 px-6">BATCH</th>
-                <th className="p-4 px-6">RESULTS</th>
-                <th className="p-4 px-6">RESULTS .CSV</th>
+                <th scope="col" className="p-4 px-6">
+                  DATE
+                </th>
+                <th scope="col" className="p-4 px-6">
+                  USER
+                </th>
+                <th scope="col" className="p-4 px-6">
+                  BATCH
+                </th>
+                <th scope="col" className="p-4 px-6">
+                  RESULTS
+                </th>
+                <th scope="col" className="p-4 px-6">
+                  RESULTS .CSV
+                </th>
               </tr>
             </thead>
 

@@ -210,19 +210,19 @@ export default function ManageUploads() {
           >
             <thead>
               <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
-                <th className="p-4 px-6">
+                <th scope="col" className="p-4 px-6">
                   <button onClick={() => handleSort('batch')}>
                     <span className="inline-flex pr-2 align-middle">BATCH</span>
                     <SortIcon />
                   </button>
                 </th>
-                <th className="p-4 px-6">
+                <th scope="col" className="p-4 px-6">
                   <button onClick={() => handleSort('files')}>
                     <span className="inline-flex pr-2 align-middle">FILES</span>
                     <SortIcon />
                   </button>
                 </th>
-                <th className="p-4 px-6">
+                <th scope="col" className="p-4 px-6">
                   <button onClick={() => handleSort('modified_by')}>
                     <span className="inline-flex pr-2 align-middle">
                       MODIFIED BY
@@ -230,7 +230,7 @@ export default function ManageUploads() {
                     <SortIcon />
                   </button>
                 </th>
-                <th className="p-4 px-6">
+                <th scope="col" className="p-4 px-6">
                   <button onClick={() => handleSort('date_modified')}>
                     <span className="inline-flex pr-2 align-middle">
                       DATE MODIFIED
@@ -238,7 +238,7 @@ export default function ManageUploads() {
                     <SortIcon />
                   </button>
                 </th>
-                <th className="p-4 px-6">
+                <th scope="col" className="p-4 px-6">
                   <span className="inline-flex pr-2 align-middle">ACTIONS</span>
                 </th>
               </tr>

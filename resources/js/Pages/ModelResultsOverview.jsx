@@ -265,12 +265,16 @@ function ModelResultsOverview({ run_id, modelName }) {
                   <table className="w-full text-left">
                     <thead>
                       <tr>
-                        <th className="w-1/3 p-2 text-sm text-xs font-bold text-black">
+                        <th
+                          scope="col"
+                          className="w-1/3 p-2 text-sm text-xs font-bold text-black"
+                        >
                           Click any of the feature names to learn more
                         </th>
                         <th
                           className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
                           colSpan="2"
+                          scope="col"
                         >
                           <span className="text-grey-700 float-left text-xs font-medium">
                             <span className="font-bold">Decreasing</span>{' '}

@@ -614,15 +614,16 @@ public function EditInstApi(Request $request)
     }
 
         // Gets support overview data for a given run
-        public function getSupportOverview(Request $request, string $run_id)
+        public function getSupportOverview(Request $request, string $run_id, string $inst_id = null, string $model_name = null)
         {
-            \Log::info('getSupportOverview called with run_id: ' . $run_id);
+            \Log::info('getSupportOverview called with run_id: ' . $run_id . ', inst_id: ' . $inst_id . ', model_name: ' . $model_name);
 
             if (ApiController::isLocalRequest()) {
-                [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
-                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . $instErr);
+                // If inst_id is provided in the route, use it; otherwise get from request
+                $inst = $inst_id ?: InstitutionHelper::GetInstitution($request)[0];
+                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . ($inst_id ? 'None' : InstitutionHelper::GetInstitution($request)[1]));
                 if ($inst == null || $inst == "") {
-                    return response()->json(['error' => $instErr], 401);
+                    return response()->json(['error' => 'Institution not found'], 401);
                 }
                 return response()->json([
                     [
@@ -690,8 +691,10 @@ public function EditInstApi(Request $request)
                     ]
                 ], 200);
             }
-            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
-            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . $instErr);
+
+            // If inst_id is provided in the route, use it; otherwise get from request
+            $inst = $inst_id ?: InstitutionHelper::GetInstitution($request)[0];
+            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . ($inst_id ? 'None' : InstitutionHelper::GetInstitution($request)[1]));
 
             $externalUrl = '/inference/support-overview/'.$run_id;
             \Log::info('Production request - External API URL: ' . $externalUrl);

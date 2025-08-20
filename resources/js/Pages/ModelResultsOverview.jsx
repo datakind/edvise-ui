@@ -203,7 +203,12 @@ function ModelResultsOverview({ run_id, modelName }) {
           <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
             <div>
               Showing results for data batch:{' '}
-              {runDetails?.batch_name || 'Loading...'}
+              <a
+                href={route('manage-uploads')}
+                className="text-black hover:underline"
+              >
+                {runDetails?.batch_name || 'Loading...'}
+              </a>
             </div>
             <div>Run on model: {modelName}</div>
           </div>
@@ -211,7 +216,13 @@ function ModelResultsOverview({ run_id, modelName }) {
           {tab === 'results' ? (
             <>
               <div className="mb-8">
-                <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
+                <SupportOverview
+                  tab={tab}
+                  setTab={setTab}
+                  run_id={run_id}
+                  inst_id={inst_id}
+                  modelName={modelName}
+                />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

@@ -614,9 +614,9 @@ public function EditInstApi(Request $request)
     }
 
         // Gets support overview data for a given run
-        public function getSupportOverview(Request $request, string $run_id, string $inst_id = null, string $model_name = null)
+        public function getSupportOverview(Request $request, string $run_id, string $inst_id = null)
         {
-            \Log::info('getSupportOverview called with run_id: ' . $run_id . ', inst_id: ' . $inst_id . ', model_name: ' . $model_name);
+            \Log::info('getSupportOverview called with run_id: ' . $run_id . ', inst_id: ' . $inst_id);
 
             if (ApiController::isLocalRequest()) {
                 // If inst_id is provided in the route, use it; otherwise get from request

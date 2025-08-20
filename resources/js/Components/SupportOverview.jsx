@@ -104,8 +104,8 @@ export default function SupportOverview({
 
       try {
         setLoading(true);
-        // Use the same pattern as other API calls - construct the proper URL
-        const apiUrl = `/institutions/${inst_id}/models/${modelName}/run/${run_id}/support-overview`;
+        // Use the correct API signature: /institutions/{inst_id}/inference/support-overview/{run_id}
+        const apiUrl = `/institutions/${inst_id}/inference/support-overview/${run_id}`;
         console.log('SupportOverview - Making API call to:', apiUrl);
         console.log(
           'SupportOverview - Full URL:',

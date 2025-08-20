@@ -348,48 +348,55 @@ function ModelResultsOverview({ run_id, modelName }) {
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td className="w-1/3 p-2 text-sm text-xs font-bold text-black"></td>
+                        <td
+                          className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
+                          colSpan="2"
+                        >
+                          <span className="text-grey-700 float-left text-xs font-medium">
+                            <span className="font-bold">Decreasing</span>{' '}
+                            likelihood of support needs
+                            {/* Left arrow */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="#000"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                              />
+                            </svg>
+                          </span>
+                          <span className="float-right font-medium">
+                            <span className="font-bold">Increasing</span>{' '}
+                            likelihood of support needs
+                            {/* Right arrow */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="#000"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                              />
+                            </svg>
+                          </span>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
-                  <div className="text-grey-700 mx-auto mt-2 flex w-1/2 justify-between px-2 text-xs">
-                    <span>
-                      {/* Left arrow */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#000"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                        />
-                      </svg>
-                      <span className="font-bold">Decreasing</span> likelihood
-                      of support needs
-                    </span>
-                    <span>
-                      {/* Right arrow */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="#000"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                        />
-                      </svg>
-                      <span className="font-bold">Increasing</span> likelihood
-                      of support needs
-                    </span>
-                  </div>
+
                   <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">
                     Questions about how to interpret these results? Contact your
                     account representative, and they&apos;d be happy to help!

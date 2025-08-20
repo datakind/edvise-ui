@@ -203,7 +203,12 @@ function ModelResultsOverview({ run_id, modelName }) {
           <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
             <div>
               Showing results for data batch:{' '}
-              {runDetails?.batch_name || 'Loading...'}
+              <a
+                href={route('manage-uploads')}
+                className="text-black hover:underline"
+              >
+                {runDetails?.batch_name || 'Loading...'}
+              </a>
             </div>
             <div>Run on model: {modelName}</div>
           </div>

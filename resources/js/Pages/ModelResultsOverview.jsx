@@ -200,11 +200,18 @@ function ModelResultsOverview({ run_id, modelName }) {
             </button>
           </div>
           <hr className="-mt-2 mb-4 w-full border-black" />
+
+          {/* Show batch and model info on both tabs */}
+          <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
+            <div>
+              Showing results for data batch:{' '}
+              {runDetails?.batch_name || 'Loading...'}
+            </div>
+            <div>Run on model: {modelName}</div>
+          </div>
+
           {tab === 'results' ? (
             <>
-              <div className="mb-4 px-2 text-lg font-light text-black">
-                Showing model results for: {modelName}
-              </div>
               <div className="mb-8">
                 <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
               </div>

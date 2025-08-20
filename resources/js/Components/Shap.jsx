@@ -3,8 +3,9 @@ import Plot from 'react-plotly.js';
 
 // Generate placeholder data for a beeswarm/dot plot
 const N = 120;
-const x = Array.from({ length: N }, (_, i) => 0.2 + 0.6 * Math.random());
+const x = Array.from({ length: N }, () => 0.2 + 0.6 * Math.random());
 const y = Array.from({ length: N }, () => (Math.random() - 0.5) * 1.5); // jitter vertically
+const supportScores = Array.from({ length: N }, () => Math.random()); // Support scores between 0-1
 const colors = x.map(val =>
   val < 0.35 ? '#2A8CA5' : val < 0.5 ? '#3DB6C6' : '#7ED6E8',
 );
@@ -34,7 +35,7 @@ export default function Shap() {
             },
             text: x.map(
               (val, idx) =>
-                `<b>Student Data</b><br>Feature Importance: ${val}<br>Feature Value: ${y[idx]}`,
+                `<b>Student Data</b><br>Feature Importance: ${val.toFixed(1)}<br>Feature Value: ${y[idx].toFixed(1)}<br>Support Score: ${supportScores[idx].toFixed(1)}`,
             ),
             hoverinfo: 'text',
             hoverlabel: {

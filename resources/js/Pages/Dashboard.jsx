@@ -216,7 +216,10 @@ export default function Dashboard({ modelname }) {
               className="ml-24 mr-24 flex h-fit"
             ></BigDangerAlert>
           ) : (
-            <div className="flex w-full flex-col items-center" id="main_area">
+            <div
+              className="flex w-full flex-col items-center"
+              id="main_content"
+            >
               <h1 className="text-center text-5xl font-light">Dashboard</h1>
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}

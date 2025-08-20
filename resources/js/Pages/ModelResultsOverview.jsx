@@ -79,11 +79,20 @@ function ModelResultsOverview({ run_id, modelName }) {
     const fetchInstitutionId = async () => {
       try {
         const response = await axios.get('/user-current-inst-api');
+        console.log(
+          'ModelResultsOverview - Institution API response:',
+          response.data,
+        );
         if (response.data && response.data.length > 0) {
           setInstId(response.data[0]); // First element is the institution ID
+          console.log(
+            'ModelResultsOverview - Set institution ID to:',
+            response.data[0],
+          );
         }
       } catch (error) {
         console.error('Error fetching institution ID:', error);
+        console.error('Error response:', error.response?.data);
       }
     };
 
@@ -95,14 +104,20 @@ function ModelResultsOverview({ run_id, modelName }) {
     const fetchRunDetails = async () => {
       if (!inst_id || !run_id) return;
 
+      const apiUrl = `/institutions/${inst_id}/models/${modelName}/run/${run_id}`;
+      console.log('ModelResultsOverview - Making API call to:', apiUrl);
+      console.log(
+        'ModelResultsOverview - Full URL:',
+        window.location.origin + apiUrl,
+      );
+
       try {
-        const response = await axios.get(
-          `/institutions/${inst_id}/models/${modelName}/run/${run_id}`,
-        );
+        const response = await axios.get(apiUrl);
         setRunDetails(response.data);
         console.log('Run details fetched:', response.data);
       } catch (error) {
         console.error('Error fetching run details:', error);
+        console.error('Error response:', error.response?.data);
       }
     };
 

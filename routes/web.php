@@ -137,11 +137,11 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
 
-// Support overview with institution and model context
+// Support overview with institution context
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/models/{model_name}/run/{run_id}/support-overview', [ApiController::class, 'getSupportOverview']);
+]))->get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
 
 Route::middleware(array_filter([
     'auth', 'terms.accepted',

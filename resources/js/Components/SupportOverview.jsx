@@ -81,14 +81,32 @@ export default function SupportOverview({ tab, setTab, run_id }) {
   const [inferenceData, setInferenceData] = useState(mockInferenceData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [inst_id, setInstId] = useState(null);
+
+  // Get institution ID when component mounts (same pattern as ModelResultsOverview)
+  useEffect(() => {
+    const fetchInstitutionId = async () => {
+      try {
+        const response = await axios.get('/user-current-inst-api');
+        if (response.data && response.data.length > 0) {
+          setInstId(response.data[0]); // First element is the institution ID
+        }
+      } catch (error) {
+        console.error('Error fetching institution ID:', error);
+      }
+    };
+
+    fetchInstitutionId();
+  }, []);
 
   useEffect(() => {
     const fetchSupportOverview = async () => {
       console.log('SupportOverview - run_id:', run_id);
+      console.log('SupportOverview - inst_id:', inst_id);
 
-      if (!run_id) {
+      if (!run_id || !inst_id) {
         console.log(
-          'SupportOverview - Missing run_id parameter, skipping API call',
+          'SupportOverview - Missing required parameters, skipping API call',
         );
         setLoading(false);
         return;
@@ -96,8 +114,8 @@ export default function SupportOverview({ tab, setTab, run_id }) {
 
       try {
         setLoading(true);
-        // Use the correct API route: /inference/support-overview/{run_id} (InstitutionHelper handles context)
-        const apiUrl = `/inference/support-overview/${run_id}`;
+        // Use the same pattern as fetchRunDetails: /institutions/{inst_id}/inference/support-overview/{run_id}
+        const apiUrl = `/institutions/${inst_id}/inference/support-overview/${run_id}`;
         console.log('SupportOverview - Making API call to:', apiUrl);
         console.log(
           'SupportOverview - Full URL:',
@@ -121,7 +139,7 @@ export default function SupportOverview({ tab, setTab, run_id }) {
     };
 
     fetchSupportOverview();
-  }, [run_id]);
+  }, [run_id, inst_id]);
 
   const numBins = 30;
   const gradientColors = Array.from({ length: numBins }, (_, i) =>

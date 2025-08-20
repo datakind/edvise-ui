@@ -614,15 +614,14 @@ public function EditInstApi(Request $request)
     }
 
                 // Gets support overview data for a given run
-        public function getSupportOverview(Request $request, string $run_id)
+        public function getSupportOverview(Request $request, string $inst_id, string $run_id)
         {
-            \Log::info('getSupportOverview called with run_id: ' . $run_id);
+            \Log::info('getSupportOverview called with inst_id: ' . $inst_id . ', run_id: ' . $run_id);
 
             if (ApiController::isLocalRequest()) {
-                [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
-                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . $instErr);
-                if ($inst == null || $inst == "") {
-                    return response()->json(['error' => $instErr], 401);
+                \Log::info('Local request - Institution ID: ' . $inst_id);
+                if ($inst_id == null || $inst_id == "") {
+                    return response()->json(['error' => 'Institution ID not provided'], 401);
                 }
                 return response()->json([
                     [
@@ -689,14 +688,13 @@ public function EditInstApi(Request $request)
                         'pct' => '10.71'
                     ]
                 ], 200);
-            }
+                        }
 
-            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
-            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . $instErr);
+            \Log::info('Production request - Institution ID: ' . $inst_id);
 
             $externalUrl = '/inference/support-overview/'.$run_id;
             \Log::info('Production request - External API URL: ' . $externalUrl);
-            \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+            \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
 
             return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
         }

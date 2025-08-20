@@ -77,13 +77,7 @@ function interpolateColor(color1, color2, factor) {
   return `rgb(${result[0]},${result[1]},${result[2]})`;
 }
 
-export default function SupportOverview({
-  tab,
-  setTab,
-  run_id,
-  inst_id,
-  modelName,
-}) {
+export default function SupportOverview({ tab, setTab, run_id }) {
   const [inferenceData, setInferenceData] = useState(mockInferenceData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -91,12 +85,10 @@ export default function SupportOverview({
   useEffect(() => {
     const fetchSupportOverview = async () => {
       console.log('SupportOverview - run_id:', run_id);
-      console.log('SupportOverview - inst_id:', inst_id);
-      console.log('SupportOverview - modelName:', modelName);
 
-      if (!run_id || !inst_id || !modelName) {
+      if (!run_id) {
         console.log(
-          'SupportOverview - Missing required parameters, skipping API call',
+          'SupportOverview - Missing run_id parameter, skipping API call',
         );
         setLoading(false);
         return;
@@ -104,8 +96,8 @@ export default function SupportOverview({
 
       try {
         setLoading(true);
-        // Use the correct API signature: /institutions/{inst_id}/inference/support-overview/{run_id}
-        const apiUrl = `/api/v1/institutions/${inst_id}/inference/support-overview/${run_id}`;
+        // Use the correct API route: /inference/support-overview/{run_id} (InstitutionHelper handles context)
+        const apiUrl = `/inference/support-overview/${run_id}`;
         console.log('SupportOverview - Making API call to:', apiUrl);
         console.log(
           'SupportOverview - Full URL:',
@@ -129,7 +121,7 @@ export default function SupportOverview({
     };
 
     fetchSupportOverview();
-  }, [run_id, inst_id, modelName]);
+  }, [run_id]);
 
   const numBins = 30;
   const gradientColors = Array.from({ length: numBins }, (_, i) =>

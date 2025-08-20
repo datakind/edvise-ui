@@ -613,17 +613,16 @@ public function EditInstApi(Request $request)
         return Http::withHeaders($headers)->get(env('DK_API_SUITE_URL').'/'.env('DK_API_SUITE_VERSION').'/'.$endpoint.'?'.$query);
     }
 
-        // Gets support overview data for a given run
-        public function getSupportOverview(Request $request, string $run_id, string $inst_id = null)
+                // Gets support overview data for a given run
+        public function getSupportOverview(Request $request, string $run_id)
         {
-            \Log::info('getSupportOverview called with run_id: ' . $run_id . ', inst_id: ' . $inst_id);
+            \Log::info('getSupportOverview called with run_id: ' . $run_id);
 
             if (ApiController::isLocalRequest()) {
-                // If inst_id is provided in the route, use it; otherwise get from request
-                $inst = $inst_id ?: InstitutionHelper::GetInstitution($request)[0];
-                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . ($inst_id ? 'None' : InstitutionHelper::GetInstitution($request)[1]));
+                [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+                \Log::info('Local request - Institution ID: ' . $inst . ', Error: ' . $instErr);
                 if ($inst == null || $inst == "") {
-                    return response()->json(['error' => 'Institution not found'], 401);
+                    return response()->json(['error' => $instErr], 401);
                 }
                 return response()->json([
                     [
@@ -692,9 +691,8 @@ public function EditInstApi(Request $request)
                 ], 200);
             }
 
-            // If inst_id is provided in the route, use it; otherwise get from request
-            $inst = $inst_id ?: InstitutionHelper::GetInstitution($request)[0];
-            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . ($inst_id ? 'None' : InstitutionHelper::GetInstitution($request)[1]));
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            \Log::info('Production request - Institution ID: ' . $inst . ', Error: ' . $instErr);
 
             $externalUrl = '/inference/support-overview/'.$run_id;
             \Log::info('Production request - External API URL: ' . $externalUrl);

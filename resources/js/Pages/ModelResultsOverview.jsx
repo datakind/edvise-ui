@@ -216,13 +216,7 @@ function ModelResultsOverview({ run_id, modelName }) {
           {tab === 'results' ? (
             <>
               <div className="mb-8">
-                <SupportOverview
-                  tab={tab}
-                  setTab={setTab}
-                  run_id={run_id}
-                  inst_id={inst_id}
-                  modelName={modelName}
-                />
+                <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

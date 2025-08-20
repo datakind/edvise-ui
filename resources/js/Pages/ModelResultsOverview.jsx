@@ -109,10 +109,8 @@ function ModelResultsOverview({ run_id, modelName }) {
     fetchRunDetails();
   }, [inst_id, run_id, modelName]);
 
-  // Create output_link and get output_filename from run details
-  const output_link = runDetails
-    ? `${run_id}/${runDetails.output_filename}`
-    : null;
+  // Get output_link and output_filename from run details
+  const output_link = runDetails ? runDetails.output_file_link : null;
   const output_filename = runDetails ? runDetails.output_filename : null;
 
   console.log('ModelResultsOverview - Fetched inst_id:', inst_id);

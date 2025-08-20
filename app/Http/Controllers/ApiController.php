@@ -722,6 +722,7 @@ public function EditInstApi(Request $request)
                     'batch_name' => 'test_batch',
                     'completed' => true,
                     'output_filename' => 'model_results_123.csv',
+                    'output_file_link' => 'https://example.com/download/model_results_123.csv',
                     'output_valid' => true,
                 ], 200);
             }
@@ -729,6 +730,25 @@ public function EditInstApi(Request $request)
 
         // Production: call external API
         $externalUrl = '/models/'.$model_name.'/run/'.$run_id;
-        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+        $result = ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+
+        // Process the response to add output_file_link like modelRuns does
+        if ($result != null && $result->getStatusCode() == 200) {
+            $output = $result->json();
+            if ($output != null) {
+                // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
+                if ($output["completed"] && $output["output_filename"] != null && $output["output_filename"] != "") {
+                    $download_url = ApiController::downloadInfData($request, $output["output_filename"]);
+                    if ($download_url->getStatusCode() == 200) {
+                        $output["output_file_link"] = $download_url->json();
+                    } else {
+                        $output["output_file_link"] = '';
+                    }
+                }
+            }
+            return response()->json($output);
+        }
+
+        return $result;
     }
 }

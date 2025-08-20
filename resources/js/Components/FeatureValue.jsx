@@ -312,7 +312,7 @@ export default function FeatureValue({ features }) {
                 </th>
                 <th
                   scope="col"
-                  className="pb-2 pt-6 text-center text-xs font-medium text-[#6B7280]"
+                  className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
                 >
                   DATA TYPE
                 </th>
@@ -336,10 +336,10 @@ export default function FeatureValue({ features }) {
                       {f.desc}
                     </div>
                   </td>
-                  <td className="py-6 pr-2 text-center text-sm text-black">
+                  <td className="py-6 pr-6 text-center text-sm text-black">
                     {f.type}
                   </td>
-                  <td className="py-6 pr-2 text-left text-sm text-black">
+                  <td className="py-6 pr-6 text-left text-sm text-black">
                     {f.importance}
                     <div className="text-xs text-[#696969]">
                       Range is {f.range}

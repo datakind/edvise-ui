@@ -728,7 +728,7 @@ public function EditInstApi(Request $request)
         }
 
         // Production: call external API
-        $externalUrl = '/institutions/'.$inst_id.'/models/'.$model_name.'/run/'.$run_id;
+        $externalUrl = '/models/'.$model_name.'/run/'.$run_id;
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
 }

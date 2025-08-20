@@ -416,7 +416,23 @@ function ModelResultsOverview({ run_id, modelName }) {
                   with information on the factors impacting student need for
                   support. The following figures demonstrate the performance of
                   the model. You can also{' '}
-                  <a href="#" className="font-semibold text-black underline">
+                  <a
+                    href="#"
+                    onClick={e => {
+                      e.preventDefault();
+                      if (inst_id && modelName) {
+                        const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
+                        console.log('Downloading model card from:', apiUrl);
+                        // Make API call to download model card
+                        window.open(apiUrl, '_blank');
+                      } else {
+                        console.error(
+                          'Missing inst_id or modelName for model card download',
+                        );
+                      }
+                    }}
+                    className="cursor-pointer font-semibold text-black underline hover:opacity-80"
+                  >
                     download the model card here
                   </a>{' '}
                   for a comprehensive report on the model, including

@@ -16,6 +16,15 @@ import '../../css/landing.css';
 
 // Features will be fetched from API
 
+// Helper function to capitalize first letter of each word
+const capitalizeWords = str => {
+  if (!str) return '';
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 function ModelResultsOverview({ run_id, modelName }) {
   console.log('run_id:', run_id);
   console.log('ModelResultsOverview - Received run_id:', run_id);
@@ -86,8 +95,24 @@ function ModelResultsOverview({ run_id, modelName }) {
 
       try {
         const response = await axios.get(apiUrl);
-        setFeatures(response.data);
-        console.log('Top features fetched:', response.data);
+
+        // Remove duplicates based on feature_readable_name, keeping only the first occurrence
+        const uniqueFeatures = response.data.filter(
+          (feature, index, self) =>
+            index ===
+            self.findIndex(
+              f => f.feature_readable_name === feature.feature_readable_name,
+            ),
+        );
+
+        setFeatures(uniqueFeatures);
+        console.log('Top features fetched (deduplicated):', uniqueFeatures);
+        console.log(
+          'Original count:',
+          response.data.length,
+          'Deduplicated count:',
+          uniqueFeatures.length,
+        );
       } catch (error) {
         console.error('Error fetching top features:', error);
         console.error('Error response:', error.response?.data);
@@ -312,7 +337,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                               className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
                               onClick={() => handleFeatureClick(feature)}
                             >
-                              {feature.feature_readable_name}
+                              {capitalizeWords(feature.feature_readable_name)}
                             </div>
                             <div className="text-base text-[#4F4F4F]">
                               {feature.feature_short_desc}
@@ -469,7 +494,8 @@ function ModelResultsOverview({ run_id, modelName }) {
             <div className="px-8 pt-8">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-medium text-black">
-                  Details: {selectedFeature?.name}
+                  Details:{' '}
+                  {capitalizeWords(selectedFeature?.feature_readable_name)}
                 </h2>
                 <p className="text-xl font-light text-[#4F4F4F]">
                   {selectedFeature?.desc}

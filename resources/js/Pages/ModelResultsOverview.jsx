@@ -14,57 +14,7 @@ import BoxWhiskerPlot from '../Components/BoxWhiskerPlot';
 import InterpretChartSimple from '../Components/InterpretChartSimple';
 import '../../css/landing.css';
 
-const features = [
-  {
-    name: 'GPA Departure',
-    desc: 'Students who have large changes to their GPA average.',
-    type: 'Numerical',
-    importance: 0.15,
-    range: '0.12 to 0.2',
-  },
-  {
-    name: 'Course Level 200',
-    desc: 'Number of 200 courses taken',
-    type: 'Numerical',
-    importance: 0.09,
-    range: '0.05 to 0.12',
-  },
-  {
-    name: 'Course with MAT',
-    desc: 'Students taking math courses this term',
-    type: 'Numerical',
-    importance: 0.08,
-    range: '0.04 to 0.1',
-  },
-  {
-    name: 'Grade B',
-    desc: 'Number of B grades earned this term',
-    type: 'Numerical',
-    importance: 0.07,
-    range: '0.03 to 0.12',
-  },
-  {
-    name: 'Course prefix Bio',
-    desc: 'Students taking biology courses this term',
-    type: 'Numerical',
-    importance: 0.06,
-    range: '0.02 to 0.09',
-  },
-  {
-    name: 'Modality In Person',
-    desc: 'Taking in-person courses',
-    type: 'Numerical',
-    importance: 0.04,
-    range: '0.01 to 0.07',
-  },
-  {
-    name: 'Grade C',
-    desc: 'Number of C grades earned this term',
-    type: 'Numerical',
-    importance: 0.04,
-    range: '0.01 to 0.07',
-  },
-];
+// Features will be fetched from API
 
 function ModelResultsOverview({ run_id, modelName }) {
   console.log('run_id:', run_id);
@@ -73,6 +23,7 @@ function ModelResultsOverview({ run_id, modelName }) {
 
   const [inst_id, setInstId] = useState(null);
   const [runDetails, setRunDetails] = useState(null);
+  const [features, setFeatures] = useState([]);
 
   // Get institution ID when component mounts
   useEffect(() => {
@@ -123,6 +74,30 @@ function ModelResultsOverview({ run_id, modelName }) {
 
     fetchRunDetails();
   }, [inst_id, run_id, modelName]);
+
+  // Get top features when we have both inst_id and run_id
+  useEffect(() => {
+    const fetchTopFeatures = async () => {
+      if (!inst_id || !run_id) return;
+
+      const apiUrl = `/institutions/${inst_id}/inference/top-features/${run_id}`;
+      console.log('Fetching top features from:', apiUrl);
+      console.log('Full URL:', window.location.origin + apiUrl);
+
+      try {
+        const response = await axios.get(apiUrl);
+        setFeatures(response.data);
+        console.log('Top features fetched:', response.data);
+      } catch (error) {
+        console.error('Error fetching top features:', error);
+        console.error('Error response:', error.response?.data);
+        // Set empty array as fallback
+        setFeatures([]);
+      }
+    };
+
+    fetchTopFeatures();
+  }, [inst_id, run_id]);
 
   // Get output_link and output_filename from run details
   const output_link = runDetails ? runDetails.output_file_link : null;
@@ -329,7 +304,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                     <tbody>
                       {features.slice(0, 10).map((feature, idx) => (
                         <tr
-                          key={feature.name}
+                          key={feature.feature_readable_name}
                           className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
                         >
                           <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
@@ -337,10 +312,10 @@ function ModelResultsOverview({ run_id, modelName }) {
                               className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
                               onClick={() => handleFeatureClick(feature)}
                             >
-                              {feature.name}
+                              {feature.feature_readable_name}
                             </div>
                             <div className="text-base text-[#4F4F4F]">
-                              {feature.desc}
+                              {feature.feature_short_desc}
                             </div>
                           </td>
                           <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">

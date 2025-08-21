@@ -491,7 +491,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                 />
               </svg>
             </button>
-            <div className="p-8">
+            <div className="px-8 pt-8">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-medium text-black">
                   Details: {selectedFeature?.name}
@@ -518,18 +518,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                 <div className="flex gap-8">
                   <div className="w-1/2">
                     <div className="text-sm text-[#4F4F4F]">
-                      <p className="mb-2">
-                        <strong>How to interpret this chart:</strong>
-                      </p>
                       <ul className="list-disc space-y-1 pl-5">
-                        <li>
-                          Charts show the features that have the most influence
-                          on this cohort of students’ support scores.
-                        </li>
-                        <li>
-                          Features are sorted from top to bottom in order of
-                          importance.
-                        </li>
                         <li>Each dot represents a student record.</li>
                         <li>
                           The relation between dot distribution and color tells

@@ -79,7 +79,9 @@ export default function DataDictionary() {
       if (!inst_id || !selectedModel) return;
 
       try {
-        const response = await axios.get(`/model/${selectedModel.name}`);
+        const response = await axios.get(
+          `/institutions/${inst_id}/models/${selectedModel.name}/runs`,
+        );
         console.log('Model runs fetched:', response.data);
 
         if (response.data && response.data.length > 0) {

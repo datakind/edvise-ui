@@ -423,8 +423,14 @@ function ModelResultsOverview({ run_id, modelName }) {
                       if (inst_id && modelName) {
                         const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
                         console.log('Downloading model card from:', apiUrl);
-                        // Make API call to download model card through backend
-                        window.open(apiUrl, '_blank');
+                        // Create a temporary link element to force download
+                        const link = document.createElement('a');
+                        link.href = apiUrl;
+                        link.download = `${modelName}_model_card.pdf`; // Suggest filename
+                        link.target = '_blank';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                       } else {
                         console.error(
                           'Missing inst_id or modelName for model card download',

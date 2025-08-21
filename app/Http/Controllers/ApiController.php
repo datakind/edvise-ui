@@ -774,6 +774,27 @@ public function EditInstApi(Request $request)
         \Log::info('Production request - External API URL: ' . $externalUrl);
         \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
 
-        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+        $response = ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+
+        // If we got a successful response, add download headers
+        if ($response && $response->getStatusCode() == 200) {
+            // Get the filename from the response headers or create a default one
+            $filename = $model_name . '_model_card.pdf';
+
+            // Add download headers to force file download
+            return response()->streamDownload(
+                function () use ($response) {
+                    echo $response->getBody();
+                },
+                $filename,
+                [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                    'Cache-Control' => 'no-cache',
+                ]
+            );
+        }
+
+        return $response;
     }
 }

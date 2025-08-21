@@ -7,7 +7,7 @@ const x = Array.from({ length: N }, () => 0.2 + 0.6 * Math.random());
 const y = Array.from({ length: N }, () => (Math.random() - 0.5) * 1.5); // jitter vertically
 const supportScores = Array.from({ length: N }, () => Math.random()); // Support scores between 0-1
 const colors = x.map(val =>
-  val < 0.35 ? '#2A8CA5' : val < 0.5 ? '#3DB6C6' : '#7ED6E8',
+  val < 0.35 ? '#7ED6E8' : val < 0.5 ? '#3DB6C6' : '#2A8CA5',
 );
 
 export default function Shap() {

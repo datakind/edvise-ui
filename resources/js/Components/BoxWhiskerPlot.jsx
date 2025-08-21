@@ -23,14 +23,17 @@ export default function BoxWhiskerPlot({
           line: { color: borderColor, width: 3 },
           whiskerwidth: 0.8,
           width: 0.5,
+          hoverinfo: 'none',
+          hoverlabel: { enabled: false },
         },
       ]}
       layout={{
-        margin: { l: 30, r: 30, t: 0, b: 30 },
+        margin: { l: 30, r: 30, t: 20, b: 30 },
         height: 80,
         xaxis: {
           range: [0, 4],
           tickvals: [0, 1, 2, 3, 4],
+          tickformat: '.2f',
           tickfont: { size: 12, color: '#222' },
           showgrid: false,
           zeroline: false,
@@ -41,6 +44,7 @@ export default function BoxWhiskerPlot({
         plot_bgcolor: 'rgba(0,0,0,0)',
         paper_bgcolor: '#EEF2F680',
         showlegend: false,
+        hovermode: 'closest',
       }}
       config={{ displayModeBar: false, responsive: true }}
       style={{ width: '100%', height: 80 }}

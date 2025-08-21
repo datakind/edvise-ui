@@ -750,4 +750,30 @@ public function EditInstApi(Request $request)
 
         return $result;
     }
+
+    // Downloads model card for a given model
+    public function downloadModelCard(Request $request, string $inst_id, string $model_name)
+    {
+        \Log::info('downloadModelCard called with inst_id: ' . $inst_id . ', model_name: ' . $model_name);
+
+        if (ApiController::isLocalRequest()) {
+            \Log::info('Local request - Institution ID: ' . $inst_id);
+            if ($inst_id == null || $inst_id == "") {
+                return response()->json(['error' => 'Institution ID not provided'], 401);
+            }
+            // Mock response for local development
+            return response()->json([
+                'message' => 'Model card download initiated',
+                'model_name' => $model_name,
+                'institution_id' => $inst_id
+            ], 200);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst_id);
+        $externalUrl = '/training/model-cards/'.$model_name;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

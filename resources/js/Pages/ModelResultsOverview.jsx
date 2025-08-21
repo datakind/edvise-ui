@@ -423,7 +423,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                       if (inst_id && modelName) {
                         const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
                         console.log('Downloading model card from:', apiUrl);
-                        // Make API call to download model card
+                        // Make API call to download model card through backend
                         window.open(apiUrl, '_blank');
                       } else {
                         console.error(

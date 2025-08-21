@@ -143,6 +143,12 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
 
+// Model card download with institution context
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,

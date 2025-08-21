@@ -6,9 +6,12 @@ const N = 120;
 const x = Array.from({ length: N }, () => 0.2 + 0.6 * Math.random());
 const y = Array.from({ length: N }, () => (Math.random() - 0.5) * 1.5); // jitter vertically
 const supportScores = Array.from({ length: N }, () => Math.random()); // Support scores between 0-1
-const colors = x.map(val =>
-  val < 0.35 ? '#7ED6E8' : val < 0.5 ? '#3DB6C6' : '#2A8CA5',
-);
+const colors = x.map((val, idx) => {
+  const normalizedIdx = idx / (N - 1); // Normalize idx to 0-1 range
+  if (normalizedIdx < 0.33) return '#3DB6C6'; // Light blue for left side
+  if (normalizedIdx < 0.66) return '#7ED6E8'; // Medium blue for middle
+  return '#2A8CA5'; // Dark blue for right side
+});
 
 export default function Shap() {
   return (

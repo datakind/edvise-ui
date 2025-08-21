@@ -33,6 +33,7 @@ function ModelResultsOverview({ run_id, modelName }) {
   const [inst_id, setInstId] = useState(null);
   const [runDetails, setRunDetails] = useState(null);
   const [features, setFeatures] = useState([]);
+  const [rawFeatures, setRawFeatures] = useState([]);
 
   // Get institution ID when component mounts
   useEffect(() => {
@@ -96,6 +97,9 @@ function ModelResultsOverview({ run_id, modelName }) {
       try {
         const response = await axios.get(apiUrl);
 
+        // Store the raw API response
+        setRawFeatures(response.data);
+
         // Remove duplicates based on feature_readable_name, keeping only the first occurrence
         const uniqueFeatures = response.data.filter(
           (feature, index, self) =>
@@ -106,6 +110,7 @@ function ModelResultsOverview({ run_id, modelName }) {
         );
 
         setFeatures(uniqueFeatures);
+        console.log('Raw features:', response.data);
         console.log('Top features fetched (deduplicated):', uniqueFeatures);
         console.log(
           'Original count:',
@@ -344,7 +349,10 @@ function ModelResultsOverview({ run_id, modelName }) {
                             </div>
                           </td>
                           <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
-                            <Shap />
+                            <Shap
+                              rawFeatures={rawFeatures}
+                              currentFeature={feature}
+                            />
                           </td>
                         </tr>
                       ))}
@@ -541,7 +549,10 @@ function ModelResultsOverview({ run_id, modelName }) {
                   </div>
                 </div>
                 <div className="mt-6 border-b border-[#767676] bg-[#F7F9FB] p-6">
-                  <Shap />
+                  <Shap
+                    rawFeatures={rawFeatures}
+                    currentFeature={selectedFeature}
+                  />
                 </div>
                 <div className="mt-4 flex justify-center gap-16 px-2 text-sm text-[#4F4F4F]">
                   <div className="flex flex-col items-end">

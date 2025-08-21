@@ -164,7 +164,7 @@ function ModelResultsOverview({ run_id, modelName }) {
   return (
     <AppLayout title="Model Results Overview">
       <Head title="Model Results Overview" />
-      <div className="font-[Helvetica Neue] mb-8 w-full">
+      <div className="font-[Helvetica Neue] mb-8 min-w-full">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="mx-auto text-5xl font-light">
             Model Results Overview
@@ -197,7 +197,7 @@ function ModelResultsOverview({ run_id, modelName }) {
             {output_link ? 'Export Data' : 'No Data Available'}
           </button>
         </div>
-        <div className="w-full bg-[#FAFAFA] p-6">
+        <div className="min-w-full bg-[#FAFAFA] p-6">
           <div className="mb-2 flex items-center gap-4">
             <button
               className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}

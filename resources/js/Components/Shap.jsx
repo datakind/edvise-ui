@@ -1,5 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import PropTypes from 'prop-types';
 
 // Generate placeholder data for a beeswarm/dot plot
 const N = 120;
@@ -13,7 +14,22 @@ const colors = x.map((val, idx) => {
   return '#2A8CA5'; // Dark blue for right side
 });
 
-export default function Shap() {
+export default function Shap({ rawFeatures, currentFeature }) {
+  // Log the props to see what data is available
+  console.log('Shap component props:', { rawFeatures, currentFeature });
+
+  // Filter rawFeatures to get data for the current feature
+  const featureData =
+    rawFeatures?.filter(
+      item =>
+        item.feature_readable_name === currentFeature?.feature_readable_name,
+    ) || [];
+
+  console.log(
+    `Feature data for "${currentFeature?.feature_readable_name}":`,
+    featureData,
+  );
+
   return (
     <div
       style={{
@@ -86,3 +102,13 @@ export default function Shap() {
     </div>
   );
 }
+
+Shap.propTypes = {
+  rawFeatures: PropTypes.array,
+  currentFeature: PropTypes.object,
+};
+
+Shap.defaultProps = {
+  rawFeatures: [],
+  currentFeature: null,
+};

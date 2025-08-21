@@ -14,6 +14,8 @@ const capitalizeWords = str => {
 
 export default function DataDictionary() {
   const [inst_id, setInstId] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [run_id, setRunId] = useState(null);
   const [features, setFeatures] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('feature_readable_name');
@@ -44,14 +46,62 @@ export default function DataDictionary() {
     fetchInstitutionId();
   }, []);
 
-  // Get top features when we have inst_id (using a mock run_id for now)
+  // Get models when we have inst_id
   useEffect(() => {
-    const fetchTopFeatures = async () => {
+    const fetchModels = async () => {
       if (!inst_id) return;
 
-      // Use a mock run_id since this is for the data dictionary
-      const mockRunId = '123';
-      const apiUrl = `/institutions/${inst_id}/inference/top-features/${mockRunId}`;
+      try {
+        const response = await axios.get(`/institutions/${inst_id}/models`);
+        console.log('Models fetched:', response.data);
+
+        if (response.data && response.data.length > 0) {
+          // Get the first valid model
+          const validModel = response.data.find(
+            model => model.valid === true || model.valid === 1,
+          );
+          if (validModel) {
+            setSelectedModel(validModel);
+            console.log('Selected model:', validModel);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching models:', error);
+      }
+    };
+
+    fetchModels();
+  }, [inst_id]);
+
+  // Get most recent run when we have a selected model
+  useEffect(() => {
+    const fetchModelRuns = async () => {
+      if (!inst_id || !selectedModel) return;
+
+      try {
+        const response = await axios.get(`/model/${selectedModel.name}`);
+        console.log('Model runs fetched:', response.data);
+
+        if (response.data && response.data.length > 0) {
+          // Get the most recent run (assuming runs are sorted by date, get the first one)
+          const mostRecentRun = response.data[0];
+          setRunId(mostRecentRun.run_id);
+          console.log('Most recent run ID:', mostRecentRun.run_id);
+        }
+      } catch (error) {
+        console.error('Error fetching model runs:', error);
+      }
+    };
+
+    fetchModelRuns();
+  }, [inst_id, selectedModel]);
+
+  // Get top features when we have run_id
+  useEffect(() => {
+    const fetchTopFeatures = async () => {
+      if (!inst_id || !run_id) return;
+
+      const apiUrl = `/institutions/${inst_id}/inference/top-features/${run_id}`;
       console.log('Fetching top features from:', apiUrl);
       console.log('Full URL:', window.location.origin + apiUrl);
 
@@ -85,7 +135,7 @@ export default function DataDictionary() {
     };
 
     fetchTopFeatures();
-  }, [inst_id]);
+  }, [inst_id, run_id]);
 
   // Filter and sort features based on search term and sort settings
   const filteredAndSortedFeatures = features

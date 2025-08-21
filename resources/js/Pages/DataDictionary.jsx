@@ -52,7 +52,7 @@ export default function DataDictionary() {
       if (!inst_id) return;
 
       try {
-        const response = await axios.get(`/institutions/${inst_id}/models`);
+        const response = await axios.get('/models-api');
         console.log('Models fetched:', response.data);
 
         if (response.data && response.data.length > 0) {

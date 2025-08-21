@@ -37,9 +37,9 @@ export default function BoxWhiskerPlot({
         ]}
         layout={{
           margin: { l: 30, r: 30, t: 50, b: 30 },
-          height: 120,
+          height: 180,
           xaxis: {
-            range: [0, 4],
+            range: [0, 4.2],
             tickvals: [0, 1, 2, 3, 4],
             tickformat: '.2f',
             tickfont: { size: 12, color: '#222' },
@@ -48,14 +48,15 @@ export default function BoxWhiskerPlot({
           },
           yaxis: {
             visible: false,
+            range: [-0.5, 0.5],
           },
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          paper_bgcolor: '#EEF2F680',
+          plot_bgcolor: '#EEF2F680',
+          paper_bgcolor: '#FFFFFF',
           showlegend: false,
           hovermode: 'closest',
         }}
         config={{ displayModeBar: false, responsive: true }}
-        style={{ width: '100%', height: 120 }}
+        style={{ width: '100%', height: 140 }}
       />
 
       {/* Static Labels positioned above the plot */}
@@ -64,7 +65,7 @@ export default function BoxWhiskerPlot({
         <div
           className="absolute -translate-x-1/2 transform"
           style={{
-            left: `calc(${(min / 4) * 100}% + 15px)`,
+            left: `calc(${(min / 4.2) * 100}% + 15px)`,
             top: '8px',
           }}
         >
@@ -78,7 +79,7 @@ export default function BoxWhiskerPlot({
         <div
           className="absolute -translate-x-1/2 transform"
           style={{
-            left: `calc(${(median / 4) * 92}% + 30px)`,
+            left: `calc(${(median / 4.2) * 92}% + 30px)`,
             top: '8px',
           }}
         >
@@ -92,7 +93,7 @@ export default function BoxWhiskerPlot({
         <div
           className="absolute -translate-x-1/2 transform"
           style={{
-            left: `calc(${(max / 4) * 92}% + 30px)`,
+            left: `calc(${(max / 4.2) * 92}% + 30px)`,
             top: '8px',
           }}
         >

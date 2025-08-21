@@ -797,4 +797,76 @@ public function EditInstApi(Request $request)
 
         return $response;
     }
+
+    // Gets top features for a given run
+    public function getTopFeatures(Request $request, string $inst_id, string $run_id)
+    {
+        \Log::info('getTopFeatures called with inst_id: ' . $inst_id . ', run_id: ' . $run_id);
+
+        if (ApiController::isLocalRequest()) {
+            \Log::info('Local request - Institution ID: ' . $inst_id);
+            if ($inst_id == null || $inst_id == "") {
+                return response()->json(['error' => 'Institution ID not provided'], 401);
+            }
+            // Mock data for local development
+            return response()->json([
+                [
+                    'feature_readable_name' => 'GPA Departure',
+                    'feature_short_desc' => 'Students who have large changes to their GPA average.',
+                    'type' => 'Numerical',
+                    'importance' => 0.15,
+                    'range' => '0.12 to 0.2',
+                ],
+                [
+                    'feature_readable_name' => 'Course Level 200',
+                    'feature_short_desc' => 'Number of 200 courses taken',
+                    'type' => 'Numerical',
+                    'importance' => 0.09,
+                    'range' => '0.05 to 0.12',
+                ],
+                [
+                    'feature_readable_name' => 'Course with MAT',
+                    'feature_short_desc' => 'Students taking math courses this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.08,
+                    'range' => '0.04 to 0.1',
+                ],
+                [
+                    'feature_readable_name' => 'Grade B',
+                    'feature_short_desc' => 'Number of B grades earned this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.07,
+                    'range' => '0.03 to 0.12',
+                ],
+                [
+                    'feature_readable_name' => 'Course prefix Bio',
+                    'feature_short_desc' => 'Students taking biology courses this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.06,
+                    'range' => '0.02 to 0.09',
+                ],
+                [
+                    'feature_readable_name' => 'Modality In Person',
+                    'feature_short_desc' => 'Taking in-person courses',
+                    'type' => 'Numerical',
+                    'importance' => 0.04,
+                    'range' => '0.01 to 0.07',
+                ],
+                [
+                    'feature_readable_name' => 'Grade C',
+                    'feature_short_desc' => 'Number of C grades earned this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.04,
+                    'range' => '0.01 to 0.07',
+                ],
+            ], 200);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst_id);
+        $externalUrl = '/inference/top-features/'.$run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

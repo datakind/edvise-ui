@@ -495,19 +495,19 @@ function ModelResultsOverview({ run_id, modelName }) {
                 </p>
               </div>
               <div className="mb-6">
-                <h3 className="mb-2 text-xl font-light">Range</h3>
+                <h3 className="mb-2 text-xl font-medium">Range</h3>
                 <hr className="mb-4 border-[#4F4F4F]" />
                 <div className="mb-4 text-sm text-[#4F4F4F]">
                   This box and whiskers plot shows the minimum, median, maximum,
                   and quartile points for this feature in the student
                   dataset.{' '}
                 </div>
-                <div className="mb-4">
+                <div className="mb-16">
                   <BoxWhiskerPlot />
                 </div>
               </div>
               <div className="mb-6">
-                <h3 className="mb-2 text-xl font-light">Student Plot Chart</h3>
+                <h3 className="mb-2 text-xl font-medium">Student Plot Chart</h3>
                 <hr className="mb-4 border-[#4F4F4F]" />
                 <div className="flex gap-8">
                   <div className="w-1/2">
@@ -516,15 +516,26 @@ function ModelResultsOverview({ run_id, modelName }) {
                         <strong>How to interpret this chart:</strong>
                       </p>
                       <ul className="list-disc space-y-1 pl-5">
-                        <li>Each dot represents a student record</li>
                         <li>
-                          The horizontal position shows the feature&apos;s
-                          impact on support needs
+                          Charts show the features that have the most influence
+                          on this cohort of students’ support scores.
                         </li>
-                        <li>Darker colors indicate higher feature values</li>
                         <li>
-                          Dots further to the right suggest higher likelihood of
-                          needing support
+                          Features are sorted from top to bottom in order of
+                          importance.
+                        </li>
+                        <li>Each dot represents a student record.</li>
+                        <li>
+                          The relation between dot distribution and color tells
+                          you how each feature affects student support needs.
+                          <ul className="list-disc space-y-1 pl-5">
+                            <li>
+                              For example, if darker dots are all clustered
+                              further to the right, that means students with a
+                              higher value for that feature are more likely to
+                              need support.
+                            </li>
+                          </ul>
                         </li>
                       </ul>
                     </div>
@@ -578,7 +589,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                     </span>
                   </div>
                 </div>
-                <div className="mt-4 text-center text-xs font-bold text-[#767676]">
+                <div className="mt-8 text-center text-xs font-bold text-[#767676]">
                   Questions about how to interpret these results? Contact your
                   account representative, and they&apos;d be happy to help!
                 </div>

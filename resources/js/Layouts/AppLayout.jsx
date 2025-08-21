@@ -472,8 +472,8 @@ export default function AppLayout({ title, renderHeader, children }) {
           </div>
         </nav>
       </header>
-      <div className="min-h-screen basis-10/12 flex-col justify-between">
-        <main className="flex h-[90%] pt-12">{children}</main>
+      <div className="min-h-screen basis-full flex-col justify-between">
+        <main className="flex h-[90%] w-full pt-12">{children}</main>
         <Footer />
       </div>
     </div>

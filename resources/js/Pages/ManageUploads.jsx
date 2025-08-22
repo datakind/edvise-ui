@@ -153,7 +153,9 @@ export default function ManageUploads() {
 
     setIsDeleting(true);
     try {
-      const response = await axios.delete(`/batch/${batchToDelete.batch_id}`);
+      const response = await axios.delete(
+        `/institutions/${inst_id}/batch/${batchToDelete.batch_id}`,
+      );
       console.log('Batch deleted successfully:', response.data);
 
       // Remove the deleted batch from the data

@@ -54,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => env('APP_ENV') === 'local' ? ['single'] : ['single', 'stderr'],
             'ignore_exceptions' => false,
         ],
 
@@ -98,7 +98,10 @@ return [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'formatter' => Monolog\Formatter\JsonFormatter::class,
+            'formatter_with' => [
+                'format' => '[%datetime%] %channel%.%level_name%: %message% %context% %extra%',
+            ],
             'with' => [
                 'stream' => 'php://stderr',
             ],

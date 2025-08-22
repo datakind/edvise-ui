@@ -1001,13 +1001,18 @@ public function EditInstApi(Request $request)
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
 
-    // Deletes a batch using request context for institution
+        // Deletes a batch using request context for institution
     public function deleteBatchWithContext(Request $request, string $inst_id, string $batch_id)
     {
         // Force immediate logging to stderr for Cloud Run visibility
         error_log("=== DELETE BATCH METHOD CALLED ===");
         error_log("batch_id: " . $batch_id);
         error_log("inst_id: " . $inst_id);
+
+        // Direct stderr output
+        file_put_contents('php://stderr', "=== DIRECT STDERR: DELETE BATCH METHOD CALLED ===\n");
+        file_put_contents('php://stderr', "batch_id: {$batch_id}\n");
+        file_put_contents('php://stderr', "inst_id: {$inst_id}\n");
 
         \Log::info('deleteBatchWithContext called with batch_id: ' . $batch_id);
 

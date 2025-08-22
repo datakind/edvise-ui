@@ -236,7 +236,7 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
+]))->delete('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
 
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {

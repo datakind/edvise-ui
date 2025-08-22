@@ -21,6 +21,29 @@ export default function ManageUploads() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [inst_id, setInstId] = useState(null);
+
+  // Get institution ID when component mounts
+  useEffect(() => {
+    const fetchInstitutionId = async () => {
+      try {
+        const response = await axios.get('/user-current-inst-api');
+        console.log('ManageUploads - Institution API response:', response.data);
+        if (response.data && response.data.length > 0) {
+          setInstId(response.data[0]); // First element is the institution ID
+          console.log(
+            'ManageUploads - Set institution ID to:',
+            response.data[0],
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching institution ID:', error);
+        console.error('Error response:', error.response?.data);
+      }
+    };
+
+    fetchInstitutionId();
+  }, []);
 
   const actions = [
     { label: 'Change batch name', onClick: () => showChangeModal() },
@@ -126,11 +149,13 @@ export default function ManageUploads() {
   };
 
   const deleteBatch = async () => {
-    if (!batchToDelete) return;
+    if (!batchToDelete || !inst_id) return;
 
     setIsDeleting(true);
     try {
-      const response = await axios.delete(`/batch/${batchToDelete.batch_id}`);
+      const response = await axios.delete(
+        `/institutions/${inst_id}/batch/${batchToDelete.batch_id}`,
+      );
       console.log('Batch deleted successfully:', response.data);
 
       // Remove the deleted batch from the data

@@ -1,6 +1,4 @@
 import AppLayout from '@/Layouts/AppLayout';
-import HeaderLabel from '@/Components/HeaderLabel';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import SortIcon from '@/Components/Icons/SortIcon';
 import OverflowMenu from '@/Components/OverflowMenu';
 import React, { useState, useEffect } from 'react';
@@ -9,6 +7,7 @@ import ActionSection from '@/Components/ActionSection';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
+import axios from 'axios';
 
 export default function ManageUploads() {
   const [data, setData] = useState({});
@@ -19,41 +18,15 @@ export default function ManageUploads() {
   const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
   const [isChangeModalPrimaryBtnDisabled, setIsChangeModalPrimaryBtnDisabled] =
     useState(true);
-
-  const mockUpload1 = {
-    batch_id: 'Id1',
-    inst_id: '12345',
-    file_names_to_ids: { 'file1.txt': '123', 'file2.txt': '124' },
-    name: 'Batch1',
-    created_by: 'Jane Doe',
-    completed: true,
-    deleted: false,
-    updated_at: '01/02/2024 09:30:20',
-    created_at: '01/02/2024 09:30:20',
-    updated_by: 'Jane Doe',
-  };
-
-  const mockUpload2 = {
-    batch_id: 'Id2',
-    inst_id: '12345',
-    file_names_to_ids: {
-      'Very very long file name FileX.txt': '123',
-      'Long file name FileY.txt': '124',
-    },
-    name: 'Batch2',
-    created_by: 'John Doe',
-    completed: true,
-    deleted: false,
-    updated_at: '01/02/2024 09:30:20',
-    created_at: '01/02/2024 09:30:20',
-    updated_by: 'John Doe',
-  };
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [batchToDelete, setBatchToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const actions = [
     { label: 'Change batch name', onClick: () => showChangeModal() },
     {
       label: 'Delete batch',
-      onClick: () => console.log('Delete batch clicked'),
+      onClick: batch => showDeleteModal(batch),
     },
   ];
 
@@ -142,6 +115,38 @@ export default function ManageUploads() {
     setIsChangeModalOpen(false);
   };
 
+  const showDeleteModal = batch => {
+    setBatchToDelete(batch);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setBatchToDelete(null);
+  };
+
+  const deleteBatch = async () => {
+    if (!batchToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(`/batch/${batchToDelete.batch_id}`);
+      console.log('Batch deleted successfully:', response.data);
+
+      // Remove the deleted batch from the data
+      setData(prevData =>
+        prevData.filter(batch => batch.batch_id !== batchToDelete.batch_id),
+      );
+
+      closeDeleteModal();
+    } catch (error) {
+      console.error('Error deleting batch:', error);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (isChangeModalOpen) {
     return (
       <ActionSection>
@@ -187,6 +192,58 @@ export default function ManageUploads() {
               onClick={changeBatchName}
             >
               Update
+            </PrimaryButton>
+          </DialogModal.Footer>
+        </DialogModal>
+      </ActionSection>
+    );
+  }
+
+  if (isDeleteModalOpen) {
+    return (
+      <ActionSection>
+        <DialogModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+          <DialogModal.Content title={'Delete Batch'}>
+            <div className="mt-4">
+              <p className="text-sm text-gray-600">
+                Are you sure you want to delete the batch &ldquo;
+                {batchToDelete?.name}&rdquo;? This action cannot be undone and
+                will permanently remove all associated files.
+              </p>
+            </div>
+          </DialogModal.Content>
+          <DialogModal.Footer>
+            <SecondaryButton
+              style={{
+                background: 'white',
+                color: '#f79222',
+                border: '1px solid #f79222',
+                textTransform: 'none',
+                fontFamily: 'Helvetica Neue',
+                fontSize: '16px',
+                lineHeight: '24px',
+                fontWeight: '500',
+                marginRight: '8px',
+              }}
+              onClick={closeDeleteModal}
+            >
+              Cancel
+            </SecondaryButton>
+            <PrimaryButton
+              style={{
+                background: '#dc2626',
+                color: 'white',
+                textTransform: 'none',
+                fontFamily: 'Helvetica Neue',
+                fontSize: '16px',
+                lineHeight: '24px',
+                fontWeight: '500',
+                opacity: isDeleting ? '0.5' : '1',
+              }}
+              disabled={isDeleting}
+              onClick={deleteBatch}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Batch'}
             </PrimaryButton>
           </DialogModal.Footer>
         </DialogModal>
@@ -256,11 +313,9 @@ export default function ManageUploads() {
                     <td className="p-4 px-6">{upload.name}</td>
                     <td className="p-4 px-6">
                       <ul>
-                        {Object.entries(upload.file_names_to_ids).map(
-                          ([k, v]) => (
-                            <li key={k}>&#8226;&nbsp;{k}</li>
-                          ),
-                        )}
+                        {Object.entries(upload.file_names_to_ids).map(([k]) => (
+                          <li key={k}>&#8226;&nbsp;{k}</li>
+                        ))}
                       </ul>
                     </td>
                     <td className="p-4 px-6 font-medium">
@@ -270,7 +325,12 @@ export default function ManageUploads() {
                       {upload.updated_at}
                     </td>
                     <td className="p-4 px-6 font-medium">
-                      <OverflowMenu items={actions} />
+                      <OverflowMenu
+                        items={actions.map(action => ({
+                          ...action,
+                          onClick: () => action.onClick(upload),
+                        }))}
+                      />
                     </td>
                   </tr>
                 ),

@@ -79,9 +79,7 @@ export default function DataDictionary() {
       if (!inst_id || !selectedModel) return;
 
       try {
-        const response = await axios.get(
-          `/api/v1/institutions/${inst_id}/models/${selectedModel.name}/runs`,
-        );
+        const response = await axios.get(`/model-runs/${selectedModel.name}`);
         console.log('Model runs fetched:', response.data);
 
         if (response.data && response.data.length > 0) {
@@ -103,7 +101,7 @@ export default function DataDictionary() {
     const fetchTopFeatures = async () => {
       if (!inst_id || !run_id) return;
 
-      const apiUrl = `/api/v1/institutions/${inst_id}/inference/top-features/${run_id}`;
+      const apiUrl = `/top-features/${run_id}`;
       console.log('Fetching top features from:', apiUrl);
       console.log('Full URL:', window.location.origin + apiUrl);
 

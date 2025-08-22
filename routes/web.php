@@ -221,6 +221,18 @@ Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
+
+// New routes that use request context for institution
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/model-runs/{model_name}', [ApiController::class, 'modelRunsWithContext']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
+
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

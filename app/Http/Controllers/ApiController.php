@@ -869,4 +869,128 @@ public function EditInstApi(Request $request)
 
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
+
+    // Gets model runs using request context for institution
+    public function modelRunsWithContext(Request $request, string $model_name)
+    {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            return response()->json([['run_id' => '123', 'inst_id' => $inst, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed'=>True, 'output_file_link'=>'https://www.google.com']], 200);
+        }
+        $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', "GET", null);
+        // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
+        // E.g. convert user uuid to name and convert the timestamp to human readable string.
+        if ($result != null && $result->getStatusCode() == 200) {
+            $output = $result->json();
+            if ($output != null) {
+                $collected_user_ids = [];
+                foreach ($output as $run) {
+                    array_push($collected_user_ids, $run["created_by"]);
+                }
+                $user_id_map = UserHelper::getNames($collected_user_ids);
+                foreach ($output as $key => $run) {
+                    $user_name = $run["created_by"];
+                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                        $user_name = $user_id_map[$user_name];
+                    }
+                    $time = ApiController::convertDateToReadable($run["triggered_at"]);
+                    $run["created_by"] = $user_name;
+                    $run["triggered_at"] = $time;
+                    // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
+                    if ($run["completed"] && $run["output_filename"] != null && $run["output_filename"] != "") {
+                        $download_url = ApiController::downloadInfData($request, $run["output_filename"]);
+                        if ($download_url->getStatusCode() == 200) {
+                            $run["output_file_link"] = $download_url->json();
+                        } else {
+                            $run["output_file_link"] = '';
+                        }
+                    }
+                    $output[$key] = $run;
+                }
+            }
+            // Set the result to the modified output.
+            return response()->json($output);
+        }
+        return $result;
+    }
+
+    // Gets top features using request context for institution
+    public function getTopFeaturesWithContext(Request $request, string $run_id)
+    {
+        \Log::info('getTopFeaturesWithContext called with run_id: ' . $run_id);
+
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // Mock data for local development
+            return response()->json([
+                [
+                    'feature_readable_name' => 'GPA Departure',
+                    'feature_short_desc' => 'Students who have large changes to their GPA average.',
+                    'type' => 'Numerical',
+                    'importance' => 0.15,
+                    'range' => '0.12 to 0.2',
+                ],
+                [
+                    'feature_readable_name' => 'Course Level 200',
+                    'feature_short_desc' => 'Number of 200 courses taken',
+                    'type' => 'Numerical',
+                    'importance' => 0.09,
+                    'range' => '0.05 to 0.12',
+                ],
+                [
+                    'feature_readable_name' => 'Course with MAT',
+                    'feature_short_desc' => 'Students taking math courses this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.08,
+                    'range' => '0.04 to 0.1',
+                ],
+                [
+                    'feature_readable_name' => 'Grade B',
+                    'feature_short_desc' => 'Number of B grades earned this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.07,
+                    'range' => '0.03 to 0.12',
+                ],
+                [
+                    'feature_readable_name' => 'Course prefix Bio',
+                    'feature_short_desc' => 'Students taking biology courses this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.06,
+                    'range' => '0.02 to 0.09',
+                ],
+                [
+                    'feature_readable_name' => 'Modality In Person',
+                    'feature_short_desc' => 'Taking in-person courses',
+                    'type' => 'Numerical',
+                    'importance' => 0.04,
+                    'range' => '0.01 to 0.07',
+                ],
+                [
+                    'feature_readable_name' => 'Grade C',
+                    'feature_short_desc' => 'Students taking math courses this term',
+                    'type' => 'Numerical',
+                    'importance' => 0.04,
+                    'range' => '0.01 to 0.07',
+                ],
+            ], 200);
+        }
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        if ($inst == null || $inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst);
+        $externalUrl = '/inference/top-features/'.$run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

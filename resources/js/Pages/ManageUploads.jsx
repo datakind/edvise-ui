@@ -151,11 +151,6 @@ export default function ManageUploads() {
   const deleteBatch = async () => {
     if (!batchToDelete || !inst_id) return;
 
-    console.log('=== DELETE BATCH STARTED ===');
-    console.log('batchToDelete:', batchToDelete);
-    console.log('inst_id:', inst_id);
-    console.log('API URL:', `/batch/${batchToDelete.batch_id}`);
-
     setIsDeleting(true);
     try {
       const response = await axios.delete(`/batch/${batchToDelete.batch_id}`);
@@ -168,11 +163,7 @@ export default function ManageUploads() {
 
       closeDeleteModal();
     } catch (error) {
-      console.error('=== DELETE BATCH ERROR ===');
       console.error('Error deleting batch:', error);
-      console.error('Error response:', error.response);
-      console.error('Error status:', error.response?.status);
-      console.error('Error data:', error.response?.data);
       // You might want to show an error message to the user here
     } finally {
       setIsDeleting(false);

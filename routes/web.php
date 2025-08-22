@@ -238,6 +238,12 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->delete('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
 
+// Test route to verify basic routing is working
+Route::get('/test-delete-route', function() {
+    error_log("=== TEST ROUTE WORKING ===");
+    return response()->json(['message' => 'Test route working']);
+});
+
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

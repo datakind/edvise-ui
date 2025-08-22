@@ -54,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => env('APP_ENV') === 'local' ? ['single'] : ['single', 'stderr'],
+            'channels' => env('APP_ENV') === 'local' ? ['single'] : ['single', 'stderr', 'cloudrun'],
             'ignore_exceptions' => false,
         ],
 
@@ -98,14 +98,16 @@ return [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
-            'formatter' => Monolog\Formatter\JsonFormatter::class,
-            'formatter_with' => [
-                'format' => '[%datetime%] %channel%.%level_name%: %message% %context% %extra%',
-            ],
             'with' => [
                 'stream' => 'php://stderr',
             ],
             'processors' => [PsrLogMessageProcessor::class],
+        ],
+
+        'cloudrun' => [
+            'driver' => 'single',
+            'path' => 'php://stderr',
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'syslog' => [

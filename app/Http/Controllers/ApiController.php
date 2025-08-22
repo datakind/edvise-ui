@@ -189,6 +189,8 @@ class ApiController extends Controller
             } else {
                 $resp = Http::withHeaders($headers)->patch($url, $req_body);
             }
+        } elseif ($method == "DELETE") {
+            $resp = Http::withHeaders($headers)->delete($url);
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }

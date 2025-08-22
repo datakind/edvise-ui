@@ -54,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => env('APP_ENV') === 'local' ? ['single'] : ['single', 'stderr', 'cloudrun'],
+            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
 
@@ -94,21 +94,7 @@ return [
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
-        'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
-            'processors' => [PsrLogMessageProcessor::class],
-        ],
 
-        'cloudrun' => [
-            'driver' => 'single',
-            'path' => 'php://stderr',
-            'level' => env('LOG_LEVEL', 'debug'),
-        ],
 
         'syslog' => [
             'driver' => 'syslog',

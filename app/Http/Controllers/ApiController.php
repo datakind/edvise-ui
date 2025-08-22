@@ -932,6 +932,7 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'GPA Departure',
                     'feature_short_desc' => 'Students who have large changes to their GPA average.',
+                    'feature_long_desc' => 'This feature measures the degree to which a student\'s current GPA deviates from their historical GPA average. It helps identify students who may be experiencing academic challenges or improvements that could impact their graduation likelihood.',
                     'type' => 'Numerical',
                     'importance' => 0.15,
                     'range' => '0.12 to 0.2',
@@ -939,6 +940,7 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'Course Level 200',
                     'feature_short_desc' => 'Number of 200 courses taken',
+                    'feature_long_desc' => 'Count of intermediate-level courses (200-level) completed by the student. These courses typically represent sophomore-level coursework and indicate progression through the academic curriculum.',
                     'type' => 'Numerical',
                     'importance' => 0.09,
                     'range' => '0.05 to 0.12',
@@ -946,6 +948,7 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'Course with MAT',
                     'feature_short_desc' => 'Students taking math courses this term',
+                    'feature_long_desc' => 'Binary indicator showing whether the student is currently enrolled in mathematics courses. Math proficiency is often a strong predictor of academic success and graduation outcomes.',
                     'type' => 'Numerical',
                     'importance' => 0.08,
                     'range' => '0.04 to 0.1',
@@ -953,6 +956,7 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'Grade B',
                     'feature_short_desc' => 'Number of B grades earned this term',
+                    'feature_long_desc' => 'Count of B grades received in the current academic term. B grades indicate above-average performance and can be a positive indicator of academic engagement and capability.',
                     'type' => 'Numerical',
                     'importance' => 0.07,
                     'range' => '0.03 to 0.12',
@@ -960,6 +964,7 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'Course prefix Bio',
                     'feature_short_desc' => 'Students taking biology courses this term',
+                    'feature_long_desc' => 'Binary indicator for students currently enrolled in biology courses. This helps identify students in specific academic programs and can indicate their academic interests and career paths.',
                     'type' => 'Numerical',
                     'importance' => 0.06,
                     'range' => '0.02 to 0.09',
@@ -967,13 +972,15 @@ public function EditInstApi(Request $request)
                 [
                     'feature_readable_name' => 'Modality In Person',
                     'feature_short_desc' => 'Taking in-person courses',
+                    'feature_long_desc' => 'Binary indicator showing whether the student is taking traditional in-person courses versus online or hybrid formats. Course modality can impact student engagement and learning outcomes.',
                     'type' => 'Numerical',
                     'importance' => 0.04,
                     'range' => '0.01 to 0.07',
                 ],
                 [
                     'feature_readable_name' => 'Grade C',
-                    'feature_short_desc' => 'Students taking math courses this term',
+                    'feature_short_desc' => 'Number of C grades earned this term',
+                    'feature_long_desc' => 'Count of C grades received in the current academic term. C grades represent average performance and may indicate areas where students need additional support or academic intervention.',
                     'type' => 'Numerical',
                     'importance' => 0.04,
                     'range' => '0.01 to 0.07',

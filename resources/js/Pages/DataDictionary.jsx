@@ -146,6 +146,9 @@ export default function DataDictionary() {
           .includes(searchTerm.toLowerCase()) ||
         feature.feature_short_desc
           .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        feature.feature_long_desc
+          ?.toLowerCase()
           .includes(searchTerm.toLowerCase()),
     )
     .sort((a, b) => {

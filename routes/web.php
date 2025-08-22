@@ -233,6 +233,11 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
 
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
+
 // Data dictionary does not require logging in to view.
 Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');

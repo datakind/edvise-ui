@@ -1004,6 +1004,10 @@ public function EditInstApi(Request $request)
             // Deletes a batch using request context for institution
     public function deleteBatchWithContext(Request $request, string $batch_id)
     {
+        // Direct console logging for Cloud Run visibility
+        error_log("=== DELETE BATCH METHOD CALLED ===");
+        error_log("batch_id: " . $batch_id);
+
         \Log::info('deleteBatchWithContext called with batch_id: ' . $batch_id);
 
         if (ApiController::isLocalRequest()) {

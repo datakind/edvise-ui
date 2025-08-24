@@ -36,6 +36,18 @@ export default function Login({ canResetPassword, status }) {
 
           <div className="pb-8 text-2xl">Welcome! Log in to get started:</div>
 
+          <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
+            <p className="text-sm text-blue-800">
+              <strong>New users:</strong> You need an invite code to register.
+              <Link
+                href={route('invite.validation')}
+                className="ml-1 underline hover:text-blue-600"
+              >
+                Enter your invite code here
+              </Link>
+            </p>
+          </div>
+
           {status && (
             <div className="mb-4 text-sm font-medium text-green-600">
               {status}

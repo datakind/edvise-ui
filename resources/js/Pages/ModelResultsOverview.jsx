@@ -16,14 +16,7 @@ import '../../css/landing.css';
 
 // Features will be fetched from API
 
-// Helper function to capitalize first letter of each word
-const capitalizeWords = str => {
-  if (!str) return '';
-  return str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-};
+import { formatModelName } from '../utils/stringUtils';
 
 function ModelResultsOverview({ run_id, modelName }) {
   console.log('run_id:', run_id);
@@ -230,7 +223,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                 {runDetails?.batch_name || 'Loading...'}
               </a>
             </div>
-            <div>Run on model: {modelName}</div>
+            <div>Run on model: {formatModelName(modelName)}</div>
           </div>
 
           {tab === 'results' ? (
@@ -342,7 +335,7 @@ function ModelResultsOverview({ run_id, modelName }) {
                               className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
                               onClick={() => handleFeatureClick(feature)}
                             >
-                              {capitalizeWords(feature.feature_readable_name)}
+                              {feature.feature_readable_name}
                             </div>
                             <div className="text-base text-[#4F4F4F]">
                               {feature.feature_short_desc}
@@ -502,8 +495,7 @@ function ModelResultsOverview({ run_id, modelName }) {
             <div className="px-8 pt-8">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-medium text-black">
-                  Details:{' '}
-                  {capitalizeWords(selectedFeature?.feature_readable_name)}
+                  Details: {selectedFeature?.feature_readable_name}
                 </h2>
                 <p className="text-xl font-light text-[#4F4F4F]">
                   {selectedFeature?.desc}

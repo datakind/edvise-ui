@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'datakinder' => \App\Http\Middleware\VerifyDatakinder::class,
         'terms.accepted' => \App\Http\Middleware\EnsureTermsAccepted::class,
+        'invite.validated' => \App\Http\Middleware\CheckInviteValidated::class,
     ];
 }

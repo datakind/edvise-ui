@@ -252,7 +252,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                 </a>
               </div>
             )
-          ) : item.children.some(e => e.name === title) ? (
+          ) : item.children.some(e => e.name === title) ||
+            (item.name === 'Model Results' && title === 'Dashboard') ? (
             <Disclosure defaultOpen as="div">
               <DisclosureButton
                 className={classNames(

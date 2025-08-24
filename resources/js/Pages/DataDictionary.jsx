@@ -3,14 +3,7 @@ import axios from 'axios';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-// Helper function to capitalize first letter of each word
-const capitalizeWords = str => {
-  if (!str) return '';
-  return str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-};
+import { formatModelName } from '../utils/stringUtils';
 
 export default function DataDictionary() {
   const [inst_id, setInstId] = useState(null);
@@ -410,7 +403,7 @@ export default function DataDictionary() {
                       >
                         <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
                           <div className="text-base font-medium text-black">
-                            {capitalizeWords(feature.feature_readable_name)}
+                            {feature.feature_readable_name}
                           </div>
                         </td>
                         <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">

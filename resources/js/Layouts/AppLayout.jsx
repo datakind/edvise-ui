@@ -32,6 +32,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { subtract } from 'lodash';
+import { formatModelName } from '@/utils/stringUtils';
 
 const VisibilityType = Object.freeze({
   PUBLIC_ONLY: 'PUBLIC_ONLY',
@@ -276,7 +277,9 @@ export default function AppLayout({ title, renderHeader, children }) {
                       {subItem.name == title && (
                         <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
                       )}
-                      {subItem.name}
+                      {item.name === 'Model Results'
+                        ? formatModelName(subItem.name)
+                        : subItem.name}
                     </DisclosureButton>
                   </li>
                 ))}
@@ -287,7 +290,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               <DisclosureButton
                 className={classNames(
                   'text-[#637381] hover:text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                  'text-sm/12 group -mx-6 flex w-[calc(100%+2rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -313,7 +316,9 @@ export default function AppLayout({ title, renderHeader, children }) {
                       {subItem.name == title && (
                         <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
                       )}
-                      {subItem.name}
+                      {item.name === 'Model Results'
+                        ? formatModelName(subItem.name)
+                        : subItem.name}
                     </DisclosureButton>
                   </li>
                 ))}

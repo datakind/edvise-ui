@@ -8,7 +8,7 @@ import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
 import BigDangerAlert from '@/Components/BigDangerAlert';
 import classNames from 'classnames';
-Button;
+import { formatModelName } from '@/utils/stringUtils';
 
 import { ChartBarIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Button from '@/Components/Landing/Button';
@@ -224,7 +224,7 @@ export default function Dashboard({ modelname }) {
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}
                   ? ''
-                  : `Current model: ${modelInfo.name}`}
+                  : `Current model: ${formatModelName(modelInfo.name)}`}
               </div>
 
               {error != null &&

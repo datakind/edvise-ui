@@ -68,6 +68,14 @@ class Invite extends Model
     }
 
     /**
+     * Get the user who sent this invite
+     */
+    public function invitedBy()
+    {
+        return $this->belongsTo(User::class, 'invited_by');
+    }
+
+    /**
      * Scope for valid invites
      */
     public function scopeValid($query)

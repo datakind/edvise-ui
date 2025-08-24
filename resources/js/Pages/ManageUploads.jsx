@@ -46,7 +46,7 @@ export default function ManageUploads() {
   }, []);
 
   const actions = [
-    { label: 'Change batch name', onClick: () => showChangeModal() },
+    // { label: 'Change batch name', onClick: () => showChangeModal() },
     {
       label: 'Delete batch',
       onClick: batch => showDeleteModal(batch),

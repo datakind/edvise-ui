@@ -35,6 +35,12 @@ class LoginController extends Controller
             $existingUser = User::where('email', $user->email)->first();
 
             if ($existingUser) {
+                // Check if user is invite-validated
+                if (!$existingUser->invite_validated) {
+                    return redirect()->route('invite.validation')
+                                   ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
+                }
+
                 // If the user exists but doesn't have a Google ID, update it
                 if (! $existingUser->google_id) {
                     $existingUser->google_id = $user->id;
@@ -46,13 +52,28 @@ class LoginController extends Controller
 
                 return redirect('/dashboard');
             } else {
-                // If no user is found, create a new one
+                // Check if there's a valid invite for this email
+                $invite = \App\Models\Invite::where('email', $user->email)
+                                           ->where('is_used', false)
+                                           ->where('expires_at', '>', now())
+                                           ->first();
+
+                if (!$invite) {
+                    return redirect()->route('invite.validation')
+                                   ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
+                }
+
+                // If no user is found, create a new one with invite validation
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     'google_id' => $user->id,
                     'password' => encrypt(''), // Encrypting an empty string as placeholder
+                    'invite_validated' => true,
                 ]);
+
+                // Mark invite as used
+                $invite->markAsUsed();
 
                 // Create a personal team for the user (required by Jetstream)
                 $newTeam = Team::forceCreate([
@@ -101,6 +122,12 @@ class LoginController extends Controller
             $existingUser = User::where('email', $user->email)->first();
 
             if ($existingUser) {
+                // Check if user is invite-validated
+                if (!$existingUser->invite_validated) {
+                    return redirect()->route('invite.validation')
+                                   ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
+                }
+
                 // If the user exists but doesn't have an Azure ID, update it
                 if (! $existingUser->azure_id) {
                     $existingUser->azure_id = $user->id;
@@ -112,13 +139,28 @@ class LoginController extends Controller
 
                 return redirect('/dashboard');
             } else {
-                // If no user is found, create a new one
+                // Check if there's a valid invite for this email
+                $invite = \App\Models\Invite::where('email', $user->email)
+                                           ->where('is_used', false)
+                                           ->where('expires_at', '>', now())
+                                           ->first();
+
+                if (!$invite) {
+                    return redirect()->route('invite.validation')
+                                   ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
+                }
+
+                // If no user is found, create a new one with invite validation
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     'azure_id' => $user->id,
                     'password' => encrypt(''), // Encrypting an empty string as placeholder
+                    'invite_validated' => true,
                 ]);
+
+                // Mark invite as used
+                $invite->markAsUsed();
 
                 // Create a personal team for the user (required by Jetstream)
                 $newTeam = Team::forceCreate([

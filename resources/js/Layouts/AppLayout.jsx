@@ -106,6 +106,12 @@ var navigationAboveLine = [
         icon: ChartPieIcon,
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
+      {
+        name: 'Manage Invites',
+        href: route('admin.invites'),
+        icon: ClipboardDocumentListIcon,
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
     ],
   },
 ];

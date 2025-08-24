@@ -30,6 +30,20 @@ Route::get('/login', function () {
     ]);
 })->name('login');
 
+// Invite system routes
+Route::get('/invite', [App\Http\Controllers\InviteController::class, 'showInviteForm'])->name('invite.validation');
+Route::post('/invite/validate', [App\Http\Controllers\InviteController::class, 'validateInvite'])->name('invite.validate');
+Route::get('/register', [App\Http\Controllers\InviteController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [App\Http\Controllers\InviteController::class, 'register'])->name('register.post');
+
+// Admin invite management routes
+Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
+    Route::get('/admin/invites', [App\Http\Controllers\InviteController::class, 'listInvites'])->name('admin.invites');
+    Route::post('/admin/invites', [App\Http\Controllers\InviteController::class, 'createInvite'])->name('admin.invites.create');
+    Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
+    Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
+});
+
 Route::get('/email/verify', function () {
     return Inertia::render('Auth/VerifyEmail');
 })->middleware('auth')->name('verification.notice');
@@ -55,7 +69,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 });
 */
 Route::middleware(array_filter([
-    'auth', 'terms.accepted',
+    'auth', 'invite.validated', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -64,7 +78,7 @@ Route::middleware(array_filter([
 });
 
 Route::middleware(array_filter([
-    'auth', 'terms.accepted',
+    'auth', 'invite.validated', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/file-upload',
@@ -74,7 +88,7 @@ Route::middleware(array_filter([
 )->name('file-upload');
 
 Route::middleware(array_filter([
-    'auth', 'terms.accepted',
+    'auth', 'invite.validated', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/dashboard/{modelname}',
@@ -85,7 +99,7 @@ Route::middleware(array_filter([
 
 // The default dashboard page.
 Route::middleware(array_filter([
-    'auth', 'terms.accepted',
+    'auth', 'invite.validated', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/dashboard',

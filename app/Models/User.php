@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_token',
         'google_refresh_token',
         'accepted_terms',
-
+        'invite_validated',
     ];
 
     /**
@@ -56,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'invite_validated' => 'boolean',
     ];
 
     /**

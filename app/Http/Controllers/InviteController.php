@@ -83,7 +83,38 @@ class InviteController extends Controller
             'accepted_terms' => 'required|accepted',
         ]);
 
-        // Create the user
+        // Check if user already exists
+        $existingUser = User::where('email', $invite->email)->first();
+
+        if ($existingUser) {
+            // If user exists but isn't invite-validated, update them
+            if (!$existingUser->invite_validated) {
+                $existingUser->update([
+                    'name' => $request->name,
+                    'password' => Hash::make($request->password),
+                    'invite_validated' => true,
+                    'accepted_terms' => true,
+                ]);
+
+                // Mark invite as used
+                $invite->markAsUsed();
+
+                // Clear session
+                session()->forget('valid_invite');
+
+                // Log the user in
+                Auth::login($existingUser);
+
+                return redirect()->intended(route('dashboard'));
+            } else {
+                // User already validated, redirect to login
+                session()->forget('valid_invite');
+                return redirect()->route('login')
+                    ->withErrors(['email' => 'This email is already registered and validated. Please log in instead.']);
+            }
+        }
+
+        // Create new user if none exists
         $user = User::create([
             'name' => $request->name,
             'email' => $invite->email,

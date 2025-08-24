@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import InputError from '@/Components/Modals/InputError';
@@ -8,6 +8,7 @@ import Checkbox from '@/Components/Fields/Checkbox';
 import AuthLayout from '@/Layouts/AuthLayout';
 import AuthFooter from '@/Components/AuthFooter';
 import Button from '@/Components/Landing/Button';
+import TermsText from '@/Components/TermsText';
 
 export default function Register({ invite }) {
   const { data, setData, post, processing, errors } = useForm({
@@ -21,6 +22,28 @@ export default function Register({ invite }) {
     e.preventDefault();
     post(route('register.post'));
   };
+
+  const scrollRef = useRef(null);
+  const [scrolledToBottom, setScrolledToBottom] = useState(false);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const isBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+    if (isBottom) setScrolledToBottom(true);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (el) {
+        el.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   return (
     <AuthLayout>
@@ -92,34 +115,35 @@ export default function Register({ invite }) {
               />
             </div>
 
-            <div className="mt-4">
-              <Checkbox
-                id="accepted_terms"
-                checked={data.accepted_terms}
-                onChange={e => setData('accepted_terms', e.target.checked)}
-              />
-              <label
-                htmlFor="accepted_terms"
-                className="ml-2 text-sm text-gray-600"
-              >
-                I agree to the{' '}
-                <Link
-                  href={route('terms-of-service')}
-                  className="text-sm text-gray-600 underline hover:text-gray-900"
-                  target="_blank"
+            <div className="mt-8">
+              <InputLabel htmlFor="accepted_terms">
+                <div className="mb-4">
+                  Please review and accept our Terms of Service:
+                </div>
+                <div
+                  ref={scrollRef}
+                  className="max-h-[50vh] space-y-4 overflow-y-auto rounded border border-gray-200 bg-gray-50 p-6 text-sm shadow-inner"
+                  data-lenis-prevent
                 >
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link
-                  href={route('privacy-policy')}
-                  className="text-sm text-gray-600 underline hover:text-gray-900"
-                  target="_blank"
-                >
-                  Privacy Policy
-                </Link>
-              </label>
-              <InputError message={errors.accepted_terms} className="mt-2" />
+                  <TermsText />
+                </div>
+                <div className="mt-4 flex items-center">
+                  <Checkbox
+                    name="accepted_terms"
+                    id="accepted_terms"
+                    checked={data.accepted_terms}
+                    onChange={e => setData('accepted_terms', e.target.checked)}
+                    required
+                  />
+                  <label
+                    htmlFor="accepted_terms"
+                    className="ml-2 text-sm text-gray-600"
+                  >
+                    I have read and agree to the Terms of Service above
+                  </label>
+                </div>
+                <InputError className="mt-2" message={errors.accepted_terms} />
+              </InputLabel>
             </div>
 
             <div className="mt-4 flex items-center justify-end">
@@ -133,9 +157,12 @@ export default function Register({ invite }) {
               <Button
                 type="submit"
                 className={classNames('ml-4', {
-                  'opacity-25': processing,
+                  'opacity-25':
+                    processing || !scrolledToBottom || !data.accepted_terms,
                 })}
-                disabled={processing}
+                disabled={
+                  processing || !scrolledToBottom || !data.accepted_terms
+                }
               >
                 Complete Registration
               </Button>

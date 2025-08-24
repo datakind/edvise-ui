@@ -70,6 +70,7 @@ class LoginController extends Controller
                     'google_id' => $user->id,
                     'password' => encrypt(''), // Encrypting an empty string as placeholder
                     'invite_validated' => true,
+                    'accepted_terms' => true,
                 ]);
 
                 // Mark invite as used
@@ -157,6 +158,7 @@ class LoginController extends Controller
                     'azure_id' => $user->id,
                     'password' => encrypt(''), // Encrypting an empty string as placeholder
                     'invite_validated' => true,
+                    'accepted_terms' => true,
                 ]);
 
                 // Mark invite as used

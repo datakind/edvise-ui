@@ -109,8 +109,17 @@ class InviteController extends Controller
 
         $invite = session('valid_invite');
 
-        // Check if this is an SSO user (they won't have a password)
-        $isSsoUser = session('sso_user', false);
+        // Check if this is an SSO user by looking at existing user record or session
+        $existingUser = User::where('email', $invite->email)->first();
+        $isSsoUser = session('sso_user', false) || ($existingUser && ($existingUser->google_id || $existingUser->azure_id));
+
+        \Log::info("SSO user detection", [
+            'email' => $invite->email,
+            'session_sso_user' => session('sso_user', false),
+            'existing_user_has_google_id' => $existingUser ? ($existingUser->google_id ? 'yes' : 'no') : 'no user',
+            'existing_user_has_azure_id' => $existingUser ? ($existingUser->azure_id ? 'yes' : 'no') : 'no user',
+            'final_is_sso_user' => $isSsoUser
+        ]);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -118,8 +127,7 @@ class InviteController extends Controller
             'accepted_terms' => 'required|accepted',
         ]);
 
-        // Check if user already exists
-        $existingUser = User::where('email', $invite->email)->first();
+        // Use the existing user we already queried above
 
         if ($existingUser) {
             // If user exists but isn't invite-validated, update them

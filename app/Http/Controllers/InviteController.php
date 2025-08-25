@@ -49,18 +49,16 @@ class InviteController extends Controller
                 // User already validated, redirect to login
                 return redirect()->route('login')
                     ->withErrors(['invite_code' => 'This email is already registered and validated. Please log in instead.']);
-            } else {
-                // User exists but not validated - check if they have SSO credentials
-                if ($existingUser->google_id || $existingUser->azure_id) {
-                    // SSO user - redirect to login with message
-                    return redirect()->route('login')
-                        ->withErrors(['invite_code' => 'This email is associated with an SSO account. Please use SSO to log in.']);
-                }
             }
+            // If user exists but not validated, allow them to proceed with invite validation
+            // (This includes SSO users who need to validate their invite)
         }
 
         // Store invite in session for registration
         session(['valid_invite' => $invite]);
+
+        // Log the flow for debugging
+        \Log::info("Invite validated for email: {$invite->email}, redirecting to registration");
 
         return redirect()->route('register');
     }
@@ -75,13 +73,21 @@ class InviteController extends Controller
         }
 
         $invite = session('valid_invite');
+
+        // Check if this is an SSO user by looking at the existing user record
+        $existingUser = User::where('email', $invite->email)->first();
+        $isSsoUser = $existingUser && ($existingUser->google_id || $existingUser->azure_id);
+
+        // Log for debugging
+        \Log::info("Showing registration form for email: {$invite->email}, isSsoUser: " . ($isSsoUser ? 'true' : 'false'));
+
         return Inertia::render('Auth/Register', [
             'invite' => [
                 'email' => $invite->email,
                 'role' => $invite->role,
                 'institution_id' => $invite->institution_id,
             ],
-            'isSsoUser' => session('sso_user', false)
+            'isSsoUser' => $isSsoUser
         ]);
     }
 

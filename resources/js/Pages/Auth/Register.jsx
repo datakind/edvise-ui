@@ -13,6 +13,7 @@ import TermsText from '@/Components/TermsText';
 export default function Register({ invite, isSsoUser = false }) {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
+    email: invite?.email || '',
     password: '',
     password_confirmation: '',
     accepted_terms: false,
@@ -20,6 +21,10 @@ export default function Register({ invite, isSsoUser = false }) {
 
   const submit = e => {
     e.preventDefault();
+    console.log('Form submitted with data:', data);
+    console.log('Is SSO user:', isSsoUser);
+    console.log('Scrolled to bottom:', scrolledToBottom);
+    console.log('Terms accepted:', data.accepted_terms);
     post(route('register.post'));
   };
 
@@ -74,7 +79,19 @@ export default function Register({ invite, isSsoUser = false }) {
             </div>
           )}
 
+          {/* Debug information */}
+          <div className="mb-4 rounded-md border border-gray-200 bg-gray-50 p-3">
+            <p className="text-sm text-gray-800">
+              <strong>Debug:</strong> Name: {data.name} | Email: {data.email} |
+              Scrolled: {scrolledToBottom ? 'Yes' : 'No'} | Terms:{' '}
+              {data.accepted_terms ? 'Accepted' : 'Not Accepted'}
+            </p>
+          </div>
+
           <form onSubmit={submit}>
+            {/* Hidden email field for the backend */}
+            <input type="hidden" name="email" value={data.email} />
+
             <div>
               <InputLabel htmlFor="name" value="Name" />
               <TextInput

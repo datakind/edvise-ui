@@ -63,35 +63,15 @@ class LoginController extends Controller
                                    ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
                 }
 
-                // If no user is found, create a new one with invite validation
-                $newUser = User::create([
+                // Store invite in session and redirect to registration
+                session(['valid_invite' => $invite]);
+                session(['sso_user' => true]);
+                session(['sso_user_data' => [
                     'name' => $user->name,
-                    'email' => $user->email,
                     'google_id' => $user->id,
-                    'password' => encrypt(''), // Encrypting an empty string as placeholder
-                    'invite_validated' => true,
-                    'accepted_terms' => true,
-                ]);
+                ]]);
 
-                // Mark invite as used
-                $invite->markAsUsed();
-
-                // Create a personal team for the user (required by Jetstream)
-                $newTeam = Team::forceCreate([
-                    'user_id' => $newUser->id,
-                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
-                    'personal_team' => true,
-                ]);
-
-                // Save the team and set it as the current team for the user
-                $newTeam->save();
-                $newUser->current_team_id = $newTeam->id;
-                $newUser->save();
-
-                // Log the new user in
-                Auth::login($newUser);
-
-                return redirect('/dashboard');
+                return redirect()->route('register');
             }
         } catch (Exception $e) {
             dd($e->getMessage());
@@ -151,35 +131,15 @@ class LoginController extends Controller
                                    ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
                 }
 
-                // If no user is found, create a new one with invite validation
-                $newUser = User::create([
+                // Store invite in session and redirect to registration
+                session(['valid_invite' => $invite]);
+                session(['sso_user' => true]);
+                session(['sso_user_data' => [
                     'name' => $user->name,
-                    'email' => $user->email,
                     'azure_id' => $user->id,
-                    'password' => encrypt(''), // Encrypting an empty string as placeholder
-                    'invite_validated' => true,
-                    'accepted_terms' => true,
-                ]);
+                ]]);
 
-                // Mark invite as used
-                $invite->markAsUsed();
-
-                // Create a personal team for the user (required by Jetstream)
-                $newTeam = Team::forceCreate([
-                    'user_id' => $newUser->id,
-                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
-                    'personal_team' => true,
-                ]);
-
-                // Save the team and set it as the current team for the user
-                $newTeam->save();
-                $newUser->current_team_id = $newTeam->id;
-                $newUser->save();
-
-                // Log the new user in
-                Auth::login($newUser);
-
-                return redirect('/dashboard');
+                return redirect()->route('register');
             }
         } catch (Exception $e) {
             dd($e->getMessage());

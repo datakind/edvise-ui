@@ -19,13 +19,35 @@ export default function Register({ invite, isSsoUser = false }) {
     accepted_terms: false,
   });
 
+  // Add error logging
+  React.useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.error('Form errors:', errors);
+    }
+  }, [errors]);
+
   const submit = e => {
     e.preventDefault();
     console.log('Form submitted with data:', data);
     console.log('Is SSO user:', isSsoUser);
     console.log('Scrolled to bottom:', scrolledToBottom);
     console.log('Terms accepted:', data.accepted_terms);
-    post(route('register.post'));
+
+    // Ensure email is included in the request
+    const formData = {
+      ...data,
+      email: invite?.email || data.email,
+    };
+
+    console.log('Sending form data:', formData);
+    post(route('register.post'), formData, {
+      onSuccess: () => {
+        console.log('Registration successful!');
+      },
+      onError: errors => {
+        console.error('Registration failed with errors:', errors);
+      },
+    });
   };
 
   const scrollRef = useRef(null);

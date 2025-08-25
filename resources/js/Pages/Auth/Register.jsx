@@ -10,7 +10,7 @@ import AuthFooter from '@/Components/AuthFooter';
 import Button from '@/Components/Landing/Button';
 import TermsText from '@/Components/TermsText';
 
-export default function Register({ invite }) {
+export default function Register({ invite, isSsoUser = false }) {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     password: '',
@@ -65,6 +65,15 @@ export default function Register({ invite }) {
             </p>
           </div>
 
+          {isSsoUser && (
+            <div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
+              <p className="text-sm text-green-800">
+                <strong>SSO User:</strong> Since you're using Single Sign-On,
+                you won't need to create a password.
+              </p>
+            </div>
+          )}
+
           <form onSubmit={submit}>
             <div>
               <InputLabel htmlFor="name" value="Name" />
@@ -81,39 +90,45 @@ export default function Register({ invite }) {
               <InputError message={errors.name} className="mt-2" />
             </div>
 
-            <div className="mt-4">
-              <InputLabel htmlFor="password" value="Password" />
-              <TextInput
-                id="password"
-                type="password"
-                className="mt-1 block w-full"
-                value={data.password}
-                onChange={e => setData('password', e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-              <InputError message={errors.password} className="mt-2" />
-            </div>
+            {!isSsoUser && (
+              <>
+                <div className="mt-4">
+                  <InputLabel htmlFor="password" value="Password" />
+                  <TextInput
+                    id="password"
+                    type="password"
+                    className="mt-1 block w-full"
+                    value={data.password}
+                    onChange={e => setData('password', e.target.value)}
+                    required
+                    autoComplete="new-password"
+                  />
+                  <InputError message={errors.password} className="mt-2" />
+                </div>
 
-            <div className="mt-4">
-              <InputLabel
-                htmlFor="password_confirmation"
-                value="Confirm Password"
-              />
-              <TextInput
-                id="password_confirmation"
-                type="password"
-                className="mt-1 block w-full"
-                value={data.password_confirmation}
-                onChange={e => setData('password_confirmation', e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-              <InputError
-                message={errors.password_confirmation}
-                className="mt-2"
-              />
-            </div>
+                <div className="mt-4">
+                  <InputLabel
+                    htmlFor="password_confirmation"
+                    value="Confirm Password"
+                  />
+                  <TextInput
+                    id="password_confirmation"
+                    type="password"
+                    className="mt-1 block w-full"
+                    value={data.password_confirmation}
+                    onChange={e =>
+                      setData('password_confirmation', e.target.value)
+                    }
+                    required
+                    autoComplete="new-password"
+                  />
+                  <InputError
+                    message={errors.password_confirmation}
+                    className="mt-2"
+                  />
+                </div>
+              </>
+            )}
 
             <div className="mt-8">
               <InputLabel htmlFor="accepted_terms">

@@ -41,6 +41,24 @@ class InviteController extends Controller
             ]);
         }
 
+        // Check if user already exists
+        $existingUser = User::where('email', $invite->email)->first();
+
+        if ($existingUser) {
+            if ($existingUser->invite_validated) {
+                // User already validated, redirect to login
+                return redirect()->route('login')
+                    ->withErrors(['invite_code' => 'This email is already registered and validated. Please log in instead.']);
+            } else {
+                // User exists but not validated - check if they have SSO credentials
+                if ($existingUser->google_id || $existingUser->azure_id) {
+                    // SSO user - redirect to login with message
+                    return redirect()->route('login')
+                        ->withErrors(['invite_code' => 'This email is associated with an SSO account. Please use SSO to log in.']);
+                }
+            }
+        }
+
         // Store invite in session for registration
         session(['valid_invite' => $invite]);
 
@@ -62,7 +80,8 @@ class InviteController extends Controller
                 'email' => $invite->email,
                 'role' => $invite->role,
                 'institution_id' => $invite->institution_id,
-            ]
+            ],
+            'isSsoUser' => session('sso_user', false)
         ]);
     }
 
@@ -77,9 +96,12 @@ class InviteController extends Controller
 
         $invite = session('valid_invite');
 
+        // Check if this is an SSO user (they won't have a password)
+        $isSsoUser = session('sso_user', false);
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => $isSsoUser ? 'nullable' : 'required|string|min:8|confirmed',
             'accepted_terms' => 'required|accepted',
         ]);
 
@@ -89,18 +111,26 @@ class InviteController extends Controller
         if ($existingUser) {
             // If user exists but isn't invite-validated, update them
             if (!$existingUser->invite_validated) {
-                $existingUser->update([
+                $updateData = [
                     'name' => $request->name,
-                    'password' => Hash::make($request->password),
                     'invite_validated' => true,
                     'accepted_terms' => true,
-                ]);
+                ];
+
+                // Only update password if not an SSO user
+                if (!$isSsoUser) {
+                    $updateData['password'] = Hash::make($request->password);
+                }
+
+                $existingUser->update($updateData);
 
                 // Mark invite as used
                 $invite->markAsUsed();
 
                 // Clear session
                 session()->forget('valid_invite');
+                session()->forget('sso_user');
+                session()->forget('sso_user_data');
 
                 // Log the user in
                 Auth::login($existingUser);
@@ -115,19 +145,51 @@ class InviteController extends Controller
         }
 
         // Create new user if none exists
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'email' => $invite->email,
-            'password' => Hash::make($request->password),
             'invite_validated' => true,
             'accepted_terms' => true,
-        ]);
+        ];
+
+        // Only set password if not an SSO user
+        if (!$isSsoUser) {
+            $userData['password'] = Hash::make($request->password);
+        }
+
+        // Add SSO provider IDs if available
+        if ($isSsoUser && session('sso_user_data')) {
+            $ssoData = session('sso_user_data');
+            if (isset($ssoData['google_id'])) {
+                $userData['google_id'] = $ssoData['google_id'];
+            }
+            if (isset($ssoData['azure_id'])) {
+                $userData['azure_id'] = $ssoData['azure_id'];
+            }
+        }
+
+        $user = User::create($userData);
+
+        // Create personal team for SSO users (required by Jetstream)
+        if ($isSsoUser) {
+            $team = \App\Models\Team::forceCreate([
+                'user_id' => $user->id,
+                'name' => explode(' ', $user->name, 2)[0]."'s Team",
+                'personal_team' => true,
+            ]);
+
+            $team->save();
+            $user->current_team_id = $team->id;
+            $user->save();
+        }
 
         // Mark invite as used
         $invite->markAsUsed();
 
         // Clear session
         session()->forget('valid_invite');
+        session()->forget('sso_user');
+        session()->forget('sso_user_data');
 
         // Log the user in
         Auth::login($user);

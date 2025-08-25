@@ -96,6 +96,13 @@ class InviteController extends Controller
      */
     public function register(Request $request)
     {
+        \Log::info("Registration attempt received", [
+            'email' => $request->email ?? 'not set',
+            'name' => $request->name ?? 'not set',
+            'has_valid_invite' => session('valid_invite') ? 'yes' : 'no',
+            'is_sso_user' => session('sso_user') ? 'yes' : 'no'
+        ]);
+
         if (!session('valid_invite')) {
             return redirect()->route('invite.validation');
         }

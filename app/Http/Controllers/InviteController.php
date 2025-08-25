@@ -78,8 +78,7 @@ class InviteController extends Controller
         $existingUser = User::where('email', $invite->email)->first();
         $isSsoUser = $existingUser && ($existingUser->google_id || $existingUser->azure_id);
 
-        // Log for debugging
-        \Log::info("Showing registration form for email: {$invite->email}, isSsoUser: " . ($isSsoUser ? 'true' : 'false'));
+
 
         return Inertia::render('Auth/Register', [
             'invite' => [
@@ -96,12 +95,7 @@ class InviteController extends Controller
      */
     public function register(Request $request)
     {
-        \Log::info("Registration attempt received", [
-            'email' => $request->email ?? 'not set',
-            'name' => $request->name ?? 'not set',
-            'has_valid_invite' => session('valid_invite') ? 'yes' : 'no',
-            'is_sso_user' => session('sso_user') ? 'yes' : 'no'
-        ]);
+
 
         if (!session('valid_invite')) {
             return redirect()->route('invite.validation');
@@ -113,13 +107,7 @@ class InviteController extends Controller
         $existingUser = User::where('email', $invite->email)->first();
         $isSsoUser = session('sso_user', false) || ($existingUser && ($existingUser->google_id || $existingUser->azure_id));
 
-        \Log::info("SSO user detection", [
-            'email' => $invite->email,
-            'session_sso_user' => session('sso_user', false),
-            'existing_user_has_google_id' => $existingUser ? ($existingUser->google_id ? 'yes' : 'no') : 'no user',
-            'existing_user_has_azure_id' => $existingUser ? ($existingUser->azure_id ? 'yes' : 'no') : 'no user',
-            'final_is_sso_user' => $isSsoUser
-        ]);
+
 
         $request->validate([
             'name' => 'required|string|max:255',

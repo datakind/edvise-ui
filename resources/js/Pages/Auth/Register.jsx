@@ -19,19 +19,8 @@ export default function Register({ invite, isSsoUser = false }) {
     accepted_terms: false,
   });
 
-  // Add error logging
-  React.useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.error('Form errors:', errors);
-    }
-  }, [errors]);
-
   const submit = e => {
     e.preventDefault();
-    console.log('Form submitted with data:', data);
-    console.log('Is SSO user:', isSsoUser);
-    console.log('Scrolled to bottom:', scrolledToBottom);
-    console.log('Terms accepted:', data.accepted_terms);
 
     // Ensure email is included in the request
     const formData = {
@@ -39,15 +28,7 @@ export default function Register({ invite, isSsoUser = false }) {
       email: invite?.email || data.email,
     };
 
-    console.log('Sending form data:', formData);
-    post(route('register.post'), formData, {
-      onSuccess: () => {
-        console.log('Registration successful!');
-      },
-      onError: errors => {
-        console.error('Registration failed with errors:', errors);
-      },
-    });
+    post(route('register.post'), formData);
   };
 
   const scrollRef = useRef(null);
@@ -100,15 +81,6 @@ export default function Register({ invite, isSsoUser = false }) {
               </p>
             </div>
           )}
-
-          {/* Debug information */}
-          <div className="mb-4 rounded-md border border-gray-200 bg-gray-50 p-3">
-            <p className="text-sm text-gray-800">
-              <strong>Debug:</strong> Name: {data.name} | Email: {data.email} |
-              Scrolled: {scrolledToBottom ? 'Yes' : 'No'} | Terms:{' '}
-              {data.accepted_terms ? 'Accepted' : 'Not Accepted'}
-            </p>
-          </div>
 
           <form onSubmit={submit}>
             {/* Hidden email field for the backend */}

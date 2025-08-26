@@ -21,8 +21,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
     if (!currentFeature || !rawFeatures) return null;
 
     // Extract feature_importance and feature_value from currentFeature
-    const featureImportance = currentFeature.feature_importance || 0;
-    const featureValue = currentFeature.feature_value || 0;
+    const featureImportance =
+      parseFloat(currentFeature.feature_importance) || 0;
+    const featureValue = parseFloat(currentFeature.feature_value) || 0;
 
     // Count occurrences of this feature_importance and feature_value combination
     const occurrences = rawFeatures.filter(
@@ -35,6 +36,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
       featureValue,
       occurrences,
       featureName: currentFeature.feature_readable_name,
+      rawFeatureImportance: currentFeature.feature_importance,
+      rawFeatureValue: currentFeature.feature_value,
+      featureImportanceType: typeof currentFeature.feature_importance,
+      featureValueType: typeof currentFeature.feature_value,
     });
 
     return {
@@ -81,14 +86,20 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 24,
-                color: plotData.featureValue.map(getColor),
+                color: plotData.featureValue.map(val =>
+                  typeof val === 'number' ? getColor(val) : '#ccc',
+                ),
                 opacity: 0.85,
                 line: { width: 0 },
               },
-              text: plotData.x.map(
-                (val, idx) =>
-                  `<b>Feature Data</b><br>Feature Importance: ${val.toFixed(3)}<br>Feature Value: ${plotData.featureValue[idx].toFixed(3)}<br>Occurrences: ${plotData.y[idx]}`,
-              ),
+              text: plotData.x.map((val, idx) => {
+                const xVal = typeof val === 'number' ? val.toFixed(3) : val;
+                const yVal =
+                  typeof plotData.featureValue[idx] === 'number'
+                    ? plotData.featureValue[idx].toFixed(3)
+                    : plotData.featureValue[idx];
+                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Occurrences: ${plotData.y[idx]}`;
+              }),
               hoverinfo: 'text',
               hoverlabel: {
                 bgcolor: 'rgba(0,0,0,0.8)',
@@ -101,7 +112,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
             xaxis: {
               title: 'Feature Importance',
               visible: true,
-              range: [0, Math.max(...plotData.x) * 1.1],
+              range: [
+                0,
+                Math.max(...plotData.x.filter(x => typeof x === 'number')) *
+                  1.1 || 1,
+              ],
               fixedrange: false,
               showgrid: true,
               zeroline: true,
@@ -109,7 +124,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
             yaxis: {
               title: 'Occurrences',
               visible: true,
-              range: [0, Math.max(...plotData.y) * 1.1],
+              range: [
+                0,
+                Math.max(...plotData.y.filter(y => typeof y === 'number')) *
+                  1.1 || 1,
+              ],
               fixedrange: false,
               showgrid: true,
               zeroline: true,

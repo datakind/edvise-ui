@@ -16,7 +16,17 @@ const colors = x.map((val, idx) => {
 
 export default function Shap({ rawFeatures, currentFeature }) {
   // Log the props to see what data is available
-  console.log('Shap component props:', { rawFeatures, currentFeature });
+  console.log('=== SHAP COMPONENT PROPS ===');
+  console.log('rawFeatures:', rawFeatures);
+  console.log('currentFeature:', currentFeature);
+  console.log('rawFeatures type:', typeof rawFeatures);
+  console.log('currentFeature type:', typeof currentFeature);
+  console.log('rawFeatures length:', rawFeatures?.length);
+  console.log(
+    'currentFeature keys:',
+    currentFeature ? Object.keys(currentFeature) : 'null',
+  );
+  console.log('===========================');
 
   // Filter rawFeatures to get data for the current feature
   const featureData =

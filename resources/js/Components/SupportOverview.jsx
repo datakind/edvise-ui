@@ -69,16 +69,15 @@ const mockInferenceData = [
   },
 ];
 
-// Helper to interpolate between two hex colors
-function interpolateColor(color1, color2, factor) {
-  const c1 = color1.match(/\w\w/g).map(x => parseInt(x, 16));
-  const c2 = color2.match(/\w\w/g).map(x => parseInt(x, 16));
-  const result = c1.map((v, i) => Math.round(v + (c2[i] - v) * factor));
-  return `rgb(${result[0]},${result[1]},${result[2]})`;
-}
-
 export default function SupportOverview({ tab, setTab, run_id }) {
-  const [inferenceData, setInferenceData] = useState(mockInferenceData);
+  // Only use mock data as initial state in local development
+  const isLocalDev =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === 'sst-app-ui.test';
+  const [inferenceData, setInferenceData] = useState(
+    isLocalDev ? mockInferenceData : [],
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [inst_id, setInstId] = useState(null);
@@ -141,7 +140,15 @@ export default function SupportOverview({ tab, setTab, run_id }) {
         );
         console.error('SupportOverview - Error response:', err.response?.data);
         setError('Failed to load support overview data');
-        setInferenceData(mockInferenceData); // Fallback to mock data
+
+        // Only use mock data in local development
+        if (
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === 'sst-app-ui.test'
+        ) {
+          setInferenceData(mockInferenceData);
+        }
       } finally {
         setLoading(false);
       }
@@ -149,11 +156,6 @@ export default function SupportOverview({ tab, setTab, run_id }) {
 
     fetchSupportOverview();
   }, [run_id, inst_id]);
-
-  const numBins = 30;
-  const gradientColors = Array.from({ length: numBins }, (_, i) =>
-    interpolateColor('F9F0E8', 'F79222', i / (numBins - 1)),
-  );
 
   const highSupport = inferenceData
     .filter(item => parseFloat(item.support_score) >= 0.5)
@@ -168,13 +170,42 @@ export default function SupportOverview({ tab, setTab, run_id }) {
         10,
     ) * 10;
 
-  // Histogram bins and counts (placeholder)
-  const bins = Array.from({ length: 30 }, (_, i) => 0.1 + (0.7 / 30) * i);
-  const counts = Array(30).fill(0);
-  inferenceData.forEach(val => {
-    const idx = Math.min(Math.floor((val - 0.1) / (0.7 / 30)), 29);
-    counts[idx]++;
-  });
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-lg text-gray-600">
+            Loading support overview data...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state (only in non-local environments)
+  if (error && !isLocalDev) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-lg text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no data available
+  if (!inferenceData || inferenceData.length === 0) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-lg text-gray-600">
+            No support overview data available
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6 rounded-3xl bg-white p-8 shadow">

@@ -20,32 +20,32 @@ export default function Shap({ rawFeatures, currentFeature }) {
   const plotData = useMemo(() => {
     if (!currentFeature || !rawFeatures) return null;
 
-    // Extract feature_importance and feature_value from currentFeature
-    const featureImportance =
-      parseFloat(currentFeature.feature_importance) || 0;
-    const featureValue = parseFloat(currentFeature.feature_value) || 0;
-
-    // Count occurrences of this feature_importance and feature_value combination
-    const occurrences = rawFeatures.filter(
+    // Get all data points for this feature from rawFeatures
+    const featureData = rawFeatures.filter(
       item =>
         item.feature_readable_name === currentFeature.feature_readable_name,
-    ).length;
+    );
+
+    if (featureData.length === 0) return null;
+
+    // Extract x (feature importance) and y (jittered vertical positions)
+    const x = featureData.map(item => parseFloat(item.feature_importance) || 0);
+    const y = featureData.map(() => (Math.random() - 0.5) * 0.8); // Vertical jitter
+    const featureValues = featureData.map(
+      item => parseFloat(item.feature_value) || 0,
+    );
 
     console.log('Processed plot data:', {
-      featureImportance,
-      featureValue,
-      occurrences,
+      featureDataLength: featureData.length,
+      xValues: x,
+      featureValues: featureValues,
       featureName: currentFeature.feature_readable_name,
-      rawFeatureImportance: currentFeature.feature_importance,
-      rawFeatureValue: currentFeature.feature_value,
-      featureImportanceType: typeof currentFeature.feature_importance,
-      featureValueType: typeof currentFeature.feature_value,
     });
 
     return {
-      x: [featureImportance],
-      y: [occurrences],
-      featureValue: [featureValue],
+      x,
+      y,
+      featureValues,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -85,20 +85,20 @@ export default function Shap({ rawFeatures, currentFeature }) {
               mode: 'markers',
               type: 'scatter',
               marker: {
-                size: 24,
-                color: plotData.featureValue.map(val =>
+                size: 8,
+                color: plotData.featureValues.map(val =>
                   typeof val === 'number' ? getColor(val) : '#ccc',
                 ),
-                opacity: 0.85,
+                opacity: 0.7,
                 line: { width: 0 },
               },
               text: plotData.x.map((val, idx) => {
                 const xVal = typeof val === 'number' ? val.toFixed(3) : val;
                 const yVal =
-                  typeof plotData.featureValue[idx] === 'number'
-                    ? plotData.featureValue[idx].toFixed(3)
-                    : plotData.featureValue[idx];
-                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Occurrences: ${plotData.y[idx]}`;
+                  typeof plotData.featureValues[idx] === 'number'
+                    ? plotData.featureValues[idx].toFixed(3)
+                    : plotData.featureValues[idx];
+                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}`;
               }),
               hoverinfo: 'text',
               hoverlabel: {
@@ -113,34 +113,46 @@ export default function Shap({ rawFeatures, currentFeature }) {
               title: 'Feature Importance',
               visible: true,
               range: [
-                0,
+                Math.min(...plotData.x.filter(x => typeof x === 'number')) *
+                  0.9 || 0,
                 Math.max(...plotData.x.filter(x => typeof x === 'number')) *
                   1.1 || 1,
               ],
               fixedrange: false,
-              showgrid: true,
-              zeroline: true,
+              showgrid: false,
+              zeroline: false,
             },
             yaxis: {
-              title: 'Occurrences',
-              visible: true,
-              range: [
-                0,
-                Math.max(...plotData.y.filter(y => typeof y === 'number')) *
-                  1.1 || 1,
-              ],
-              fixedrange: false,
-              showgrid: true,
-              zeroline: true,
+              visible: false,
+              range: [-1, 1],
+              fixedrange: true,
+              showgrid: false,
+              zeroline: false,
             },
-            plot_bgcolor: 'white',
-            paper_bgcolor: 'white',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            paper_bgcolor: 'rgba(0,0,0,0)',
             showlegend: false,
-            height: 300,
+            height: 120,
             title: {
               text: `SHAP Values for ${currentFeature?.feature_readable_name || 'Feature'}`,
               font: { size: 16, color: '#333' },
             },
+            shapes: [
+              {
+                type: 'line',
+                x0: 0.5,
+                y0: -1,
+                x1: 0.5,
+                y1: 1,
+                xref: 'x',
+                yref: 'y',
+                line: {
+                  color: '#D5E5EE',
+                  width: 2,
+                },
+                layer: 'below',
+              },
+            ],
           }}
           config={{ displayModeBar: false, responsive: true }}
           style={{ width: '100%', height: 120 }}

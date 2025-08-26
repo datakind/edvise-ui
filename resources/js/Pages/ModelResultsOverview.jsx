@@ -18,6 +18,12 @@ import '../../css/landing.css';
 
 import { formatModelName } from '../utils/stringUtils';
 
+// Helper function to capitalize first letter of first word
+const capitalizeFirstWord = str => {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 function ModelResultsOverview({ run_id, modelName }) {
   console.log('run_id:', run_id);
   console.log('ModelResultsOverview - Received run_id:', run_id);
@@ -335,7 +341,9 @@ function ModelResultsOverview({ run_id, modelName }) {
                               className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
                               onClick={() => handleFeatureClick(feature)}
                             >
-                              {feature.feature_readable_name}
+                              {capitalizeFirstWord(
+                                feature.feature_readable_name,
+                              )}
                             </div>
                             <div className="text-base text-[#4F4F4F]">
                               {feature.feature_short_desc}

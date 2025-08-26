@@ -1,18 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Plot from 'react-plotly.js';
 import PropTypes from 'prop-types';
-
-// Generate placeholder data for a beeswarm/dot plot
-const N = 120;
-const x = Array.from({ length: N }, () => 0.2 + 0.6 * Math.random());
-const y = Array.from({ length: N }, () => (Math.random() - 0.5) * 1.5); // jitter vertically
-const supportScores = Array.from({ length: N }, () => Math.random()); // Support scores between 0-1
-const colors = x.map((val, idx) => {
-  const normalizedIdx = idx / (N - 1); // Normalize idx to 0-1 range
-  if (normalizedIdx < 0.33) return '#3DB6C6'; // Light blue for left side
-  if (normalizedIdx < 0.66) return '#7ED6E8'; // Medium blue for middle
-  return '#2A8CA5'; // Dark blue for right side
-});
 
 export default function Shap({ rawFeatures, currentFeature }) {
   // Log the props to see what data is available
@@ -28,17 +16,51 @@ export default function Shap({ rawFeatures, currentFeature }) {
   );
   console.log('===========================');
 
-  // Filter rawFeatures to get data for the current feature
-  const featureData =
-    rawFeatures?.filter(
-      item =>
-        item.feature_readable_name === currentFeature?.feature_readable_name,
-    ) || [];
+  // Process currentFeature data for the beeswarm plot
+  const plotData = useMemo(() => {
+    if (!currentFeature || !rawFeatures) return null;
 
-  console.log(
-    `Feature data for "${currentFeature?.feature_readable_name}":`,
-    featureData,
-  );
+    // Extract feature_importance and feature_value from currentFeature
+    const featureImportance = currentFeature.feature_importance || 0;
+    const featureValue = currentFeature.feature_value || 0;
+
+    // Count occurrences of this feature_importance and feature_value combination
+    const occurrences = rawFeatures.filter(
+      item =>
+        item.feature_readable_name === currentFeature.feature_readable_name,
+    ).length;
+
+    console.log('Processed plot data:', {
+      featureImportance,
+      featureValue,
+      occurrences,
+      featureName: currentFeature.feature_readable_name,
+    });
+
+    return {
+      x: [featureImportance],
+      y: [occurrences],
+      featureValue: [featureValue],
+    };
+  }, [currentFeature, rawFeatures]);
+
+  // Generate color based on feature_value
+  const getColor = featureValue => {
+    // Normalize feature_value to 0-1 range for color mapping
+    // Assuming feature_value is typically between -2 and 2
+    const normalized = Math.max(0, Math.min(1, (featureValue + 2) / 4));
+
+    // Color gradient from blue (low) to red (high)
+    if (normalized < 0.5) {
+      // Blue to green
+      const factor = normalized * 2;
+      return `rgb(${Math.round(61 + factor * 125)}, ${Math.round(182 + factor * 73)}, ${Math.round(198 - factor * 98)})`;
+    } else {
+      // Green to red
+      const factor = (normalized - 0.5) * 2;
+      return `rgb(${Math.round(186 + factor * 69)}, ${Math.round(255 - factor * 255)}, ${Math.round(125 - factor * 125)})`;
+    }
+  };
 
   return (
     <div
@@ -49,66 +71,66 @@ export default function Shap({ rawFeatures, currentFeature }) {
         background: 'transparent',
       }}
     >
-      <Plot
-        data={[
-          {
-            x,
-            y,
-            mode: 'markers',
-            type: 'scatter',
-            marker: {
-              size: 24,
-              color: colors,
-              opacity: 0.85,
-              line: { width: 0 },
-            },
-            text: x.map(
-              (val, idx) =>
-                `<b>Student Data</b><br>Feature Importance: ${val.toFixed(1)}<br>Feature Value: ${y[idx].toFixed(1)}<br>Support Score: ${supportScores[idx].toFixed(1)}`,
-            ),
-            hoverinfo: 'text',
-            hoverlabel: {
-              bgcolor: 'rgba(0,0,0,0.8)',
-              font: { color: '#fff' },
-            },
-          },
-        ]}
-        layout={{
-          margin: { l: 0, r: 0, t: 0, b: 0 },
-          xaxis: {
-            visible: false,
-            range: [0, 1],
-            fixedrange: true,
-          },
-          yaxis: {
-            visible: false,
-            range: [-2, 2],
-            fixedrange: true,
-          },
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          showlegend: false,
-          height: 120,
-          shapes: [
+      {plotData ? (
+        <Plot
+          data={[
             {
-              type: 'line',
-              x0: 0.5,
-              y0: -2,
-              x1: 0.5,
-              y1: 2,
-              xref: 'x',
-              yref: 'y',
-              line: {
-                color: '#D5E5EE',
-                width: 2,
+              x: plotData.x,
+              y: plotData.y,
+              mode: 'markers',
+              type: 'scatter',
+              marker: {
+                size: 24,
+                color: plotData.featureValue.map(getColor),
+                opacity: 0.85,
+                line: { width: 0 },
               },
-              layer: 'below',
+              text: plotData.x.map(
+                (val, idx) =>
+                  `<b>Feature Data</b><br>Feature Importance: ${val.toFixed(3)}<br>Feature Value: ${plotData.featureValue[idx].toFixed(3)}<br>Occurrences: ${plotData.y[idx]}`,
+              ),
+              hoverinfo: 'text',
+              hoverlabel: {
+                bgcolor: 'rgba(0,0,0,0.8)',
+                font: { color: '#fff' },
+              },
             },
-          ],
-        }}
-        config={{ displayModeBar: false, responsive: true }}
-        style={{ width: '100%', height: 120 }}
-      />
+          ]}
+          layout={{
+            margin: { l: 60, r: 30, t: 30, b: 60 },
+            xaxis: {
+              title: 'Feature Importance',
+              visible: true,
+              range: [0, Math.max(...plotData.x) * 1.1],
+              fixedrange: false,
+              showgrid: true,
+              zeroline: true,
+            },
+            yaxis: {
+              title: 'Occurrences',
+              visible: true,
+              range: [0, Math.max(...plotData.y) * 1.1],
+              fixedrange: false,
+              showgrid: true,
+              zeroline: true,
+            },
+            plot_bgcolor: 'white',
+            paper_bgcolor: 'white',
+            showlegend: false,
+            height: 300,
+            title: {
+              text: `SHAP Values for ${currentFeature?.feature_readable_name || 'Feature'}`,
+              font: { size: 16, color: '#333' },
+            },
+          }}
+          config={{ displayModeBar: false, responsive: true }}
+          style={{ width: '100%', height: 120 }}
+        />
+      ) : (
+        <div className="flex h-32 items-center justify-center text-gray-500">
+          No feature data available
+        </div>
+      )}
     </div>
   );
 }

@@ -22,12 +22,17 @@ class ApiController extends Controller
     // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
 
     // For local requests, mock out backend calls.
+    // Temporarily disabled for rapid development with real API
     public function isLocalRequest()
     {
-        if (strtoupper(env('APP_ENV')) == 'LOCAL') {
-            return True;
-        }
-        return False;
+        // Temporarily return false to use real API in local development
+        return false;
+
+        // Original logic (uncomment when done with rapid development):
+        // if (strtoupper(env('APP_ENV')) == 'LOCAL') {
+        //     return True;
+        // }
+        // return False;
     }
 
     // Constructs a query for Datakinder cases that does not retrieve institution info.

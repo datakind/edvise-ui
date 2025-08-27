@@ -108,9 +108,15 @@ export default function Shap({ rawFeatures, currentFeature }) {
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
+    // Calculate the midpoint of the x-axis range for the reference line
+    const xMin = Math.min(...x.filter(x => typeof x === 'number'));
+    const xMax = Math.max(...x.filter(x => typeof x === 'number'));
+    const xMidpoint = (xMin + xMax) / 2;
+
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
+      xRange: { min: xMin, max: xMax, midpoint: xMidpoint },
       xValuesStats: {
         min: Math.min(...x),
         max: Math.max(...x),
@@ -135,6 +141,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
+      xMidpoint,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -160,7 +167,6 @@ export default function Shap({ rawFeatures, currentFeature }) {
     <div
       style={{
         width: '100%',
-        maxWidth: 900,
         margin: 'auto',
         background: 'transparent',
       }}
@@ -182,13 +188,13 @@ export default function Shap({ rawFeatures, currentFeature }) {
                 line: { width: 0 },
               },
               text: plotData.x.map((val, idx) => {
-                const xVal = typeof val === 'number' ? val.toFixed(1) : val;
+                const xVal = typeof val === 'number' ? val.toFixed(2) : val;
                 const yVal =
                   typeof plotData.featureValues[idx] === 'number'
-                    ? plotData.featureValues[idx].toFixed(1)
+                    ? plotData.featureValues[idx].toFixed(2)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(1)}`;
+                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(2)}`;
               }),
               hoverinfo: 'text',
               hoverlabel: {
@@ -198,14 +204,14 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
           ]}
           layout={{
-            margin: { l: 0, r: 0, t: 0, b: 0 },
+            margin: { l: 10, r: 10, t: 0, b: 0 },
             xaxis: {
               visible: false,
               range: [
                 Math.min(...plotData.x.filter(x => typeof x === 'number')) *
-                  0.9 || 0,
+                  1.2 || 0,
                 Math.max(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.1 || 1,
+                  1.2 || 1,
               ],
               fixedrange: false,
               showgrid: false,
@@ -226,9 +232,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               {
                 type: 'line',
                 x0: 0.5,
-                y0: -1,
+                y0: -2,
                 x1: 0.5,
-                y1: 1,
+                y1: 2,
                 xref: 'x',
                 yref: 'y',
                 line: {
@@ -239,9 +245,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               },
               {
                 type: 'line',
-                x0: 0,
+                x0: plotData.xMidpoint,
                 y0: -2,
-                x1: 0,
+                x1: plotData.xMidpoint,
                 y1: 2,
                 xref: 'x',
                 yref: 'y',
@@ -250,6 +256,38 @@ export default function Shap({ rawFeatures, currentFeature }) {
                   width: 2,
                 },
                 layer: 'below',
+              },
+            ],
+            annotations: [
+              {
+                x: 0.5,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: 'Midpoint',
+                showarrow: false,
+                font: { size: 10, color: '#666' },
+                align: 'center',
+              },
+              {
+                x: 0,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: 'Neutral',
+                showarrow: false,
+                font: { size: 10, color: '#666' },
+                align: 'center',
+              },
+              {
+                x: plotData.xMidpoint,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: `Midpoint: ${plotData.xMidpoint.toFixed(2)}`,
+                showarrow: false,
+                font: { size: 10, color: '#666' },
+                align: 'center',
               },
             ],
           }}

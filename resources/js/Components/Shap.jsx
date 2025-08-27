@@ -108,13 +108,15 @@ export default function Shap({ rawFeatures, currentFeature }) {
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
-    // Calculate the mean of SHAP values for the reference line
-    const shapMean =
-      x.length > 0 ? x.reduce((sum, val) => sum + val, 0) / x.length : 0;
+    // Calculate the midpoint of the x-axis range for the reference line
+    const xMin = Math.min(...x.filter(x => typeof x === 'number'));
+    const xMax = Math.max(...x.filter(x => typeof x === 'number'));
+    const xMidpoint = (xMin + xMax) / 2;
 
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
+      xRange: { min: xMin, max: xMax, midpoint: xMidpoint },
       xValuesStats: {
         min: Math.min(...x),
         max: Math.max(...x),
@@ -139,7 +141,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      shapMean,
+      xMidpoint,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -243,9 +245,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               },
               {
                 type: 'line',
-                x0: plotData.shapMean,
+                x0: plotData.xMidpoint,
                 y0: -2,
-                x1: plotData.shapMean,
+                x1: plotData.xMidpoint,
                 y1: 2,
                 xref: 'x',
                 yref: 'y',
@@ -278,13 +280,13 @@ export default function Shap({ rawFeatures, currentFeature }) {
                 align: 'center',
               },
               {
-                x: plotData.shapMean,
+                x: plotData.xMidpoint,
                 y: 2.2,
                 xref: 'x',
                 yref: 'y',
-                text: `Mean: ${plotData.shapMean.toFixed(2)}`,
+                text: `Midpoint: ${plotData.xMidpoint.toFixed(2)}`,
                 showarrow: false,
-                font: { size: 10, color: '#FF6B6B' },
+                font: { size: 10, color: '#666' },
                 align: 'center',
               },
             ],

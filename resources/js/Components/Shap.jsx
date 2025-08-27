@@ -182,13 +182,13 @@ export default function Shap({ rawFeatures, currentFeature }) {
                 line: { width: 0 },
               },
               text: plotData.x.map((val, idx) => {
-                const xVal = typeof val === 'number' ? val.toFixed(1) : val;
+                const xVal = typeof val === 'number' ? val.toFixed(2) : val;
                 const yVal =
                   typeof plotData.featureValues[idx] === 'number'
-                    ? plotData.featureValues[idx].toFixed(1)
+                    ? plotData.featureValues[idx].toFixed(2)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(1)}`;
+                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(2)}`;
               }),
               hoverinfo: 'text',
               hoverlabel: {

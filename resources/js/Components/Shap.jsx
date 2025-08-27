@@ -160,7 +160,6 @@ export default function Shap({ rawFeatures, currentFeature }) {
     <div
       style={{
         width: '100%',
-        maxWidth: 900,
         margin: 'auto',
         background: 'transparent',
       }}
@@ -198,14 +197,14 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
           ]}
           layout={{
-            margin: { l: 0, r: 0, t: 0, b: 0 },
+            margin: { l: 10, r: 10, t: 0, b: 0 },
             xaxis: {
               visible: false,
               range: [
                 Math.min(...plotData.x.filter(x => typeof x === 'number')) *
-                  0.9 || 0,
+                  1.2 || 0,
                 Math.max(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.1 || 1,
+                  1.2 || 1,
               ],
               fixedrange: false,
               showgrid: false,

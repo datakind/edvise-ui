@@ -108,6 +108,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
+    // Calculate the mean of SHAP values for the reference line
+    const shapMean =
+      x.length > 0 ? x.reduce((sum, val) => sum + val, 0) / x.length : 0;
+
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
@@ -135,6 +139,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
+      shapMean,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -225,9 +230,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               {
                 type: 'line',
                 x0: 0.5,
-                y0: -1,
+                y0: -2,
                 x1: 0.5,
-                y1: 1,
+                y1: 2,
                 xref: 'x',
                 yref: 'y',
                 line: {
@@ -238,9 +243,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               },
               {
                 type: 'line',
-                x0: 0,
+                x0: plotData.shapMean,
                 y0: -2,
-                x1: 0,
+                x1: plotData.shapMean,
                 y1: 2,
                 xref: 'x',
                 yref: 'y',
@@ -249,6 +254,38 @@ export default function Shap({ rawFeatures, currentFeature }) {
                   width: 2,
                 },
                 layer: 'below',
+              },
+            ],
+            annotations: [
+              {
+                x: 0.5,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: 'Midpoint',
+                showarrow: false,
+                font: { size: 10, color: '#666' },
+                align: 'center',
+              },
+              {
+                x: 0,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: 'Neutral',
+                showarrow: false,
+                font: { size: 10, color: '#666' },
+                align: 'center',
+              },
+              {
+                x: plotData.shapMean,
+                y: 2.2,
+                xref: 'x',
+                yref: 'y',
+                text: `Mean: ${plotData.shapMean.toFixed(2)}`,
+                showarrow: false,
+                font: { size: 10, color: '#FF6B6B' },
+                align: 'center',
               },
             ],
           }}

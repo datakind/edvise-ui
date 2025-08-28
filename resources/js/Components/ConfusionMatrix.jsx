@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const cmData = [
   {
@@ -126,3 +127,7 @@ export default function ConfusionMatrix() {
     </div>
   );
 }
+
+ConfusionMatrix.propTypes = {
+  model_run_id: PropTypes.string,
+};

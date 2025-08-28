@@ -1,51 +1,127 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-const cmData = [
-  {
-    true_positive: '0.7863247863247863',
-    false_positive: '0.32142857142857145',
-    true_negative: '0.6785714285714286',
-    false_negative: '0.21367521367521367',
-  },
-];
+export default function ConfusionMatrix({ model_run_id }) {
+  const [cmData, setCmData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-const cellInfo = [
-  [
-    {
-      label: 'True negative',
-      percent: (cmData[0].true_negative * 100).toFixed(0) + '%',
-      desc: 'Of students with low support needs were <b>accurately classified</b> by the model',
-      color: '#1796A5',
-      text: '#ffffff',
-    },
-    {
-      label: 'False positive',
-      percent: (cmData[0].false_positive * 100).toFixed(0) + '%',
-      desc: 'Of students with low support needs were <b>incorrectly classified</b> as high support need',
-      color: '#7ED6E8',
-      text: '#000000',
-    },
-  ],
-  [
-    {
-      label: 'False negative',
-      percent: (cmData[0].false_negative * 100).toFixed(0) + '%',
-      desc: 'Of students with high support needs were <b>incorrectly classified</b> as low support need',
-      color: '#7ED6E8',
-      text: '#000000',
-    },
-    {
-      label: 'True positive',
-      percent: (cmData[0].true_positive * 100).toFixed(0) + '%',
-      desc: 'Of students with high support needs were <b>accurately classified</b> by the model',
-      color: '#1796A5',
-      text: '#ffffff',
-    },
-  ],
-];
+  // Fetch confusion matrix data when model_run_id is available
+  useEffect(() => {
+    const fetchConfusionMatrix = async () => {
+      if (!model_run_id) return;
 
-export default function ConfusionMatrix() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Get the current user's institution ID
+        const instResponse = await axios.get('/user-current-inst-api');
+        if (instResponse.data && instResponse.data.length > 0) {
+          const inst_id = instResponse.data[0];
+
+          // Fetch confusion matrix data
+          const response = await axios.get(
+            `/institutions/${inst_id}/training/confusion_matrix/${model_run_id}`,
+          );
+
+          if (response.data) {
+            setCmData(response.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching confusion matrix data:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          url: error.config?.url,
+        });
+        setError(
+          `Failed to load confusion matrix data: ${error.response?.status || error.message}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConfusionMatrix();
+  }, [model_run_id]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            Loading confusion matrix data...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no data
+  if (!cmData || cmData.length === 0) {
+    return (
+      <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            No confusion matrix data available
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const cellInfo = [
+    [
+      {
+        label: 'True negative',
+        percent: (cmData[0].true_negative * 100).toFixed(0) + '%',
+        desc: 'Of students with low support needs were <b>accurately classified</b> by the model',
+        color: '#1796A5',
+        text: '#ffffff',
+      },
+      {
+        label: 'False positive',
+        percent: (cmData[0].false_positive * 100).toFixed(0) + '%',
+        desc: 'Of students with low support needs were <b>incorrectly classified</b> as high support need',
+        color: '#7ED6E8',
+        text: '#000000',
+      },
+    ],
+    [
+      {
+        label: 'False negative',
+        percent: (cmData[0].false_negative * 100).toFixed(0) + '%',
+        desc: 'Of students with high support needs were <b>incorrectly classified</b> as low support need',
+        color: '#7ED6E8',
+        text: '#000000',
+      },
+      {
+        label: 'True positive',
+        percent: (cmData[0].true_positive * 100).toFixed(0) + '%',
+        desc: 'Of students with high support needs were <b>accurately classified</b> by the model',
+        color: '#1796A5',
+        text: '#ffffff',
+      },
+    ],
+  ];
+
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
@@ -58,8 +134,8 @@ export default function ConfusionMatrix() {
             A confusion matrix evaluates how well the model is performing.
           </li>
           <li className="mb-3">
-            We compare the model's predictions to the actual outcomes and review
-            correct vs. incorrect outputs.
+            We compare the model&apos;s predictions to the actual outcomes and
+            review correct vs. incorrect outputs.
           </li>
           <li>
             This confusion matrix shows the results for a subset of the original

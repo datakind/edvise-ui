@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const cmData = [
   {
-    true_positive: '0.8441011235955056',
-    false_positive: '0.20485175202156333',
-    true_negative: '0.7951482479784366',
-    false_negative: '0.15589887640449437',
+    true_positive: '0.7863247863247863',
+    false_positive: '0.32142857142857145',
+    true_negative: '0.6785714285714286',
+    false_negative: '0.21367521367521367',
   },
 ];
 
@@ -130,3 +131,7 @@ export default function ConfusionMatrix() {
     </div>
   );
 }
+
+ConfusionMatrix.propTypes = {
+  model_run_id: PropTypes.string,
+};

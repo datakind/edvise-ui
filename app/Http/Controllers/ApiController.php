@@ -1078,4 +1078,35 @@ public function EditInstApi(Request $request)
 
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
+
+    public function getConfusionMatrix(Request $request, string $inst_id, string $model_run_id)
+    {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // Mock response for local development
+            return response()->json([
+                [
+                    'true_positive' => '0.8441011235955056',
+                    'false_positive' => '0.20485175202156333',
+                    'true_negative' => '0.7951482479784366',
+                    'false_negative' => '0.15589887640449437',
+                ]
+            ], 200);
+        }
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        if ($inst == null || $inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst);
+        $externalUrl = '/training/confusion_matrix/'.$model_run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

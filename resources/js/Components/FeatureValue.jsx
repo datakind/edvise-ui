@@ -102,56 +102,58 @@ export default function FeatureValue({ model_run_id }) {
         </div>
         {/* Right column: table */}
         <div className="w-full overflow-x-auto rounded-3xl border border-gray-200 shadow-sm md:w-3/4">
-          <table className="w-full rounded-3xl text-left">
-            <thead>
-              <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
-                <th
-                  scope="col"
-                  className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]"
-                >
-                  FEATURE NAME
-                </th>
-                <th
-                  scope="col"
-                  className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
-                >
-                  DATA TYPE
-                </th>
-                <th
-                  scope="col"
-                  className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]"
-                >
-                  OVERALL FEATURE IMPORTANCE
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {featureData.map((feature, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                >
-                  <td className="p-6 text-base font-normal text-black">
-                    {feature.readable_feature_name.charAt(0).toUpperCase() +
-                      feature.readable_feature_name.slice(1)}
-                    <div className="text-sm font-light text-[#696969]">
-                      {feature.short_feature_desc}
-                    </div>
-                  </td>
-                  <td className="py-6 pr-6 text-center text-sm text-black">
-                    {feature.data_type}
-                  </td>
-                  <td className="py-6 pr-6 text-left text-sm text-black">
-                    {feature.average_shap_magnitude}
-                    <div className="text-xs text-[#696969]">
-                      {/* Range not provided by API */}
-                      SHAP magnitude value
-                    </div>
-                  </td>
+          <div className="max-h-96 overflow-y-auto">
+            <table className="w-full rounded-3xl text-left">
+              <thead className="sticky top-0 z-10 bg-[#F9FAFB]">
+                <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
+                  <th
+                    scope="col"
+                    className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]"
+                  >
+                    FEATURE NAME
+                  </th>
+                  <th
+                    scope="col"
+                    className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
+                  >
+                    DATA TYPE
+                  </th>
+                  <th
+                    scope="col"
+                    className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]"
+                  >
+                    OVERALL FEATURE IMPORTANCE
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {featureData.map((feature, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                  >
+                    <td className="p-6 text-base font-normal text-black">
+                      {feature.readable_feature_name.charAt(0).toUpperCase() +
+                        feature.readable_feature_name.slice(1)}
+                      <div className="text-sm font-light text-[#696969]">
+                        {feature.short_feature_desc}
+                      </div>
+                    </td>
+                    <td className="py-6 pr-6 text-center text-sm text-black">
+                      {feature.data_type}
+                    </td>
+                    <td className="py-6 pr-6 text-left text-sm text-black">
+                      {feature.average_shap_magnitude}
+                      <div className="text-xs text-[#696969]">
+                        {/* Range not provided by API */}
+                        SHAP magnitude value
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

@@ -1161,4 +1161,74 @@ public function EditInstApi(Request $request)
 
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
+
+    public function getTrainingSupportOverview(Request $request, string $inst_id, string $model_run_id)
+    {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // Mock response for local development
+            return response()->json([
+                [
+                    'bin_lower' => '0.05',
+                    'bin_upper' => '0.15',
+                    'count_of_students' => '45',
+                ],
+                [
+                    'bin_lower' => '0.15',
+                    'bin_upper' => '0.25',
+                    'count_of_students' => '78',
+                ],
+                [
+                    'bin_lower' => '0.25',
+                    'bin_upper' => '0.35',
+                    'count_of_students' => '112',
+                ],
+                [
+                    'bin_lower' => '0.35',
+                    'bin_upper' => '0.45',
+                    'count_of_students' => '156',
+                ],
+                [
+                    'bin_lower' => '0.45',
+                    'bin_upper' => '0.55',
+                    'count_of_students' => '203',
+                ],
+                [
+                    'bin_lower' => '0.55',
+                    'bin_upper' => '0.65',
+                    'count_of_students' => '189',
+                ],
+                [
+                    'bin_lower' => '0.65',
+                    'bin_upper' => '0.75',
+                    'count_of_students' => '167',
+                ],
+                [
+                    'bin_lower' => '0.75',
+                    'bin_upper' => '0.85',
+                    'count_of_students' => '134',
+                ],
+                [
+                    'bin_lower' => '0.85',
+                    'bin_upper' => '0.95',
+                    'count_of_students' => '89',
+                ]
+            ], 200);
+        }
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        if ($inst == null || $inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst);
+        $externalUrl = '/training/support-overview/'.$model_run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

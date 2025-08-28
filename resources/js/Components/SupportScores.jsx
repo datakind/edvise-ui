@@ -1,79 +1,99 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const inferenceData = [
-  {
-    bin_lower: '0.8',
-    bin_upper: '0.9',
-    support_score: '0.85',
-    count_of_students: '47',
-    pct: '6.71',
-  },
-  {
-    bin_lower: '0.9',
-    bin_upper: '1.0',
-    support_score: '0.95',
-    count_of_students: '19',
-    pct: '2.71',
-  },
-  {
-    bin_lower: '0.2',
-    bin_upper: '0.3',
-    support_score: '0.25',
-    count_of_students: '91',
-    pct: '13.0',
-  },
-  {
-    bin_lower: '0.5',
-    bin_upper: '0.6',
-    support_score: '0.55',
-    count_of_students: '102',
-    pct: '14.57',
-  },
-  {
-    bin_lower: '0.7',
-    bin_upper: '0.8',
-    support_score: '0.75',
-    count_of_students: '68',
-    pct: '9.71',
-  },
-  {
-    bin_lower: '0.1',
-    bin_upper: '0.2',
-    support_score: '0.15',
-    count_of_students: '40',
-    pct: '5.71',
-  },
-  {
-    bin_lower: '0.3',
-    bin_upper: '0.4',
-    support_score: '0.35',
-    count_of_students: '130',
-    pct: '18.57',
-  },
-  {
-    bin_lower: '0.4',
-    bin_upper: '0.5',
-    support_score: '0.45',
-    count_of_students: '128',
-    pct: '18.29',
-  },
-  {
-    bin_lower: '0.6',
-    bin_upper: '0.7',
-    support_score: '0.65',
-    count_of_students: '75',
-    pct: '10.71',
-  },
-];
+export default function SupportScores({ setTab, model_run_id }) {
+  const [supportData, setSupportData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-export default function SupportScores({ setTab }) {
-  // Sort inferenceData by bin_lower to ensure proper ordering
-  const sortedData = [...inferenceData].sort(
+  // Fetch support scores data when model_run_id is available
+  useEffect(() => {
+    const fetchSupportScores = async () => {
+      if (!model_run_id) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Get the current user's institution ID
+        const instResponse = await axios.get('/user-current-inst-api');
+        if (instResponse.data && instResponse.data.length > 0) {
+          const inst_id = instResponse.data[0];
+
+          // Fetch support scores data
+          const response = await axios.get(
+            `/institutions/${inst_id}/training/support-overview/${model_run_id}`,
+          );
+
+          if (response.data) {
+            setSupportData(response.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching support scores data:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          url: error.config?.url,
+        });
+        setError(
+          `Failed to load support scores data: ${error.response?.status || error.message}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSupportScores();
+  }, [model_run_id]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            Loading support scores data...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no data
+  if (!supportData || supportData.length === 0) {
+    return (
+      <div className="mt-6 rounded-3xl bg-white p-8 shadow">
+        <div className="flex w-full items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            No support scores data available
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Sort supportData by bin_lower to ensure proper ordering
+  const sortedData = [...supportData].sort(
     (a, b) => parseFloat(a.bin_lower) - parseFloat(b.bin_lower),
   );
 
-  // Extract x and y values from inferenceData, centering bars on bin midpoints
+  // Extract x and y values from supportData, centering bars on bin midpoints
   const xValues = sortedData.map(
     item =>
       parseFloat(item.bin_lower) +
@@ -201,3 +221,8 @@ export default function SupportScores({ setTab }) {
     </div>
   );
 }
+
+SupportScores.propTypes = {
+  setTab: PropTypes.func.isRequired,
+  model_run_id: PropTypes.string,
+};

@@ -132,14 +132,14 @@ export default function FeatureValue({ model_run_id }) {
                   className="border-b border-[#E5E7EB] align-top last:border-b-0"
                 >
                   <td className="p-6 text-base font-normal text-black">
-                    {feature.readable_feature_name}
+                    {feature.readable_feature_name.charAt(0).toUpperCase() +
+                      feature.readable_feature_name.slice(1)}
                     <div className="text-sm font-light text-[#696969]">
                       {feature.short_feature_desc}
                     </div>
                   </td>
                   <td className="py-6 pr-6 text-center text-sm text-black">
-                    {/* Data type not provided by API, showing placeholder */}
-                    N/A
+                    {feature.data_type}
                   </td>
                   <td className="py-6 pr-6 text-left text-sm text-black">
                     {feature.average_shap_magnitude}

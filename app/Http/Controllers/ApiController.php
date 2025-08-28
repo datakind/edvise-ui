@@ -1109,4 +1109,56 @@ public function EditInstApi(Request $request)
 
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
     }
+
+    public function getRocCurve(Request $request, string $inst_id, string $model_run_id)
+    {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // Mock response for local development
+            return response()->json([
+                [
+                    'threshold' => '0.4632',
+                    'true_positive_rate' => '0.856',
+                    'false_positive_rate' => '0.2354',
+                    'true_positive' => '1219',
+                    'false_positives' => '262',
+                    'true_negatives' => '851',
+                    'false_negatives' => '205',
+                ],
+                [
+                    'threshold' => '0.4606',
+                    'true_positive_rate' => '0.8567',
+                    'false_positive_rate' => '0.2363',
+                    'true_positive' => '1220',
+                    'false_positives' => '263',
+                    'true_negatives' => '850',
+                    'false_negative' => '204',
+                ],
+                [
+                    'threshold' => '0.4585',
+                    'true_positive_rate' => '0.8588',
+                    'false_positive_rate' => '0.2381',
+                    'true_positive' => '1223',
+                    'false_positives' => '265',
+                    'true_negatives' => '848',
+                    'false_negatives' => '201',
+                ]
+            ], 200);
+        }
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        if ($inst == null || $inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst);
+        $externalUrl = '/training/roc_curve/'.$model_run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

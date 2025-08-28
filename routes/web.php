@@ -340,6 +340,10 @@ Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('dem
 
 Route::get('/institutions/{inst_id}/models/{model_name}/run/{run_id}', [ApiController::class, 'getRunDetails']);
 
+Route::get('/institutions/{inst_id}/training/feature_importance/{model_run_id}', [ApiController::class, 'getFeatureImportance']);
+
+Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,

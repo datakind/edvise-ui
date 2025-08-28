@@ -481,7 +481,7 @@ function ModelResultsOverview({ run_id, modelName }) {
               </div>
               <div className="mb-8">
                 {/* Feature Value Table */}
-                <FeatureValue features={features} model_run_id={model_run_id} />
+                <FeatureValue model_run_id={model_run_id} />
               </div>
               {/* Confusion Matrix */}
               <div className="mb-8">

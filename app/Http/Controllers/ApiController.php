@@ -1038,4 +1038,44 @@ public function EditInstApi(Request $request)
 
         return ApiController::constructInstRequest($request, $externalUrl, "DELETE", null);
     }
+
+    public function getFeatureImportance(Request $request, string $inst_id, string $model_run_id)
+    {
+        if (ApiController::isLocalRequest()) {
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+            // Mock response for local development
+            return response()->json([
+                [
+                    'readable_feature_name' => 'Cumulative Credits Earned',
+                    'short_feature_desc' => 'Total credits earned across all terms',
+                    'average_shap_magnitude' => '0.0437'
+                ],
+                [
+                    'readable_feature_name' => 'English 1010 Completion',
+                    'short_feature_desc' => 'Whether student has completed English 1010',
+                    'average_shap_magnitude' => '0.0669'
+                ],
+                [
+                    'readable_feature_name' => 'Course Level 400',
+                    'short_feature_desc' => 'Number of senior-level courses taken',
+                    'average_shap_magnitude' => '0.0547'
+                ]
+            ], 200);
+        }
+
+        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        if ($inst == null || $inst == "") {
+            return response()->json(['error' => $instErr], 401);
+        }
+
+        \Log::info('Production request - Institution ID: ' . $inst);
+        $externalUrl = '/training/feature_importance/'.$model_run_id;
+        \Log::info('Production request - External API URL: ' . $externalUrl);
+        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+
+        return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
 }

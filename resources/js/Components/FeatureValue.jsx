@@ -1,290 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-export default function FeatureValue({ features }) {
-  const topFeatures = [
-    {
-      feature_name:
-        'cumulative proportion of courses in program of study area term 1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0153',
-    },
-    {
-      feature_name: 'year of enrollment at cohort institution',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0143',
-    },
-    {
-      feature_name: 'number of courses with failing or withdrawal grades',
-      data_type: 'Categorical',
-      average_shap_magnitude: '3.0E-4',
-    },
-    {
-      feature_name: 'difference in credits earned from term 1 to term 2',
-      data_type: 'Categorical',
-      average_shap_magnitude: '2.0E-4',
-    },
-    {
-      feature_name: 'has taken psychology 1001 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '2.0E-4',
-    },
-    {
-      feature_name: 'cumulative proportion of courses delivered by method H',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0011',
-    },
-    {
-      feature_name: 'difference in credits earned term 3 to term 4',
-      data_type: 'Categorical',
-      average_shap_magnitude: '8.0E-4',
-    },
-    {
-      feature_name: 'number of courses in program of study area term 1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0014',
-    },
-    {
-      feature_name: 'number of unique course subject areas',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0011',
-    },
-    {
-      feature_name: 'proportion of courses with grade W in term n-3',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0011',
-    },
-    {
-      feature_name: 'cumulative proportion of courses delivered by method o',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0018',
-    },
-    {
-      feature_name: 'difference in credits earned from previous term',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0016',
-    },
-    {
-      feature_name: 'difference in credits earned term 2 to term 3',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0015',
-    },
-    {
-      feature_name: 'student completion rate above sections average',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'number of key general studies courses',
-      data_type: 'Categorical',
-      average_shap_magnitude: '5.0E-4',
-    },
-    {
-      feature_name: 'number of courses difference term 2 to term 3',
-      data_type: 'Categorical',
-      average_shap_magnitude: '5.0E-4',
-    },
-    {
-      feature_name: 'number of courses difference from previous term',
-      data_type: 'Categorical',
-      average_shap_magnitude: '4.0E-4',
-    },
-    {
-      feature_name: 'standard deviation of course levels',
-      data_type: 'Categorical',
-      average_shap_magnitude: '4.0E-4',
-    },
-    {
-      feature_name: 'has taken communication studies 1010 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '3.0E-4',
-    },
-    {
-      feature_name: 'cumulative count of terms during peak COVID',
-      data_type: 'Categorical',
-      average_shap_magnitude: '3.0E-4',
-    },
-    {
-      feature_name:
-        'standard deviation of number of students enrolled per section',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0173',
-    },
-    {
-      feature_name: 'has taken mathematical science 1080 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'has taken philosophy 1010 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'proportion of courses with grade F in term n-2',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'number of courses difference term 3 to term 4',
-      data_type: 'Categorical',
-      average_shap_magnitude: '2.0E-4',
-    },
-    {
-      feature_name: 'proportion of courses delivered by method H',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'proportion of courses at level 1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'cumulative proportion of fall/spring terms unenrolled',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0067',
-    },
-    {
-      feature_name: 'proportion of courses with grade F in term n-3',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'has taken history 1210 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'term during peak COVID',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'number of courses difference term 1 to term 2',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'cumulative number of repeated courses',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0026',
-    },
-    {
-      feature_name: 'has taken mathematical science 1210 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0026',
-    },
-    {
-      feature_name: 'proportion of courses with grade F in term n-1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0024',
-    },
-    {
-      feature_name: 'proportion of courses at level 2',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0053',
-    },
-    {
-      feature_name: 'proportion of credits earned',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.005',
-    },
-    {
-      feature_name: 'enrollment type',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0085',
-    },
-    {
-      feature_name: 'proportion of courses delivered by method F',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0085',
-    },
-    {
-      feature_name: 'number of courses in program of study area year 1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0068',
-    },
-    {
-      feature_name: 'has taken biology 1080 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'has taken philosophy 1030 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '1.0E-4',
-    },
-    {
-      feature_name: 'proportion of courses with grade W in term n-1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '6.0E-4',
-    },
-    {
-      feature_name: 'proportion of students who passed per section',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0049',
-    },
-    {
-      feature_name: 'cumulative minimum credits earned',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0046',
-    },
-    {
-      feature_name: 'student enrollment intensity this term',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0041',
-    },
-    {
-      feature_name: 'enrollment intensity in first term',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0037',
-    },
-    {
-      feature_name: 'student program of study area term 1',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0033',
-    },
-    {
-      feature_name: 'mean number of students enrolled per section',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0028',
-    },
-    {
-      feature_name: 'has taken history 1030 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '<0.0000',
-    },
-    {
-      feature_name: 'has taken english 1010 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0669',
-    },
-    {
-      feature_name: 'cumulative proportion of courses at level 4',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0547',
-    },
-    {
-      feature_name: 'cumulative credits earned',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0437',
-    },
-    {
-      feature_name: 'proportion of courses at level 4',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0326',
-    },
-    {
-      feature_name: 'has taken english 1020 ever',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0262',
-    },
-    {
-      feature_name: 'academic term',
-      data_type: 'Categorical',
-      average_shap_magnitude: '0.0181',
-    },
-  ];
+export default function FeatureValue({ model_run_id }) {
+  const [featureData, setFeatureData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch feature importance data when model_run_id is available
+  useEffect(() => {
+    const fetchFeatureImportance = async () => {
+      if (!model_run_id) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Get the current user's institution ID
+        const instResponse = await axios.get('/user-current-inst-api');
+        if (instResponse.data && instResponse.data.length > 0) {
+          const inst_id = instResponse.data[0];
+
+          // Fetch feature importance data
+          const response = await axios.get(
+            `/institutions/${inst_id}/training/feature_importance/${model_run_id}`,
+          );
+
+          if (response.data) {
+            setFeatureData(response.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching feature importance data:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          url: error.config?.url,
+        });
+        setError(
+          `Failed to load feature importance data: ${error.response?.status || error.message}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeatureImportance();
+  }, [model_run_id]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="mb-8 rounded-2xl bg-white p-6 shadow">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            Loading feature importance data...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="mb-8 rounded-2xl bg-white p-6 shadow">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-lg text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no data
+  if (!featureData || featureData.length === 0) {
+    return (
+      <div className="mb-8 rounded-2xl bg-white p-6 shadow">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-lg text-gray-600">
+            No feature importance data available
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8 rounded-2xl bg-white p-6 shadow">
@@ -301,56 +102,64 @@ export default function FeatureValue({ features }) {
         </div>
         {/* Right column: table */}
         <div className="w-full overflow-x-auto rounded-3xl border border-gray-200 shadow-sm md:w-3/4">
-          <table className="w-full rounded-3xl text-left">
-            <thead>
-              <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
-                <th
-                  scope="col"
-                  className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]"
-                >
-                  FEATURE NAME
-                </th>
-                <th
-                  scope="col"
-                  className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
-                >
-                  DATA TYPE
-                </th>
-                <th
-                  scope="col"
-                  className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]"
-                >
-                  OVERALL FEATURE IMPORTANCE
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {features.map(f => (
-                <tr
-                  key={f.name}
-                  className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                >
-                  <td className="p-6 text-base font-normal text-black">
-                    {f.name}
-                    <div className="text-sm font-light text-[#696969]">
-                      {f.desc}
-                    </div>
-                  </td>
-                  <td className="py-6 pr-6 text-center text-sm text-black">
-                    {f.type}
-                  </td>
-                  <td className="py-6 pr-6 text-left text-sm text-black">
-                    {f.importance}
-                    <div className="text-xs text-[#696969]">
-                      Range is {f.range}
-                    </div>
-                  </td>
+          <div className="max-h-96 overflow-y-auto">
+            <table className="w-full rounded-3xl text-left">
+              <thead className="sticky top-0 z-10 bg-[#F9FAFB]">
+                <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
+                  <th
+                    scope="col"
+                    className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]"
+                  >
+                    FEATURE NAME
+                  </th>
+                  <th
+                    scope="col"
+                    className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
+                  >
+                    DATA TYPE
+                  </th>
+                  <th
+                    scope="col"
+                    className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]"
+                  >
+                    OVERALL FEATURE IMPORTANCE
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {featureData.map((feature, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                  >
+                    <td className="p-6 text-base font-normal text-black">
+                      {feature.readable_feature_name.charAt(0).toUpperCase() +
+                        feature.readable_feature_name.slice(1)}
+                      <div className="text-sm font-light text-[#696969]">
+                        {feature.short_feature_desc}
+                      </div>
+                    </td>
+                    <td className="py-6 pr-6 text-center text-sm text-black">
+                      {feature.data_type}
+                    </td>
+                    <td className="py-6 pr-6 text-left text-sm text-black">
+                      {feature.average_shap_magnitude}
+                      <div className="text-xs text-[#696969]">
+                        {/* Range not provided by API */}
+                        SHAP magnitude value
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+FeatureValue.propTypes = {
+  model_run_id: PropTypes.string,
+};

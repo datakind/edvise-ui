@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 const cmData = [
   {
-    true_positive: '0.8441011235955056',
-    false_positive: '0.20485175202156333',
-    true_negative: '0.7951482479784366',
-    false_negative: '0.15589887640449437',
+    true_positive: '0.7863247863247863',
+    false_positive: '0.32142857142857145',
+    true_negative: '0.6785714285714286',
+    false_negative: '0.21367521367521367',
   },
 ];
 
@@ -93,13 +93,17 @@ export default function ConfusionMatrix() {
             Normalized Confusion Matrix
           </div>
           <div className="rounded-32 grid w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa] bg-white">
-            {cellInfo.flat().map(cell => (
+            {cellInfo.flat().map((cell, idx) => (
               <div
                 key={cell.label}
                 className="relative flex flex-col items-center justify-center bg-[#1796A5] p-0"
                 style={{
                   background: cell.color,
                   color: cell.text,
+                  borderTopLeftRadius: idx === 0 ? 32 : 0,
+                  borderTopRightRadius: idx === 1 ? 32 : 0,
+                  borderBottomLeftRadius: idx === 2 ? 32 : 0,
+                  borderBottomRightRadius: idx === 3 ? 32 : 0,
                 }}
               >
                 <div className="my-2 text-sm font-semibold">{cell.label}</div>

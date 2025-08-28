@@ -92,17 +92,13 @@ export default function ConfusionMatrix() {
             Normalized Confusion Matrix
           </div>
           <div className="rounded-32 grid w-[520px] grid-cols-2 grid-rows-2 overflow-hidden bg-[#f7f8fa] bg-white">
-            {cellInfo.flat().map((cell, idx) => (
+            {cellInfo.flat().map(cell => (
               <div
                 key={cell.label}
                 className="relative flex flex-col items-center justify-center bg-[#1796A5] p-0"
                 style={{
                   background: cell.color,
                   color: cell.text,
-                  borderTopLeftRadius: idx === 0 ? 32 : 0,
-                  borderTopRightRadius: idx === 1 ? 32 : 0,
-                  borderBottomLeftRadius: idx === 2 ? 32 : 0,
-                  borderBottomRightRadius: idx === 3 ? 32 : 0,
                 }}
               >
                 <div className="my-2 text-sm font-semibold">{cell.label}</div>

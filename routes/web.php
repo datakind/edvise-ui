@@ -344,6 +344,8 @@ Route::get('/institutions/{inst_id}/training/feature_importance/{model_run_id}',
 
 Route::get('/institutions/{inst_id}/training/confusion_matrix/{model_run_id}', [ApiController::class, 'getConfusionMatrix']);
 
+Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
+
 Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
 
 Route::middleware(array_filter([

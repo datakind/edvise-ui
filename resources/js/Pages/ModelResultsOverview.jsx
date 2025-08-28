@@ -30,6 +30,7 @@ function ModelResultsOverview({ run_id, modelName }) {
   console.log('ModelResultsOverview - Received modelName:', modelName);
 
   const [inst_id, setInstId] = useState(null);
+  const [model_run_id, setModelRunId] = useState(null);
   const [runDetails, setRunDetails] = useState(null);
   const [features, setFeatures] = useState([]);
   const [rawFeatures, setRawFeatures] = useState([]);
@@ -58,6 +59,30 @@ function ModelResultsOverview({ run_id, modelName }) {
 
     fetchInstitutionId();
   }, []);
+
+  // Get model_run_id from .env when inst_id is available
+  useEffect(() => {
+    const fetchModelRunId = async () => {
+      if (!inst_id) return;
+
+      try {
+        // Call a backend endpoint that will read the .env file and return the model_run_id
+        const apiUrl = `/get-model-run-id/${inst_id}`;
+
+        const response = await axios.get(apiUrl);
+        if (response.data && response.data.model_run_id) {
+          setModelRunId(response.data.model_run_id);
+        }
+      } catch (error) {
+        console.error('Error fetching model_run_id:', error);
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+        console.error('Error URL:', error.config?.url);
+      }
+    };
+
+    fetchModelRunId();
+  }, [inst_id]);
 
   // Get run details when we have both inst_id and run_id
   useEffect(() => {
@@ -456,19 +481,23 @@ function ModelResultsOverview({ run_id, modelName }) {
               </div>
               <div className="mb-8">
                 {/* Feature Value Table */}
-                <FeatureValue features={features} />
+                <FeatureValue features={features} model_run_id={model_run_id} />
               </div>
               {/* Confusion Matrix */}
               <div className="mb-8">
-                <ConfusionMatrix />
+                <ConfusionMatrix model_run_id={model_run_id} />
               </div>
               {/* ROC Curve */}
               <div className="mb-8">
-                <RocCurve />
+                <RocCurve model_run_id={model_run_id} />
               </div>
               {/* Support Scores Histogram */}
               <div className="mb-8">
-                <SupportScores tab={tab} setTab={setTab} />
+                <SupportScores
+                  tab={tab}
+                  setTab={setTab}
+                  model_run_id={model_run_id}
+                />
               </div>
             </>
           )}

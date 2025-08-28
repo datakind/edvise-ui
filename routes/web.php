@@ -352,3 +352,14 @@ Route::middleware(array_filter([
         ]);
     }
 )->name('model-results-overview');
+
+Route::get('/get-model-run-id/{inst_id}', function ($inst_id) {
+    $envKey = 'ALT_' . strtoupper($inst_id);
+    $modelRunId = env($envKey);
+
+    if (!$modelRunId) {
+        return response()->json(['error' => 'Model run ID not found for institution'], 404);
+    }
+
+    return response()->json(['model_run_id' => $modelRunId]);
+});

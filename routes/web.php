@@ -337,20 +337,18 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
 
 Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');
 
-Route::get('/institutions/{inst_id}/models/{model_name}/run/{run_id}', [ApiController::class, 'getRunDetails']);
+Route::middleware(['auth', 'terms.accepted'])->group(function () {
 
-Route::get('/institutions/{inst_id}/training/feature_importance/{model_run_id}', [ApiController::class, 'getFeatureImportance']);
+    Route::get('/institutions/{inst_id}/models/{model_name}/run/{run_id}', [ApiController::class, 'getRunDetails']);
+    Route::get('/institutions/{inst_id}/training/feature_importance/{model_run_id}', [ApiController::class, 'getFeatureImportance']);
+    Route::get('/institutions/{inst_id}/training/confusion_matrix/{model_run_id}', [ApiController::class, 'getConfusionMatrix']);
+    Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
+    Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
+    Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+    // The following returns a list of two strings, the first is the inst id, the second is an error if any.
+    Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
 
-Route::get('/institutions/{inst_id}/training/confusion_matrix/{model_run_id}', [ApiController::class, 'getConfusionMatrix']);
-
-Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
-
-Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
-
-Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
-
-// The following returns a list of two strings, the first is the inst id, the second is an error if any.
-Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
+});
 
 Route::middleware(array_filter([
     'auth', 'terms.accepted',

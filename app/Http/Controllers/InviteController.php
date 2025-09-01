@@ -124,6 +124,8 @@ class InviteController extends Controller
                     'name' => $request->name,
                     'invite_validated' => true,
                     'accepted_terms' => true,
+                    'access_type' => $invite->role,
+                    'inst_id' => $invite->institution_id,
                 ];
 
                 // Only update password if not an SSO user
@@ -159,6 +161,8 @@ class InviteController extends Controller
             'email' => $invite->email,
             'invite_validated' => true,
             'accepted_terms' => true,
+            'access_type' => $invite->role,
+            'inst_id' => $invite->institution_id,
         ];
 
         // Only set password if not an SSO user

@@ -11,6 +11,9 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DemoRequestController;
 
+
+// PUBLIC ROUTES
+
 // Main app entrypoint.
 
 Route::get('/', function () {
@@ -24,6 +27,26 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('/data-dictionary', function () {
+    return Inertia::render('DataDictionary');
+})->name('data-dictionary');
+
+Route::get('/faq', function () {
+    return Inertia::render('Faq');
+})->name('FAQ');
+
+Route::get('/license', function () {
+    return Inertia::render('License');
+})->name('license');
+
+Route::get('/privacy-policy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('privacy-policy');
+
+Route::get('/terms-of-service', function () {
+    return Inertia::render('TermsOfService');
+})->name('terms-of-service');
+
 Route::get('/login', function () {
     return Inertia::render('Auth/Login', [
         'canResetPassword' => Route::has('password.request'),
@@ -36,13 +59,7 @@ Route::post('/invite/validate', [App\Http\Controllers\InviteController::class, '
 Route::get('/register', [App\Http\Controllers\InviteController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [App\Http\Controllers\InviteController::class, 'register'])->name('register.post');
 
-// Admin invite management routes
-Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
-    Route::get('/admin/invites', [App\Http\Controllers\InviteController::class, 'listInvites'])->name('admin.invites');
-    Route::post('/admin/invites', [App\Http\Controllers\InviteController::class, 'createInvite'])->name('admin.invites.create');
-    Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
-    Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
-});
+// AUTH RELATED ROUTES
 
 Route::get('/email/verify', function () {
     return Inertia::render('Auth/VerifyEmail');
@@ -60,6 +77,12 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
+
+Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
+Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
+
 /*
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -68,6 +91,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     })->name('dashboard');
 });
 */
+
+// PROFILE RELATED ROUTES
+
 Route::middleware(array_filter([
     'auth', 'invite.validated', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
@@ -76,6 +102,8 @@ Route::middleware(array_filter([
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// AUTHED ROUTES
 
 Route::middleware(array_filter([
     'auth', 'invite.validated', 'terms.accepted',
@@ -253,38 +281,10 @@ Route::middleware(array_filter([
 ]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
 
 
-
-// Data dictionary does not require logging in to view.
-Route::get('/data-dictionary', function () {
-    return Inertia::render('DataDictionary');
-})->name('data-dictionary');
-
-Route::get('/faq', function () {
-    return Inertia::render('Faq');
-})->name('FAQ');
-
-Route::get('/license', function () {
-    return Inertia::render('License');
-})->name('license');
-
-Route::get('/privacy-policy', function () {
-    return Inertia::render('PrivacyPolicy');
-})->name('privacy-policy');
-
-Route::get('/terms-of-service', function () {
-    return Inertia::render('TermsOfService');
-})->name('terms-of-service');
-
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
-
-Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
-Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
-Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
 Route::middleware(['auth'])->get('/terms/prompt', function () {
     return Inertia::render('Auth/AcceptTerms');
@@ -301,8 +301,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
-    // The following returns a list of two strings, the first is the inst id, the second is an error if any.
-    Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
+
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');
@@ -350,6 +349,9 @@ Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [
 
 Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
 
+// The following returns a list of two strings, the first is the inst id, the second is an error if any.
+Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
+
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
@@ -372,4 +374,12 @@ Route::get('/get-model-run-id/{inst_id}', function ($inst_id) {
     }
 
     return response()->json(['model_run_id' => $modelRunId]);
+});
+
+// Admin invite management routes
+Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
+    Route::get('/admin/invites', [App\Http\Controllers\InviteController::class, 'listInvites'])->name('admin.invites');
+    Route::post('/admin/invites', [App\Http\Controllers\InviteController::class, 'createInvite'])->name('admin.invites.create');
+    Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
+    Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
 });

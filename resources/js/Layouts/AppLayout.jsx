@@ -396,9 +396,11 @@ export default function AppLayout({ title, renderHeader, children }) {
                         </button>
                       </Dropdown.Trigger>
                       <Dropdown.Content>
-                        <Dropdown.Link href={route('#', user.current_team)}>
+                        {/* <Dropdown.Link
+                          href={route('#', user.current_team)}
+                        >
                           Team Settings
-                        </Dropdown.Link>
+                        </Dropdown.Link> */}
                         {jetstream.hasTeamFeatures && (
                           <>
                             {jetstream.canCreateTeams && (

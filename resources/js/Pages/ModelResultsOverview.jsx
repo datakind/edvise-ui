@@ -31,6 +31,14 @@ function ModelResultsOverview({ run_id, modelName }) {
 
   const [inst_id, setInstId] = useState(null);
   const [model_run_id, setModelRunId] = useState(null);
+
+  // Log when model_run_id changes
+  useEffect(() => {
+    console.log(
+      'ModelResultsOverview - model_run_id state changed to:',
+      model_run_id,
+    );
+  }, [model_run_id]);
   const [runDetails, setRunDetails] = useState(null);
   const [features, setFeatures] = useState([]);
   const [rawFeatures, setRawFeatures] = useState([]);
@@ -72,6 +80,10 @@ function ModelResultsOverview({ run_id, modelName }) {
         const response = await axios.get(apiUrl);
         if (response.data && response.data.model_run_id) {
           setModelRunId(response.data.model_run_id);
+        } else {
+          console.log(
+            'ModelResultsOverview - No model_run_id found in response',
+          );
         }
       } catch (error) {
         console.error('Error fetching model_run_id:', error);
@@ -532,10 +544,13 @@ function ModelResultsOverview({ run_id, modelName }) {
             <div className="px-8 pt-8">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-medium text-black">
-                  Details: {selectedFeature?.feature_readable_name}
+                  Details:{' '}
+                  {selectedFeature?.feature_readable_name?.replace(/\b\w/g, l =>
+                    l.toUpperCase(),
+                  )}
                 </h2>
                 <p className="text-xl font-light text-[#4F4F4F]">
-                  {selectedFeature?.desc}
+                  {selectedFeature?.feature_long_desc}
                 </p>
               </div>
               <div className="mb-6">

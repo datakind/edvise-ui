@@ -18,10 +18,10 @@ import '../../css/landing.css';
 
 import { formatModelName } from '../utils/stringUtils';
 
-// Helper function to capitalize first letter of first word
+// Helper function to convert to title case
 const capitalizeFirstWord = str => {
   if (!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.replace(/(^|\s)[a-z]/g, l => l.toUpperCase());
 };
 
 function ModelResultsOverview({ run_id, modelName }) {
@@ -545,9 +545,7 @@ function ModelResultsOverview({ run_id, modelName }) {
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-medium text-black">
                   Details:{' '}
-                  {selectedFeature?.feature_readable_name?.replace(/\b\w/g, l =>
-                    l.toUpperCase(),
-                  )}
+                  {capitalizeFirstWord(selectedFeature?.feature_readable_name)}
                 </h2>
                 <p className="text-xl font-light text-[#4F4F4F]">
                   {selectedFeature?.feature_long_desc}
@@ -562,7 +560,12 @@ function ModelResultsOverview({ run_id, modelName }) {
                   dataset.{' '}
                 </div>
                 <div className="mb-16">
-                  <BoxWhiskerPlot />
+                  <BoxWhiskerPlot
+                    key={`${run_id}-${selectedFeature?.feature_name}-${inst_id}`}
+                    run_id={run_id}
+                    feature_name={selectedFeature?.feature_name}
+                    inst_id={inst_id}
+                  />
                 </div>
               </div>
               <div className="mb-6">

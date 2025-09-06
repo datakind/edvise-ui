@@ -179,9 +179,10 @@ class ApiController extends Controller
 
         $url = env('BACKEND_URL').'/institutions/'.$inst.$url_piece;
         \Log::info('constructInstRequest - Full URL being called: ' . $url);
+        \Log::info('constructInstRequest - Query parameters: ' . json_encode($request->query()));
         $resp = null;
         if ($method == "GET") {
-            $resp = Http::withHeaders($headers)->get($url);
+            $resp = Http::withHeaders($headers)->get($url, $request->query());
         } elseif ($method == "POST") {
             if ($req_body == null) {
                 $resp = Http::withHeaders($headers)->post($url);
@@ -921,6 +922,62 @@ public function EditInstApi(Request $request)
             // Set the result to the modified output.
             return response()->json($output);
         }
+        return $result;
+    }
+
+    // Gets features boxplot statistics for a given run and feature
+    public function getFeaturesBoxplotStat(Request $request, string $inst_id, string $run_id)
+    {
+        \Log::info('getFeaturesBoxplotStat called with inst_id: ' . $inst_id . ', run_id: ' . $run_id);
+        \Log::info('getFeaturesBoxplotStat feature_name: ' . $request->query('feature_name'));
+
+        if (ApiController::isLocalRequest()) {
+            \Log::info('Local request - Institution ID: ' . $inst_id);
+            if ($inst_id == null || $inst_id == "") {
+                return response()->json(['error' => 'Institution ID not provided'], 401);
+            }
+            // Mock data for local development - generate different data based on feature_name
+            $featureName = $request->query('feature_name', 'test_feature');
+
+            // Generate consistent but different mock data based on feature name
+            $hash = crc32($featureName);
+            $min = round(($hash % 100) / 100, 2);
+            $q1 = round($min + (($hash % 50) / 100), 2);
+            $median = round($q1 + (($hash % 30) / 100), 2);
+            $q3 = round($median + (($hash % 40) / 100), 2);
+            $max = round($q3 + (($hash % 60) / 100), 2);
+            $count = 200 + ($hash % 200);
+            $shapValue = round(($hash % 1000) / 10000, 6);
+
+            return response()->json([
+                [
+                    'feature_name' => $featureName,
+                    'feature_shap_value' => (string)$shapValue,
+                    'min' => (string)$min,
+                    'q_1' => (string)$q1,
+                    'median' => (string)$median,
+                    'q_3' => (string)$q3,
+                    'max' => (string)$max,
+                    'count' => (string)$count,
+                    'n_missing' => '0',
+                    'feature_readable_name' => ucwords(str_replace('_', ' ', $featureName)),
+                    'feature_short_desc' => 'Mock description for ' . $featureName,
+                    'feature_long_desc' => 'This is mock data for the feature ' . $featureName . ' generated for local development testing.'
+                ]
+            ], 200);
+        }
+
+        // Production: call external API
+        $externalUrl = '/inference/features-boxplot-stat/' . $run_id;
+        $result = ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+
+        if ($result != null && $result->getStatusCode() == 200) {
+            $output = $result->json();
+            if ($output != null) {
+                return response()->json($output);
+            }
+        }
+
         return $result;
     }
 

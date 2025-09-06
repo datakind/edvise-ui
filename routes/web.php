@@ -200,6 +200,11 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/inference/features-boxplot-stat/{run_id}', [ApiController::class, 'getFeaturesBoxplotStat']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/view-input-data', [ApiController::class, 'viewInputData']);
 Route::middleware(array_filter([
     'auth', 'terms.accepted',

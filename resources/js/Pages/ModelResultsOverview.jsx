@@ -562,7 +562,12 @@ function ModelResultsOverview({ run_id, modelName }) {
                   dataset.{' '}
                 </div>
                 <div className="mb-16">
-                  <BoxWhiskerPlot />
+                  <BoxWhiskerPlot
+                    key={`${run_id}-${selectedFeature?.feature_name}-${inst_id}`}
+                    run_id={run_id}
+                    feature_name={selectedFeature?.feature_name}
+                    inst_id={inst_id}
+                  />
                 </div>
               </div>
               <div className="mb-6">

@@ -136,6 +136,10 @@ export default function SupportScores({ setTab, model_run_id }) {
           {
             x: xValues,
             y: yValues,
+            customdata: sortedData.map(item => [
+              item.bin_lower,
+              item.bin_upper,
+            ]),
             type: 'bar',
             width: 0.1,
             marker: {
@@ -146,7 +150,7 @@ export default function SupportScores({ setTab, model_run_id }) {
             },
             hoverinfo: 'skip',
             hovertemplate:
-              '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a<br>support score of <span style="font-weight:bold;font-size:16px">%{x}</span><extra></extra>',
+              '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score between <span style="font-weight:bold;font-size:16px">%{customdata[0]}</span> and <span style="font-weight:bold;font-size:16px">%{customdata[1]}</span><extra></extra>',
             name: 'Support Score',
           },
         ]}

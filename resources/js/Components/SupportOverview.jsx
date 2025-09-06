@@ -255,6 +255,10 @@ export default function SupportOverview({ tab, setTab, run_id }) {
               {
                 x: inferenceData.map(item => item.support_score),
                 y: inferenceData.map(item => item.count_of_students),
+                customdata: inferenceData.map(item => [
+                  item.bin_lower,
+                  item.bin_upper,
+                ]),
                 type: 'bar',
                 marker: {
                   color: inferenceData.map(item => item.support_score),
@@ -266,7 +270,7 @@ export default function SupportOverview({ tab, setTab, run_id }) {
                 },
                 hoverinfo: 'skip',
                 hovertemplate:
-                  '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score of <span style="font-weight:bold;font-size:16px">%{x}</span><extra></extra>',
+                  '<span style="font-weight:bold;font-size:16px">%{y}</span> students have a support score between <span style="font-weight:bold;font-size:16px">%{customdata[0]}</span> and <span style="font-weight:bold;font-size:16px">%{customdata[1]}</span><extra></extra>',
                 name: 'Support Score',
               },
               {

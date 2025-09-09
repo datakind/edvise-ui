@@ -60,9 +60,13 @@ var navigationAboveLine = [
     icon: PlusCircleIcon,
     visibility_type: VisibilityType.PRIVATE_ONLY,
     children: [
-      { name: 'Upload Data', href: route('file-upload') },
+      {
+        name: 'Upload Data',
+        href: route('file-upload'),
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
       { name: 'Start Prediction', href: route('run-inference') },
-      { name: 'Manage Uploads', href: route('manage-uploads') },
+      { name: 'Manage Data', href: route('manage-uploads') },
     ],
   },
   {
@@ -269,27 +273,39 @@ export default function AppLayout({ title, renderHeader, children }) {
                 />
               </DisclosureButton>
               <DisclosurePanel as="ul" className="mt-1">
-                {item.children.map(subItem => (
-                  <li key={subItem.name}>
-                    <DisclosureButton
-                      as="a"
-                      href={subItem.href}
-                      className={classNames(
-                        subItem.name == title
-                          ? 'text-black'
-                          : 'text-[#637381] hover:text-black',
-                        'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
-                      )}
-                    >
-                      {subItem.name == title && (
-                        <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
-                      )}
-                      {item.name === 'Model Results'
-                        ? formatModelName(subItem.name)
-                        : subItem.name}
-                    </DisclosureButton>
-                  </li>
-                ))}
+                {item.children
+                  .filter(
+                    subItem =>
+                      !subItem.visibility_type ||
+                      (subItem.visibility_type ===
+                        VisibilityType.DATAKIND_ONLY &&
+                        userIsDatakinder) ||
+                      (subItem.visibility_type ===
+                        VisibilityType.PRIVATE_ONLY &&
+                        user) ||
+                      subItem.visibility_type === VisibilityType.BOTH,
+                  )
+                  .map(subItem => (
+                    <li key={subItem.name}>
+                      <DisclosureButton
+                        as="a"
+                        href={subItem.href}
+                        className={classNames(
+                          subItem.name == title
+                            ? 'text-black'
+                            : 'text-[#637381] hover:text-black',
+                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
+                        )}
+                      >
+                        {subItem.name == title && (
+                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
+                        )}
+                        {item.name === 'Model Results'
+                          ? formatModelName(subItem.name)
+                          : subItem.name}
+                      </DisclosureButton>
+                    </li>
+                  ))}
               </DisclosurePanel>
             </Disclosure>
           ) : (
@@ -308,27 +324,39 @@ export default function AppLayout({ title, renderHeader, children }) {
                 />
               </DisclosureButton>
               <DisclosurePanel as="ul" className="mt-1">
-                {item.children.map(subItem => (
-                  <li key={subItem.name}>
-                    <DisclosureButton
-                      as="a"
-                      href={subItem.href}
-                      className={classNames(
-                        subItem.name == title
-                          ? 'text-black'
-                          : 'text-[#637381] hover:text-black',
-                        'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
-                      )}
-                    >
-                      {subItem.name == title && (
-                        <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
-                      )}
-                      {item.name === 'Model Results'
-                        ? formatModelName(subItem.name)
-                        : subItem.name}
-                    </DisclosureButton>
-                  </li>
-                ))}
+                {item.children
+                  .filter(
+                    subItem =>
+                      !subItem.visibility_type ||
+                      (subItem.visibility_type ===
+                        VisibilityType.DATAKIND_ONLY &&
+                        userIsDatakinder) ||
+                      (subItem.visibility_type ===
+                        VisibilityType.PRIVATE_ONLY &&
+                        user) ||
+                      subItem.visibility_type === VisibilityType.BOTH,
+                  )
+                  .map(subItem => (
+                    <li key={subItem.name}>
+                      <DisclosureButton
+                        as="a"
+                        href={subItem.href}
+                        className={classNames(
+                          subItem.name == title
+                            ? 'text-black'
+                            : 'text-[#637381] hover:text-black',
+                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
+                        )}
+                      >
+                        {subItem.name == title && (
+                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
+                        )}
+                        {item.name === 'Model Results'
+                          ? formatModelName(subItem.name)
+                          : subItem.name}
+                      </DisclosureButton>
+                    </li>
+                  ))}
               </DisclosurePanel>
             </Disclosure>
           )}

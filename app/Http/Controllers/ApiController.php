@@ -584,12 +584,12 @@ public function EditInstApi(Request $request)
                     if ($batch["updated_by"] == null) {
                         array_push($collected_user_ids, $batch["created_by"]);
                     } else {
-                        array_push($collected_user_ids, $batch["updated_by"]);
+                        array_push($collected_user_ids, $batch["created_by"]);
                     }
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($batches as $key => $batch) {
-                    $user_name = ($batch["updated_by"] == null) ? $batch["created_by"] : $batch["updated_by"];
+                    $user_name = ($batch["updated_by"] == null) ? $batch["created_by"] : $batch["created_by"];
                     if ($user_id_map && $user_id_map[$user_name] != null) {
                         $user_name = $user_id_map[$user_name];
                     }
@@ -1287,5 +1287,65 @@ public function EditInstApi(Request $request)
         \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, "GET", null);
+    }
+
+    public function updateBatch(Request $request, $inst_id, $batch_id)
+    {
+        try {
+            // Validate required fields
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'batch_disabled' => 'boolean',
+                'file_ids' => 'array',
+                'file_names' => 'array',
+                'completed' => 'boolean',
+                'deleted' => 'boolean'
+            ]);
+
+            \Log::info('updateBatch called with batch_id: ' . $batch_id);
+
+            // Handle local development
+            if (ApiController::isLocalRequest()) {
+                [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+                if ($inst == null || $inst == "") {
+                    return response()->json(['error' => $instErr], 401);
+                }
+
+                \Log::info('updateBatch - Local development mode, returning mock response');
+                return response()->json([
+                    'message' => 'Batch updated successfully',
+                    'batch_id' => $batch_id,
+                    'name' => $request->input('name')
+                ], 200);
+            }
+
+            // Handle production - use constructInstRequest
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == "") {
+                return response()->json(['error' => $instErr], 401);
+            }
+
+            \Log::info('updateBatch - Production request - Institution ID: ' . $inst);
+            $externalUrl = '/batch/' . $batch_id;
+            \Log::info('updateBatch - External API URL: ' . $externalUrl);
+
+            // Prepare the request body for the external API
+            $requestBody = [
+                'name' => $request->input('name'),
+                'batch_disabled' => $request->input('batch_disabled', false),
+                'file_ids' => $request->input('file_ids', []),
+                'file_names' => $request->input('file_names', []),
+                'completed' => $request->input('completed', false),
+                'deleted' => $request->input('deleted', false)
+            ];
+
+            \Log::info('updateBatch - Request body: ' . json_encode($requestBody));
+
+            return ApiController::constructInstRequest($request, $externalUrl, "PATCH", $requestBody);
+
+        } catch (\Exception $e) {
+            \Log::error('updateBatch error: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update batch'], 500);
+        }
     }
 }

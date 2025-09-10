@@ -285,6 +285,11 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
 
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
+
 
 Route::middleware(array_filter([
     'auth', 'terms.accepted',

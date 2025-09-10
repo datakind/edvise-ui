@@ -20,6 +20,7 @@ export default function ManageUploads() {
     useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState(null);
+  const [batchToChange, setBatchToChange] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [inst_id, setInstId] = useState(null);
 
@@ -46,7 +47,7 @@ export default function ManageUploads() {
   }, []);
 
   const actions = [
-    // { label: 'Change batch name', onClick: () => showChangeModal() },
+    { label: 'Change batch name', onClick: upload => showChangeModal(upload) },
     {
       label: 'Delete batch',
       onClick: batch => showDeleteModal(batch),
@@ -119,7 +120,8 @@ export default function ManageUploads() {
     setData(sortedData);
   };
 
-  const showChangeModal = () => {
+  const showChangeModal = upload => {
+    setBatchToChange(upload);
     setIsChangeModalOpen(true);
   };
 
@@ -178,7 +180,7 @@ export default function ManageUploads() {
             <div className="mt-4">
               <TextInput
                 className="mt-1 block w-3/4"
-                placeholder="OldBatchName"
+                value={batchToChange?.name || 'OldBatchName'}
                 onChange={() => enableChangeModalPrimaryBtn()}
               />
             </div>

@@ -21,6 +21,7 @@ export default function ManageUploads() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState(null);
   const [batchToChange, setBatchToChange] = useState(null);
+  const [newBatchName, setNewBatchName] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [inst_id, setInstId] = useState(null);
 
@@ -54,27 +55,26 @@ export default function ManageUploads() {
     },
   ];
 
-  useEffect(() => {
-    // To Do: Please replace by call to the backend API but keep the mock around for easy frontend testing.
-    // Use the mock JSON object for reference on the format of the response.
-    const getUploadsData = async () => {
-      try {
-        // Comment out the following lines when testing.
-        const output = await axios.get('/view-uploaded-data');
-        if (output != null) {
-          setData(output.data.batches);
-        }
-
-        /* // Uncomment when testing
-        const jsonResponse = [mockUpload1, mockUpload2];
-        setData(jsonResponse);
-        */
-        setLoading(false);
-      } catch (err) {
-        setError(err);
-        setLoading(false);
+  const getUploadsData = async () => {
+    try {
+      // Comment out the following lines when testing.
+      const output = await axios.get('/view-uploaded-data');
+      if (output != null) {
+        setData(output.data.batches);
       }
-    };
+
+      /* // Uncomment when testing
+      const jsonResponse = [mockUpload1, mockUpload2];
+      setData(jsonResponse);
+      */
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     getUploadsData();
   }, []);
 
@@ -122,6 +122,7 @@ export default function ManageUploads() {
 
   const showChangeModal = upload => {
     setBatchToChange(upload);
+    setNewBatchName(upload?.name || '');
     setIsChangeModalOpen(true);
   };
 
@@ -129,15 +130,47 @@ export default function ManageUploads() {
     setIsChangeModalPrimaryBtnDisabled(false);
   };
 
+  const changeBatchName = async () => {
+    if (!batchToChange || !inst_id || !newBatchName.trim()) {
+      console.error('Missing required data for batch name change');
+      return;
+    }
+
+    try {
+      const requestBody = {
+        name: newBatchName.trim(),
+        batch_disabled: batchToChange.batch_disabled || false,
+        file_ids: Object.values(batchToChange.file_names_to_ids || {}),
+        file_names: Object.keys(batchToChange.file_names_to_ids || {}),
+        completed: batchToChange.completed || false,
+        deleted: batchToChange.deleted || false,
+      };
+
+      console.log('Changing batch name with request body:', requestBody);
+
+      const response = await axios.patch(
+        `/institutions/${inst_id}/batch/${batchToChange.batch_id}`,
+        requestBody,
+      );
+
+      console.log('Batch name change response:', response.data);
+
+      // Refresh data from server instead of updating local state
+      await getUploadsData();
+
+      // Close modal and reset state
+      closeChangeModal();
+    } catch (error) {
+      console.error('Error changing batch name:', error);
+      console.error('Error response:', error.response?.data);
+    }
+  };
+
   const closeChangeModal = () => {
     setIsChangeModalOpen(false);
     setIsChangeModalPrimaryBtnDisabled(true);
-  };
-
-  const changeBatchName = () => {
-    //TODO: Make necessary backend calls to update the batch name.
-    console.log('Updating batch name....');
-    setIsChangeModalOpen(false);
+    setBatchToChange(null);
+    setNewBatchName('');
   };
 
   const showDeleteModal = batch => {
@@ -180,8 +213,11 @@ export default function ManageUploads() {
             <div className="mt-4">
               <TextInput
                 className="mt-1 block w-3/4"
-                value={batchToChange?.name || 'OldBatchName'}
-                onChange={() => enableChangeModalPrimaryBtn()}
+                value={newBatchName}
+                onChange={e => {
+                  setNewBatchName(e.target.value);
+                  enableChangeModalPrimaryBtn();
+                }}
               />
             </div>
           </DialogModal.Content>

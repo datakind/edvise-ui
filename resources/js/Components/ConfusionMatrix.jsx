@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function ConfusionMatrix({ model_run_id }) {
+export default function ConfusionMatrix({ model_run_id, modelName }) {
   const [cmData, setCmData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [inst_id, setInstId] = useState(null);
 
   // Fetch confusion matrix data when model_run_id is available
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function ConfusionMatrix({ model_run_id }) {
         const instResponse = await axios.get('/user-current-inst-api');
         if (instResponse.data && instResponse.data.length > 0) {
           const inst_id = instResponse.data[0];
+          setInstId(inst_id);
 
           // Fetch confusion matrix data
           const response = await axios.get(
@@ -142,7 +144,30 @@ export default function ConfusionMatrix({ model_run_id }) {
             data you provided that was not used to train the model. More details
             on the test dataset are available in the{' '}
             <b>
-              <a href="#" className="text-black underline">
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  if (inst_id && modelName) {
+                    const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
+                    console.log('Downloading model card from:', apiUrl);
+                    // Create a temporary link element to force download
+                    const link = document.createElement('a');
+                    link.href = apiUrl;
+                    link.download = `${modelName}_model_card.pdf`; // Suggest filename
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  } else {
+                    console.error(
+                      'Missing inst_id or modelName for model card download',
+                      { inst_id, modelName },
+                    );
+                  }
+                }}
+                className="cursor-pointer text-black underline hover:opacity-80"
+              >
                 model card
               </a>
             </b>
@@ -210,4 +235,5 @@ export default function ConfusionMatrix({ model_run_id }) {
 
 ConfusionMatrix.propTypes = {
   model_run_id: PropTypes.string,
+  modelName: PropTypes.string,
 };

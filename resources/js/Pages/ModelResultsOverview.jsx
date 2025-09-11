@@ -497,11 +497,14 @@ function ModelResultsOverview({ run_id, modelName }) {
               </div>
               {/* Confusion Matrix */}
               <div className="mb-8">
-                <ConfusionMatrix model_run_id={model_run_id} />
+                <ConfusionMatrix
+                  model_run_id={model_run_id}
+                  modelName={modelName}
+                />
               </div>
               {/* ROC Curve */}
               <div className="mb-8">
-                <RocCurve model_run_id={model_run_id} />
+                <RocCurve model_run_id={model_run_id} modelName={modelName} />
               </div>
               {/* Support Scores Histogram */}
               <div className="mb-8">

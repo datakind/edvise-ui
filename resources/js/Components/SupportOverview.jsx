@@ -340,7 +340,10 @@ export default function SupportOverview({ tab, setTab, run_id }) {
               annotations: [
                 {
                   x: 0.7,
-                  y: 150,
+                  y:
+                    Math.max(
+                      ...inferenceData.map(item => item.count_of_students),
+                    ) + 10,
                   xref: 'x',
                   yref: 'y',
                   text: 'Students in greater<br>need of support',

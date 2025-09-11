@@ -60,7 +60,13 @@ export default function ManageUploads() {
       // Comment out the following lines when testing.
       const output = await axios.get('/view-uploaded-data');
       if (output != null) {
-        setData(output.data.batches);
+        // Sort by created_at in descending order (newest first)
+        const sortedBatches = output.data.batches.sort((a, b) => {
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          return dateB - dateA; // Descending order
+        });
+        setData(sortedBatches);
       }
 
       /* // Uncomment when testing

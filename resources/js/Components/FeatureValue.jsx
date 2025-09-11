@@ -143,7 +143,9 @@ export default function FeatureValue({ model_run_id }) {
                       {feature.data_type}
                     </td>
                     <td className="py-6 pr-6 text-left text-sm text-black">
-                      {feature.average_shap_magnitude}
+                      {parseFloat(feature.average_shap_magnitude)
+                        .toFixed(6)
+                        .replace(/\.?0+$/, '')}
                       <div className="text-xs text-[#696969]">
                         {/* Range not provided by API */}
                         SHAP magnitude value

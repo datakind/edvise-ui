@@ -14,8 +14,8 @@ window._ = _;
 (window as any).axios.defaults.headers.common['X-Requested-With'] =
   'XMLHttpRequest';
 
-// Set timeout to 60 seconds (60000 milliseconds)
-(window as any).axios.defaults.timeout = 60000;
+// Set timeout to 120 seconds (120000 milliseconds)
+(window as any).axios.defaults.timeout = 120000;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

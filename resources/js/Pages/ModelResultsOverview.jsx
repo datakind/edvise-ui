@@ -507,13 +507,13 @@ function ModelResultsOverview({ run_id, modelName }) {
                 <RocCurve model_run_id={model_run_id} modelName={modelName} />
               </div>
               {/* Support Scores Histogram */}
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <SupportScores
                   tab={tab}
                   setTab={setTab}
                   model_run_id={model_run_id}
                 />
-              </div>
+              </div> */}
             </>
           )}
         </div>

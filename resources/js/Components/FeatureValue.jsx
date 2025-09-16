@@ -127,34 +127,49 @@ export default function FeatureValue({ model_run_id }) {
                 </tr>
               </thead>
               <tbody>
-                {featureData.map((feature, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                  >
-                    <td className="p-6 text-base font-normal text-black">
-                      {feature.readable_feature_name.charAt(0).toUpperCase() +
-                        feature.readable_feature_name.slice(1)}
-                      <div className="text-sm font-light text-[#696969]">
-                        {feature.short_feature_desc}
-                      </div>
-                    </td>
-                    <td className="py-6 pr-6 text-center text-sm text-black">
-                      {feature.data_type}
-                    </td>
-                    <td className="py-6 pr-6 text-left text-sm text-black">
-                      {feature.average_shap_magnitude === '<0.0000'
-                        ? '<0.0000'
-                        : parseFloat(feature.average_shap_magnitude)
-                            .toFixed(6)
-                            .replace(/\.?0+$/, '')}
-                      <div className="text-xs text-[#696969]">
-                        {/* Range not provided by API */}
-                        SHAP magnitude value
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {featureData
+                  .sort((a, b) => {
+                    // Handle values with '<' - put them at the bottom
+                    const aHasLessThan = a.average_shap_magnitude.includes('<');
+                    const bHasLessThan = b.average_shap_magnitude.includes('<');
+
+                    if (aHasLessThan && !bHasLessThan) return 1;
+                    if (!aHasLessThan && bHasLessThan) return -1;
+                    if (aHasLessThan && bHasLessThan) return 0;
+
+                    // Sort by numeric value in descending order
+                    const aValue = parseFloat(a.average_shap_magnitude);
+                    const bValue = parseFloat(b.average_shap_magnitude);
+                    return bValue - aValue;
+                  })
+                  .map((feature, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                    >
+                      <td className="p-6 text-base font-normal text-black">
+                        {feature.readable_feature_name.charAt(0).toUpperCase() +
+                          feature.readable_feature_name.slice(1)}
+                        <div className="text-sm font-light text-[#696969]">
+                          {feature.short_feature_desc}
+                        </div>
+                      </td>
+                      <td className="py-6 pr-6 text-center text-sm text-black">
+                        {feature.data_type}
+                      </td>
+                      <td className="py-6 pr-6 text-left text-sm text-black">
+                        {feature.average_shap_magnitude === '<0.0000'
+                          ? '<0.0000'
+                          : parseFloat(feature.average_shap_magnitude)
+                              .toFixed(6)
+                              .replace(/\.?0+$/, '')}
+                        <div className="text-xs text-[#696969]">
+                          {/* Range not provided by API */}
+                          SHAP magnitude value
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

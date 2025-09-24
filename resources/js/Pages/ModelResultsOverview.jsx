@@ -266,7 +266,9 @@ function ModelResultsOverview({ run_id, modelName }) {
                 {runDetails?.batch_name || 'Loading...'}
               </a>
             </div>
-            <div>Run on model: {formatModelName(modelName)}</div>
+            <div>
+              Run on model: {formatModelName(modelName || 'Unknown Model')}
+            </div>
           </div>
 
           {tab === 'results' ? (
@@ -499,12 +501,16 @@ function ModelResultsOverview({ run_id, modelName }) {
               <div className="mb-8">
                 <ConfusionMatrix
                   model_run_id={model_run_id}
-                  modelName={modelName}
+                  modelName={modelName || ''}
                 />
               </div>
               {/* ROC Curve */}
               <div className="mb-8">
-                <RocCurve model_run_id={model_run_id} modelName={modelName} />
+                {console.log('RocCurve - model_run_id:', model_run_id)}
+                <RocCurve
+                  model_run_id={model_run_id}
+                  modelName={modelName || ''}
+                />
               </div>
               {/* Support Scores Histogram */}
               {/* <div className="mb-8">

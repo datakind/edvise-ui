@@ -8,11 +8,14 @@
  * @returns {string} - Formatted string (e.g., "Midway Uni Graduation 4Y End Of First Year")
  */
 export const formatModelName = str => {
-  if (!str) return '';
+  if (!str || typeof str !== 'string') return '';
 
   return str
     .split('_')
     .map(word => {
+      // Skip empty words
+      if (!word) return '';
+
       // Handle special cases like "4y" -> "4Y"
       if (/^\d+[a-z]$/i.test(word)) {
         return word.toUpperCase();

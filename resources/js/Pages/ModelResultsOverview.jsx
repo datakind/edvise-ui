@@ -74,8 +74,15 @@ function ModelResultsOverview({ run_id, modelName }) {
       if (!inst_id) return;
 
       try {
+        // Determine the environment variable prefix based on model name
+        const envPrefix =
+          modelName && modelName.toLowerCase().includes('assoc')
+            ? 'ALT2_'
+            : 'ALT_';
+        const envKey = `${envPrefix}${inst_id.toUpperCase()}`;
+
         // Call a backend endpoint that will read the .env file and return the model_run_id
-        const apiUrl = `/get-model-run-id/${inst_id}`;
+        const apiUrl = `/get-model-run-id/${inst_id}?env_key=${envKey}`;
 
         const response = await axios.get(apiUrl);
         if (response.data && response.data.model_run_id) {
@@ -94,7 +101,7 @@ function ModelResultsOverview({ run_id, modelName }) {
     };
 
     fetchModelRunId();
-  }, [inst_id]);
+  }, [inst_id, modelName]);
 
   // Get run details when we have both inst_id and run_id
   useEffect(() => {

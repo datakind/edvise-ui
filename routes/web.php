@@ -4,11 +4,11 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Helpers\InstitutionHelper;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\DemoRequestController;
 
 
@@ -373,8 +373,9 @@ Route::middleware(array_filter([
     }
 )->name('model-results-overview');
 
-Route::get('/get-model-run-id/{inst_id}', function ($inst_id) {
-    $envKey = 'ALT_' . strtoupper($inst_id);
+Route::get('/get-model-run-id/{inst_id}', function ($inst_id, Request $request) {
+    // Get the env_key from query parameter, fallback to ALT_ prefix for backward compatibility
+    $envKey = $request->query('env_key', 'ALT_' . strtoupper($inst_id));
     $modelRunId = env($envKey);
 
     if (!$modelRunId) {

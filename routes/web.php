@@ -1,13 +1,24 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Helpers\InstitutionHelper;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\DemoRequestController;
+
+
+// PUBLIC ROUTES
+
+// Main app entrypoint.
 
 Route::get('/', function () {
+    //$out = new \Symfony\Component\Console\Output\ConsoleOutput;
+    //$out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -16,27 +27,11 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/login', function () {
-    return Inertia::render('Auth/Login', [
-        'canResetPassword' => Route::has('password.request'),
-    ]);
-})->name('login');
-
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-    Route::get('/dashboard', function () {return redirect()->route('home');})->name('dashboard');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::middleware('auth')->get('/data-dictionary', function () {
+Route::get('/data-dictionary', function () {
     return Inertia::render('DataDictionary');
 })->name('data-dictionary');
 
-Route::middleware('auth')->get('/faq', function () {
+Route::get('/faq', function () {
     return Inertia::render('Faq');
 })->name('FAQ');
 
@@ -52,7 +47,35 @@ Route::get('/terms-of-service', function () {
     return Inertia::render('TermsOfService');
 })->name('terms-of-service');
 
-Route::middleware('auth')->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login', [
+        'canResetPassword' => Route::has('password.request'),
+    ]);
+})->name('login');
+
+// Invite system routes
+Route::get('/invite', [App\Http\Controllers\InviteController::class, 'showInviteForm'])->name('invite.validation');
+Route::post('/invite/validate', [App\Http\Controllers\InviteController::class, 'validateInvite'])->name('invite.validate');
+Route::get('/register', [App\Http\Controllers\InviteController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [App\Http\Controllers\InviteController::class, 'register'])->name('register.post');
+
+// AUTH RELATED ROUTES
+
+Route::get('/email/verify', function () {
+    return Inertia::render('Auth/VerifyEmail');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
@@ -60,3 +83,312 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
+/*
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+        // return redirect()->route('home'); // simply returns the homepage
+    })->name('dashboard');
+});
+*/
+
+// PROFILE RELATED ROUTES
+
+Route::middleware(array_filter([
+    'auth', 'invite.validated', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// AUTHED ROUTES
+
+Route::middleware(array_filter([
+    'auth', 'invite.validated', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/file-upload',
+    function () {
+        return Inertia::render('FileUpload');
+    }
+)->name('file-upload');
+
+Route::middleware(array_filter([
+    'auth', 'invite.validated', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/dashboard/{modelname}',
+    function ($modelname) {
+        return Inertia::render('Dashboard', ['modelname' => $modelname]);
+    }
+)->name('dashboard_modelname');
+
+// The default dashboard page.
+Route::middleware(array_filter([
+    'auth', 'invite.validated', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/dashboard',
+    function () {
+        return Inertia::render('Dashboard');
+    }
+)->name('dashboard');
+
+// The default home page when logged in.
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/new-home',
+    function () {
+        return Inertia::render('NewHome');
+    }
+)->name('new-home');
+
+// difficult to get params working with named routes
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->post('/create-batch', [ApiController::class, 'createBatch']);
+Route::middleware(array_filter([
+    'auth',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->post('/create-model', [ApiController::class, 'createModelApi']);
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/models-api', [ApiController::class, 'getModels']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
+
+// Support overview with institution context (follows same pattern as other API endpoints)
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
+
+// Model card download with institution context
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+
+// Top features with institution context
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/inference/top-features/{run_id}', [ApiController::class, 'getTopFeatures']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/inference/features-boxplot-stat/{run_id}', [ApiController::class, 'getFeaturesBoxplotStat']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/view-input-data', [ApiController::class, 'viewInputData']);
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/view-output-data', [ApiController::class, 'viewOutputData']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/run-inference',
+    function () {
+        return Inertia::render('RunInference');
+    }
+)->name('run-inference');
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/manage-uploads',
+    function () {
+        return Inertia::render('ManageUploads');
+    }
+)->name('manage-uploads');
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/file-management',
+    function () {
+        return Inertia::render('FileManagement');
+    }
+)->name('file-management');
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename', '.*');
+
+// Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename', '.*');
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
+
+// New routes that use request context for institution
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/model-runs/{model_name}', [ApiController::class, 'modelRunsWithContext']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
+
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
+
+Route::middleware(['auth'])->get('/terms/prompt', function () {
+    return Inertia::render('Auth/AcceptTerms');
+})->name('terms.prompt');
+
+Route::middleware(['auth'])->post('/terms/accept', function () {
+    auth()->user()->update(['accepted_terms' => true]);
+    return redirect()->route('dashboard');
+})->name('terms.accept');
+
+// The below are datakinder only paths.
+Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
+    Route::post('/create-inst-api', [ApiController::class, 'createInstApi']);
+    Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
+    Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
+    Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
+
+
+    Route::get('/create-inst', function () {
+        return Inertia::render('CreateInst');
+    })->name('create-inst');
+
+    Route::get('/edit-inst', function () {
+        return Inertia::render('EditInst');
+    })->name('edit-inst');
+
+    Route::get('/create-model', function () {
+        return Inertia::render('CreateModel');
+    })->name('create-model');
+
+    Route::get('/set-inst', function () {
+        return Inertia::render('SetInst');
+    })->name('set-inst');
+
+    Route::get('/add-dk', function () {
+        return Inertia::render('AddDatakinders');
+    })->name('add-dk');
+
+    Route::post('/set-inst-api/{inst}', function (string $inst) {
+        $access_str = Auth::user()->access_type ?? "";
+        $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
+
+        if ($errStr != "") {
+            return response()->json(['error' => $errStr], 400);
+        }
+
+        return $inst;
+    });
+});
+
+Route::post('/demo-request', [DemoRequestController::class, 'store'])->name('demo.request');
+
+Route::middleware(['auth', 'terms.accepted'])->group(function () {
+
+    Route::get('/institutions/{inst_id}/models/{model_name}/run/{run_id}', [ApiController::class, 'getRunDetails']);
+    Route::get('/institutions/{inst_id}/training/feature_importance/{model_run_id}', [ApiController::class, 'getFeatureImportance']);
+    Route::get('/institutions/{inst_id}/training/confusion_matrix/{model_run_id}', [ApiController::class, 'getConfusionMatrix']);
+    Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
+    Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
+    Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+    // The following returns a list of two strings, the first is the inst id, the second is an error if any.
+    Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
+
+});
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/model-results-overview/{run_id}/{modelName}',
+    function ($run_id, $modelName, Request $request) {
+        return Inertia::render('ModelResultsOverview', [
+            'run_id' => $run_id,
+            'modelName' => $modelName,
+        ]);
+    }
+)->name('model-results-overview');
+
+Route::get('/get-model-run-id/{inst_id}', function ($inst_id, Request $request) {
+    // Get the env_key from query parameter, fallback to ALT_ prefix for backward compatibility
+    $envKey = $request->query('env_key', 'ALT_' . strtoupper($inst_id));
+    $modelRunId = env($envKey);
+
+    if (!$modelRunId) {
+        return response()->json(['error' => 'Model run ID not found for institution'], 404);
+    }
+
+    return response()->json(['model_run_id' => $modelRunId]);
+});
+
+// Admin invite management routes
+Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
+    Route::get('/admin/invites', [App\Http\Controllers\InviteController::class, 'listInvites'])->name('admin.invites');
+    Route::post('/admin/invites', [App\Http\Controllers\InviteController::class, 'createInvite'])->name('admin.invites.create');
+    Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
+    Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
+});

@@ -3,11 +3,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "format:landing": "prettier --write resources/css/landing.css resources/js/Components/Landing/*",
+    "update-static": "vite build && gsutil -o \"GSUtil:parallel_process_count=1\" -m cp -r public/* gs://${ASSET_BUCKET}"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@popperjs/core": "^2.11.6",
-    "@prettier/plugin-php": "^0.18.9",
+    "@prettier/plugin-php": "^0.22.4",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@types/lodash": "^4.14.201",
@@ -18,9 +21,13 @@
     "autoprefixer": "^10.4.16",
     "axios": "^0.26.1",
     "bootstrap": "^5.2.3",
+    "eslint": "^9.18.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
     "laravel-vite-plugin": "^0.7.8",
     "postcss": "^8.4.31",
-    "prettier": "^2.8.8",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.56.1",
@@ -29,26 +36,32 @@
     "vite": "^3.2.7"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.17",
+    "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "@inertiajs/core": "^1.0.14",
-    "@inertiajs/react": "^1.0.14",
+    "@inertiajs/react": "^2.0.4",
     "@mapbox/mapbox-gl-geocoder": "^5.0.3",
     "@turf/bbox": "^6.5.0",
     "@turf/turf": "^7.1.0",
     "@types/mapbox-gl": "^2.7.19",
     "classnames": "^2.3.2",
     "html2canvas": "^1.4.1",
+    "lenis": "^1.2.3",
     "lodash": "^4.17.21",
     "mapbox-gl": "^3.3.0",
     "papaparse": "^5.4.1",
+    "plotly.js": "^3.0.1",
     "react-drag-drop-files": "^2.3.10",
     "react-ga4": "^2.1.0",
+    "react-google-charts": "^5.2.1",
     "react-map-gl": "^7.1.7",
     "react-map-gl-geocoder": "^2.2.0",
+    "react-player": "2.13.0",
+    "react-plotly.js": "^2.6.0",
     "react-range-slider-input": "^3.0.7",
     "turf-polygon": "^1.0.3",
     "xlsx": "^0.18.5",
+    "yarn": "^1.22.22",
     "ziggy-js": "^1.8.1"
   },
   "prettier": {
@@ -58,6 +71,9 @@
     "tabWidth": 2,
     "trailingComma": "all",
     "printWidth": 80,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }

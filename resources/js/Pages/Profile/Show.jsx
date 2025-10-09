@@ -7,43 +7,49 @@ import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfile
 import useTypedPage from '@/Hooks/useTypedPage';
 import SectionBorder from '@/Components/Fields/SectionBorder';
 import AppLayout from '@/Layouts/AppLayout';
-export default function Show({ sessions, confirmsTwoFactorAuthentication, }) {
-    const page = useTypedPage();
-    return (<AppLayout title={'Profile'} renderHeader={() => (<h2 className="font-semibold text-xl text-gray-800 leading-tight">
+
+export default function Show({ sessions, confirmsTwoFactorAuthentication }) {
+  const page = useTypedPage();
+  return (
+    <AppLayout
+      title="Profile"
+      renderHeader={() => (
+        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
           Profile
-        </h2>)}>
-      <div>
-        <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-          {page.props.jetstream.canUpdateProfileInformation ? (<div>
-              <UpdateProfileInformationForm user={page.props.auth.user}/>
-
-              <SectionBorder />
-            </div>) : null}
-
-          {page.props.jetstream.canUpdatePassword ? (<div className="mt-10 sm:mt-0">
-              <UpdatePasswordForm />
-
-              <SectionBorder />
-            </div>) : null}
-
-          {page.props.jetstream.canManageTwoFactorAuthentication ? (<div className="mt-10 sm:mt-0">
-              <TwoFactorAuthenticationForm requiresConfirmation={confirmsTwoFactorAuthentication}/>
-
-              <SectionBorder />
-            </div>) : null}
-
-          <div className="mt-10 sm:mt-0">
-            <LogoutOtherBrowserSessions sessions={sessions}/>
+        </h2>
+      )}
+    >
+      <div className="flex flex-col w-full p-4">
+        {page.props.jetstream.canUpdateProfileInformation ? (
+          <div className="flex border-solid border-gray-900 p-6">
+            <UpdateProfileInformationForm user={page.props.auth.user} />
           </div>
+        ) : null}
 
-          {page.props.jetstream.hasAccountDeletionFeatures ? (<>
-              <SectionBorder />
+        {page.props.jetstream.canUpdatePassword ? (
+          <div className="flex border-solid border-gray-900 p-6">
+            <UpdatePasswordForm />
+          </div>
+        ) : null}
 
-              <div className="mt-10 sm:mt-0">
-                <DeleteUserForm />
-              </div>
-            </>) : null}
+        {page.props.jetstream.canManageTwoFactorAuthentication ? (
+          <div className="flex border-solid border-gray-900 p-6">
+            <TwoFactorAuthenticationForm
+              requiresConfirmation={confirmsTwoFactorAuthentication}
+            />
+          </div>
+        ) : null}
+
+        <div className="flex border-solid border-gray-900 p-6">
+          <LogoutOtherBrowserSessions sessions={sessions} />
         </div>
+
+        {page.props.jetstream.hasAccountDeletionFeatures ? (
+          <div className="flex border-solid border-gray-900 p-6">
+            <DeleteUserForm />
+          </div>
+        ) : null}
       </div>
-    </AppLayout>);
+    </AppLayout>
+  );
 }

@@ -1,0 +1,151 @@
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import AppLayout from '@/Layouts/AppLayout';
+import axios from 'axios';
+import FileView from '@/Components/FileView';
+import HeaderLabel from '@/Components/HeaderLabel';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+// Skeleton for the download inf data page.
+export default function FileManagement() {
+  const [files, setFiles] = useState({});
+  const [batches, setBatches] = useState({});
+  // csv as 2d matrix
+  const tableCreate = parsedValues => {
+    const tbl = document.createElement('table');
+    tbl.style.width = '100px';
+    tbl.style.border = '1px solid black';
+
+    // one less than length bc of how newline split adds one more to the list.
+    for (let i = 0; i < parsedValues.length - 1; i++) {
+      const tr = tbl.insertRow();
+      for (let j = 0; j < parsedValues[0].length; j++) {
+        const td = tr.insertCell();
+        td.appendChild(document.createTextNode(parsedValues[i][j]));
+        td.style.border = '1px solid black';
+      }
+    }
+    return tbl;
+  };
+
+  // TODO: delete or use
+  const getOutputFilesAndBatchesToView = () => {
+    return axios
+      .get('/view-output-data')
+      .then(res => {
+        let constructFileDict = {};
+        setFiles(res.data.files);
+        setBatches(res.data.batches);
+      })
+      .catch(err => {
+        console.log('errors');
+      });
+  };
+
+  const triggerDownload = () => {
+    document.getElementById('result_area').innerHTML = '';
+
+    var filename = document.getElementById('filename').value;
+    if (filename == undefined || filename == '') {
+      document.getElementById('result_area').innerHTML =
+        'Please add a valid filename';
+      return;
+    }
+
+    const output = axios
+      .get('/download-inf-data/' + filename)
+      .then(res => {
+        window.open(res.data, '_self');
+      })
+      .catch(err => {
+        document.getElementById('result_area').innerHTML =
+          '3' + filename + ' url:' + err;
+      });
+  };
+
+  const loadView = () => {
+    document.getElementById('result_area').innerHTML = '';
+    document.getElementById('table_area').innerHTML = '';
+
+    var filename = document.getElementById('filename').value;
+    if (filename == undefined || filename == '') {
+      document.getElementById('result_area').innerHTML =
+        'Please add a valid filename';
+      return;
+    }
+    const output = axios
+      .get('/download-inf-data/' + filename)
+      .then(res => {
+        fetch(res.data)
+          .then(res1 => {
+            res1
+              .text()
+              .then(res2 => {
+                const lines = res2.split(/\r\n|\r|\n/);
+                const outcome = lines.map(line => line.split(','));
+                document.getElementById('result_area').innerHTML =
+                  filename + ' in table format:';
+
+                document
+                  .getElementById('table_area')
+                  .appendChild(tableCreate(outcome));
+              })
+              .catch(err1 => {
+                document.getElementById('result_area').innerHTML =
+                  filename + ': ' + err1;
+              });
+          })
+          .catch(err2 => {
+            document.getElementById('result_area').innerHTML =
+              filename + ': ' + err2;
+          });
+      })
+      .catch(err => {
+        document.getElementById('result_area').innerHTML =
+          filename + ' url:' + err;
+      });
+  };
+
+  return (
+    <AppLayout
+      title="Download Data"
+      renderHeader={() => (
+        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+          File Management
+        </h2>
+      )}
+    >
+      <div className="py-12">
+        <HeaderLabel
+          className="pl-12"
+          iconObj={
+            <DocumentDuplicateIcon
+              aria-hidden="true"
+              className="size-6 shrink-0"
+            />
+          }
+          majorTitle="Actions"
+          minorTitle="File Management"
+        ></HeaderLabel>
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <p id="info">Type in the filename you want to download below.</p>
+          <input type="text" id="filename" name="filename" />
+          <button
+            id="button_content"
+            onClick={triggerDownload}
+            className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4"
+          >
+            Download
+          </button>{' '}
+          <button
+            id="button_content"
+            onClick={loadView}
+            className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4"
+          >
+            Show Data
+          </button>
+          <div id="result_area"></div>
+          <div id="table_area"></div>
+        </div>
+      </div>
+    </AppLayout>
+  );
+}

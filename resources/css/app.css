@@ -2,44 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
-    display: none;
+@layer base {
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueLight.woff') format('woff');
+        font-weight: 300;
+    }
+
+    @font-face {
+        font-family: 'Helvetica Neue';
+        src:
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff2') format('woff2'),
+        url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
+        font-weight: 400;
+    }
 }
 
-input[type="text"].mapboxgl-ctrl-geocoder--input[placeholder="Search"] {
-    @apply px-8;
+[x-cloak] {
+  display: none;
+}
+
+input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
+  @apply px-8;
 }
 
 .text-header {
-    @apply font-sans font-bold text-5xl;
+  @apply font-sans font-bold text-5xl;
 }
 
 .text-subheader {
-    @apply font-sans text-2xl leading-normal tracking-normal font-normal;
+  @apply font-sans text-2xl leading-normal tracking-normal font-normal;
 }
 
 .text-section {
-    @apply font-sans font-bold text-2xl;
+  @apply font-sans font-bold text-2xl;
 }
 
 .text-feature {
-    @apply font-serif text-lg;
+  @apply font-serif text-lg;
 }
 
 .text-body {
-    @apply font-serif text-base;
+  @apply font-serif text-base;
 }
 
 .text-navigation {
-    @apply font-sans hover:font-bold text-base hover:text-gray-500 hover:underline active:text-gray-500 active:underline;
+  @apply font-sans hover:font-bold text-base hover:text-gray-500 hover:underline active:text-gray-500 active:underline;
 }
 
 .text-detail {
-    @apply font-sans font-[600] text-base;
+  @apply font-sans font-[600] text-base;
+}
+
+/* Merriweather font utilities */
+.text-merriweather {
+  @apply font-merriweather;
+}
+
+.text-merriweather-light {
+  @apply font-merriweather font-light;
+}
+
+.text-merriweather-normal {
+  @apply font-merriweather font-normal;
+}
+
+.text-merriweather-bold {
+  @apply font-merriweather font-bold;
+}
+
+.text-merriweather-black {
+  @apply font-merriweather font-black;
+}
+
+.text-merriweather-italic {
+  @apply font-merriweather italic;
 }
 
 a {
-    @apply text-blue-700;
+  @apply text-blue-700;
 }
 
-
+/* Rounded corners for Plotly tooltips */
+.js-plotly-plot .hoverlayer .hovertext {
+  border-radius: 16px !important;
+  overflow: hidden;
+  padding: 8px !important;
+}

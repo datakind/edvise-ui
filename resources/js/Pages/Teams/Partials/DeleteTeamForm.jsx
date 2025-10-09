@@ -21,33 +21,31 @@ const DeleteTeamForm = ({ team }) => {
 
   return (
     <ActionSection>
-      <div className="title">
-        Delete Team
-      </div>
+      <div className="title">Delete Team</div>
 
-      <div className="description">
-        Permanently delete this team.
-      </div>
+      <div className="description">Permanently delete this team.</div>
 
       <div className="content">
         <div className="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-          Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team, please download any data or information regarding this team that you wish to retain.
+          Once a team is deleted, all of its resources and data will be
+          permanently deleted. Before deleting this team, please download any
+          data or information regarding this team that you wish to retain.
         </div>
 
         <div className="mt-5">
-          <DangerButton onClick={confirmTeamDeletion}>
-            Delete Team
-          </DangerButton>
+          <DangerButton onClick={confirmTeamDeletion}>Delete Team</DangerButton>
         </div>
 
         {/* Delete Team Confirmation Modal */}
-        <ConfirmationModal show={confirmingTeamDeletion} onClose={() => setConfirmingTeamDeletion(false)}>
-          <div className="modal-title">
-            Delete Team
-          </div>
+        <ConfirmationModal
+          show={confirmingTeamDeletion}
+          onClose={() => setConfirmingTeamDeletion(false)}
+        >
+          <div className="modal-title">Delete Team</div>
 
           <div className="modal-content">
-            Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be permanently deleted.
+            Are you sure you want to delete this team? Once a team is deleted,
+            all of its resources and data will be permanently deleted.
           </div>
 
           <div className="modal-footer">

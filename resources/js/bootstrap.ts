@@ -14,6 +14,9 @@ window._ = _;
 (window as any).axios.defaults.headers.common['X-Requested-With'] =
   'XMLHttpRequest';
 
+// Set timeout to 120 seconds (120000 milliseconds)
+(window as any).axios.defaults.timeout = 120000;
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Http;
 use App\Models\DataDictionary;
 use App\Traits\UsesApi;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Http;
 
 class DataDictionarySeeder extends Seeder
 {
@@ -17,20 +17,20 @@ class DataDictionarySeeder extends Seeder
     public function run(): void
     {
         $data = $this->getDataDictionary();
-        if (!empty($data)) {
+        if (! empty($data)) {
             foreach ($data as $item) {
                 DataDictionary::updateOrCreate(
                     [
-                        'description'     => $item[4],
-                        'field_name'      => $item[1],
-                        'location_type'   => $item[2],
-                        'category'        => $item[3],
-                        'file_name'       => $item[0],
-                        'unit'            => $item[5],
+                        'description' => $item[4],
+                        'field_name' => $item[1],
+                        'location_type' => $item[2],
+                        'category' => $item[3],
+                        'file_name' => $item[0],
+                        'unit' => $item[5],
                     ],
                     [
-                        'created_at'      => now(),
-                        'updated_at'      => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ]
                 );
             }
@@ -52,7 +52,7 @@ class DataDictionarySeeder extends Seeder
             'Authorization' => $token->access,
             'Cache-Control' => 'no-cache',
         ];
-        $response = Http::withHeaders($headers)->get(env('DK_API_SUITE_URL') . '/' . $endpoint);
+        $response = Http::withHeaders($headers)->get(env('DK_API_SUITE_URL').'/'.$endpoint);
 
         if ($response->successful()) {
             $data = $response->json();
@@ -61,9 +61,10 @@ class DataDictionarySeeder extends Seeder
                     $item = $this->parseComplexString($item);
                 }
             }
+
             return $data;
         } else {
-            throw new \Exception('Failed to fetch data from API: ' . $response->body());
+            throw new \Exception('Failed to fetch data from API: '.$response->body());
         }
     }
 
@@ -74,11 +75,10 @@ class DataDictionarySeeder extends Seeder
     {
         $pattern = '/(?<!\\\),(?=(?:[^"]*|"[^"]*")*$)/';
         $result = preg_split($pattern, $input);
-        $result = array_map(function($item) {
+        $result = array_map(function ($item) {
             return trim($item, '"');
         }, $result);
 
         return $result;
     }
-
 }

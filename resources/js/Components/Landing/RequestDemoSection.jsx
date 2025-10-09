@@ -1,0 +1,39 @@
+import React, { useEffect } from 'react';
+import DemoForm from './DemoForm';
+
+export default function RequestDemoSection() {
+  useEffect(() => {
+    // Check if there's a hash in the URL when the component mounts
+    if (window.location.hash === '#request-demo') {
+      // Small delay to ensure the page is fully rendered
+      setTimeout(() => {
+        const element = document.getElementById('request-demo');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, []);
+
+  return (
+    <div id="request-demo" className="request-demo-section">
+      <div className="layout:grid">
+        <div className="col-span-6">
+          <p className="type:section-label mb-9 sm:mb-12">Request demo</p>
+          <h2 className="type:section-title mb-9 sm:mb-20 md:mb-32">
+            How to get started with Edvise
+          </h2>
+          <div className="hidden overflow-hidden rounded-[40px] md:block">
+            <img
+              src="https://storage.googleapis.com/staging-sst-01-staging-static/form-thumbnail.jpg"
+              alt="Request Demo"
+            />
+          </div>
+        </div>
+        <div className="col-span-full tb:col-span-6 tb:col-start-2 md:col-span-9 md:col-start-9 md:pt-14">
+          <DemoForm formId="request-demo-form" className="w-full" />
+        </div>
+      </div>
+    </div>
+  );
+}

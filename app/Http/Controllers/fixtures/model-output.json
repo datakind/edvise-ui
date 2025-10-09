@@ -1,0 +1,3352 @@
+[
+  {
+    "index_x": 0,
+    "Student ID": "YQ8JKB8T",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.33339437715548276,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.2344933257460882,
+    "Rank": 1
+  },
+  {
+    "index_x": 0,
+    "Student ID": "YQ8JKB8T",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.33339437715548276,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.0617953377070679,
+    "Rank": 2
+  },
+  {
+    "index_x": 0,
+    "Student ID": "YQ8JKB8T",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.33339437715548276,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.05649026036299767,
+    "Rank": 3
+  },
+  {
+    "index_x": 0,
+    "Student ID": "YQ8JKB8T",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.33339437715548276,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": 0.04581203973871555,
+    "Rank": 4
+  },
+  {
+    "index_x": 0,
+    "Student ID": "YQ8JKB8T",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.33339437715548276,
+    "Risk Prediction": 0,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": 0.0330832113833404,
+    "Rank": 5
+  },
+  {
+    "index_x": 1,
+    "Student ID": "N0K6LK4Q",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7261891467528636,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1544480278940487,
+    "Rank": 1
+  },
+  {
+    "index_x": 1,
+    "Student ID": "N0K6LK4Q",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7261891467528636,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07760999686271988,
+    "Rank": 2
+  },
+  {
+    "index_x": 1,
+    "Student ID": "N0K6LK4Q",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7261891467528636,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0734958894619536,
+    "Rank": 3
+  },
+  {
+    "index_x": 1,
+    "Student ID": "N0K6LK4Q",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7261891467528636,
+    "Risk Prediction": 1,
+    "Feature": "2.42 < years_enrolled <= 3.42",
+    "Magnitude": 0.06600234721029623,
+    "Rank": 4
+  },
+  {
+    "index_x": 1,
+    "Student ID": "N0K6LK4Q",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7261891467528636,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM <= 62.00",
+    "Magnitude": 0.040062298628202424,
+    "Rank": 5
+  },
+  {
+    "index_x": 2,
+    "Student ID": "XA329105",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9812182033640463,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5553218310480268,
+    "Rank": 1
+  },
+  {
+    "index_x": 2,
+    "Student ID": "XA329105",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9812182033640463,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.14790004838526108,
+    "Rank": 2
+  },
+  {
+    "index_x": 2,
+    "Student ID": "XA329105",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9812182033640463,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07725577601263267,
+    "Rank": 3
+  },
+  {
+    "index_x": 2,
+    "Student ID": "XA329105",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9812182033640463,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07495968060811507,
+    "Rank": 4
+  },
+  {
+    "index_x": 2,
+    "Student ID": "XA329105",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9812182033640463,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.030038605710403177,
+    "Rank": 5
+  },
+  {
+    "index_x": 3,
+    "Student ID": "5BC8WQBB",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9924121205929158,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5591330734639071,
+    "Rank": 1
+  },
+  {
+    "index_x": 3,
+    "Student ID": "5BC8WQBB",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9924121205929158,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07667595152926024,
+    "Rank": 2
+  },
+  {
+    "index_x": 3,
+    "Student ID": "5BC8WQBB",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9924121205929158,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07276733580232304,
+    "Rank": 3
+  },
+  {
+    "index_x": 3,
+    "Student ID": "5BC8WQBB",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9924121205929158,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.03133529182899989,
+    "Rank": 4
+  },
+  {
+    "index_x": 3,
+    "Student ID": "5BC8WQBB",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9924121205929158,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.029629103063735365,
+    "Rank": 5
+  },
+  {
+    "index_x": 4,
+    "Student ID": "R2UFAWM5",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9942924815070056,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5612008205264657,
+    "Rank": 1
+  },
+  {
+    "index_x": 4,
+    "Student ID": "R2UFAWM5",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9942924815070056,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15286428240451017,
+    "Rank": 2
+  },
+  {
+    "index_x": 4,
+    "Student ID": "R2UFAWM5",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9942924815070056,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10484799203011165,
+    "Rank": 3
+  },
+  {
+    "index_x": 4,
+    "Student ID": "R2UFAWM5",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9942924815070056,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07633110032452355,
+    "Rank": 4
+  },
+  {
+    "index_x": 4,
+    "Student ID": "R2UFAWM5",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9942924815070056,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07061762905756566,
+    "Rank": 5
+  },
+  {
+    "index_x": 5,
+    "Student ID": "80GLNNAC",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921332864866993,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5628640518162307,
+    "Rank": 1
+  },
+  {
+    "index_x": 5,
+    "Student ID": "80GLNNAC",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921332864866993,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07230122581969307,
+    "Rank": 2
+  },
+  {
+    "index_x": 5,
+    "Student ID": "80GLNNAC",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921332864866993,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.06974213456243572,
+    "Rank": 3
+  },
+  {
+    "index_x": 5,
+    "Student ID": "80GLNNAC",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921332864866993,
+    "Risk Prediction": 1,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": -0.023380769399417457,
+    "Rank": 4
+  },
+  {
+    "index_x": 5,
+    "Student ID": "80GLNNAC",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921332864866993,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.024325665465737865,
+    "Rank": 5
+  },
+  {
+    "index_x": 6,
+    "Student ID": "03086GP8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9889011770828076,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5641438388919505,
+    "Rank": 1
+  },
+  {
+    "index_x": 6,
+    "Student ID": "03086GP8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9889011770828076,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10532223507677081,
+    "Rank": 2
+  },
+  {
+    "index_x": 6,
+    "Student ID": "03086GP8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9889011770828076,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.09061799918783253,
+    "Rank": 3
+  },
+  {
+    "index_x": 6,
+    "Student ID": "03086GP8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9889011770828076,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07528321703712015,
+    "Rank": 4
+  },
+  {
+    "index_x": 6,
+    "Student ID": "03086GP8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9889011770828076,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.026833180508809267,
+    "Rank": 5
+  },
+  {
+    "index_x": 7,
+    "Student ID": "4W4TPUKZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941420327013214,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5618444509450404,
+    "Rank": 1
+  },
+  {
+    "index_x": 7,
+    "Student ID": "4W4TPUKZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941420327013214,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07715802898011485,
+    "Rank": 2
+  },
+  {
+    "index_x": 7,
+    "Student ID": "4W4TPUKZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941420327013214,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07305000218520134,
+    "Rank": 3
+  },
+  {
+    "index_x": 7,
+    "Student ID": "4W4TPUKZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941420327013214,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.024089859125001726,
+    "Rank": 4
+  },
+  {
+    "index_x": 7,
+    "Student ID": "4W4TPUKZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941420327013214,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.03689017384033196,
+    "Rank": 5
+  },
+  {
+    "index_x": 8,
+    "Student ID": "71457PQD",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923203259984416,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5583483527681876,
+    "Rank": 1
+  },
+  {
+    "index_x": 8,
+    "Student ID": "71457PQD",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923203259984416,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08320701729181441,
+    "Rank": 2
+  },
+  {
+    "index_x": 8,
+    "Student ID": "71457PQD",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923203259984416,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07384016926806246,
+    "Rank": 3
+  },
+  {
+    "index_x": 8,
+    "Student ID": "71457PQD",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923203259984416,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.025720334566916764,
+    "Rank": 4
+  },
+  {
+    "index_x": 8,
+    "Student ID": "71457PQD",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923203259984416,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.027209947549099965,
+    "Rank": 5
+  },
+  {
+    "index_x": 9,
+    "Student ID": "CT8YPB4B",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9928490172014958,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5596138937133626,
+    "Rank": 1
+  },
+  {
+    "index_x": 9,
+    "Student ID": "CT8YPB4B",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9928490172014958,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0797561269764333,
+    "Rank": 2
+  },
+  {
+    "index_x": 9,
+    "Student ID": "CT8YPB4B",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9928490172014958,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.06966103322350406,
+    "Rank": 3
+  },
+  {
+    "index_x": 9,
+    "Student ID": "CT8YPB4B",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9928490172014958,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.027664478164575106,
+    "Rank": 4
+  },
+  {
+    "index_x": 9,
+    "Student ID": "CT8YPB4B",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9928490172014958,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.03041545457003854,
+    "Rank": 5
+  },
+  {
+    "index_x": 10,
+    "Student ID": "A6SCQ89R",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7223854187547133,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5616512513954162,
+    "Rank": 1
+  },
+  {
+    "index_x": 10,
+    "Student ID": "A6SCQ89R",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7223854187547133,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15208795273106288,
+    "Rank": 2
+  },
+  {
+    "index_x": 10,
+    "Student ID": "A6SCQ89R",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7223854187547133,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08076129959212684,
+    "Rank": 3
+  },
+  {
+    "index_x": 10,
+    "Student ID": "A6SCQ89R",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7223854187547133,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07784660607416881,
+    "Rank": 4
+  },
+  {
+    "index_x": 10,
+    "Student ID": "A6SCQ89R",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7223854187547133,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.02397764622473561,
+    "Rank": 5
+  },
+  {
+    "index_x": 11,
+    "Student ID": "FYIZYTCL",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.34716980650118934,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.23315764183451287,
+    "Rank": 1
+  },
+  {
+    "index_x": 11,
+    "Student ID": "FYIZYTCL",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.34716980650118934,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.06361950170577459,
+    "Rank": 2
+  },
+  {
+    "index_x": 11,
+    "Student ID": "FYIZYTCL",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.34716980650118934,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.048553566036551185,
+    "Rank": 3
+  },
+  {
+    "index_x": 11,
+    "Student ID": "FYIZYTCL",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.34716980650118934,
+    "Risk Prediction": 0,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": 0.03361192083291708,
+    "Rank": 4
+  },
+  {
+    "index_x": 11,
+    "Student ID": "FYIZYTCL",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.34716980650118934,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": 0.027730519013972204,
+    "Rank": 5
+  },
+  {
+    "index_x": 12,
+    "Student ID": "Q754NXZX",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.991081392952346,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5569980376498659,
+    "Rank": 1
+  },
+  {
+    "index_x": 12,
+    "Student ID": "Q754NXZX",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.991081392952346,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10941142284581402,
+    "Rank": 2
+  },
+  {
+    "index_x": 12,
+    "Student ID": "Q754NXZX",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.991081392952346,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07564312958105777,
+    "Rank": 3
+  },
+  {
+    "index_x": 12,
+    "Student ID": "Q754NXZX",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.991081392952346,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07250853369377161,
+    "Rank": 4
+  },
+  {
+    "index_x": 12,
+    "Student ID": "Q754NXZX",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.991081392952346,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.02888501118280619,
+    "Rank": 5
+  },
+  {
+    "index_x": 13,
+    "Student ID": "EZP44QF8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923541292767923,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5663698809292382,
+    "Rank": 1
+  },
+  {
+    "index_x": 13,
+    "Student ID": "EZP44QF8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923541292767923,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10736934010497111,
+    "Rank": 2
+  },
+  {
+    "index_x": 13,
+    "Student ID": "EZP44QF8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923541292767923,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07489662011049694,
+    "Rank": 3
+  },
+  {
+    "index_x": 13,
+    "Student ID": "EZP44QF8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923541292767923,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07154825429247452,
+    "Rank": 4
+  },
+  {
+    "index_x": 13,
+    "Student ID": "EZP44QF8",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923541292767923,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.026806990002542233,
+    "Rank": 5
+  },
+  {
+    "index_x": 14,
+    "Student ID": "6UDRUDP4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9443322992307058,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5612970805935441,
+    "Rank": 1
+  },
+  {
+    "index_x": 14,
+    "Student ID": "6UDRUDP4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9443322992307058,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10170069914455987,
+    "Rank": 2
+  },
+  {
+    "index_x": 14,
+    "Student ID": "6UDRUDP4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9443322992307058,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07138068026515135,
+    "Rank": 3
+  },
+  {
+    "index_x": 14,
+    "Student ID": "6UDRUDP4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9443322992307058,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07084335308024721,
+    "Rank": 4
+  },
+  {
+    "index_x": 14,
+    "Student ID": "6UDRUDP4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9443322992307058,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.02753320702328144,
+    "Rank": 5
+  },
+  {
+    "index_x": 15,
+    "Student ID": "AN14BXWK",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992051207241694,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5649916038166045,
+    "Rank": 1
+  },
+  {
+    "index_x": 15,
+    "Student ID": "AN14BXWK",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992051207241694,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10655750739386237,
+    "Rank": 2
+  },
+  {
+    "index_x": 15,
+    "Student ID": "AN14BXWK",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992051207241694,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.09003659556603345,
+    "Rank": 3
+  },
+  {
+    "index_x": 15,
+    "Student ID": "AN14BXWK",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992051207241694,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07530996273457881,
+    "Rank": 4
+  },
+  {
+    "index_x": 15,
+    "Student ID": "AN14BXWK",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992051207241694,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.029689537873835943,
+    "Rank": 5
+  },
+  {
+    "index_x": 16,
+    "Student ID": "LPAEDDFJ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9789507634814602,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.559308085994347,
+    "Rank": 1
+  },
+  {
+    "index_x": 16,
+    "Student ID": "LPAEDDFJ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9789507634814602,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1545807060678021,
+    "Rank": 2
+  },
+  {
+    "index_x": 16,
+    "Student ID": "LPAEDDFJ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9789507634814602,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07807741427767709,
+    "Rank": 3
+  },
+  {
+    "index_x": 16,
+    "Student ID": "LPAEDDFJ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9789507634814602,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07235186766647882,
+    "Rank": 4
+  },
+  {
+    "index_x": 16,
+    "Student ID": "LPAEDDFJ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9789507634814602,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.035626788832395936,
+    "Rank": 5
+  },
+  {
+    "index_x": 17,
+    "Student ID": "LU34MMES",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932541613791765,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5601399584038349,
+    "Rank": 1
+  },
+  {
+    "index_x": 17,
+    "Student ID": "LU34MMES",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932541613791765,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08456426797842449,
+    "Rank": 2
+  },
+  {
+    "index_x": 17,
+    "Student ID": "LU34MMES",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932541613791765,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07294614394432138,
+    "Rank": 3
+  },
+  {
+    "index_x": 17,
+    "Student ID": "LU34MMES",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932541613791765,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.030549443697302867,
+    "Rank": 4
+  },
+  {
+    "index_x": 17,
+    "Student ID": "LU34MMES",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932541613791765,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.03482670891460555,
+    "Rank": 5
+  },
+  {
+    "index_x": 18,
+    "Student ID": "1DTMYPVW",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9895283176174517,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5577374177133544,
+    "Rank": 1
+  },
+  {
+    "index_x": 18,
+    "Student ID": "1DTMYPVW",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9895283176174517,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07922124420245931,
+    "Rank": 2
+  },
+  {
+    "index_x": 18,
+    "Student ID": "1DTMYPVW",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9895283176174517,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07053176219028595,
+    "Rank": 3
+  },
+  {
+    "index_x": 18,
+    "Student ID": "1DTMYPVW",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9895283176174517,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.03230072977155765,
+    "Rank": 4
+  },
+  {
+    "index_x": 18,
+    "Student ID": "1DTMYPVW",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9895283176174517,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.027752891283741612,
+    "Rank": 5
+  },
+  {
+    "index_x": 19,
+    "Student ID": "J4O0NLP0",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.994577568613756,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5660219534068429,
+    "Rank": 1
+  },
+  {
+    "index_x": 19,
+    "Student ID": "J4O0NLP0",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.994577568613756,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.0817189641230919,
+    "Rank": 2
+  },
+  {
+    "index_x": 19,
+    "Student ID": "J4O0NLP0",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.994577568613756,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07489255136316952,
+    "Rank": 3
+  },
+  {
+    "index_x": 19,
+    "Student ID": "J4O0NLP0",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.994577568613756,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.022785460486463786,
+    "Rank": 4
+  },
+  {
+    "index_x": 19,
+    "Student ID": "J4O0NLP0",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.994577568613756,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.02764336807480763,
+    "Rank": 5
+  },
+  {
+    "index_x": 20,
+    "Student ID": "HEYFZR43",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5538712606958262,
+    "Rank": 1
+  },
+  {
+    "index_x": 20,
+    "Student ID": "HEYFZR43",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1498082395757484,
+    "Rank": 2
+  },
+  {
+    "index_x": 20,
+    "Student ID": "HEYFZR43",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07813040447070756,
+    "Rank": 3
+  },
+  {
+    "index_x": 20,
+    "Student ID": "HEYFZR43",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07388870181460512,
+    "Rank": 4
+  },
+  {
+    "index_x": 20,
+    "Student ID": "HEYFZR43",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.030296111944563962,
+    "Rank": 5
+  },
+  {
+    "index_x": 21,
+    "Student ID": "YR188PQ9",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.25103977177390857,
+    "Risk Prediction": 0,
+    "Feature": "years_enrolled <= 1.75",
+    "Magnitude": 0.32552817864463446,
+    "Rank": 1
+  },
+  {
+    "index_x": 21,
+    "Student ID": "YR188PQ9",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.25103977177390857,
+    "Risk Prediction": 0,
+    "Feature": "course_pass_rate > 0.95",
+    "Magnitude": 0.08931448777979346,
+    "Rank": 2
+  },
+  {
+    "index_x": 21,
+    "Student ID": "YR188PQ9",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.25103977177390857,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.06701245342088452,
+    "Rank": 3
+  },
+  {
+    "index_x": 21,
+    "Student ID": "YR188PQ9",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.25103977177390857,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.043051097060407315,
+    "Rank": 4
+  },
+  {
+    "index_x": 21,
+    "Student ID": "YR188PQ9",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.25103977177390857,
+    "Risk Prediction": 0,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": 0.04086335297935163,
+    "Rank": 5
+  },
+  {
+    "index_x": 22,
+    "Student ID": "887L0D3U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923267985013611,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5650933758244188,
+    "Rank": 1
+  },
+  {
+    "index_x": 22,
+    "Student ID": "887L0D3U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923267985013611,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07489915280380514,
+    "Rank": 2
+  },
+  {
+    "index_x": 22,
+    "Student ID": "887L0D3U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923267985013611,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07180901529605366,
+    "Rank": 3
+  },
+  {
+    "index_x": 22,
+    "Student ID": "887L0D3U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923267985013611,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.026660364047270603,
+    "Rank": 4
+  },
+  {
+    "index_x": 22,
+    "Student ID": "887L0D3U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9923267985013611,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.03033022956966279,
+    "Rank": 5
+  },
+  {
+    "index_x": 23,
+    "Student ID": "M83EXFPH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5263986522564966,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.0939734968135725,
+    "Rank": 1
+  },
+  {
+    "index_x": 23,
+    "Student ID": "M83EXFPH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5263986522564966,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07591864037200197,
+    "Rank": 2
+  },
+  {
+    "index_x": 23,
+    "Student ID": "M83EXFPH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5263986522564966,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07165855481756081,
+    "Rank": 3
+  },
+  {
+    "index_x": 23,
+    "Student ID": "M83EXFPH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5263986522564966,
+    "Risk Prediction": 1,
+    "Feature": "2.42 < years_enrolled <= 3.42",
+    "Magnitude": 0.07054227741303488,
+    "Rank": 4
+  },
+  {
+    "index_x": 23,
+    "Student ID": "M83EXFPH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5263986522564966,
+    "Risk Prediction": 1,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": -0.026295385213236572,
+    "Rank": 5
+  },
+  {
+    "index_x": 24,
+    "Student ID": "V32MD913",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6980112490291045,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5691598137660814,
+    "Rank": 1
+  },
+  {
+    "index_x": 24,
+    "Student ID": "V32MD913",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6980112490291045,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08799545160138814,
+    "Rank": 2
+  },
+  {
+    "index_x": 24,
+    "Student ID": "V32MD913",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6980112490291045,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0759247778821287,
+    "Rank": 3
+  },
+  {
+    "index_x": 24,
+    "Student ID": "V32MD913",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6980112490291045,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.03001839658593776,
+    "Rank": 4
+  },
+  {
+    "index_x": 24,
+    "Student ID": "V32MD913",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6980112490291045,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.03077667549515608,
+    "Rank": 5
+  },
+  {
+    "index_x": 25,
+    "Student ID": "39NX2MHH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.2658795683636905,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.2469283475362642,
+    "Rank": 1
+  },
+  {
+    "index_x": 25,
+    "Student ID": "39NX2MHH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.2658795683636905,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.053137248350239884,
+    "Rank": 2
+  },
+  {
+    "index_x": 25,
+    "Student ID": "39NX2MHH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.2658795683636905,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.052479276515818775,
+    "Rank": 3
+  },
+  {
+    "index_x": 25,
+    "Student ID": "39NX2MHH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.2658795683636905,
+    "Risk Prediction": 0,
+    "Feature": "Credits+Hours Semester Completed Perf SUM > 86.50",
+    "Magnitude": 0.03775216558108437,
+    "Rank": 4
+  },
+  {
+    "index_x": 25,
+    "Student ID": "39NX2MHH",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.2658795683636905,
+    "Risk Prediction": 0,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": 0.03738633458814386,
+    "Rank": 5
+  },
+  {
+    "index_x": 26,
+    "Student ID": "3OJLLPRS",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9929848656360462,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5567677891204637,
+    "Rank": 1
+  },
+  {
+    "index_x": 26,
+    "Student ID": "3OJLLPRS",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9929848656360462,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08419949908331648,
+    "Rank": 2
+  },
+  {
+    "index_x": 26,
+    "Student ID": "3OJLLPRS",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9929848656360462,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0750012954464441,
+    "Rank": 3
+  },
+  {
+    "index_x": 26,
+    "Student ID": "3OJLLPRS",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9929848656360462,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.02702374062976038,
+    "Rank": 4
+  },
+  {
+    "index_x": 26,
+    "Student ID": "3OJLLPRS",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9929848656360462,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.02132719392002169,
+    "Rank": 5
+  },
+  {
+    "index_x": 27,
+    "Student ID": "H2JPWWB4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.38410333291571214,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.23449197669177724,
+    "Rank": 1
+  },
+  {
+    "index_x": 27,
+    "Student ID": "H2JPWWB4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.38410333291571214,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.06466471088787512,
+    "Rank": 2
+  },
+  {
+    "index_x": 27,
+    "Student ID": "H2JPWWB4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.38410333291571214,
+    "Risk Prediction": 0,
+    "Feature": "0.86 < course_pass_rate <= 0.95",
+    "Magnitude": 0.06119224098353215,
+    "Rank": 3
+  },
+  {
+    "index_x": 27,
+    "Student ID": "H2JPWWB4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.38410333291571214,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.060266265865731125,
+    "Rank": 4
+  },
+  {
+    "index_x": 27,
+    "Student ID": "H2JPWWB4",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.38410333291571214,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": 0.04252780117964215,
+    "Rank": 5
+  },
+  {
+    "index_x": 28,
+    "Student ID": "3S5J05C3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.8765646545646816,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5630557551612653,
+    "Rank": 1
+  },
+  {
+    "index_x": 28,
+    "Student ID": "3S5J05C3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.8765646545646816,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.09600971290806981,
+    "Rank": 2
+  },
+  {
+    "index_x": 28,
+    "Student ID": "3S5J05C3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.8765646545646816,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07981003944482315,
+    "Rank": 3
+  },
+  {
+    "index_x": 28,
+    "Student ID": "3S5J05C3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.8765646545646816,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07443345691390839,
+    "Rank": 4
+  },
+  {
+    "index_x": 28,
+    "Student ID": "3S5J05C3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.8765646545646816,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.03917622443103464,
+    "Rank": 5
+  },
+  {
+    "index_x": 29,
+    "Student ID": "O32HX9ME",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.42089453363615004,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.23266019472282273,
+    "Rank": 1
+  },
+  {
+    "index_x": 29,
+    "Student ID": "O32HX9ME",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.42089453363615004,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.06300574544874116,
+    "Rank": 2
+  },
+  {
+    "index_x": 29,
+    "Student ID": "O32HX9ME",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.42089453363615004,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.050792819178173756,
+    "Rank": 3
+  },
+  {
+    "index_x": 29,
+    "Student ID": "O32HX9ME",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.42089453363615004,
+    "Risk Prediction": 0,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": 0.03583082703716141,
+    "Rank": 4
+  },
+  {
+    "index_x": 29,
+    "Student ID": "O32HX9ME",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.42089453363615004,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": 0.030504677066812064,
+    "Rank": 5
+  },
+  {
+    "index_x": 30,
+    "Student ID": "X88COF59",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9900529428761862,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.55686340102686,
+    "Rank": 1
+  },
+  {
+    "index_x": 30,
+    "Student ID": "X88COF59",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9900529428761862,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.1089535573892378,
+    "Rank": 2
+  },
+  {
+    "index_x": 30,
+    "Student ID": "X88COF59",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9900529428761862,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07475907497331562,
+    "Rank": 3
+  },
+  {
+    "index_x": 30,
+    "Student ID": "X88COF59",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9900529428761862,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0738937407597419,
+    "Rank": 4
+  },
+  {
+    "index_x": 30,
+    "Student ID": "X88COF59",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9900529428761862,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.029360654879426337,
+    "Rank": 5
+  },
+  {
+    "index_x": 31,
+    "Student ID": "H39IQ6EA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9930050985902282,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5637987201625041,
+    "Rank": 1
+  },
+  {
+    "index_x": 31,
+    "Student ID": "H39IQ6EA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9930050985902282,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07438538011589976,
+    "Rank": 2
+  },
+  {
+    "index_x": 31,
+    "Student ID": "H39IQ6EA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9930050985902282,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07151788107605156,
+    "Rank": 3
+  },
+  {
+    "index_x": 31,
+    "Student ID": "H39IQ6EA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9930050985902282,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.029078943857791358,
+    "Rank": 4
+  },
+  {
+    "index_x": 31,
+    "Student ID": "H39IQ6EA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9930050985902282,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.03373840336683639,
+    "Rank": 5
+  },
+  {
+    "index_x": 32,
+    "Student ID": "WGHMAEDT",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9153512267973903,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.556452163729102,
+    "Rank": 1
+  },
+  {
+    "index_x": 32,
+    "Student ID": "WGHMAEDT",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9153512267973903,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1519116911293106,
+    "Rank": 2
+  },
+  {
+    "index_x": 32,
+    "Student ID": "WGHMAEDT",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9153512267973903,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.0728915657936553,
+    "Rank": 3
+  },
+  {
+    "index_x": 32,
+    "Student ID": "WGHMAEDT",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9153512267973903,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07236361211611789,
+    "Rank": 4
+  },
+  {
+    "index_x": 32,
+    "Student ID": "WGHMAEDT",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9153512267973903,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.024484476212638873,
+    "Rank": 5
+  },
+  {
+    "index_x": 33,
+    "Student ID": "0PS5T2W1",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7120124387147875,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.11664256132153404,
+    "Rank": 1
+  },
+  {
+    "index_x": 33,
+    "Student ID": "0PS5T2W1",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7120124387147875,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.08049546655441096,
+    "Rank": 2
+  },
+  {
+    "index_x": 33,
+    "Student ID": "0PS5T2W1",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7120124387147875,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08002379874798593,
+    "Rank": 3
+  },
+  {
+    "index_x": 33,
+    "Student ID": "0PS5T2W1",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7120124387147875,
+    "Risk Prediction": 1,
+    "Feature": "2.42 < years_enrolled <= 3.42",
+    "Magnitude": 0.06905495853098778,
+    "Rank": 4
+  },
+  {
+    "index_x": 33,
+    "Student ID": "0PS5T2W1",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7120124387147875,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM <= 62.00",
+    "Magnitude": 0.03831760333895613,
+    "Rank": 5
+  },
+  {
+    "index_x": 34,
+    "Student ID": "0758MSV3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932048314581396,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.56356895869901,
+    "Rank": 1
+  },
+  {
+    "index_x": 34,
+    "Student ID": "0758MSV3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932048314581396,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10236298202926487,
+    "Rank": 2
+  },
+  {
+    "index_x": 34,
+    "Student ID": "0758MSV3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932048314581396,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07621516754600544,
+    "Rank": 3
+  },
+  {
+    "index_x": 34,
+    "Student ID": "0758MSV3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932048314581396,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07474016786844816,
+    "Rank": 4
+  },
+  {
+    "index_x": 34,
+    "Student ID": "0758MSV3",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932048314581396,
+    "Risk Prediction": 1,
+    "Feature": "2.70 < GPA_last_sem <= 3.33",
+    "Magnitude": -0.023380791056716182,
+    "Rank": 5
+  },
+  {
+    "index_x": 35,
+    "Student ID": "77U37RMN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5542485186690056,
+    "Rank": 1
+  },
+  {
+    "index_x": 35,
+    "Student ID": "77U37RMN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15282442902805451,
+    "Rank": 2
+  },
+  {
+    "index_x": 35,
+    "Student ID": "77U37RMN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08269151246713521,
+    "Rank": 3
+  },
+  {
+    "index_x": 35,
+    "Student ID": "77U37RMN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07377520229262956,
+    "Rank": 4
+  },
+  {
+    "index_x": 35,
+    "Student ID": "77U37RMN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9932450065412091,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.03178337743120979,
+    "Rank": 5
+  },
+  {
+    "index_x": 36,
+    "Student ID": "3SXY474B",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921217718253711,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5593997522934184,
+    "Rank": 1
+  },
+  {
+    "index_x": 36,
+    "Student ID": "3SXY474B",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921217718253711,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07863354326019566,
+    "Rank": 2
+  },
+  {
+    "index_x": 36,
+    "Student ID": "3SXY474B",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921217718253711,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.068892922245868,
+    "Rank": 3
+  },
+  {
+    "index_x": 36,
+    "Student ID": "3SXY474B",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921217718253711,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.026737679686308895,
+    "Rank": 4
+  },
+  {
+    "index_x": 36,
+    "Student ID": "3SXY474B",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9921217718253711,
+    "Risk Prediction": 1,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": -0.02721050647556651,
+    "Rank": 5
+  },
+  {
+    "index_x": 37,
+    "Student ID": "TAUF2U1H",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9912166620194199,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5611601705642956,
+    "Rank": 1
+  },
+  {
+    "index_x": 37,
+    "Student ID": "TAUF2U1H",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9912166620194199,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.09464711917013494,
+    "Rank": 2
+  },
+  {
+    "index_x": 37,
+    "Student ID": "TAUF2U1H",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9912166620194199,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08176071964005205,
+    "Rank": 3
+  },
+  {
+    "index_x": 37,
+    "Student ID": "TAUF2U1H",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9912166620194199,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0736708746082698,
+    "Rank": 4
+  },
+  {
+    "index_x": 37,
+    "Student ID": "TAUF2U1H",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9912166620194199,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.02290531759359826,
+    "Rank": 5
+  },
+  {
+    "index_x": 38,
+    "Student ID": "A3K5644Y",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.3848033963766118,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.06720418770094208,
+    "Rank": 1
+  },
+  {
+    "index_x": 38,
+    "Student ID": "A3K5644Y",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.3848033963766118,
+    "Risk Prediction": 0,
+    "Feature": "GPA_last_3_sem > 3.27",
+    "Magnitude": 0.052080249807723585,
+    "Rank": 2
+  },
+  {
+    "index_x": 38,
+    "Student ID": "A3K5644Y",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.3848033963766118,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.050808503832843625,
+    "Rank": 3
+  },
+  {
+    "index_x": 38,
+    "Student ID": "A3K5644Y",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.3848033963766118,
+    "Risk Prediction": 0,
+    "Feature": "0.86 < course_pass_rate <= 0.95",
+    "Magnitude": 0.036451699229894705,
+    "Rank": 4
+  },
+  {
+    "index_x": 38,
+    "Student ID": "A3K5644Y",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.3848033963766118,
+    "Risk Prediction": 0,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": 0.03485049007428668,
+    "Rank": 5
+  },
+  {
+    "index_x": 39,
+    "Student ID": "OGQZ81I4",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9888298666924367,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5593305275931548,
+    "Rank": 1
+  },
+  {
+    "index_x": 39,
+    "Student ID": "OGQZ81I4",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9888298666924367,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07595576251187187,
+    "Rank": 2
+  },
+  {
+    "index_x": 39,
+    "Student ID": "OGQZ81I4",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9888298666924367,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07307233549396148,
+    "Rank": 3
+  },
+  {
+    "index_x": 39,
+    "Student ID": "OGQZ81I4",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9888298666924367,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.03049487499627382,
+    "Rank": 4
+  },
+  {
+    "index_x": 39,
+    "Student ID": "OGQZ81I4",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9888298666924367,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.036299694359634614,
+    "Rank": 5
+  },
+  {
+    "index_x": 40,
+    "Student ID": "REF9ZM83",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6257852676181362,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.16299420525646086,
+    "Rank": 1
+  },
+  {
+    "index_x": 40,
+    "Student ID": "REF9ZM83",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6257852676181362,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07949752868067549,
+    "Rank": 2
+  },
+  {
+    "index_x": 40,
+    "Student ID": "REF9ZM83",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6257852676181362,
+    "Risk Prediction": 1,
+    "Feature": "2.42 < years_enrolled <= 3.42",
+    "Magnitude": 0.06569708928310038,
+    "Rank": 3
+  },
+  {
+    "index_x": 40,
+    "Student ID": "REF9ZM83",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6257852676181362,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.05804847858569678,
+    "Rank": 4
+  },
+  {
+    "index_x": 40,
+    "Student ID": "REF9ZM83",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.6257852676181362,
+    "Risk Prediction": 1,
+    "Feature": "64.00 < total_hours_enrolled <= 78.00",
+    "Magnitude": 0.03502760011424,
+    "Rank": 5
+  },
+  {
+    "index_x": 41,
+    "Student ID": "UXCIOSE9",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9900198339276585,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5627895032452691,
+    "Rank": 1
+  },
+  {
+    "index_x": 41,
+    "Student ID": "UXCIOSE9",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9900198339276585,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07231926631428579,
+    "Rank": 2
+  },
+  {
+    "index_x": 41,
+    "Student ID": "UXCIOSE9",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9900198339276585,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.06996270246446368,
+    "Rank": 3
+  },
+  {
+    "index_x": 41,
+    "Student ID": "UXCIOSE9",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9900198339276585,
+    "Risk Prediction": 1,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": -0.023717277285279583,
+    "Rank": 4
+  },
+  {
+    "index_x": 41,
+    "Student ID": "UXCIOSE9",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9900198339276585,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.024334480845389576,
+    "Rank": 5
+  },
+  {
+    "index_x": 42,
+    "Student ID": "X278WJ15",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.989457640151337,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5658996741660569,
+    "Rank": 1
+  },
+  {
+    "index_x": 42,
+    "Student ID": "X278WJ15",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.989457640151337,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.09032639151741707,
+    "Rank": 2
+  },
+  {
+    "index_x": 42,
+    "Student ID": "X278WJ15",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.989457640151337,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07719793641404124,
+    "Rank": 3
+  },
+  {
+    "index_x": 42,
+    "Student ID": "X278WJ15",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.989457640151337,
+    "Risk Prediction": 1,
+    "Feature": "64.00 < total_hours_enrolled <= 78.00",
+    "Magnitude": 0.024830616538326918,
+    "Rank": 4
+  },
+  {
+    "index_x": 42,
+    "Student ID": "X278WJ15",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.989457640151337,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.027324388363667042,
+    "Rank": 5
+  },
+  {
+    "index_x": 43,
+    "Student ID": "0TRGOGFC",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932345810561447,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5672476975235776,
+    "Rank": 1
+  },
+  {
+    "index_x": 43,
+    "Student ID": "0TRGOGFC",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932345810561447,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07776954446374662,
+    "Rank": 2
+  },
+  {
+    "index_x": 43,
+    "Student ID": "0TRGOGFC",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932345810561447,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07214602373153176,
+    "Rank": 3
+  },
+  {
+    "index_x": 43,
+    "Student ID": "0TRGOGFC",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932345810561447,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.024077854851548067,
+    "Rank": 4
+  },
+  {
+    "index_x": 43,
+    "Student ID": "0TRGOGFC",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9932345810561447,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.03455275781678357,
+    "Rank": 5
+  },
+  {
+    "index_x": 44,
+    "Student ID": "8V654K7G",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9931689853912563,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5556811996566116,
+    "Rank": 1
+  },
+  {
+    "index_x": 44,
+    "Student ID": "8V654K7G",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9931689853912563,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1513262210799207,
+    "Rank": 2
+  },
+  {
+    "index_x": 44,
+    "Student ID": "8V654K7G",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9931689853912563,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08262832571770612,
+    "Rank": 3
+  },
+  {
+    "index_x": 44,
+    "Student ID": "8V654K7G",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9931689853912563,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07223467822174302,
+    "Rank": 4
+  },
+  {
+    "index_x": 44,
+    "Student ID": "8V654K7G",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9931689853912563,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.02899847747344669,
+    "Rank": 5
+  },
+  {
+    "index_x": 45,
+    "Student ID": "CAKOATA0",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9060989136033716,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5587864501430865,
+    "Rank": 1
+  },
+  {
+    "index_x": 45,
+    "Student ID": "CAKOATA0",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9060989136033716,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07905427933626866,
+    "Rank": 2
+  },
+  {
+    "index_x": 45,
+    "Student ID": "CAKOATA0",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9060989136033716,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07139450759880824,
+    "Rank": 3
+  },
+  {
+    "index_x": 45,
+    "Student ID": "CAKOATA0",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9060989136033716,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.027373285614199033,
+    "Rank": 4
+  },
+  {
+    "index_x": 45,
+    "Student ID": "CAKOATA0",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9060989136033716,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.02858990610171469,
+    "Rank": 5
+  },
+  {
+    "index_x": 46,
+    "Student ID": "GCEBER9H",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.992951030156924,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5628723980190137,
+    "Rank": 1
+  },
+  {
+    "index_x": 46,
+    "Student ID": "GCEBER9H",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.992951030156924,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15569695660962962,
+    "Rank": 2
+  },
+  {
+    "index_x": 46,
+    "Student ID": "GCEBER9H",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.992951030156924,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08122590280443512,
+    "Rank": 3
+  },
+  {
+    "index_x": 46,
+    "Student ID": "GCEBER9H",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.992951030156924,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07727678844535288,
+    "Rank": 4
+  },
+  {
+    "index_x": 46,
+    "Student ID": "GCEBER9H",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.992951030156924,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.02952061410951412,
+    "Rank": 5
+  },
+  {
+    "index_x": 47,
+    "Student ID": "SFAI04IP",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9909869508476808,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5570244564972404,
+    "Rank": 1
+  },
+  {
+    "index_x": 47,
+    "Student ID": "SFAI04IP",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9909869508476808,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10261726075005567,
+    "Rank": 2
+  },
+  {
+    "index_x": 47,
+    "Student ID": "SFAI04IP",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9909869508476808,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07934094423305922,
+    "Rank": 3
+  },
+  {
+    "index_x": 47,
+    "Student ID": "SFAI04IP",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9909869508476808,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07396076637542785,
+    "Rank": 4
+  },
+  {
+    "index_x": 47,
+    "Student ID": "SFAI04IP",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9909869508476808,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.030169225786402385,
+    "Rank": 5
+  },
+  {
+    "index_x": 48,
+    "Student ID": "U8MLPNIN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9893151345044382,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5565946284854043,
+    "Rank": 1
+  },
+  {
+    "index_x": 48,
+    "Student ID": "U8MLPNIN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9893151345044382,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10932679439131276,
+    "Rank": 2
+  },
+  {
+    "index_x": 48,
+    "Student ID": "U8MLPNIN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9893151345044382,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07544615417255382,
+    "Rank": 3
+  },
+  {
+    "index_x": 48,
+    "Student ID": "U8MLPNIN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9893151345044382,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07397910213048557,
+    "Rank": 4
+  },
+  {
+    "index_x": 48,
+    "Student ID": "U8MLPNIN",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9893151345044382,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.027820955537447376,
+    "Rank": 5
+  },
+  {
+    "index_x": 49,
+    "Student ID": "KYOE3HGU",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9891899989534989,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5669600824185389,
+    "Rank": 1
+  },
+  {
+    "index_x": 49,
+    "Student ID": "KYOE3HGU",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9891899989534989,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10707977686695942,
+    "Rank": 2
+  },
+  {
+    "index_x": 49,
+    "Student ID": "KYOE3HGU",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9891899989534989,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07644735706745344,
+    "Rank": 3
+  },
+  {
+    "index_x": 49,
+    "Student ID": "KYOE3HGU",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9891899989534989,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07156098181169462,
+    "Rank": 4
+  },
+  {
+    "index_x": 49,
+    "Student ID": "KYOE3HGU",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9891899989534989,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.04302759617750434,
+    "Rank": 5
+  },
+  {
+    "index_x": 50,
+    "Student ID": "YXBVGNMK",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5126271680849066,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1648630279481842,
+    "Rank": 1
+  },
+  {
+    "index_x": 50,
+    "Student ID": "YXBVGNMK",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5126271680849066,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07531490867569707,
+    "Rank": 2
+  },
+  {
+    "index_x": 50,
+    "Student ID": "YXBVGNMK",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5126271680849066,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07352821269162665,
+    "Rank": 3
+  },
+  {
+    "index_x": 50,
+    "Student ID": "YXBVGNMK",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5126271680849066,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM <= 62.00",
+    "Magnitude": 0.04973253259882547,
+    "Rank": 4
+  },
+  {
+    "index_x": 50,
+    "Student ID": "YXBVGNMK",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.5126271680849066,
+    "Risk Prediction": 1,
+    "Feature": "2.82 < GPA_last_3_sem <= 3.27",
+    "Magnitude": -0.0413008112600858,
+    "Rank": 5
+  },
+  {
+    "index_x": 51,
+    "Student ID": "3OW77Y54",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.23895154489624718,
+    "Risk Prediction": 0,
+    "Feature": "1.75 < years_enrolled <= 2.42",
+    "Magnitude": 0.24970916777035496,
+    "Rank": 1
+  },
+  {
+    "index_x": 51,
+    "Student ID": "3OW77Y54",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.23895154489624718,
+    "Risk Prediction": 0,
+    "Feature": "has_any_financial_aid=1",
+    "Magnitude": 0.05032022997781036,
+    "Rank": 2
+  },
+  {
+    "index_x": 51,
+    "Student ID": "3OW77Y54",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.23895154489624718,
+    "Risk Prediction": 0,
+    "Feature": "IR_total_fa_awd_amt_sum > 0.00",
+    "Magnitude": 0.03392759275517566,
+    "Rank": 3
+  },
+  {
+    "index_x": 51,
+    "Student ID": "3OW77Y54",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.23895154489624718,
+    "Risk Prediction": 0,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": 0.030367032479610517,
+    "Rank": 4
+  },
+  {
+    "index_x": 51,
+    "Student ID": "3OW77Y54",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.23895154489624718,
+    "Risk Prediction": 0,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": 0.025892252961125534,
+    "Rank": 5
+  },
+  {
+    "index_x": 52,
+    "Student ID": "F0YPBSGR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9376285292237971,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5565838884743859,
+    "Rank": 1
+  },
+  {
+    "index_x": 52,
+    "Student ID": "F0YPBSGR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9376285292237971,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.1554492387545881,
+    "Rank": 2
+  },
+  {
+    "index_x": 52,
+    "Student ID": "F0YPBSGR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9376285292237971,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07760520717034501,
+    "Rank": 3
+  },
+  {
+    "index_x": 52,
+    "Student ID": "F0YPBSGR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9376285292237971,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07227194755859666,
+    "Rank": 4
+  },
+  {
+    "index_x": 52,
+    "Student ID": "F0YPBSGR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.9376285292237971,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM <= 62.00",
+    "Magnitude": 0.03932018631212191,
+    "Rank": 5
+  },
+  {
+    "index_x": 53,
+    "Student ID": "92U4IZGZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9676406197693873,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5494777947340791,
+    "Rank": 1
+  },
+  {
+    "index_x": 53,
+    "Student ID": "92U4IZGZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9676406197693873,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10397992811969865,
+    "Rank": 2
+  },
+  {
+    "index_x": 53,
+    "Student ID": "92U4IZGZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9676406197693873,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08393815901014501,
+    "Rank": 3
+  },
+  {
+    "index_x": 53,
+    "Student ID": "92U4IZGZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9676406197693873,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07202979926028992,
+    "Rank": 4
+  },
+  {
+    "index_x": 53,
+    "Student ID": "92U4IZGZ",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9676406197693873,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM <= 62.00",
+    "Magnitude": 0.03696574788632382,
+    "Rank": 5
+  },
+  {
+    "index_x": 54,
+    "Student ID": "GGVJHGNH",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992996562759293,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5603917272043979,
+    "Rank": 1
+  },
+  {
+    "index_x": 54,
+    "Student ID": "GGVJHGNH",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992996562759293,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07886121735340688,
+    "Rank": 2
+  },
+  {
+    "index_x": 54,
+    "Student ID": "GGVJHGNH",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992996562759293,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.06933309464125431,
+    "Rank": 3
+  },
+  {
+    "index_x": 54,
+    "Student ID": "GGVJHGNH",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992996562759293,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.0262308581376591,
+    "Rank": 4
+  },
+  {
+    "index_x": 54,
+    "Student ID": "GGVJHGNH",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.992996562759293,
+    "Risk Prediction": 1,
+    "Feature": "0.75 < course_pass_rate <= 0.86",
+    "Magnitude": -0.02699536199436252,
+    "Rank": 5
+  },
+  {
+    "index_x": 55,
+    "Student ID": "M7IAE49K",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.8660992980548496,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5589788444284701,
+    "Rank": 1
+  },
+  {
+    "index_x": 55,
+    "Student ID": "M7IAE49K",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.8660992980548496,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15329775817350452,
+    "Rank": 2
+  },
+  {
+    "index_x": 55,
+    "Student ID": "M7IAE49K",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.8660992980548496,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.09580606774747545,
+    "Rank": 3
+  },
+  {
+    "index_x": 55,
+    "Student ID": "M7IAE49K",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.8660992980548496,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08017013695848149,
+    "Rank": 4
+  },
+  {
+    "index_x": 55,
+    "Student ID": "M7IAE49K",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.8660992980548496,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07511757559467859,
+    "Rank": 5
+  },
+  {
+    "index_x": 56,
+    "Student ID": "6PXJSY9J",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9927011056097302,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5518799116193001,
+    "Rank": 1
+  },
+  {
+    "index_x": 56,
+    "Student ID": "6PXJSY9J",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9927011056097302,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.14991153447808178,
+    "Rank": 2
+  },
+  {
+    "index_x": 56,
+    "Student ID": "6PXJSY9J",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9927011056097302,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10214736887439867,
+    "Rank": 3
+  },
+  {
+    "index_x": 56,
+    "Student ID": "6PXJSY9J",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9927011056097302,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0753818535727479,
+    "Rank": 4
+  },
+  {
+    "index_x": 56,
+    "Student ID": "6PXJSY9J",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9927011056097302,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07346157470288679,
+    "Rank": 5
+  },
+  {
+    "index_x": 57,
+    "Student ID": "N4UE762U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9751799174067352,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5565735142569374,
+    "Rank": 1
+  },
+  {
+    "index_x": 57,
+    "Student ID": "N4UE762U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9751799174067352,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10930629085023481,
+    "Rank": 2
+  },
+  {
+    "index_x": 57,
+    "Student ID": "N4UE762U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9751799174067352,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07543489209379863,
+    "Rank": 3
+  },
+  {
+    "index_x": 57,
+    "Student ID": "N4UE762U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9751799174067352,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07396326120595954,
+    "Rank": 4
+  },
+  {
+    "index_x": 57,
+    "Student ID": "N4UE762U",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9751799174067352,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.02780127327710999,
+    "Rank": 5
+  },
+  {
+    "index_x": 58,
+    "Student ID": "QKA25TB3",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.685961729963886,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5635251735821336,
+    "Rank": 1
+  },
+  {
+    "index_x": 58,
+    "Student ID": "QKA25TB3",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.685961729963886,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07437429580787121,
+    "Rank": 2
+  },
+  {
+    "index_x": 58,
+    "Student ID": "QKA25TB3",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.685961729963886,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07085992668504959,
+    "Rank": 3
+  },
+  {
+    "index_x": 58,
+    "Student ID": "QKA25TB3",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.685961729963886,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.026508643216150814,
+    "Rank": 4
+  },
+  {
+    "index_x": 58,
+    "Student ID": "QKA25TB3",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.685961729963886,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.030402678394755238,
+    "Rank": 5
+  },
+  {
+    "index_x": 59,
+    "Student ID": "CZWH0L89",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9875233162506308,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5623209255981512,
+    "Rank": 1
+  },
+  {
+    "index_x": 59,
+    "Student ID": "CZWH0L89",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9875233162506308,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10111787825212769,
+    "Rank": 2
+  },
+  {
+    "index_x": 59,
+    "Student ID": "CZWH0L89",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9875233162506308,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07229239045438586,
+    "Rank": 3
+  },
+  {
+    "index_x": 59,
+    "Student ID": "CZWH0L89",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9875233162506308,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07218534581676653,
+    "Rank": 4
+  },
+  {
+    "index_x": 59,
+    "Student ID": "CZWH0L89",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9875233162506308,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem <= 1.59",
+    "Magnitude": 0.02722962651187618,
+    "Rank": 5
+  },
+  {
+    "index_x": 60,
+    "Student ID": "9QGOOQPH",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9863550680546315,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5650826040931829,
+    "Rank": 1
+  },
+  {
+    "index_x": 60,
+    "Student ID": "9QGOOQPH",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9863550680546315,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10628958008533684,
+    "Rank": 2
+  },
+  {
+    "index_x": 60,
+    "Student ID": "9QGOOQPH",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9863550680546315,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.09005543618154094,
+    "Rank": 3
+  },
+  {
+    "index_x": 60,
+    "Student ID": "9QGOOQPH",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9863550680546315,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07507820609360469,
+    "Rank": 4
+  },
+  {
+    "index_x": 60,
+    "Student ID": "9QGOOQPH",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9863550680546315,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.029645413907989308,
+    "Rank": 5
+  },
+  {
+    "index_x": 61,
+    "Student ID": "TXH922LA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993132353428943,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5632992011527628,
+    "Rank": 1
+  },
+  {
+    "index_x": 61,
+    "Student ID": "TXH922LA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993132353428943,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07625322140588288,
+    "Rank": 2
+  },
+  {
+    "index_x": 61,
+    "Student ID": "TXH922LA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993132353428943,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.0732166826568611,
+    "Rank": 3
+  },
+  {
+    "index_x": 61,
+    "Student ID": "TXH922LA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993132353428943,
+    "Risk Prediction": 1,
+    "Feature": "1.59 < GPA_last_sem <= 2.70",
+    "Magnitude": 0.029164358373715824,
+    "Rank": 4
+  },
+  {
+    "index_x": 61,
+    "Student ID": "TXH922LA",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993132353428943,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.02442747466518749,
+    "Rank": 5
+  },
+  {
+    "index_x": 62,
+    "Student ID": "7VRTYWAM",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993238173604221,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5582127170389929,
+    "Rank": 1
+  },
+  {
+    "index_x": 62,
+    "Student ID": "7VRTYWAM",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993238173604221,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08369782602906874,
+    "Rank": 2
+  },
+  {
+    "index_x": 62,
+    "Student ID": "7VRTYWAM",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993238173604221,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07482555465824926,
+    "Rank": 3
+  },
+  {
+    "index_x": 62,
+    "Student ID": "7VRTYWAM",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993238173604221,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.02614174247998513,
+    "Rank": 4
+  },
+  {
+    "index_x": 62,
+    "Student ID": "7VRTYWAM",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.993238173604221,
+    "Risk Prediction": 1,
+    "Feature": "IR_total_grants_nb_awd_amt_sum > 0.00",
+    "Magnitude": -0.02678654913292675,
+    "Rank": 5
+  },
+  {
+    "index_x": 63,
+    "Student ID": "DCXB5FZR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7264077561730632,
+    "Risk Prediction": 1,
+    "Feature": "course_pass_rate <= 0.75",
+    "Magnitude": 0.15694922742000275,
+    "Rank": 1
+  },
+  {
+    "index_x": 63,
+    "Student ID": "DCXB5FZR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7264077561730632,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_3_sem <= 2.29",
+    "Magnitude": 0.10244096558129236,
+    "Rank": 2
+  },
+  {
+    "index_x": 63,
+    "Student ID": "DCXB5FZR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7264077561730632,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.08499584247745891,
+    "Rank": 3
+  },
+  {
+    "index_x": 63,
+    "Student ID": "DCXB5FZR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7264077561730632,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.074891725850077,
+    "Rank": 4
+  },
+  {
+    "index_x": 63,
+    "Student ID": "DCXB5FZR",
+    "Risk Group": "0 to 4 years enrolled",
+    "Risk Score": 0.7264077561730632,
+    "Risk Prediction": 1,
+    "Feature": "2.42 < years_enrolled <= 3.42",
+    "Magnitude": 0.07461154407696927,
+    "Rank": 5
+  },
+  {
+    "index_x": 64,
+    "Student ID": "SJ8J1ZWM",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941297352832077,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5673380483627232,
+    "Rank": 1
+  },
+  {
+    "index_x": 64,
+    "Student ID": "SJ8J1ZWM",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941297352832077,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.08169817880307342,
+    "Rank": 2
+  },
+  {
+    "index_x": 64,
+    "Student ID": "SJ8J1ZWM",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941297352832077,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07585134307144964,
+    "Rank": 3
+  },
+  {
+    "index_x": 64,
+    "Student ID": "SJ8J1ZWM",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941297352832077,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.02772788250148917,
+    "Rank": 4
+  },
+  {
+    "index_x": 64,
+    "Student ID": "SJ8J1ZWM",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9941297352832077,
+    "Risk Prediction": 1,
+    "Feature": "2.70 < GPA_last_sem <= 3.33",
+    "Magnitude": -0.028603259848802687,
+    "Rank": 5
+  },
+  {
+    "index_x": 65,
+    "Student ID": "XTSNJ9RZ",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9934442096686481,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5592923736804045,
+    "Rank": 1
+  },
+  {
+    "index_x": 65,
+    "Student ID": "XTSNJ9RZ",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9934442096686481,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.08131921886891672,
+    "Rank": 2
+  },
+  {
+    "index_x": 65,
+    "Student ID": "XTSNJ9RZ",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9934442096686481,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07466775008542788,
+    "Rank": 3
+  },
+  {
+    "index_x": 65,
+    "Student ID": "XTSNJ9RZ",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9934442096686481,
+    "Risk Prediction": 1,
+    "Feature": "stdev_credits_sem <= 2.83",
+    "Magnitude": 0.030902267245271526,
+    "Rank": 4
+  },
+  {
+    "index_x": 65,
+    "Student ID": "XTSNJ9RZ",
+    "Risk Group": "6+ years enrolled",
+    "Risk Score": 0.9934442096686481,
+    "Risk Prediction": 1,
+    "Feature": "Credits+Hours Semester Completed Perf SUM > 86.50",
+    "Magnitude": -0.03352174592549138,
+    "Rank": 5
+  },
+  {
+    "index_x": 66,
+    "Student ID": "PJHY0OLO",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9939388261749376,
+    "Risk Prediction": 1,
+    "Feature": "years_enrolled > 3.42",
+    "Magnitude": 0.5595638581792126,
+    "Rank": 1
+  },
+  {
+    "index_x": 66,
+    "Student ID": "PJHY0OLO",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9939388261749376,
+    "Risk Prediction": 1,
+    "Feature": "is_justice_academy=0",
+    "Magnitude": 0.07696395568866714,
+    "Rank": 2
+  },
+  {
+    "index_x": 66,
+    "Student ID": "PJHY0OLO",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9939388261749376,
+    "Risk Prediction": 1,
+    "Feature": "has_associates_degree=0",
+    "Magnitude": 0.07259325081644669,
+    "Rank": 3
+  },
+  {
+    "index_x": 66,
+    "Student ID": "PJHY0OLO",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9939388261749376,
+    "Risk Prediction": 1,
+    "Feature": "GPA_semester_stdev <= 0.39",
+    "Magnitude": -0.03414723399594252,
+    "Rank": 4
+  },
+  {
+    "index_x": 66,
+    "Student ID": "PJHY0OLO",
+    "Risk Group": "4 to 6 years enrolled",
+    "Risk Score": 0.9939388261749376,
+    "Risk Prediction": 1,
+    "Feature": "GPA_last_sem > 3.33",
+    "Magnitude": -0.036908955043539776,
+    "Rank": 5
+  }
+]

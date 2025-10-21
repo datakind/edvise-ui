@@ -1095,10 +1095,10 @@ class ApiController extends Controller
             return response()->json(['error' => $instErr], 401);
         }
 
-        \Log::info('Production request - Institution ID: ' . $inst);
-        $externalUrl = '/inference/top-features/'.$run_id;
-        \Log::info('Production request - External API URL: ' . $externalUrl);
-        \Log::info('Production request - Full external URL: ' . env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
+        \Log::info('Production request - Institution ID: '.$inst);
+        $externalUrl = '/training/feature_importance/'.$run_id;
+        \Log::info('Production request - External API URL: '.$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$inst.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }

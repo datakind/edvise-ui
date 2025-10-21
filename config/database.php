@@ -43,7 +43,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-'mysql' => [
+        'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -59,12 +59,14 @@ return [
             'strict' => true,
             'engine' => null,
             'sslmode' => 'require',
-            'options' => [
-                PDO::MYSQL_ATTR_SSL_CA => env('SSL_CA_PATH'),
-                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-                PDO::MYSQL_ATTR_SSL_KEY => env('SSL_KEY_PATH'),
-                PDO::MYSQL_ATTR_SSL_CERT => env('SSL_CERT_PATH'),
-            ],
+            'options' => env('APP_ENV') === 'local'
+                            ? []
+                            : array_filter([
+                                PDO::MYSQL_ATTR_SSL_CA => env('SSL_CA_PATH'),
+                                PDO::MYSQL_ATTR_SSL_CERT => env('SSL_CERT_PATH'),
+                                PDO::MYSQL_ATTR_SSL_KEY => env('SSL_KEY_PATH'),
+                                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+                            ]),
         ],
 
         'pgsql' => [

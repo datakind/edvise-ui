@@ -58,8 +58,7 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'sslmode' => 'require',
-            'options' => env('APP_ENV') === 'local'
+            'options' => in_array(env('APP_ENV'), ['local', 'dev'])
                             ? []
                             : array_filter([
                                 PDO::MYSQL_ATTR_SSL_CA => env('SSL_CA_PATH'),

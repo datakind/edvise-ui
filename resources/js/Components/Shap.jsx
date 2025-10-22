@@ -10,6 +10,30 @@ export default function Shap({ rawFeatures, currentFeature }) {
     return `${featureName}_${timestamp}`;
   }, [currentFeature?.feature_readable_name]);
 
+  // Calculate global SHAP value range across ALL features
+  const globalShapRange = useMemo(() => {
+    if (!rawFeatures || rawFeatures.length === 0) {
+      return { min: -1, max: 1 };
+    }
+
+    const allShapValues = rawFeatures.map(item => {
+      if ('shap_value' in item) return parseFloat(item.shap_value) || 0;
+      if ('feature_importance' in item) return parseFloat(item.feature_importance) || 0;
+      if ('importance' in item) return parseFloat(item.importance) || 0;
+      return 0;
+    }).filter(val => typeof val === 'number' && !isNaN(val));
+
+    const min = Math.min(...allShapValues);
+    const max = Math.max(...allShapValues);
+
+    // Add some padding (20%) and ensure the range includes 0
+    const padding = Math.max(Math.abs(min), Math.abs(max)) * 0.2;
+    return {
+      min: Math.min(min - padding, -padding),
+      max: Math.max(max + padding, padding),
+    };
+  }, [rawFeatures]);
+
   // Log the props to see what data is available
   console.log(`=== SHAP COMPONENT ${componentId} ===`);
   console.log('rawFeatures:', rawFeatures);
@@ -108,15 +132,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
-    // Calculate the midpoint of the x-axis range for the reference line
-    const xMin = Math.min(...x.filter(x => typeof x === 'number'));
-    const xMax = Math.max(...x.filter(x => typeof x === 'number'));
-    const xMidpoint = (xMin + xMax) / 2;
-
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
-      xRange: { min: xMin, max: xMax, midpoint: xMidpoint },
       xValuesStats: {
         min: Math.min(...x),
         max: Math.max(...x),
@@ -141,19 +159,23 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      xMidpoint,
     };
   }, [currentFeature, rawFeatures]);
 
-  // Generate color based on feature_value
-  const getColor = featureValue => {
-    // Normalize feature_value to 0-1 range for color mapping
-    // Assuming feature_value is typically between -2 and 2
-    const normalized = Math.max(0, Math.min(1, (featureValue + 2) / 4));
+  // Generate color based on feature_value with improved contrast
+  const getColor = (featureValue, allValues) => {
+    // Use actual data range for better color mapping
+    const minVal = Math.min(...allValues.filter(v => typeof v === 'number'));
+    const maxVal = Math.max(...allValues.filter(v => typeof v === 'number'));
+
+    // Normalize to 0-1 based on actual data range
+    const normalized = maxVal === minVal
+      ? 0.5
+      : Math.max(0, Math.min(1, (featureValue - minVal) / (maxVal - minVal)));
 
     // Convert hex colors to RGB for interpolation
-    const color1 = { r: 178, g: 241, b: 249 }; // #B2F1F9 (light blue)
-    const color2 = { r: 0, g: 124, b: 140 }; // #007C8C (teal)
+    const color1 = { r: 178, g: 241, b: 249 }; // #B2F1F9 (light blue) for low values
+    const color2 = { r: 0, g: 124, b: 140 }; // #007C8C (teal) for high values
 
     // Linear interpolation between the two colors
     const r = Math.round(color1.r + (color2.r - color1.r) * normalized);
@@ -180,21 +202,24 @@ export default function Shap({ rawFeatures, currentFeature }) {
               mode: 'markers',
               type: 'scatter',
               marker: {
-                size: 20,
+                size: 12,
                 color: plotData.featureValues.map(val =>
-                  typeof val === 'number' ? getColor(val) : '#ccc',
+                  typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
                 ),
-                opacity: 0.7,
-                line: { width: 0 },
+                opacity: 1.0,
+                line: {
+                  width: 0.5,
+                  color: 'rgba(255, 255, 255, 0.3)'
+                },
               },
               text: plotData.x.map((val, idx) => {
-                const xVal = typeof val === 'number' ? val.toFixed(2) : val;
-                const yVal =
+                const shapVal = typeof val === 'number' ? val.toFixed(3) : val;
+                const featureVal =
                   typeof plotData.featureValues[idx] === 'number'
-                    ? plotData.featureValues[idx].toFixed(2)
+                    ? plotData.featureValues[idx].toFixed(3)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(2)}`;
+                return `<b>Student Data Point</b><br>SHAP Value: ${shapVal}<br>Feature Value: ${featureVal}<br>Support Score: ${supportScore.toFixed(2)}`;
               }),
               hoverinfo: 'text',
               hoverlabel: {
@@ -207,12 +232,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             margin: { l: 10, r: 10, t: 0, b: 0 },
             xaxis: {
               visible: false,
-              range: [
-                Math.min(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.2 || 0,
-                Math.max(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.2 || 1,
-              ],
+              range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
               showgrid: false,
               zeroline: false,
@@ -231,23 +251,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
             shapes: [
               {
                 type: 'line',
-                x0: 0.5,
+                x0: 0,
                 y0: -2,
-                x1: 0.5,
-                y1: 2,
-                xref: 'x',
-                yref: 'y',
-                line: {
-                  color: '#D5E5EE',
-                  width: 2,
-                },
-                layer: 'below',
-              },
-              {
-                type: 'line',
-                x0: plotData.xMidpoint,
-                y0: -2,
-                x1: plotData.xMidpoint,
+                x1: 0,
                 y1: 2,
                 xref: 'x',
                 yref: 'y',
@@ -260,31 +266,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
             ],
             annotations: [
               {
-                x: 0.5,
-                y: 2.2,
-                xref: 'x',
-                yref: 'y',
-                text: 'Midpoint',
-                showarrow: false,
-                font: { size: 10, color: '#666' },
-                align: 'center',
-              },
-              {
                 x: 0,
                 y: 2.2,
                 xref: 'x',
                 yref: 'y',
-                text: 'Neutral',
-                showarrow: false,
-                font: { size: 10, color: '#666' },
-                align: 'center',
-              },
-              {
-                x: plotData.xMidpoint,
-                y: 2.2,
-                xref: 'x',
-                yref: 'y',
-                text: `Midpoint: ${plotData.xMidpoint.toFixed(2)}`,
+                text: 'No Effect',
                 showarrow: false,
                 font: { size: 10, color: '#666' },
                 align: 'center',

@@ -29,3 +29,45 @@ export const formatModelName = str => {
     })
     .join(' ');
 };
+
+/**
+ * Converts a string to title case with proper handling of small words
+ * Small words (a, an, the, in, on, at, etc.) are not capitalized unless they're the first or last word
+ * @param {string} str - The input string
+ * @returns {string} - Title cased string
+ */
+export const toTitleCase = str => {
+  if (!str || typeof str !== 'string') return '';
+
+  // List of small words that should not be capitalized (unless first or last word)
+  const smallWords = new Set([
+    'a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'from', 'in',
+    'into', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'up', 'via', 'with'
+  ]);
+
+  const words = str.trim().split(/\s+/);
+
+  return words
+    .map((word, index) => {
+      // Skip empty words
+      if (!word) return '';
+
+      // Get the lowercase version for comparison
+      const lowerWord = word.toLowerCase();
+
+      // Always capitalize first and last words
+      const isFirstOrLast = index === 0 || index === words.length - 1;
+
+      // Check if it's a small word
+      const isSmallWord = smallWords.has(lowerWord);
+
+      // Capitalize if it's first/last word, or not a small word
+      if (isFirstOrLast || !isSmallWord) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+
+      // Keep small words lowercase
+      return lowerWord;
+    })
+    .join(' ');
+};

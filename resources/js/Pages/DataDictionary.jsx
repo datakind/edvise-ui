@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-import { formatModelName } from '../utils/stringUtils';
+import { formatModelName, toTitleCase } from '../utils/stringUtils';
 
 export default function DataDictionary() {
   const [inst_id, setInstId] = useState(null);
@@ -439,7 +439,7 @@ export default function DataDictionary() {
                     >
                       <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
                         <div className="text-base font-medium text-black">
-                          {feature.readable_feature_name}
+                          {toTitleCase(feature.readable_feature_name)}
                         </div>
                       </td>
                       <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">

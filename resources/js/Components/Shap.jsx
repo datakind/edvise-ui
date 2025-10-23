@@ -26,11 +26,12 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const min = Math.min(...allShapValues);
     const max = Math.max(...allShapValues);
 
-    // Add some padding (20%) and ensure the range includes 0
-    const padding = Math.max(Math.abs(min), Math.abs(max)) * 0.2;
+    // Create symmetric range centered at 0
+    const maxAbsValue = Math.max(Math.abs(min), Math.abs(max));
+    const symmetricPadding = maxAbsValue * 0.2;
     return {
-      min: Math.min(min - padding, -padding),
-      max: Math.max(max + padding, padding),
+      min: -(maxAbsValue + symmetricPadding),
+      max: maxAbsValue + symmetricPadding,
     };
   }, [rawFeatures]);
 

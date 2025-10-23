@@ -248,8 +248,8 @@ function ModelResultsOverview({ run_id, modelName }) {
             onClick={handleExportData}
             disabled={!output_link}
             className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${output_link
-                ? 'bg-[#f79222] hover:bg-[#e67c00]'
-                : 'cursor-not-allowed bg-gray-400'
+              ? 'bg-[#f79222] hover:bg-[#e67c00]'
+              : 'cursor-not-allowed bg-gray-400'
               }`}
           >
             <svg

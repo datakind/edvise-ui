@@ -35,6 +35,58 @@ export default function Shap({ rawFeatures, currentFeature }) {
     };
   }, [rawFeatures]);
 
+  // Calculate global y-axis range based on jitter spread across ALL features
+  const globalYRange = useMemo(() => {
+    if (!rawFeatures || rawFeatures.length === 0) {
+      return { min: -2, max: 2 };
+    }
+
+    // Calculate jitter for all features to find the broadest range
+    const allJitterValues = [];
+
+    // Group by feature to calculate jitter for each
+    const featureGroups = {};
+    rawFeatures.forEach(item => {
+      const featureName = item.feature_readable_name;
+      if (!featureGroups[featureName]) {
+        featureGroups[featureName] = [];
+      }
+      featureGroups[featureName].push(item);
+    });
+
+    // Calculate jitter for each feature and collect all values
+    Object.values(featureGroups).forEach(featureData => {
+      featureData.forEach((item, idx) => {
+        const shapValue = parseFloat(item.shap_value || item.feature_importance || item.importance || 0);
+        const baseJitter = (Math.random() - 0.5) * 0.6;
+        const importanceSpread = Math.abs(shapValue) * 0.8;
+
+        const seed = (item.feature_readable_name + idx)
+          .split('')
+          .reduce((a, b) => {
+            a = ((a << 5) - a + b.charCodeAt(0)) & 0xffffffff;
+            return a;
+          }, 0);
+
+        const randomFactor = (seed % 100) / 100;
+        const finalJitter = baseJitter + (randomFactor - 0.5) * importanceSpread;
+        allJitterValues.push(Math.max(-1.5, Math.min(1.5, finalJitter)));
+      });
+    });
+
+    const minJitter = Math.min(...allJitterValues);
+    const maxJitter = Math.max(...allJitterValues);
+
+    // Add padding and ensure symmetric range
+    const maxAbsJitter = Math.max(Math.abs(minJitter), Math.abs(maxJitter));
+    const padding = maxAbsJitter * 0.2;
+
+    return {
+      min: -(maxAbsJitter + padding),
+      max: maxAbsJitter + padding,
+    };
+  }, [rawFeatures]);
+
   // Log the props to see what data is available
   console.log(`=== SHAP COMPONENT ${componentId} ===`);
   console.log('rawFeatures:', rawFeatures);
@@ -240,7 +292,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
             yaxis: {
               visible: false,
-              range: [-2, 2],
+              range: [globalYRange.min, globalYRange.max],
               fixedrange: true,
               showgrid: false,
               zeroline: false,
@@ -253,9 +305,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               {
                 type: 'line',
                 x0: 0,
-                y0: -2,
+                y0: globalYRange.min,
                 x1: 0,
-                y1: 2,
+                y1: globalYRange.max,
                 xref: 'x',
                 yref: 'y',
                 line: {
@@ -268,7 +320,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             annotations: [
               {
                 x: 0,
-                y: 2.2,
+                y: globalYRange.max + 0.2,
                 xref: 'x',
                 yref: 'y',
                 text: 'No Effect',

@@ -58,7 +58,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
     Object.values(featureGroups).forEach(featureData => {
       featureData.forEach((item, idx) => {
         const shapValue = parseFloat(item.shap_value || item.feature_importance || item.importance || 0);
-        const baseJitter = (Math.random() - 0.5) * 0.6;
+        const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
         const importanceSpread = Math.abs(shapValue) * 0.8;
 
         const seed = (item.feature_readable_name + idx)
@@ -147,8 +147,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
       // Get the feature importance value for this data point
       const featureImportance = x[idx];
 
-      // Create base jitter based on feature importance (more spread for higher importance)
-      const baseJitter = (Math.random() - 0.5) * 0.6;
+      // Create base jitter using functional form instead of uniform random
+      const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
 
       // Add clustering effect based on feature importance
       // Higher importance features get more vertical spread to show concentrations

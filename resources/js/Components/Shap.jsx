@@ -26,11 +26,64 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const min = Math.min(...allShapValues);
     const max = Math.max(...allShapValues);
 
-    // Add some padding (20%) and ensure the range includes 0
-    const padding = Math.max(Math.abs(min), Math.abs(max)) * 0.2;
+    // Create symmetric range centered at 0
+    const maxAbsValue = Math.max(Math.abs(min), Math.abs(max));
+    const symmetricPadding = maxAbsValue * 0.2;
     return {
-      min: Math.min(min - padding, -padding),
-      max: Math.max(max + padding, padding),
+      min: -(maxAbsValue + symmetricPadding),
+      max: maxAbsValue + symmetricPadding,
+    };
+  }, [rawFeatures]);
+
+  // Calculate global y-axis range based on jitter spread across ALL features
+  const globalYRange = useMemo(() => {
+    if (!rawFeatures || rawFeatures.length === 0) {
+      return { min: -2, max: 2 };
+    }
+
+    // Calculate jitter for all features to find the broadest range
+    const allJitterValues = [];
+
+    // Group by feature to calculate jitter for each
+    const featureGroups = {};
+    rawFeatures.forEach(item => {
+      const featureName = item.feature_readable_name;
+      if (!featureGroups[featureName]) {
+        featureGroups[featureName] = [];
+      }
+      featureGroups[featureName].push(item);
+    });
+
+    // Calculate jitter for each feature and collect all values
+    Object.values(featureGroups).forEach(featureData => {
+      featureData.forEach((item, idx) => {
+        const shapValue = parseFloat(item.shap_value || item.feature_importance || item.importance || 0);
+        const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
+        const importanceSpread = Math.abs(shapValue) * 0.8;
+
+        const seed = (item.feature_readable_name + idx)
+          .split('')
+          .reduce((a, b) => {
+            a = ((a << 5) - a + b.charCodeAt(0)) & 0xffffffff;
+            return a;
+          }, 0);
+
+        const randomFactor = (seed % 100) / 100;
+        const finalJitter = baseJitter + (randomFactor - 0.5) * importanceSpread;
+        allJitterValues.push(Math.max(-1.5, Math.min(1.5, finalJitter)));
+      });
+    });
+
+    const minJitter = Math.min(...allJitterValues);
+    const maxJitter = Math.max(...allJitterValues);
+
+    // Add padding and ensure symmetric range
+    const maxAbsJitter = Math.max(Math.abs(minJitter), Math.abs(maxJitter));
+    const padding = maxAbsJitter * 0.2;
+
+    return {
+      min: -(maxAbsJitter + padding),
+      max: maxAbsJitter + padding,
     };
   }, [rawFeatures]);
 
@@ -94,8 +147,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
       // Get the feature importance value for this data point
       const featureImportance = x[idx];
 
-      // Create base jitter based on feature importance (more spread for higher importance)
-      const baseJitter = (Math.random() - 0.5) * 0.6;
+      // Create base jitter using functional form instead of uniform random
+      const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
 
       // Add clustering effect based on feature importance
       // Higher importance features get more vertical spread to show concentrations
@@ -239,7 +292,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
             yaxis: {
               visible: false,
-              range: [-2, 2],
+              range: [globalYRange.min, globalYRange.max],
               fixedrange: true,
               showgrid: false,
               zeroline: false,
@@ -252,9 +305,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
               {
                 type: 'line',
                 x0: 0,
-                y0: -2,
+                y0: globalYRange.min,
                 x1: 0,
-                y1: 2,
+                y1: globalYRange.max,
                 xref: 'x',
                 yref: 'y',
                 line: {
@@ -267,7 +320,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             annotations: [
               {
                 x: 0,
-                y: 2.2,
+                y: globalYRange.max + 0.2,
                 xref: 'x',
                 yref: 'y',
                 text: 'No Effect',

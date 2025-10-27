@@ -390,7 +390,7 @@ export default function AppLayout({ title, renderHeader, children }) {
         <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
           <div className="flex flex-col justify-between">
             <ul role="list" className="flex flex-1 flex-col gap-y-12">
-              <div
+              <li
                 className="flex h-16 shrink-0 flex-col items-center pt-12"
                 key="logo"
               >
@@ -401,15 +401,16 @@ export default function AppLayout({ title, renderHeader, children }) {
                     alt="Edvise Logo"
                   />
                 </a>
-              </div>
-              <ul>
-                {renderNav(navAboveLine)}
+              </li>
+              {renderNav(navAboveLine)}
+              <li key="divider">
                 <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
-                {renderNav(navigationBelowLine)}
-                {user ? (
+              </li>
+              {renderNav(navigationBelowLine)}
+              {user ? (
+                <li key="profile">
                   <div
                     className="flex hidden items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50"
-                    key="profile"
                   >
                     <span className="sr-only">Your profile</span>
                     <Dropdown>
@@ -480,10 +481,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                       </Dropdown.Content>
                     </Dropdown>
                   </div>
-                ) : (
-                  <></>
-                )}
-              </ul>
+                </li>
+              ) : null}
             </ul>
             {user ? (
               <div></div>

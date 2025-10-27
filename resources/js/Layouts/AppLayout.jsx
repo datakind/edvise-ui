@@ -221,9 +221,9 @@ export default function AppLayout({ title, renderHeader, children }) {
   const renderNav = navMap =>
     navMap.map(item =>
       (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
-      (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-      (!userIsDatakinder &&
-        item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
+        (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
+        (!userIsDatakinder &&
+          item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
         <></>
       ) : (
         <li key={item.name}>

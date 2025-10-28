@@ -356,13 +356,21 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
           ]}
           layout={{
-            margin: { l: 10, r: 10, t: 0, b: 0 },
+            margin: { l: 10, r: 10, t: 0, b: 50 },
             xaxis: {
-              visible: false,
+              visible: true,
+              title: {
+                text: 'SHAP Value',
+                font: { size: 12, color: '#666' }
+              },
               range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
-              showgrid: false,
-              zeroline: false,
+              showgrid: true,
+              gridcolor: '#E5E7EB',
+              zeroline: true,
+              zerolinecolor: '#D5E5EE',
+              zerolinewidth: 2,
+              tickfont: { size: 10, color: '#666' },
             },
             yaxis: {
               visible: false,
@@ -374,7 +382,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             plot_bgcolor: 'rgba(0,0,0,0)',
             paper_bgcolor: 'rgba(0,0,0,0)',
             showlegend: false,
-            height: 200,
+            height: 250,
             shapes: [
               {
                 type: 'line',
@@ -405,7 +413,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             ],
           }}
           config={{ displayModeBar: false, responsive: true }}
-          style={{ width: '100%', height: 200 }}
+          style={{ width: '100%', height: 250 }}
         />
       ) : (
         <div className="flex h-32 items-center justify-center text-gray-500">

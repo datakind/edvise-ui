@@ -54,32 +54,68 @@ export default function Shap({ rawFeatures, currentFeature }) {
       featureGroups[featureName].push(item);
     });
 
-    // Calculate jitter for each feature and collect all values
+    // Calculate beeswarm jitter for each feature with collision detection
     Object.values(featureGroups).forEach(featureData => {
-      featureData.forEach((item, idx) => {
-        const shapValue = parseFloat(item.shap_value || item.feature_importance || item.importance || 0);
-        const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
-        const importanceSpread = Math.abs(shapValue) * 0.8;
+      // Create array with SHAP values
+      const points = featureData.map((item, idx) => ({
+        x: parseFloat(item.shap_value || item.feature_importance || item.importance || 0),
+        originalIdx: idx,
+        y: 0
+      }));
 
-        const seed = (item.feature_readable_name + idx)
-          .split('')
-          .reduce((a, b) => {
-            a = ((a << 5) - a + b.charCodeAt(0)) & 0xffffffff;
-            return a;
-          }, 0);
+      // Sort by x position (SHAP value)
+      points.sort((a, b) => a.x - b.x);
 
-        const randomFactor = (seed % 100) / 100;
-        const finalJitter = baseJitter + (randomFactor - 0.5) * importanceSpread;
-        allJitterValues.push(Math.max(-1.5, Math.min(1.5, finalJitter)));
+      // Collision detection parameters (same as main algorithm)
+      const dotRadius = 0.02;
+      const stackIncrement = 0.04;
+
+      // Place each dot with collision detection
+      const placedPoints = [];
+
+      points.forEach((point) => {
+        let yPosition = 0;
+        let placed = false;
+        let attempts = 0;
+        const maxAttempts = 50;
+
+        while (!placed && attempts < maxAttempts) {
+          const hasCollision = placedPoints.some(placedPoint => {
+            const xDist = Math.abs(placedPoint.x - point.x);
+            // Only consider collision if x values are very close
+            if (xDist > 0.003) return false; // Different SHAP value (tolerance = 0.003)
+            // Similar SHAP value, check y distance
+            const yDist = Math.abs(placedPoint.y - yPosition);
+            return yDist < dotRadius;
+          });
+
+          if (!hasCollision) {
+            point.y = yPosition;
+            placedPoints.push(point);
+            placed = true;
+          } else {
+            attempts++;
+            yPosition = attempts % 2 === 0
+              ? (attempts / 2) * stackIncrement
+              : -(Math.ceil(attempts / 2)) * stackIncrement;
+          }
+        }
+
+        if (!placed) {
+          point.y = yPosition;
+          placedPoints.push(point);
+        }
+
+        allJitterValues.push(Math.max(-0.8, Math.min(0.8, point.y)));
       });
     });
 
     const minJitter = Math.min(...allJitterValues);
     const maxJitter = Math.max(...allJitterValues);
 
-    // Add padding and ensure symmetric range
+    // Add minimal padding and ensure symmetric range (keep tight around y=0)
     const maxAbsJitter = Math.max(Math.abs(minJitter), Math.abs(maxJitter));
-    const padding = maxAbsJitter * 0.2;
+    const padding = Math.max(0.3, maxAbsJitter * 0.15); // Ensure minimum visible height
 
     return {
       min: -(maxAbsJitter + padding),
@@ -142,31 +178,69 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return Math.random() * 0.5; // Fallback for missing data
     });
 
-    // Create realistic beeswarm jitter that shows student concentrations
-    const y = featureData.map((item, idx) => {
-      // Get the feature importance value for this data point
-      const featureImportance = x[idx];
+    // Create true beeswarm jitter with collision detection
+    const y = (() => {
+      // Create array with SHAP values and indices
+      const points = featureData.map((item, idx) => ({
+        x: x[idx],
+        originalIdx: idx,
+        y: 0 // Start all at center (y=0)
+      }));
 
-      // Create base jitter using functional form instead of uniform random
-      const baseJitter = (Math.sin(idx * 0.7) * 0.3 + Math.cos(idx * 1.3) * 0.3);
+      // Sort by x position (SHAP value) for proper stacking
+      points.sort((a, b) => a.x - b.x);
 
-      // Add clustering effect based on feature importance
-      // Higher importance features get more vertical spread to show concentrations
-      const importanceSpread = featureImportance * 0.8;
+      // Collision detection parameters (very tight clustering for dense packing)
+      const dotRadius = 0.02; // How close dots can be before colliding (very small)
+      const stackIncrement = 0.04; // How much to move up/down on collision (very small steps)
 
-      // Add some randomness but keep it deterministic for the same data
-      const seed = (item.feature_readable_name + idx)
-        .split('')
-        .reduce((a, b) => {
-          a = ((a << 5) - a + b.charCodeAt(0)) & 0xffffffff;
-          return a;
-        }, 0);
+      // Place each dot, checking for collisions
+      const placedPoints = [];
 
-      const randomFactor = (seed % 100) / 100;
-      const finalJitter = baseJitter + (randomFactor - 0.5) * importanceSpread;
+      points.forEach((point) => {
+        let yPosition = 0; // Always start at center (y=0)
+        let placed = false;
+        let attempts = 0;
+        const maxAttempts = 50; // Allow more stacking with smaller increments
 
-      return Math.max(-1.5, Math.min(1.5, finalJitter));
-    });
+        while (!placed && attempts < maxAttempts) {
+          // Check if this position collides with any placed dots
+          // Stack if SHAP values are very similar (small tolerance)
+          const hasCollision = placedPoints.some(placedPoint => {
+            const xDist = Math.abs(placedPoint.x - point.x);
+            // Only consider collision if x values are very close
+            if (xDist > 0.003) return false; // Different SHAP value (tolerance = 0.003)
+            // Similar SHAP value, check y distance
+            const yDist = Math.abs(placedPoint.y - yPosition);
+            return yDist < dotRadius;
+          });
+
+          if (!hasCollision) {
+            // No collision, place here
+            point.y = yPosition;
+            placedPoints.push(point);
+            placed = true;
+          } else {
+            // Collision detected, try next position
+            attempts++;
+            // Alternate between positive and negative offsets: 0, +0.08, -0.08, +0.16, -0.16...
+            yPosition = attempts % 2 === 0
+              ? (attempts / 2) * stackIncrement
+              : -(Math.ceil(attempts / 2)) * stackIncrement;
+          }
+        }
+
+        // If we couldn't place it, just use the last attempted position
+        if (!placed) {
+          point.y = yPosition;
+          placedPoints.push(point);
+        }
+      });
+
+      // Sort back to original order and return y values
+      points.sort((a, b) => a.originalIdx - b.originalIdx);
+      return points.map(p => Math.max(-0.8, Math.min(0.8, p.y)));
+    })();
 
     const featureValues = featureData.map(item => {
       if ('feature_value' in item) return parseFloat(item.feature_value) || 0;
@@ -282,13 +356,21 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
           ]}
           layout={{
-            margin: { l: 10, r: 10, t: 0, b: 0 },
+            margin: { l: 10, r: 10, t: 0, b: 50 },
             xaxis: {
-              visible: false,
+              visible: true,
+              title: {
+                text: 'SHAP Value',
+                font: { size: 12, color: '#666' }
+              },
               range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
-              showgrid: false,
-              zeroline: false,
+              showgrid: true,
+              gridcolor: '#E5E7EB',
+              zeroline: true,
+              zerolinecolor: '#D5E5EE',
+              zerolinewidth: 2,
+              tickfont: { size: 10, color: '#666' },
             },
             yaxis: {
               visible: false,
@@ -300,7 +382,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             plot_bgcolor: 'rgba(0,0,0,0)',
             paper_bgcolor: 'rgba(0,0,0,0)',
             showlegend: false,
-            height: 200,
+            height: 250,
             shapes: [
               {
                 type: 'line',
@@ -331,7 +413,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             ],
           }}
           config={{ displayModeBar: false, responsive: true }}
-          style={{ width: '100%', height: 200 }}
+          style={{ width: '100%', height: 250 }}
         />
       ) : (
         <div className="flex h-32 items-center justify-center text-gray-500">

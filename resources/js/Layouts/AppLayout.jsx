@@ -402,87 +402,91 @@ export default function AppLayout({ title, renderHeader, children }) {
                   />
                 </a>
               </li>
-              {renderNav(navAboveLine)}
-              <li key="divider">
-                <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
-              </li>
-              {renderNav(navigationBelowLine)}
-              {user ? (
-                <li key="profile">
-                  <div
-                    className="flex hidden items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50"
-                  >
-                    <span className="sr-only">Your profile</span>
-                    <Dropdown>
-                      <Dropdown.Trigger>
-                        <button className="flex items-center gap-2 text-[#637381]">
-                          <UsersIcon
-                            aria-hidden="true"
-                            className="size-6 shrink-0"
-                          />
-                          {user.name}
-                          <ChevronDownIcon className="h-4 w-4" />
-                        </button>
-                      </Dropdown.Trigger>
-                      <Dropdown.Content>
-                        {/* <Dropdown.Link
-                          href={route('#', user.current_team)}
-                        >
-                          Team Settings
-                        </Dropdown.Link> */}
-                        {jetstream.hasTeamFeatures && (
-                          <>
-                            {jetstream.canCreateTeams && (
-                              <Dropdown.Link href={route('teams.create')}>
-                                Create New Team
-                              </Dropdown.Link>
-                            )}
-                            {user.all_teams.length > 1 && (
+              <li key="navigation">
+                <ul>
+                  {renderNav(navAboveLine)}
+                  <li key="divider" aria-hidden="true">
+                    <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
+                  </li>
+                  {renderNav(navigationBelowLine)}
+                  {user ? (
+                    <li key="profile" className="flex hidden items-end">
+                      <div
+                        className="flex w-full items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50"
+                      >
+                        <span className="sr-only">Your profile</span>
+                        <Dropdown>
+                          <Dropdown.Trigger>
+                            <button className="flex items-center gap-2 text-[#637381]">
+                              <UsersIcon
+                                aria-hidden="true"
+                                className="size-6 shrink-0"
+                              />
+                              {user.name}
+                              <ChevronDownIcon className="h-4 w-4" />
+                            </button>
+                          </Dropdown.Trigger>
+                          <Dropdown.Content>
+                            {/* <Dropdown.Link
+                              href={route('#', user.current_team)}
+                            >
+                              Team Settings
+                            </Dropdown.Link> */}
+                            {jetstream.hasTeamFeatures && (
                               <>
-                                <div className="border-t border-gray-200" />
-                                <div className="block px-4 py-2 text-xs text-gray-400">
-                                  Switch Teams
-                                </div>
-                                {user.all_teams.map(team => (
-                                  <form
-                                    key={team.id}
-                                    onSubmit={e => {
-                                      e.preventDefault();
-                                      switchToTeam(team);
-                                    }}
-                                  >
-                                    <Dropdown.Link as="button">
-                                      <div className="flex items-center">
-                                        {team.id === user.current_team_id && (
-                                          <svg
-                                            className="me-2 h-5 w-5 text-green-400"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth="1.5"
-                                            stroke="currentColor"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                          </svg>
-                                        )}
-                                        <div>{team.name}</div>
-                                      </div>
-                                    </Dropdown.Link>
-                                  </form>
-                                ))}
+                                {jetstream.canCreateTeams && (
+                                  <Dropdown.Link href={route('teams.create')}>
+                                    Create New Team
+                                  </Dropdown.Link>
+                                )}
+                                {user.all_teams.length > 1 && (
+                                  <>
+                                    <div className="border-t border-gray-200" />
+                                    <div className="block px-4 py-2 text-xs text-gray-400">
+                                      Switch Teams
+                                    </div>
+                                    {user.all_teams.map(team => (
+                                      <form
+                                        key={team.id}
+                                        onSubmit={e => {
+                                          e.preventDefault();
+                                          switchToTeam(team);
+                                        }}
+                                      >
+                                        <Dropdown.Link as="button">
+                                          <div className="flex items-center">
+                                            {team.id === user.current_team_id && (
+                                              <svg
+                                                className="me-2 h-5 w-5 text-green-400"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth="1.5"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                              </svg>
+                                            )}
+                                            <div>{team.name}</div>
+                                          </div>
+                                        </Dropdown.Link>
+                                      </form>
+                                    ))}
+                                  </>
+                                )}
                               </>
                             )}
-                          </>
-                        )}
-                      </Dropdown.Content>
-                    </Dropdown>
-                  </div>
-                </li>
-              ) : null}
+                          </Dropdown.Content>
+                        </Dropdown>
+                      </div>
+                    </li>
+                  ) : null}
+                </ul>
+              </li>
             </ul>
             {user ? (
               <div></div>

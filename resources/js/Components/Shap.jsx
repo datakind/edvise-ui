@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
@@ -123,18 +123,20 @@ export default function Shap({ rawFeatures, currentFeature }) {
     };
   }, [rawFeatures]);
 
-  // Log the props to see what data is available
-  console.log(`=== SHAP COMPONENT ${componentId} ===`);
-  console.log('rawFeatures:', rawFeatures);
-  console.log('currentFeature:', currentFeature);
-  console.log('rawFeatures type:', typeof rawFeatures);
-  console.log('currentFeature type:', typeof currentFeature);
-  console.log('rawFeatures length:', rawFeatures?.length);
-  console.log(
-    'currentFeature keys:',
-    currentFeature ? Object.keys(currentFeature) : 'null',
-  );
-  console.log('===========================');
+  // Log the props to see what data is available (only when they change)
+  useEffect(() => {
+    console.log(`=== SHAP COMPONENT ${componentId} ===`);
+    console.log('rawFeatures:', rawFeatures);
+    console.log('currentFeature:', currentFeature);
+    console.log('rawFeatures type:', typeof rawFeatures);
+    console.log('currentFeature type:', typeof currentFeature);
+    console.log('rawFeatures length:', rawFeatures?.length);
+    console.log(
+      'currentFeature keys:',
+      currentFeature ? Object.keys(currentFeature) : 'null',
+    );
+    console.log('===========================');
+  }, [componentId, rawFeatures, currentFeature]);
 
   // Process currentFeature data for the beeswarm plot
   const plotData = useMemo(() => {

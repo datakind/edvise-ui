@@ -166,7 +166,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const x = featureData.map(item => {
       if ('shap_value' in item) {
         const shapValue = parseFloat(item.shap_value);
-        console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
+        // console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
         return shapValue || 0;
       }
       if ('feature_importance' in item)

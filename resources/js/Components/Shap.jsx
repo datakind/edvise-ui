@@ -259,6 +259,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return 0; // Fallback for missing data
     });
 
+    // Detect if feature is categorical (all values are 0 or 1)
+    const isCategorical = featureValues.every(val => val === 0 || val === 1);
+
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
     console.log('Processed plot data:', {
@@ -270,6 +273,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
+      isCategorical: isCategorical,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -288,6 +292,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
+      isCategorical,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -332,9 +337,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.featureValues.map(val =>
-                  typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
-                ),
+                color: plotData.isCategorical
+                  ? '#808080'  // Gray for categorical (binary 0/1) features
+                  : plotData.featureValues.map(val =>
+                    typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
+                  ),
                 opacity: 1.0,
                 line: {
                   width: 0.5,

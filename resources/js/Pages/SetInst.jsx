@@ -25,33 +25,61 @@ import Spinner from '@/Components/Spinner';
 export default function SetInstitution() {
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentInstId, setCurrentInstId] = useState('');
+  const [selectedInstId, setSelectedInstId] = useState('');
+  
   useEffect(() => {
+    // Fetch all institutions
     axios
       .get('/view-all-institutions-api')
       .then(res => {
         let resultingVar = {};
         res.data.forEach(b => (resultingVar[b.name] = b.inst_id));
         setResultList(resultingVar);
+        setLoading(false);
       })
       .catch(err => {
         setError(JSON.stringify(err.message));
+        setLoading(false);
+      });
+
+    // Fetch current institution
+    axios
+      .get('/user-current-inst-api')
+      .then(res => {
+        if (res.data && res.data.length > 0) {
+          const instId = res.data[0];
+          setCurrentInstId(instId);
+          setSelectedInstId(instId);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching current institution:', err);
       });
   }, []);
 
   const handleSubmit = event => {
     event.preventDefault();
-    let inst = event.target.elements.instid.value;
-    if (inst == undefined) {
-      document.getElementById('result_area').innerHTML =
-        'Error: field is empty';
+    const inst = selectedInstId;
+    const resultArea = document.getElementById('result_area');
+    
+    if (!inst || inst === '') {
+      resultArea.innerHTML = '<span class="text-red-600 font-semibold">Error: Please select an institution</span>';
+      return;
     }
+    
+    resultArea.innerHTML = '<span class="text-gray-600">Setting institution...</span>';
+    
     return axios
       .post('/set-inst-api/' + inst)
       .then(res => {
-        document.getElementById('result_area').innerHTML = 'Done';
+        const institutionName = Object.entries(resultList).find(([name, id]) => id === inst)?.[0] || 'Unknown';
+        setCurrentInstId(inst); // Update current institution after successful change
+        resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
       })
       .catch(e => {
-        document.getElementById('result_area').innerHTML = e;
+        resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;
       });
   };
 
@@ -75,23 +103,12 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
-        <div className="flex py-12">
-          <div className="mx-auto flex flex-col items-center justify-center">
-            <label className="mb-2 text-lg font-bold uppercase text-black">
-              All institutions registered in the SST:
-            </label>
-            <ul>
-              {error}
-              {Object.entries(resultList).map(([name, inst_id]) => {
-                return (
-                  <li key={inst_id}>
-                    {name} : {inst_id}
-                  </li>
-                );
-              })}
-            </ul>
+        {error && (
+          <div className="mt-8 w-full max-w-2xl rounded-lg bg-red-100 p-4 text-center text-red-700">
+            <p className="font-semibold">Error loading institutions:</p>
+            <p>{error}</p>
           </div>
-        </div>
+        )}
 
         <form
           className="w-full max-w-full pl-36 pr-36 pt-24"
@@ -101,43 +118,50 @@ export default function SetInstitution() {
             <div className="-mx-3 mb-6 flex justify-center">
               <div className="mb-6 w-full px-3">
                 <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700">
-                  The institution ID for the current Datakinder to use.
-                </label>
-
-                <input
-                  className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
-                  name="instid"
-                  type="text"
-                  placeholder="Copy institution id here."
-                ></input>
-                <p className="text-xs italic text-gray-600">
-                  Input the institution ID (e.g.
-                  "f42c1c43f1f947bb85cf703bc3449c77") without quotes.
-                </p>
-              </div>
-            </div>
-            <div className="-mx-3 mb-6 flex hidden">
-              <div className="mb-6 w-full px-3 md:mb-0 md:w-1/3">
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700">
-                  Institution
+                  Select Institution
                 </label>
                 <div className="relative">
                   <select
-                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                    id="grid-state"
+                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    style={{ backgroundImage: 'none' }}
+                    name="instid"
+                    value={selectedInstId}
+                    onChange={(e) => setSelectedInstId(e.target.value)}
+                    required
+                    disabled={loading}
                   >
-                    <option>
-                      Placeholder. Under development - Don't use this
+                    <option value="">
+                      {loading ? 'Loading institutions...' : 'Choose an institution...'}
                     </option>
+                    {Object.entries(resultList)
+                      .sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
+                      .map(([name, inst_id]) => (
+                        <option key={inst_id} value={inst_id}>
+                          {name}
+                        </option>
+                      ))}
                   </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      className="h-4 w-4 fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
                 </div>
+                <p className="mt-2 text-xs italic text-gray-600">
+                  Select the institution for the current Datakinder to use.
+                </p>
               </div>
             </div>
           </div>
           <div className="flex justify-center">
             <button
               type="submit"
-              className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white"
+              disabled={loading}
+              className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               Submit
             </button>

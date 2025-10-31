@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
@@ -123,18 +123,20 @@ export default function Shap({ rawFeatures, currentFeature }) {
     };
   }, [rawFeatures]);
 
-  // Log the props to see what data is available
-  console.log(`=== SHAP COMPONENT ${componentId} ===`);
-  console.log('rawFeatures:', rawFeatures);
-  console.log('currentFeature:', currentFeature);
-  console.log('rawFeatures type:', typeof rawFeatures);
-  console.log('currentFeature type:', typeof currentFeature);
-  console.log('rawFeatures length:', rawFeatures?.length);
-  console.log(
-    'currentFeature keys:',
-    currentFeature ? Object.keys(currentFeature) : 'null',
-  );
-  console.log('===========================');
+  // Log the props to see what data is available (only when they change)
+  useEffect(() => {
+    console.log(`=== SHAP COMPONENT ${componentId} ===`);
+    console.log('rawFeatures:', rawFeatures);
+    console.log('currentFeature:', currentFeature);
+    console.log('rawFeatures type:', typeof rawFeatures);
+    console.log('currentFeature type:', typeof currentFeature);
+    console.log('rawFeatures length:', rawFeatures?.length);
+    console.log(
+      'currentFeature keys:',
+      currentFeature ? Object.keys(currentFeature) : 'null',
+    );
+    console.log('===========================');
+  }, [componentId, rawFeatures, currentFeature]);
 
   // Process currentFeature data for the beeswarm plot
   const plotData = useMemo(() => {
@@ -164,7 +166,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const x = featureData.map(item => {
       if ('shap_value' in item) {
         const shapValue = parseFloat(item.shap_value);
-        console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
+        // console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
         return shapValue || 0;
       }
       if ('feature_importance' in item)
@@ -257,6 +259,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return 0; // Fallback for missing data
     });
 
+    // Detect if feature is categorical (all values are 0 or 1)
+    const isCategorical = featureValues.every(val => val === 0 || val === 1);
+
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
     console.log('Processed plot data:', {
@@ -268,6 +273,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
+      isCategorical: isCategorical,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -286,6 +292,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
+      isCategorical,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -330,9 +337,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.featureValues.map(val =>
-                  typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
-                ),
+                color: plotData.isCategorical
+                  ? '#808080'  // Gray for categorical (binary 0/1) features
+                  : plotData.featureValues.map(val =>
+                    typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
+                  ),
                 opacity: 1.0,
                 line: {
                   width: 0.5,

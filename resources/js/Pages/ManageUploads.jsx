@@ -321,15 +321,15 @@ export default function ManageUploads() {
   return (
     <AppLayout title="Manage Uploads">
       <div
-        className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white"
+        className="mx-12 mb-12 rounded-3xl bg-white pb-6"
         id="main_area"
       >
         <h1 className="py-12 text-center text-5xl font-light">
           Manage Uploads
         </h1>
-        <div className="mx-auto flex w-full justify-center">
+        <div className="overflow-x-auto px-6">
           <table
-            className="mx-6 w-[93%] table-auto rounded-lg bg-white text-left shadow-md"
+            className="w-full table-auto text-left"
             id="uploads-table"
           >
             <thead>

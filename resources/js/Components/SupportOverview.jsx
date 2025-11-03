@@ -275,7 +275,7 @@ export default function SupportOverview({ tab, setTab, run_id }) {
               },
               {
                 x: [0.5, 0.5],
-                y: [0, { yRange }],
+                y: [0, yRange * 1.05],
                 type: 'scatter',
                 mode: 'lines',
                 line: {
@@ -288,28 +288,37 @@ export default function SupportOverview({ tab, setTab, run_id }) {
               },
             ]}
             layout={{
-              margin: { l: 60, r: 30, t: 10, b: 60 },
+              margin: { l: 60, r: 30, t: 30, b: 60 },
               xaxis: {
                 title: {
                   text: 'Support Score',
-                  font: { size: 18, family: 'inherit', color: '#222' },
+                  font: { size: 18, family: 'inherit', color: '#637381' },
+                  standoff: 20,
                 },
                 range: [0, 1],
-                tickfont: { size: 16, family: 'inherit', color: '#222' },
+                fixedrange: true,
+                tickfont: { size: 16, family: 'inherit', color: '#637381' },
+                ticks: '',
+                tickpad: 10,
                 showgrid: false,
                 zeroline: false,
               },
               yaxis: {
                 title: {
                   text: 'Count of Students',
-                  font: { size: 18, family: 'inherit', color: '#222' },
+                  font: { size: 18, family: 'inherit', color: '#637381' },
+                  standoff: 20,
                 },
-                range: [0, { yRange }],
-                tickfont: { size: 16, family: 'inherit', color: '#222' },
+                range: [0, yRange * 1.05],
+                fixedrange: true,
+                tickfont: { size: 16, family: 'inherit', color: '#637381' },
+                ticks: '',
+                tickpad: 10,
                 showgrid: false,
                 zeroline: false,
               },
               showlegend: false,
+              dragmode: false,
               plot_bgcolor: '#fff',
               paper_bgcolor: '#fff',
               bargap: 0,
@@ -341,9 +350,9 @@ export default function SupportOverview({ tab, setTab, run_id }) {
                 {
                   x: 0.7,
                   y:
-                    Math.max(
+                    (Math.max(
                       ...inferenceData.map(item => item.count_of_students),
-                    ) + 10,
+                    ) + 10) * 1.05,
                   xref: 'x',
                   yref: 'y',
                   text: 'Students in greater<br>need of support',
@@ -362,6 +371,7 @@ export default function SupportOverview({ tab, setTab, run_id }) {
                   size: 16,
                 },
                 align: 'center',
+                bordercolor: 'transparent',
               },
             }}
             config={{ displayModeBar: false, responsive: true }}

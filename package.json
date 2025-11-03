@@ -59,6 +59,7 @@
     "react-player": "2.13.0",
     "react-plotly.js": "^2.6.0",
     "react-range-slider-input": "^3.0.7",
+    "recharts": "^3.3.0",
     "turf-polygon": "^1.0.3",
     "xlsx": "^0.18.5",
     "yarn": "^1.22.22",

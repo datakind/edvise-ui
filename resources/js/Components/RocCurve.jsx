@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Plot from 'react-plotly.js';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
@@ -88,10 +88,44 @@ export default function RocCurve({ model_run_id, modelName }) {
     );
   }
 
-  // Sort the API data
+  // Transform data for Recharts
   const sortedRocData = [...rocData].sort(
-    (a, b) => Number(a.threshold) - Number(b.threshold),
+    (a, b) => Number(a.false_positive_rate) - Number(b.false_positive_rate),
   );
+
+  const chartData = sortedRocData.map(d => ({
+    fpr: Number(d.false_positive_rate),
+    tpr: Number(d.true_positive_rate),
+    threshold: d.threshold,
+  }));
+
+  // Diagonal reference line data
+  const diagonalData = [
+    { fpr: 0, tpr: 0 },
+    { fpr: 1, tpr: 1 },
+  ];
+
+  // Custom tooltip
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="rounded-xl bg-black/80 px-4 py-3 text-white shadow-lg">
+          <p className="text-sm">
+            <strong>True Positive Rate:</strong> {data.tpr?.toFixed(3)}
+          </p>
+          <p className="text-sm">
+            <strong>False Positive Rate:</strong> {data.fpr?.toFixed(3)}
+          </p>
+          <p className="text-sm">
+            <strong>Threshold:</strong> {data.threshold}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       <div className="mr-8 flex min-w-[320px] max-w-[420px] flex-1 flex-col justify-start">
@@ -118,10 +152,9 @@ export default function RocCurve({ model_run_id, modelName }) {
                   if (inst_id && modelName) {
                     const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
                     console.log('Downloading model card from:', apiUrl);
-                    // Create a temporary link element to force download
                     const link = document.createElement('a');
                     link.href = apiUrl;
-                    link.download = `${modelName}_model_card.pdf`; // Suggest filename
+                    link.download = `${modelName}_model_card.pdf`;
                     link.target = '_blank';
                     document.body.appendChild(link);
                     link.click();
@@ -142,93 +175,70 @@ export default function RocCurve({ model_run_id, modelName }) {
           </li>
         </ul>
       </div>
-      <div className="flex min-w-0">
-        <Plot
-          data={[
-            // ROC curve
-            {
-              x: sortedRocData.map(d => Number(d.false_positive_rate)),
-              y: sortedRocData.map(d => Number(d.true_positive_rate)),
-              mode: 'lines+markers',
-              line: { color: '#F79122', width: 4 },
-              hoverinfo: 'text',
-              hoverlabel: {
-                bgcolor: 'rgba(0,0,0,0.8)',
-                font: { color: '#fff' },
-              },
-              text: sortedRocData.map(
-                d =>
-                  `True Positive Rate: ${d.true_positive_rate}<br>False Positive Rate: ${d.false_positive_rate}<br>Threshold: ${d.threshold}`,
-              ),
-              marker: { size: 6 },
-              name: 'ROC Curve',
-            },
-            // Diagonal reference
-            {
-              x: [0, 1],
-              y: [0, 1],
-              mode: 'lines',
-              line: { color: '#888', width: 2, dash: 'dash' },
-              name: 'Random',
-              hoverinfo: 'none',
-              showlegend: false,
-            },
-          ]}
-          layout={{
-            margin: { l: 60, r: 30, t: 10, b: 60 },
-            xaxis: {
-              title: {
-                text: 'False Positive Rate',
-                font: { size: 18, family: 'inherit', color: '#222' },
-              },
-              range: [0, 1],
-              tickfont: { size: 16, color: '#222' },
-              showgrid: false,
-              zeroline: false,
-            },
-            yaxis: {
-              title: {
-                text: 'True Positive Rate',
-                font: { size: 18, family: 'inherit', color: '#222' },
-              },
-              range: [0, 1],
-              tickfont: { size: 16, color: '#222' },
-              showgrid: false,
-              zeroline: false,
-            },
-            showlegend: false,
-            plot_bgcolor: '#EEF2F6',
-            paper_bgcolor: '#fff',
-            shapes: [
-              {
-                type: 'line',
-                x0: 0.0,
-                y0: 0,
-                x1: 1,
-                y1: 0,
-                line: {
-                  color: '#000000',
-                  width: 3,
-                },
-              },
-              {
-                type: 'line',
-                x0: 0,
-                y0: 0,
-                x1: 0,
-                y1: 1,
-                line: {
-                  color: '#000000',
-                  width: 3,
-                },
-              },
-            ],
-            annotations: [],
-            height: 480,
-          }}
-          config={{ displayModeBar: false, responsive: true }}
-          style={{ width: '100%', height: 480 }}
-        />
+      <div className="flex min-w-0 flex-1" style={{ height: 480 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={chartData}
+            margin={{ top: 30, right: 30, bottom: 70, left: 90 }}
+            style={{ backgroundColor: 'transparent' }}
+          >
+            {/* Gray background only in plot area - no grid lines */}
+            <CartesianGrid stroke="none" fill="#EEF2F6" />
+            <XAxis
+              dataKey="fpr"
+              type="number"
+              domain={[0, 1]}
+              ticks={[0, 0.2, 0.4, 0.6, 0.8, 1.0]}
+              tick={{ fill: '#637381', fontSize: 14 }}
+              tickLine={false}
+              tickMargin={15}
+              axisLine={{ stroke: '#000000', strokeWidth: 2 }}
+              padding={{ left: 20, right: 20 }}
+              label={{
+                value: 'False Positive Rate',
+                position: 'bottom',
+                offset: 20,
+                style: { fill: '#637381', fontSize: 16 },
+              }}
+            />
+            <YAxis
+              dataKey="tpr"
+              type="number"
+              domain={[0, 1]}
+              ticks={[0, 0.2, 0.4, 0.6, 0.8, 1.0]}
+              tick={{ fill: '#637381', fontSize: 14 }}
+              tickLine={false}
+              tickMargin={15}
+              axisLine={{ stroke: '#000000', strokeWidth: 2 }}
+              padding={{ top: 20, bottom: 20 }}
+              label={{
+                value: 'True Positive Rate',
+                angle: -90,
+                position: 'insideLeft',
+                offset: -10,
+                style: { fill: '#637381', fontSize: 16, textAnchor: 'middle' },
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            {/* Diagonal reference line */}
+            <ReferenceLine
+              segment={[{ x: 0, y: 0 }, { x: 1, y: 1 }]}
+              stroke="#999"
+              strokeWidth={1.5}
+              strokeDasharray="4 4"
+            />
+            {/* ROC Curve */}
+            <Line
+              type="stepAfter"
+              dataKey="tpr"
+              stroke="#F79122"
+              strokeWidth={2.5}
+              dot={{ r: 1, fill: '#F79122', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#F79122' }}
+              isAnimationActive={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

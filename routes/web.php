@@ -1,24 +1,23 @@
 <?php
 
+use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Helpers\InstitutionHelper;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Controllers\DemoRequestController;
-
 
 // PUBLIC ROUTES
 
 // Main app entrypoint.
 
 Route::get('/', function () {
-    //$out = new \Symfony\Component\Console\Output\ConsoleOutput;
-    //$out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
+    // $out = new \Symfony\Component\Console\Output\ConsoleOutput;
+    // $out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -290,7 +289,6 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
 
-
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
@@ -302,6 +300,7 @@ Route::middleware(['auth'])->get('/terms/prompt', function () {
 
 Route::middleware(['auth'])->post('/terms/accept', function () {
     auth()->user()->update(['accepted_terms' => true]);
+
     return redirect()->route('dashboard');
 })->name('terms.accept');
 
@@ -311,7 +310,6 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
-
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');
@@ -334,10 +332,10 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('add-dk');
 
     Route::post('/set-inst-api/{inst}', function (string $inst) {
-        $access_str = Auth::user()->access_type ?? "";
+        $access_str = Auth::user()->access_type ?? '';
         $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
 
-        if ($errStr != "") {
+        if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);
         }
 

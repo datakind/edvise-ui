@@ -24,9 +24,9 @@ const capitalizeFirstWord = str => {
   return str.replace(/(^|\s)[a-z]/g, l => l.toUpperCase());
 };
 
-function ModelResultsOverview({ run_id, modelName }) {
-  console.log('run_id:', run_id);
-  console.log('ModelResultsOverview - Received run_id:', run_id);
+function ModelResultsOverview({ job_run_id, modelName }) {
+  console.log('job_run_id:', job_run_id);
+  console.log('ModelResultsOverview - Received job_run_id:', job_run_id);
   console.log('ModelResultsOverview - Received modelName:', modelName);
 
   const [inst_id, setInstId] = useState(null);
@@ -68,47 +68,32 @@ function ModelResultsOverview({ run_id, modelName }) {
     fetchInstitutionId();
   }, []);
 
-  // Get model_run_id from .env when inst_id is available
+  // Get model_run_id from job table using job_run_id
   useEffect(() => {
     const fetchModelRunId = async () => {
-      if (!inst_id) return;
+      if (!job_run_id) return;
 
       try {
-        // Determine the environment variable prefix based on model name
-        const envPrefix =
-          modelName && modelName.toLowerCase().includes('assoc')
-            ? 'ALT2_'
-            : 'ALT_';
-        const envKey = `${envPrefix}${inst_id.toUpperCase()}`;
+        const response = await axios.get(`/get-model-run-id-by-job/${job_run_id}`);
 
-        // Call a backend endpoint that will read the .env file and return the model_run_id
-        const apiUrl = `/get-model-run-id/${inst_id}?env_key=${envKey}`;
-
-        const response = await axios.get(apiUrl);
-        if (response.data && response.data.model_run_id) {
+        if (response.data?.model_run_id) {
           setModelRunId(response.data.model_run_id);
-        } else {
-          console.log(
-            'ModelResultsOverview - No model_run_id found in response',
-          );
+          console.log('Got model_run_id from job table:', response.data.model_run_id);
         }
       } catch (error) {
         console.error('Error fetching model_run_id:', error);
-        console.error('Error response:', error.response?.data);
-        console.error('Error status:', error.response?.status);
-        console.error('Error URL:', error.config?.url);
       }
     };
 
     fetchModelRunId();
-  }, [inst_id, modelName]);
+  }, [job_run_id]);
 
-  // Get run details when we have both inst_id and run_id
+  // Get run details when we have both inst_id and job_run_id
   useEffect(() => {
     const fetchRunDetails = async () => {
-      if (!inst_id || !run_id) return;
+      if (!inst_id || !job_run_id) return;
 
-      const apiUrl = `/institutions/${inst_id}/models/${modelName}/run/${run_id}`;
+      const apiUrl = `/institutions/${inst_id}/models/${modelName}/run/${job_run_id}`;
       console.log('ModelResultsOverview - Making API call to:', apiUrl);
       console.log(
         'ModelResultsOverview - Full URL:',
@@ -126,14 +111,14 @@ function ModelResultsOverview({ run_id, modelName }) {
     };
 
     fetchRunDetails();
-  }, [inst_id, run_id, modelName]);
+  }, [inst_id, job_run_id, modelName]);
 
-  // Get top features when we have both inst_id and run_id
+  // Get top features when we have both inst_id and job_run_id
   useEffect(() => {
     const fetchTopFeatures = async () => {
-      if (!inst_id || !run_id) return;
+      if (!inst_id || !job_run_id) return;
 
-      const apiUrl = `/institutions/${inst_id}/inference/top-features/${run_id}`;
+      const apiUrl = `/institutions/${inst_id}/inference/top-features/${job_run_id}`;
       console.log('Fetching top features from:', apiUrl);
       console.log('Full URL:', window.location.origin + apiUrl);
 
@@ -195,7 +180,7 @@ function ModelResultsOverview({ run_id, modelName }) {
     };
 
     fetchTopFeatures();
-  }, [inst_id, run_id]);
+  }, [inst_id, job_run_id]);
 
   // Get output_link and output_filename from run details
   const output_link = runDetails ? runDetails.output_file_link : null;
@@ -305,7 +290,7 @@ function ModelResultsOverview({ run_id, modelName }) {
           {tab === 'results' ? (
             <>
               <div className="mb-8">
-                <SupportOverview tab={tab} setTab={setTab} run_id={run_id} />
+                <SupportOverview tab={tab} setTab={setTab} run_id={job_run_id} />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -601,8 +586,8 @@ function ModelResultsOverview({ run_id, modelName }) {
                 </div>
                 <div className="mb-16">
                   <BoxWhiskerPlot
-                    key={`${run_id}-${selectedFeature?.feature_name}-${inst_id}`}
-                    run_id={run_id}
+                    key={`${job_run_id}-${selectedFeature?.feature_name}-${inst_id}`}
+                    run_id={job_run_id}
                     feature_name={selectedFeature?.feature_name}
                     inst_id={inst_id}
                   />
@@ -697,7 +682,7 @@ function ModelResultsOverview({ run_id, modelName }) {
 }
 
 ModelResultsOverview.propTypes = {
-  run_id: PropTypes.string.isRequired,
+  job_run_id: PropTypes.string.isRequired,
   output_link: PropTypes.string,
   modelName: PropTypes.string,
 };

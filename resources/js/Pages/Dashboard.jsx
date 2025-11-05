@@ -228,7 +228,7 @@ export default function Dashboard({ modelname }) {
               </div>
 
               {error != null &&
-              (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
+                (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
                 <>
                   <div className="flex w-full flex-row justify-between pl-12 pr-12 pt-12">
                     <div className="flex flex-row items-center justify-center gap-x-2">
@@ -263,7 +263,7 @@ export default function Dashboard({ modelname }) {
                     </div>
                   )}
                   <div className="mx-auto w-full max-w-[1057px]">
-                    <ModelRunHistory runInfos={[]} modelName={modelInfo.name} />
+                    <ModelRunHistory runInfos={[]} modelName={modelInfo?.name || ''} />
                   </div>
                 </>
               ) : (
@@ -276,7 +276,7 @@ export default function Dashboard({ modelname }) {
                       <div className="flex">Run Time:</div>
                       <div className="flex">
                         {runDatesToJobDict == undefined ||
-                        Object.keys(runDatesToJobDict).length == 0 ? (
+                          Object.keys(runDatesToJobDict).length == 0 ? (
                           <select
                             className="px-30 flex items-center justify-center rounded-lg border border-gray-200 bg-white py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                             id="run_time"
@@ -310,7 +310,7 @@ export default function Dashboard({ modelname }) {
                   <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
                     <ModelRunHistory
                       runInfos={runs}
-                      modelName={modelInfo.name}
+                      modelName={modelInfo?.name || ''}
                     />
                   </div>
                 </>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import PropTypes from 'prop-types';
 
@@ -10,18 +10,133 @@ export default function Shap({ rawFeatures, currentFeature }) {
     return `${featureName}_${timestamp}`;
   }, [currentFeature?.feature_readable_name]);
 
-  // Log the props to see what data is available
-  console.log(`=== SHAP COMPONENT ${componentId} ===`);
-  console.log('rawFeatures:', rawFeatures);
-  console.log('currentFeature:', currentFeature);
-  console.log('rawFeatures type:', typeof rawFeatures);
-  console.log('currentFeature type:', typeof currentFeature);
-  console.log('rawFeatures length:', rawFeatures?.length);
-  console.log(
-    'currentFeature keys:',
-    currentFeature ? Object.keys(currentFeature) : 'null',
-  );
-  console.log('===========================');
+  // Calculate global SHAP value range across ALL features
+  const globalShapRange = useMemo(() => {
+    if (!rawFeatures || rawFeatures.length === 0) {
+      return { min: -1, max: 1 };
+    }
+
+    const allShapValues = rawFeatures.map(item => {
+      if ('shap_value' in item) return parseFloat(item.shap_value) || 0;
+      if ('feature_importance' in item) return parseFloat(item.feature_importance) || 0;
+      if ('importance' in item) return parseFloat(item.importance) || 0;
+      return 0;
+    }).filter(val => typeof val === 'number' && !isNaN(val));
+
+    const min = Math.min(...allShapValues);
+    const max = Math.max(...allShapValues);
+
+    // Create symmetric range centered at 0
+    const maxAbsValue = Math.max(Math.abs(min), Math.abs(max));
+    const symmetricPadding = maxAbsValue * 0.2;
+    return {
+      min: -(maxAbsValue + symmetricPadding),
+      max: maxAbsValue + symmetricPadding,
+    };
+  }, [rawFeatures]);
+
+  // Calculate global y-axis range based on jitter spread across ALL features
+  const globalYRange = useMemo(() => {
+    if (!rawFeatures || rawFeatures.length === 0) {
+      return { min: -2, max: 2 };
+    }
+
+    // Calculate jitter for all features to find the broadest range
+    const allJitterValues = [];
+
+    // Group by feature to calculate jitter for each
+    const featureGroups = {};
+    rawFeatures.forEach(item => {
+      const featureName = item.feature_readable_name;
+      if (!featureGroups[featureName]) {
+        featureGroups[featureName] = [];
+      }
+      featureGroups[featureName].push(item);
+    });
+
+    // Calculate beeswarm jitter for each feature with collision detection
+    Object.values(featureGroups).forEach(featureData => {
+      // Create array with SHAP values
+      const points = featureData.map((item, idx) => ({
+        x: parseFloat(item.shap_value || item.feature_importance || item.importance || 0),
+        originalIdx: idx,
+        y: 0
+      }));
+
+      // Sort by x position (SHAP value)
+      points.sort((a, b) => a.x - b.x);
+
+      // Collision detection parameters (same as main algorithm)
+      const dotRadius = 0.02;
+      const stackIncrement = 0.04;
+
+      // Place each dot with collision detection
+      const placedPoints = [];
+
+      points.forEach((point) => {
+        let yPosition = 0;
+        let placed = false;
+        let attempts = 0;
+        const maxAttempts = 50;
+
+        while (!placed && attempts < maxAttempts) {
+          const hasCollision = placedPoints.some(placedPoint => {
+            const xDist = Math.abs(placedPoint.x - point.x);
+            // Only consider collision if x values are very close
+            if (xDist > 0.003) return false; // Different SHAP value (tolerance = 0.003)
+            // Similar SHAP value, check y distance
+            const yDist = Math.abs(placedPoint.y - yPosition);
+            return yDist < dotRadius;
+          });
+
+          if (!hasCollision) {
+            point.y = yPosition;
+            placedPoints.push(point);
+            placed = true;
+          } else {
+            attempts++;
+            yPosition = attempts % 2 === 0
+              ? (attempts / 2) * stackIncrement
+              : -(Math.ceil(attempts / 2)) * stackIncrement;
+          }
+        }
+
+        if (!placed) {
+          point.y = yPosition;
+          placedPoints.push(point);
+        }
+
+        allJitterValues.push(Math.max(-0.8, Math.min(0.8, point.y)));
+      });
+    });
+
+    const minJitter = Math.min(...allJitterValues);
+    const maxJitter = Math.max(...allJitterValues);
+
+    // Add minimal padding and ensure symmetric range (keep tight around y=0)
+    const maxAbsJitter = Math.max(Math.abs(minJitter), Math.abs(maxJitter));
+    const padding = Math.max(0.3, maxAbsJitter * 0.15); // Ensure minimum visible height
+
+    return {
+      min: -(maxAbsJitter + padding),
+      max: maxAbsJitter + padding,
+    };
+  }, [rawFeatures]);
+
+  // Log the props to see what data is available (only when they change)
+  useEffect(() => {
+    console.log(`=== SHAP COMPONENT ${componentId} ===`);
+    console.log('rawFeatures:', rawFeatures);
+    console.log('currentFeature:', currentFeature);
+    console.log('rawFeatures type:', typeof rawFeatures);
+    console.log('currentFeature type:', typeof currentFeature);
+    console.log('rawFeatures length:', rawFeatures?.length);
+    console.log(
+      'currentFeature keys:',
+      currentFeature ? Object.keys(currentFeature) : 'null',
+    );
+    console.log('===========================');
+  }, [componentId, rawFeatures, currentFeature]);
 
   // Process currentFeature data for the beeswarm plot
   const plotData = useMemo(() => {
@@ -51,7 +166,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const x = featureData.map(item => {
       if ('shap_value' in item) {
         const shapValue = parseFloat(item.shap_value);
-        console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
+        // console.log(`shap_value: "${item.shap_value}" -> parsed: ${shapValue}`);
         return shapValue || 0;
       }
       if ('feature_importance' in item)
@@ -65,31 +180,69 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return Math.random() * 0.5; // Fallback for missing data
     });
 
-    // Create realistic beeswarm jitter that shows student concentrations
-    const y = featureData.map((item, idx) => {
-      // Get the feature importance value for this data point
-      const featureImportance = x[idx];
+    // Create true beeswarm jitter with collision detection
+    const y = (() => {
+      // Create array with SHAP values and indices
+      const points = featureData.map((item, idx) => ({
+        x: x[idx],
+        originalIdx: idx,
+        y: 0 // Start all at center (y=0)
+      }));
 
-      // Create base jitter based on feature importance (more spread for higher importance)
-      const baseJitter = (Math.random() - 0.5) * 0.6;
+      // Sort by x position (SHAP value) for proper stacking
+      points.sort((a, b) => a.x - b.x);
 
-      // Add clustering effect based on feature importance
-      // Higher importance features get more vertical spread to show concentrations
-      const importanceSpread = featureImportance * 0.8;
+      // Collision detection parameters (very tight clustering for dense packing)
+      const dotRadius = 0.02; // How close dots can be before colliding (very small)
+      const stackIncrement = 0.04; // How much to move up/down on collision (very small steps)
 
-      // Add some randomness but keep it deterministic for the same data
-      const seed = (item.feature_readable_name + idx)
-        .split('')
-        .reduce((a, b) => {
-          a = ((a << 5) - a + b.charCodeAt(0)) & 0xffffffff;
-          return a;
-        }, 0);
+      // Place each dot, checking for collisions
+      const placedPoints = [];
 
-      const randomFactor = (seed % 100) / 100;
-      const finalJitter = baseJitter + (randomFactor - 0.5) * importanceSpread;
+      points.forEach((point) => {
+        let yPosition = 0; // Always start at center (y=0)
+        let placed = false;
+        let attempts = 0;
+        const maxAttempts = 50; // Allow more stacking with smaller increments
 
-      return Math.max(-1.5, Math.min(1.5, finalJitter));
-    });
+        while (!placed && attempts < maxAttempts) {
+          // Check if this position collides with any placed dots
+          // Stack if SHAP values are very similar (small tolerance)
+          const hasCollision = placedPoints.some(placedPoint => {
+            const xDist = Math.abs(placedPoint.x - point.x);
+            // Only consider collision if x values are very close
+            if (xDist > 0.003) return false; // Different SHAP value (tolerance = 0.003)
+            // Similar SHAP value, check y distance
+            const yDist = Math.abs(placedPoint.y - yPosition);
+            return yDist < dotRadius;
+          });
+
+          if (!hasCollision) {
+            // No collision, place here
+            point.y = yPosition;
+            placedPoints.push(point);
+            placed = true;
+          } else {
+            // Collision detected, try next position
+            attempts++;
+            // Alternate between positive and negative offsets: 0, +0.08, -0.08, +0.16, -0.16...
+            yPosition = attempts % 2 === 0
+              ? (attempts / 2) * stackIncrement
+              : -(Math.ceil(attempts / 2)) * stackIncrement;
+          }
+        }
+
+        // If we couldn't place it, just use the last attempted position
+        if (!placed) {
+          point.y = yPosition;
+          placedPoints.push(point);
+        }
+      });
+
+      // Sort back to original order and return y values
+      points.sort((a, b) => a.originalIdx - b.originalIdx);
+      return points.map(p => Math.max(-0.8, Math.min(0.8, p.y)));
+    })();
 
     const featureValues = featureData.map(item => {
       if ('feature_value' in item) return parseFloat(item.feature_value) || 0;
@@ -106,23 +259,21 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return 0; // Fallback for missing data
     });
 
-    // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
+    // Detect if feature is categorical (all values are 0 or 1)
+    const isCategorical = featureValues.every(val => val === 0 || val === 1);
 
-    // Calculate the midpoint of the x-axis range for the reference line
-    const xMin = Math.min(...x.filter(x => typeof x === 'number'));
-    const xMax = Math.max(...x.filter(x => typeof x === 'number'));
-    const xMidpoint = (xMin + xMax) / 2;
+    // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
-      xRange: { min: xMin, max: xMax, midpoint: xMidpoint },
       xValuesStats: {
         min: Math.min(...x),
         max: Math.max(...x),
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
+      isCategorical: isCategorical,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -141,19 +292,24 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      xMidpoint,
+      isCategorical,
     };
   }, [currentFeature, rawFeatures]);
 
-  // Generate color based on feature_value
-  const getColor = featureValue => {
-    // Normalize feature_value to 0-1 range for color mapping
-    // Assuming feature_value is typically between -2 and 2
-    const normalized = Math.max(0, Math.min(1, (featureValue + 2) / 4));
+  // Generate color based on feature_value with improved contrast
+  const getColor = (featureValue, allValues) => {
+    // Use actual data range for better color mapping
+    const minVal = Math.min(...allValues.filter(v => typeof v === 'number'));
+    const maxVal = Math.max(...allValues.filter(v => typeof v === 'number'));
+
+    // Normalize to 0-1 based on actual data range
+    const normalized = maxVal === minVal
+      ? 0.5
+      : Math.max(0, Math.min(1, (featureValue - minVal) / (maxVal - minVal)));
 
     // Convert hex colors to RGB for interpolation
-    const color1 = { r: 178, g: 241, b: 249 }; // #B2F1F9 (light blue)
-    const color2 = { r: 0, g: 124, b: 140 }; // #007C8C (teal)
+    const color1 = { r: 178, g: 241, b: 249 }; // #B2F1F9 (light blue) for low values
+    const color2 = { r: 0, g: 124, b: 140 }; // #007C8C (teal) for high values
 
     // Linear interpolation between the two colors
     const r = Math.round(color1.r + (color2.r - color1.r) * normalized);
@@ -180,21 +336,26 @@ export default function Shap({ rawFeatures, currentFeature }) {
               mode: 'markers',
               type: 'scatter',
               marker: {
-                size: 20,
-                color: plotData.featureValues.map(val =>
-                  typeof val === 'number' ? getColor(val) : '#ccc',
-                ),
-                opacity: 0.7,
-                line: { width: 0 },
+                size: 12,
+                color: plotData.isCategorical
+                  ? '#808080'  // Gray for categorical (binary 0/1) features
+                  : plotData.featureValues.map(val =>
+                    typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
+                  ),
+                opacity: 1.0,
+                line: {
+                  width: 0.5,
+                  color: 'rgba(255, 255, 255, 0.3)'
+                },
               },
               text: plotData.x.map((val, idx) => {
-                const xVal = typeof val === 'number' ? val.toFixed(2) : val;
-                const yVal =
+                const shapVal = typeof val === 'number' ? val.toFixed(3) : val;
+                const featureVal =
                   typeof plotData.featureValues[idx] === 'number'
-                    ? plotData.featureValues[idx].toFixed(2)
+                    ? plotData.featureValues[idx].toFixed(3)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Feature Data</b><br>Feature Importance: ${xVal}<br>Feature Value: ${yVal}<br>Student Support Score: ${supportScore.toFixed(2)}`;
+                return `<b>Student Data Point</b><br>SHAP Value: ${shapVal}<br>Feature Value: ${featureVal}<br>Support Score: ${supportScore.toFixed(2)}`;
               }),
               hoverinfo: 'text',
               hoverlabel: {
@@ -204,22 +365,25 @@ export default function Shap({ rawFeatures, currentFeature }) {
             },
           ]}
           layout={{
-            margin: { l: 10, r: 10, t: 0, b: 0 },
+            margin: { l: 10, r: 10, t: 0, b: 50 },
             xaxis: {
-              visible: false,
-              range: [
-                Math.min(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.2 || 0,
-                Math.max(...plotData.x.filter(x => typeof x === 'number')) *
-                  1.2 || 1,
-              ],
+              visible: true,
+              title: {
+                text: 'SHAP Value',
+                font: { size: 12, color: '#666' }
+              },
+              range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
-              showgrid: false,
-              zeroline: false,
+              showgrid: true,
+              gridcolor: '#E5E7EB',
+              zeroline: true,
+              zerolinecolor: '#D5E5EE',
+              zerolinewidth: 2,
+              tickfont: { size: 10, color: '#666' },
             },
             yaxis: {
               visible: false,
-              range: [-2, 2],
+              range: [globalYRange.min, globalYRange.max],
               fixedrange: true,
               showgrid: false,
               zeroline: false,
@@ -227,28 +391,14 @@ export default function Shap({ rawFeatures, currentFeature }) {
             plot_bgcolor: 'rgba(0,0,0,0)',
             paper_bgcolor: 'rgba(0,0,0,0)',
             showlegend: false,
-            height: 200,
+            height: 250,
             shapes: [
               {
                 type: 'line',
-                x0: 0.5,
-                y0: -2,
-                x1: 0.5,
-                y1: 2,
-                xref: 'x',
-                yref: 'y',
-                line: {
-                  color: '#D5E5EE',
-                  width: 2,
-                },
-                layer: 'below',
-              },
-              {
-                type: 'line',
-                x0: plotData.xMidpoint,
-                y0: -2,
-                x1: plotData.xMidpoint,
-                y1: 2,
+                x0: 0,
+                y0: globalYRange.min,
+                x1: 0,
+                y1: globalYRange.max,
                 xref: 'x',
                 yref: 'y',
                 line: {
@@ -260,31 +410,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
             ],
             annotations: [
               {
-                x: 0.5,
-                y: 2.2,
-                xref: 'x',
-                yref: 'y',
-                text: 'Midpoint',
-                showarrow: false,
-                font: { size: 10, color: '#666' },
-                align: 'center',
-              },
-              {
                 x: 0,
-                y: 2.2,
+                y: globalYRange.max + 0.2,
                 xref: 'x',
                 yref: 'y',
-                text: 'Neutral',
-                showarrow: false,
-                font: { size: 10, color: '#666' },
-                align: 'center',
-              },
-              {
-                x: plotData.xMidpoint,
-                y: 2.2,
-                xref: 'x',
-                yref: 'y',
-                text: `Midpoint: ${plotData.xMidpoint.toFixed(2)}`,
+                text: 'No Effect',
                 showarrow: false,
                 font: { size: 10, color: '#666' },
                 align: 'center',
@@ -292,7 +422,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
             ],
           }}
           config={{ displayModeBar: false, responsive: true }}
-          style={{ width: '100%', height: 200 }}
+          style={{ width: '100%', height: 250 }}
         />
       ) : (
         <div className="flex h-32 items-center justify-center text-gray-500">

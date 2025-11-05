@@ -143,23 +143,48 @@ function ModelResultsOverview({ run_id, modelName }) {
         // Store the raw API response
         setRawFeatures(response.data);
 
-        // Remove duplicates based on feature_readable_name, keeping only the first occurrence
-        const uniqueFeatures = response.data.filter(
-          (feature, index, self) =>
-            index ===
-            self.findIndex(
-              f => f.feature_readable_name === feature.feature_readable_name,
-            ),
-        );
+        // Group features by name and calculate mean absolute SHAP value
+        const featureGroups = {};
+        response.data.forEach(item => {
+          const featureName = item.feature_readable_name;
+          if (!featureGroups[featureName]) {
+            featureGroups[featureName] = {
+              feature: item, // Keep first occurrence as template
+              shapValues: [],
+            };
+          }
+          // Extract SHAP value and take absolute value
+          const shapValue = parseFloat(item.shap_value || item.importance || 0);
+          featureGroups[featureName].shapValues.push(Math.abs(shapValue));
+        });
+
+        // Calculate mean absolute SHAP value and create sorted feature list
+        const uniqueFeatures = Object.keys(featureGroups)
+          .map(featureName => {
+            const group = featureGroups[featureName];
+            const meanAbsShapValue =
+              group.shapValues.reduce((sum, val) => sum + val, 0) /
+              group.shapValues.length;
+
+            return {
+              ...group.feature,
+              mean_abs_shap_value: meanAbsShapValue,
+            };
+          })
+          .sort((a, b) => b.mean_abs_shap_value - a.mean_abs_shap_value); // Descending order
 
         setFeatures(uniqueFeatures);
         console.log('Raw features:', response.data);
-        console.log('Top features fetched (deduplicated):', uniqueFeatures);
+        console.log('Top features sorted by mean absolute SHAP value:', uniqueFeatures);
         console.log(
           'Original count:',
           response.data.length,
           'Deduplicated count:',
           uniqueFeatures.length,
+        );
+        console.log(
+          'Feature order by importance:',
+          uniqueFeatures.map(f => `${f.feature_readable_name} (mean abs SHAP: ${f.mean_abs_shap_value.toFixed(4)})`),
         );
       } catch (error) {
         console.error('Error fetching top features:', error);
@@ -222,11 +247,10 @@ function ModelResultsOverview({ run_id, modelName }) {
           <button
             onClick={handleExportData}
             disabled={!output_link}
-            className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${
-              output_link
-                ? 'bg-[#f79222] hover:bg-[#e67c00]'
-                : 'cursor-not-allowed bg-gray-400'
-            }`}
+            className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${output_link
+              ? 'bg-[#f79222] hover:bg-[#e67c00]'
+              : 'cursor-not-allowed bg-gray-400'
+              }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

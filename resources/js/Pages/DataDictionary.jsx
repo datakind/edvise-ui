@@ -3,15 +3,16 @@ import axios from 'axios';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-import { formatModelName } from '../utils/stringUtils';
+import { formatModelName, toTitleCase } from '../utils/stringUtils';
 
 export default function DataDictionary() {
   const [inst_id, setInstId] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [run_id, setRunId] = useState(null);
+  const [model_run_id, setModelRunId] = useState(null);
   const [features, setFeatures] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState('feature_readable_name');
+  const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
 
   // Get institution ID when component mounts
@@ -89,12 +90,47 @@ export default function DataDictionary() {
     fetchModelRuns();
   }, [inst_id, selectedModel]);
 
-  // Get top features when we have run_id
+  // Get model_run_id from .env when inst_id is available
+  useEffect(() => {
+    const fetchModelRunId = async () => {
+      if (!inst_id) return;
+
+      try {
+        // Determine the environment variable prefix based on model name
+        const envPrefix =
+          selectedModel && selectedModel.name && selectedModel.name.toLowerCase().includes('assoc')
+            ? 'ALT2_'
+            : 'ALT_';
+        const envKey = `${envPrefix}${inst_id.toUpperCase()}`;
+
+        // Call a backend endpoint that will read the .env file and return the model_run_id
+        const apiUrl = `/get-model-run-id/${inst_id}?env_key=${envKey}`;
+
+        const response = await axios.get(apiUrl);
+        if (response.data && response.data.model_run_id) {
+          setModelRunId(response.data.model_run_id);
+        } else {
+          console.log(
+            'DataDictionary - No model_run_id found in response',
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching model_run_id:', error);
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+        console.error('Error URL:', error.config?.url);
+      }
+    };
+
+    fetchModelRunId();
+  }, [inst_id, selectedModel]);
+
+  // Get top features when we have model_run_id
   useEffect(() => {
     const fetchTopFeatures = async () => {
-      if (!inst_id || !run_id) return;
+      if (!inst_id || !model_run_id) return;
 
-      const apiUrl = `/top-features/${run_id}`;
+      const apiUrl = `/top-features/${model_run_id}`;
       console.log('Fetching top features from:', apiUrl);
       console.log('Full URL:', window.location.origin + apiUrl);
 
@@ -102,12 +138,11 @@ export default function DataDictionary() {
         const response = await axios.get(apiUrl);
 
         // Remove duplicates based on feature_readable_name, keeping only the first occurrence
-        const uniqueFeatures = response.data.filter(
-          (feature, index, self) =>
-            index ===
-            self.findIndex(
-              f => f.feature_readable_name === feature.feature_readable_name,
-            ),
+        const uniqueFeatures = Array.from(
+          new Map(response.data
+            .filter(feature => feature.readable_feature_name) // Remove invalid features
+            .map(feature => [feature.readable_feature_name, feature]) // Create key-value pairs
+          ).values()
         );
 
         setFeatures(uniqueFeatures);
@@ -128,19 +163,16 @@ export default function DataDictionary() {
     };
 
     fetchTopFeatures();
-  }, [inst_id, run_id]);
+  }, [inst_id, model_run_id]);
 
   // Filter and sort features based on search term and sort settings
   const filteredAndSortedFeatures = features
     .filter(
       feature =>
-        feature.feature_readable_name
-          .toLowerCase()
+        feature.readable_feature_name
+          ?.toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        feature.feature_short_desc
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        feature.feature_long_desc
+        feature.short_feature_desc
           ?.toLowerCase()
           .includes(searchTerm.toLowerCase()),
     )
@@ -154,6 +186,12 @@ export default function DataDictionary() {
         return bValue.localeCompare(aValue);
       }
     });
+
+  // Debug logging
+  console.log('Features after deduplication:', features);
+  console.log('Filtered and sorted features:', filteredAndSortedFeatures);
+  console.log('Search term:', searchTerm);
+  console.log('Sort field:', sortField);
 
   const handleSort = field => {
     if (sortField === field) {
@@ -324,98 +362,95 @@ export default function DataDictionary() {
 
           {/* Original Feature Value Table Section */}
           <div>
-            <h2 className="mb-4 text-3xl font-light">
-              Original Feature
-              <br />
-              Value Table
-            </h2>
-            <div className="flex gap-8">
-              {/* Left Side - Description and Search */}
-              <div className="w-1/4">
-                <div className="mb-4">
-                  <p className="text-base font-light">
-                    The chart shows how all features are weighed in the model.
-                  </p>
-                </div>
+            {/* Header with title/description on left, search on right */}
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex-1">
+                <h2 className="mb-2 text-3xl font-light">
+                  Original Feature Value Table
+                </h2>
+                <p className="text-base font-light">
+                  The chart shows how all features are weighed in the model.
+                </p>
               </div>
 
-              {/* Right Side - Table */}
-              <div className="-mt-12 w-3/4 overflow-x-auto">
-                {/* Search Bar */}
-                <div className="relative float-right w-64 pb-4">
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full rounded-full border border-[#e5e7eb] px-4 py-2 pr-10 focus:border-[#007C8C] focus:outline-none"
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                    <svg
-                      className="mb-4 h-5 w-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
+              {/* Search Bar */}
+              <div className="relative w-64 ml-4">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="w-full rounded-full border border-[#e5e7eb] px-4 py-2 pr-10 focus:border-[#007C8C] focus:outline-none"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
                 </div>
-                <table className="w-full border-collapse border border-[#e5e7eb]">
-                  <thead>
-                    <tr className="bg-[#f9fafb]">
-                      <th
-                        className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
-                        onClick={() => handleSort('feature_readable_name')}
-                      >
-                        <div className="flex items-center gap-2">
-                          FEATURE NAME
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                            />
-                          </svg>
-                        </div>
-                      </th>
-                      <th className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
-                        DESCRIPTION
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredAndSortedFeatures.map(feature => (
-                      <tr
-                        key={feature.feature_readable_name}
-                        className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                      >
-                        <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
-                          <div className="text-base font-medium text-black">
-                            {feature.feature_readable_name}
-                          </div>
-                        </td>
-                        <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
-                          <div className="text-base font-light text-[#696969]">
-                            {feature.feature_long_desc}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
+            </div>
+
+            {/* Table Container */}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-[#e5e7eb]">
+                <thead>
+                  <tr className="bg-[#f9fafb]">
+                    <th
+                      className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                      onClick={() => handleSort('readable_feature_name')}
+                    >
+                      <div className="flex items-center gap-2">
+                        FEATURE NAME
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                          />
+                        </svg>
+                      </div>
+                    </th>
+                    <th className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
+                      DESCRIPTION
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAndSortedFeatures.map(feature => (
+                    <tr
+                      key={feature.readable_feature_name}
+                      className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                    >
+                      <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
+                        <div className="text-base font-medium text-black">
+                          {toTitleCase(feature.readable_feature_name)}
+                        </div>
+                      </td>
+                      <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
+                        <div className="text-base font-light text-[#696969]">
+                          {feature.short_feature_desc}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

@@ -34,13 +34,15 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_REDIRECT'),
+        'redirect' => env('GOOGLE_REDIRECT'), // Legacy support - not used when redirectUrl is set dynamically
+        'redirect_path' => env('GOOGLE_REDIRECT_PATH', '/auth/google/callback'),
     ],
 
     'azure' => [
         'client_id' => env('AZURE_CLIENT_ID'),
         'client_secret' => env('AZURE_CLIENT_SECRET'),
-        'redirect' => env('AZURE_REDIRECT_URI'),
+        'redirect' => env('AZURE_REDIRECT_URI'), // Legacy support - not used when redirectUrl is set dynamically
+        'redirect_path' => env('AZURE_REDIRECT_PATH', '/auth/azure/callback'),
     ],
 
 ];

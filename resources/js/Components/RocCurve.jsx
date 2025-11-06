@@ -3,35 +3,27 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-export default function RocCurve({ model_run_id, modelName }) {
+export default function RocCurve({ model_run_id, modelName, inst_id }) {
   const [rocData, setRocData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [inst_id, setInstId] = useState(null);
 
-  // Fetch ROC curve data when model_run_id is available
+  // Fetch ROC curve data when model_run_id and inst_id are available
   useEffect(() => {
     const fetchRocCurve = async () => {
-      if (!model_run_id) return;
+      if (!model_run_id || !inst_id) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        // Get the current user's institution ID
-        const instResponse = await axios.get('/user-current-inst-api');
-        if (instResponse.data && instResponse.data.length > 0) {
-          const inst_id = instResponse.data[0];
-          setInstId(inst_id);
+        // Fetch ROC curve data
+        const response = await axios.get(
+          `/institutions/${inst_id}/training/roc_curve/${model_run_id}`,
+        );
 
-          // Fetch ROC curve data
-          const response = await axios.get(
-            `/institutions/${inst_id}/training/roc_curve/${model_run_id}`,
-          );
-
-          if (response.data) {
-            setRocData(response.data);
-          }
+        if (response.data) {
+          setRocData(response.data);
         }
       } catch (error) {
         console.error('Error fetching ROC curve data:', error);
@@ -51,7 +43,7 @@ export default function RocCurve({ model_run_id, modelName }) {
     };
 
     fetchRocCurve();
-  }, [model_run_id]);
+  }, [model_run_id, inst_id]);
 
   // Show loading state
   if (loading) {

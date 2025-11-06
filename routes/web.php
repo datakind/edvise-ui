@@ -354,6 +354,9 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
     Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
     Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+
+    // DEPRECATED: inst_id is now shared via Inertia props (HandleInertiaRequests middleware)
+    // This route is kept for backward compatibility and debugging purposes
     // The following returns a list of two strings, the first is the inst id, the second is an error if any.
     Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
@@ -29,7 +29,10 @@ function ModelResultsOverview({ job_run_id, modelName }) {
   console.log('ModelResultsOverview - Received job_run_id:', job_run_id);
   console.log('ModelResultsOverview - Received modelName:', modelName);
 
-  const [inst_id, setInstId] = useState(null);
+  // Get inst_id from Inertia shared props (no API call needed!)
+  const { inst_id } = usePage().props;
+  console.log('ModelResultsOverview - Institution ID from shared props:', inst_id);
+
   const [model_run_id, setModelRunId] = useState(null);
 
   // Log when model_run_id changes
@@ -42,31 +45,6 @@ function ModelResultsOverview({ job_run_id, modelName }) {
   const [runDetails, setRunDetails] = useState(null);
   const [features, setFeatures] = useState([]);
   const [rawFeatures, setRawFeatures] = useState([]);
-
-  // Get institution ID when component mounts
-  useEffect(() => {
-    const fetchInstitutionId = async () => {
-      try {
-        const response = await axios.get('/user-current-inst-api');
-        console.log(
-          'ModelResultsOverview - Institution API response:',
-          response.data,
-        );
-        if (response.data && response.data.length > 0) {
-          setInstId(response.data[0]); // First element is the institution ID
-          console.log(
-            'ModelResultsOverview - Set institution ID to:',
-            response.data[0],
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching institution ID:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchInstitutionId();
-  }, []);
 
   // Get model_run_id from job table using job_run_id
   useEffect(() => {
@@ -290,7 +268,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
           {tab === 'results' ? (
             <>
               <div className="mb-8">
-                <SupportOverview tab={tab} setTab={setTab} run_id={job_run_id} />
+                <SupportOverview tab={tab} setTab={setTab} run_id={job_run_id} inst_id={inst_id} />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -511,13 +489,14 @@ function ModelResultsOverview({ job_run_id, modelName }) {
               </div>
               <div className="mb-8">
                 {/* Feature Value Table */}
-                <FeatureValue model_run_id={model_run_id} />
+                <FeatureValue model_run_id={model_run_id} inst_id={inst_id} />
               </div>
               {/* Confusion Matrix */}
               <div className="mb-8">
                 <ConfusionMatrix
                   model_run_id={model_run_id}
                   modelName={modelName || ''}
+                  inst_id={inst_id}
                 />
               </div>
               {/* ROC Curve */}
@@ -526,6 +505,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                 <RocCurve
                   model_run_id={model_run_id}
                   modelName={modelName || ''}
+                  inst_id={inst_id}
                 />
               </div>
               {/* Support Scores Histogram */}

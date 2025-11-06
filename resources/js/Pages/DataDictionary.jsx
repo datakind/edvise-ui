@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
 import { formatModelName, toTitleCase } from '../utils/stringUtils';
 
 export default function DataDictionary() {
-  const [inst_id, setInstId] = useState(null);
+  // Get inst_id from Inertia shared props (no API call needed!)
+  const { inst_id } = usePage().props;
+  console.log('DataDictionary - Institution ID from shared props:', inst_id);
+
   const [selectedModel, setSelectedModel] = useState(null);
   const [run_id, setRunId] = useState(null);
   const [model_run_id, setModelRunId] = useState(null);
@@ -14,31 +17,6 @@ export default function DataDictionary() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
-
-  // Get institution ID when component mounts
-  useEffect(() => {
-    const fetchInstitutionId = async () => {
-      try {
-        const response = await axios.get('/user-current-inst-api');
-        console.log(
-          'DataDictionary - Institution API response:',
-          response.data,
-        );
-        if (response.data && response.data.length > 0) {
-          setInstId(response.data[0]); // First element is the institution ID
-          console.log(
-            'DataDictionary - Set institution ID to:',
-            response.data[0],
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching institution ID:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchInstitutionId();
-  }, []);
 
   // Get models when we have inst_id
   useEffect(() => {

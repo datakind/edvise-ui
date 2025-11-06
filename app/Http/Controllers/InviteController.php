@@ -233,10 +233,7 @@ class InviteController extends Controller
         // Send invite email
         $this->sendInviteEmail($invite);
 
-        return response()->json([
-            'message' => 'Invite created successfully',
-            'invite' => $invite,
-        ]);
+        return back()->with('success', 'Invite created successfully');
     }
 
     /**
@@ -270,9 +267,9 @@ class InviteController extends Controller
     public function resendInvite(Invite $invite)
     {
         if ($invite->is_used) {
-            return response()->json([
+            return back()->withErrors([
                 'message' => 'Cannot resend used invite',
-            ], 400);
+            ]);
         }
 
         // Extend expiration
@@ -283,9 +280,7 @@ class InviteController extends Controller
         // Resend email
         $this->sendInviteEmail($invite);
 
-        return response()->json([
-            'message' => 'Invite resent successfully',
-        ]);
+        return back()->with('success', 'Invite resent successfully');
     }
 
     /**
@@ -294,15 +289,13 @@ class InviteController extends Controller
     public function deleteInvite(Invite $invite)
     {
         if ($invite->is_used) {
-            return response()->json([
+            return back()->withErrors([
                 'message' => 'Cannot delete used invite',
-            ], 400);
+            ]);
         }
 
         $invite->delete();
 
-        return response()->json([
-            'message' => 'Invite deleted successfully',
-        ]);
+        return redirect()->route('admin.invites')->with('success', 'Invite deleted successfully');
     }
 }

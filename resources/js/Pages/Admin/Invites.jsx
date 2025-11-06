@@ -24,6 +24,7 @@ export default function Invites({ invites }) {
   });
 
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
 
   const submit = e => {
     e.preventDefault();
@@ -35,9 +36,10 @@ export default function Invites({ invites }) {
     });
   };
 
-  const resendInvite = inviteId => {
-    post(route('admin.invites.resend', inviteId));
-  };
+  // Hidden until email functionality is implemented
+  // const resendInvite = inviteId => {
+  //   post(route('admin.invites.resend', inviteId));
+  // };
 
   const deleteInvite = inviteId => {
     if (confirm('Are you sure you want to delete this invite?')) {
@@ -47,6 +49,38 @@ export default function Invites({ invites }) {
 
   const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const copyInviteCode = (inviteId, inviteCode) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(inviteCode)
+        .then(() => {
+          setCopiedId(inviteId);
+          setTimeout(() => setCopiedId(null), 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy:', err);
+          alert('Failed to copy to clipboard');
+        });
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = inviteCode;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopiedId(inviteId);
+        setTimeout(() => setCopiedId(null), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        alert('Failed to copy to clipboard');
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   const getStatusBadge = invite => {
@@ -185,6 +219,9 @@ export default function Invites({ invites }) {
                         Email
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                        Invite Code
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                         Role
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
@@ -208,6 +245,58 @@ export default function Invites({ invites }) {
                           {invite.email}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                          <div className="relative inline-block">
+                            <button
+                              onClick={() =>
+                                copyInviteCode(invite.id, invite.invite_code)
+                              }
+                              className={`group flex items-center gap-2 rounded px-2 py-1 transition-colors ${
+                                copiedId === invite.id
+                                  ? 'bg-green-100'
+                                  : 'bg-gray-100 hover:bg-gray-200'
+                              }`}
+                              title={
+                                copiedId === invite.id
+                                  ? 'Copied!'
+                                  : 'Click to copy'
+                              }
+                            >
+                              <code className="text-xs">
+                                {invite.invite_code}
+                              </code>
+                              {copiedId === invite.id ? (
+                                <svg
+                                  className="h-4 w-4 text-green-600"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              ) : (
+                                <svg
+                                  className="h-4 w-4 text-gray-400 group-hover:text-gray-600"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                  />
+                                </svg>
+                              )}
+                            </button>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                           <span className="capitalize">{invite.role}</span>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
@@ -221,7 +310,8 @@ export default function Invites({ invites }) {
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                           <div className="flex space-x-2">
-                            {!invite.is_used &&
+                            {/* Hidden until email functionality is implemented */}
+                            {/* {!invite.is_used &&
                               new Date(invite.expires_at) > new Date() && (
                                 <button
                                   onClick={() => resendInvite(invite.id)}
@@ -229,7 +319,7 @@ export default function Invites({ invites }) {
                                 >
                                   Resend
                                 </button>
-                              )}
+                              )} */}
                             {!invite.is_used && (
                               <button
                                 onClick={() => deleteInvite(invite.id)}

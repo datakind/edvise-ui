@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,9 +16,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToGoogle()
+    public function redirectToGoogle(Request $request)
     {
-        return Socialite::driver('google')->redirect();
+        // Build redirect URL dynamically from current request base URL
+        $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
+        $redirectUrl = $request->root() . $redirectPath;
+        
+        return Socialite::driver('google')
+            ->redirectUrl($redirectUrl)
+            ->redirect();
     }
 
     /**
@@ -25,11 +32,17 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         try {
+            // Build redirect URL dynamically from current request base URL
+            $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
+            $redirectUrl = $request->root() . $redirectPath;
+            
             // Retrieve the user from Google
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver('google')
+                ->redirectUrl($redirectUrl)
+                ->user();
 
             // Check if there's an existing user with the same email
             $existingUser = User::where('email', $user->email)->first();
@@ -83,9 +96,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToAzure()
+    public function redirectToAzure(Request $request)
     {
-        return Socialite::driver('azure')->redirect();
+        // Build redirect URL dynamically from current request base URL
+        $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
+        $redirectUrl = $request->root() . $redirectPath;
+        
+        return Socialite::driver('azure')
+            ->redirectUrl($redirectUrl)
+            ->redirect();
     }
 
     /**
@@ -93,11 +112,17 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function handleAzureCallback()
+    public function handleAzureCallback(Request $request)
     {
         try {
+            // Build redirect URL dynamically from current request base URL
+            $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
+            $redirectUrl = $request->root() . $redirectPath;
+            
             // Retrieve the user from Azure
-            $user = Socialite::driver('azure')->user();
+            $user = Socialite::driver('azure')
+                ->redirectUrl($redirectUrl)
+                ->user();
 
             // Check if there's an existing user with the same email
             $existingUser = User::where('email', $user->email)->first();

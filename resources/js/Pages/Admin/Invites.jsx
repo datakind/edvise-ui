@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
@@ -377,6 +377,32 @@ export default function Invites({ invites }) {
                   </tbody>
                 </table>
               </div>
+
+              {invites.links && invites.links.length > 1 && (
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="text-sm text-gray-600">
+                    Showing {invites.from} to {invites.to} of {invites.total} invites
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {invites.links.map(link => (
+                      <Link
+                        key={link.url ?? link.label}
+                        href={link.url || '#'}
+                        preserveScroll
+                        preserveState
+                        className={`rounded px-3 py-1 text-sm ${
+                          link.active
+                            ? 'bg-indigo-600 text-white'
+                            : link.url
+                              ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                              : 'cursor-not-allowed border border-transparent bg-gray-100 text-gray-400'
+                        }`}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {invites.data.length === 0 && (
                 <div className="py-8 text-center text-gray-500">

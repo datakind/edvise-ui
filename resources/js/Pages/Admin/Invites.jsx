@@ -8,11 +8,19 @@ import TextInput from '@/Components/Fields/TextInput';
 import Dropdown from '@/Components/Fields/Dropdown';
 
 export default function Invites({ invites }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const {
+    data,
+    setData,
+    post,
+    delete: destroy,
+    processing,
+    errors,
+    reset,
+  } = useForm({
     email: '',
     role: 'user',
     institution_id: '',
-    expires_in_days: 7,
+    expires_in_days: 30,
   });
 
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -33,7 +41,7 @@ export default function Invites({ invites }) {
 
   const deleteInvite = inviteId => {
     if (confirm('Are you sure you want to delete this invite?')) {
-      post(route('admin.invites.delete', inviteId), { method: 'delete' });
+      destroy(route('admin.invites.delete', inviteId));
     }
   };
 

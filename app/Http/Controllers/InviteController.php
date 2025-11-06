@@ -217,7 +217,7 @@ class InviteController extends Controller
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:user,admin,datakinder',
+            'role' => 'required|in:MODEL_OWNER,DATAKINDER',
             'institution_id' => 'nullable|string',
             'expires_in_days' => 'nullable|integer|min:1|max:30',
         ]);

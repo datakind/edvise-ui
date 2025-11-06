@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
-import Dropdown from '@/Components/Fields/Dropdown';
+import axios from 'axios';
 
 export default function Invites({ invites }) {
   const {
@@ -18,13 +18,32 @@ export default function Invites({ invites }) {
     reset,
   } = useForm({
     email: '',
-    role: 'user',
+    role: 'MODEL_OWNER',
     institution_id: '',
     expires_in_days: 30,
   });
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [institutions, setInstitutions] = useState({});
+  const [loadingInstitutions, setLoadingInstitutions] = useState(false);
+
+  useEffect(() => {
+    // Fetch all institutions when component mounts
+    setLoadingInstitutions(true);
+    axios
+      .get('/view-all-institutions-api')
+      .then(res => {
+        let institutionMap = {};
+        res.data.forEach(inst => (institutionMap[inst.name] = inst.inst_id));
+        setInstitutions(institutionMap);
+        setLoadingInstitutions(false);
+      })
+      .catch(err => {
+        console.error('Error fetching institutions:', err);
+        setLoadingInstitutions(false);
+      });
+  }, []);
 
   const submit = e => {
     e.preventDefault();
@@ -146,33 +165,47 @@ export default function Invites({ invites }) {
 
                       <div>
                         <InputLabel htmlFor="role" value="Role" />
-                        <Dropdown
+                        <select
                           id="role"
-                          className="mt-1 block w-full"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                           value={data.role}
                           onChange={e => setData('role', e.target.value)}
                         >
-                          <option value="user">User</option>
-                          <option value="admin">Admin</option>
-                          <option value="datakinder">Datakinder</option>
-                        </Dropdown>
+                          <option value="MODEL_OWNER">Model Owner</option>
+                          <option value="DATAKINDER">Datakinder</option>
+                        </select>
                         <InputError message={errors.role} className="mt-2" />
                       </div>
 
                       <div>
                         <InputLabel
                           htmlFor="institution_id"
-                          value="Institution ID (Optional)"
+                          value="Institution (Optional)"
                         />
-                        <TextInput
+                        <select
                           id="institution_id"
-                          type="text"
-                          className="mt-1 block w-full"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                           value={data.institution_id}
                           onChange={e =>
                             setData('institution_id', e.target.value)
                           }
-                        />
+                          disabled={loadingInstitutions}
+                        >
+                          <option value="">
+                            {loadingInstitutions
+                              ? 'Loading institutions...'
+                              : 'Select an institution (optional)'}
+                          </option>
+                          {Object.entries(institutions)
+                            .sort(([nameA], [nameB]) =>
+                              nameA.localeCompare(nameB),
+                            )
+                            .map(([name, inst_id]) => (
+                              <option key={inst_id} value={inst_id}>
+                                {name}
+                              </option>
+                            ))}
+                        </select>
                         <InputError
                           message={errors.institution_id}
                           className="mt-2"
@@ -241,8 +274,17 @@ export default function Invites({ invites }) {
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {invites.data.map(invite => (
                       <tr key={invite.id}>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                          {invite.email}
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          <div className="flex flex-col gap-1">
+                            <div>{invite.email}</div>
+                            {invite.institution_id && (
+                              <div className="text-xs font-normal text-gray-400">
+                                {Object.entries(institutions).find(
+                                  ([, id]) => id === invite.institution_id,
+                                )?.[0] || invite.institution_id}
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                           <div className="relative inline-block">

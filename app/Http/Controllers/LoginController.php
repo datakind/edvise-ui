@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,9 +16,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToGoogle()
+    public function redirectToGoogle(Request $request)
     {
-        return Socialite::driver('google')->redirect();
+        // Build redirect URL dynamically from current request base URL
+        $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
+        $redirectUrl = $request->root() . $redirectPath;
+        
+        return Socialite::driver('google')
+            ->redirectUrl($redirectUrl)
+            ->redirect();
     }
 
     /**
@@ -83,9 +90,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToAzure()
+    public function redirectToAzure(Request $request)
     {
-        return Socialite::driver('azure')->redirect();
+        // Build redirect URL dynamically from current request base URL
+        $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
+        $redirectUrl = $request->root() . $redirectPath;
+        
+        return Socialite::driver('azure')
+            ->redirectUrl($redirectUrl)
+            ->redirect();
     }
 
     /**

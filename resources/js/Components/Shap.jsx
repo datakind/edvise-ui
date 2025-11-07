@@ -369,17 +369,18 @@ export default function Shap({ rawFeatures, currentFeature }) {
             xaxis: {
               visible: true,
               title: {
-                text: 'SHAP Value',
-                font: { size: 12, color: '#666' }
+                text: '',
               },
               range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
               showgrid: true,
               gridcolor: '#E5E7EB',
+              griddash: 'dash',
               zeroline: true,
               zerolinecolor: '#D5E5EE',
               zerolinewidth: 2,
               tickfont: { size: 10, color: '#666' },
+              showticklabels: false,
             },
             yaxis: {
               visible: false,
@@ -421,7 +422,13 @@ export default function Shap({ rawFeatures, currentFeature }) {
               },
             ],
           }}
-          config={{ displayModeBar: false, responsive: true }}
+          config={{
+            displayModeBar: false,
+            responsive: true,
+            scrollZoom: false,
+            doubleClick: false,
+            staticPlot: true,
+          }}
           style={{ width: '100%', height: 250 }}
         />
       ) : (

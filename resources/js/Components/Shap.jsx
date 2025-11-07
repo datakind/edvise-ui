@@ -260,7 +260,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
     });
 
     // Detect if feature is categorical (all values are 0 or 1)
-    const isCategorical = featureValues.every(val => val === 0 || val === 1);
+    const allValuesSame =
+      featureValues.length > 0 &&
+      featureValues.every(val => val === featureValues[0]);
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
@@ -273,7 +275,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
-      isCategorical: isCategorical,
+      allValuesSame: allValuesSame,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -292,7 +294,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      isCategorical,
+      allValuesSame,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -337,8 +339,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.isCategorical
-                  ? '#808080'  // Gray for categorical (binary 0/1) features
+                color: plotData.allValuesSame
+                  ? '#808080'  // Gray for all the same values
                   : plotData.featureValues.map(val =>
                     typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
                   ),
@@ -427,7 +429,6 @@ export default function Shap({ rawFeatures, currentFeature }) {
             responsive: true,
             scrollZoom: false,
             doubleClick: false,
-            staticPlot: true,
           }}
           style={{ width: '100%', height: 250 }}
         />

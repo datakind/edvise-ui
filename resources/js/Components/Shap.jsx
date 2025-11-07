@@ -357,7 +357,19 @@ export default function Shap({ rawFeatures, currentFeature }) {
                     ? plotData.featureValues[idx].toFixed(3)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Student Data Point</b><br>SHAP Value: ${shapVal}<br>Feature Value: ${featureVal}<br>Support Score: ${supportScore.toFixed(2)}`;
+
+                const tooltipLines = [
+                  '<b>Student Data Point</b>',
+                  `SHAP Value: ${shapVal}`,
+                ];
+
+                if (!plotData.allValuesSame) {
+                  tooltipLines.push(`Feature Value: ${featureVal}`);
+                }
+
+                tooltipLines.push(`Support Score: ${supportScore.toFixed(2)}`);
+
+                return tooltipLines.join('<br>');
               }),
               hoverinfo: 'text',
               hoverlabel: {

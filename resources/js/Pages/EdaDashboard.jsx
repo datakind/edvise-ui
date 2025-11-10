@@ -2,6 +2,7 @@ import React from 'react';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
+import StatCard from '@/Components/StatCard';
 
 const summaryStats = [
     {
@@ -36,17 +37,7 @@ export default function EdaDashboard() {
 
                     <div className="grid gap-4 md:grid-cols-3">
                         {summaryStats.map(stat => (
-                            <div
-                                key={stat.label}
-                                className="rounded-3xl bg-[#E6EEF5] px-6 py-8 text-center shadow-sm"
-                            >
-                                <div className="text-4xl font-light text-[#1E343F] md:text-5xl">
-                                    {stat.value}
-                                </div>
-                                <div className="mt-2 text-base font-semibold uppercase tracking-wide text-[#1E343F]/80">
-                                    {stat.label}
-                                </div>
-                            </div>
+                            <StatCard key={stat.label} value={stat.value} label={stat.label} />
                         ))}
                     </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
@@ -12,6 +12,7 @@ import InterpretChart from '../Components/InterpretChart';
 import FeatureValue from '../Components/FeatureValue';
 import BoxWhiskerPlot from '../Components/BoxWhiskerPlot';
 import InterpretChartSimple from '../Components/InterpretChartSimple';
+import PageHeading from '@/Components/PageHeading';
 import '../../css/landing.css';
 
 // Features will be fetched from API
@@ -238,11 +239,7 @@ function ModelResultsOverview({ run_id, modelName }) {
     <AppLayout title="Model Results Overview">
       <Head title="Model Results Overview" />
       <div className="font-[Helvetica Neue] mb-8 min-w-full">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="mx-auto text-5xl font-light">
-            Model Results Overview
-          </h1>
-        </div>
+        <PageHeading>Model Results Overview</PageHeading>
         <div className="my-6">
           <button
             onClick={handleExportData}

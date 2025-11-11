@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect, useMemo } from 'react';
+import { Head, useForm, router } from '@inertiajs/react';
+import route from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
@@ -7,7 +9,7 @@ import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import axios from 'axios';
 
-export default function Invites({ invites }) {
+export default function Invites({ invites, filters = {} }) {
   const {
     data,
     setData,
@@ -27,6 +29,9 @@ export default function Invites({ invites }) {
   const [copiedId, setCopiedId] = useState(null);
   const [institutions, setInstitutions] = useState({});
   const [loadingInstitutions, setLoadingInstitutions] = useState(false);
+  const [perPage, setPerPage] = useState(
+    filters.per_page ? String(filters.per_page) : '20',
+  );
 
   useEffect(() => {
     // Fetch all institutions when component mounts
@@ -44,6 +49,73 @@ export default function Invites({ invites }) {
         setLoadingInstitutions(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (filters && filters.per_page) {
+      setPerPage(String(filters.per_page));
+    } else {
+      setPerPage('20');
+    }
+  }, [filters?.per_page]);
+
+  const handlePerPageChange = event => {
+    const value = event.target.value;
+    setPerPage(value);
+    router.get(
+      route('admin.invites'),
+      { per_page: value },
+      { preserveScroll: true, preserveState: true },
+    );
+  };
+
+  const handlePageChange = page => {
+    if (!page || page === invites.current_page) {
+      return;
+    }
+    const targetPage = Math.max(1, Math.min(page, invites.last_page ?? 1));
+    router.get(
+      route('admin.invites'),
+      { page: targetPage, per_page: perPage },
+      { preserveScroll: true, preserveState: true },
+    );
+  };
+
+  const paginationPages = useMemo(() => {
+    const currentPage = invites.current_page ?? 1;
+    const lastPage = invites.last_page ?? 1;
+
+    if (lastPage <= 7) {
+      return Array.from({ length: lastPage }, (_, idx) => idx + 1);
+    }
+
+    const pages = [];
+    const delta = 1;
+    let start = Math.max(2, currentPage - delta);
+    let end = Math.min(lastPage - 1, currentPage + delta);
+
+    if (currentPage - delta <= 2) {
+      end = Math.min(lastPage - 1, end + (delta - (currentPage - 2)));
+    }
+    if (currentPage + delta >= lastPage - 1) {
+      start = Math.max(2, start - (delta - (lastPage - 1 - currentPage)));
+    }
+
+    pages.push(1);
+    if (start > 2) {
+      pages.push('ellipsis-start');
+    }
+    for (let page = start; page <= end; page += 1) {
+      pages.push(page);
+    }
+    if (end < lastPage - 1) {
+      pages.push('ellipsis-end');
+    }
+    if (lastPage > 1) {
+      pages.push(lastPage);
+    }
+
+    return pages;
+  }, [invites.current_page, invites.last_page]);
 
   const submit = e => {
     e.preventDefault();
@@ -245,6 +317,25 @@ export default function Invites({ invites }) {
               )}
 
               <div className="overflow-x-auto">
+                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <h2 className="text-lg font-semibold text-gray-700">
+                    Invites
+                  </h2>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Rows per page:</span>
+                    <select
+                      value={perPage}
+                      onChange={handlePerPageChange}
+                      className="rounded-md border border-gray-300 bg-white pl-2 pr-8 py-1 text-sm leading-normal focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    >
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                      <option value="200">200</option>
+                      <option value="all">All</option>
+                    </select>
+                  </div>
+                </div>
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -378,28 +469,76 @@ export default function Invites({ invites }) {
                 </table>
               </div>
 
-              {invites.links && invites.links.length > 1 && (
+              {invites.total > 0 && invites.last_page > 1 && (
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="text-sm text-gray-600">
-                    Showing {invites.from} to {invites.to} of {invites.total} invites
+                    Showing {invites.from} to {invites.to} of {invites.total}{' '}
+                    invites
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
-                    {invites.links.map(link => (
-                      <Link
-                        key={link.url ?? link.label}
-                        href={link.url || '#'}
-                        preserveScroll
-                        preserveState
-                        className={`rounded px-3 py-1 text-sm ${
-                          link.active
-                            ? 'bg-indigo-600 text-white'
-                            : link.url
-                              ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                              : 'cursor-not-allowed border border-transparent bg-gray-100 text-gray-400'
-                        }`}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                      />
-                    ))}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handlePageChange((invites.current_page ?? 1) - 1)
+                      }
+                      disabled={!invites.prev_page_url}
+                      className={`rounded px-3 py-1 text-sm ${
+                        invites.prev_page_url
+                          ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                          : 'cursor-not-allowed border border-transparent bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      Previous
+                    </button>
+                    {paginationPages.map((page, index) => {
+                      if (
+                        page === 'ellipsis-start' ||
+                        page === 'ellipsis-end'
+                      ) {
+                        return (
+                          <span
+                            key={`${page}-${index}`}
+                            className="px-2 text-sm text-gray-400"
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+
+                      const pageNumber = Number(page);
+                      const isActive =
+                        pageNumber === (invites.current_page ?? 1);
+
+                      return (
+                        <button
+                          type="button"
+                          key={`page-${pageNumber}`}
+                          onClick={() => handlePageChange(pageNumber)}
+                          disabled={isActive}
+                          className={`rounded px-3 py-1 text-sm ${
+                            isActive
+                              ? 'bg-indigo-600 text-white'
+                              : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                          } ${isActive ? 'cursor-default' : ''}`}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    })}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handlePageChange((invites.current_page ?? 1) + 1)
+                      }
+                      disabled={!invites.next_page_url}
+                      className={`rounded px-3 py-1 text-sm ${
+                        invites.next_page_url
+                          ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                          : 'cursor-not-allowed border border-transparent bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
               )}

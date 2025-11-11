@@ -250,14 +250,30 @@ class InviteController extends Controller
     /**
      * List all invites (admin only)
      */
-    public function listInvites()
+    public function listInvites(Request $request)
     {
+        $perPageParam = $request->input('per_page', 20);
+
+        if ($perPageParam === 'all') {
+            $totalInvites = Invite::count();
+            $perPage = max($totalInvites, 1);
+        } else {
+            $perPage = (int) $perPageParam;
+            if ($perPage <= 0) {
+                $perPage = 20;
+            }
+        }
+
         $invites = Invite::with('invitedBy')
                         ->orderBy('created_at', 'desc')
-                        ->paginate(20);
+                        ->paginate($perPage)
+                        ->withQueryString();
 
         return Inertia::render('Admin/Invites', [
             'invites' => $invites,
+            'filters' => [
+                'per_page' => $perPageParam,
+            ],
         ]);
     }
 

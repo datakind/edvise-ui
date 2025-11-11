@@ -260,7 +260,9 @@ export default function Shap({ rawFeatures, currentFeature }) {
     });
 
     // Detect if feature is categorical (all values are 0 or 1)
-    const isCategorical = featureValues.every(val => val === 0 || val === 1);
+    const allValuesSame =
+      featureValues.length > 0 &&
+      featureValues.every(val => val === featureValues[0]);
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
 
@@ -273,7 +275,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
-      isCategorical: isCategorical,
+      allValuesSame: allValuesSame,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -292,7 +294,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      isCategorical,
+      allValuesSame,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -337,8 +339,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.isCategorical
-                  ? '#808080'  // Gray for categorical (binary 0/1) features
+                color: plotData.allValuesSame
+                  ? '#808080'  // Gray for all the same values
                   : plotData.featureValues.map(val =>
                     typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
                   ),
@@ -355,7 +357,19 @@ export default function Shap({ rawFeatures, currentFeature }) {
                     ? plotData.featureValues[idx].toFixed(3)
                     : plotData.featureValues[idx];
                 const supportScore = plotData.studentSupportScores[idx] || 0;
-                return `<b>Student Data Point</b><br>SHAP Value: ${shapVal}<br>Feature Value: ${featureVal}<br>Support Score: ${supportScore.toFixed(2)}`;
+
+                const tooltipLines = [
+                  '<b>Student Data Point</b>',
+                  `SHAP Value: ${shapVal}`,
+                ];
+
+                if (!plotData.allValuesSame) {
+                  tooltipLines.push(`Feature Value: ${featureVal}`);
+                }
+
+                tooltipLines.push(`Support Score: ${supportScore.toFixed(2)}`);
+
+                return tooltipLines.join('<br>');
               }),
               hoverinfo: 'text',
               hoverlabel: {
@@ -369,17 +383,18 @@ export default function Shap({ rawFeatures, currentFeature }) {
             xaxis: {
               visible: true,
               title: {
-                text: 'SHAP Value',
-                font: { size: 12, color: '#666' }
+                text: '',
               },
               range: [globalShapRange.min, globalShapRange.max],
               fixedrange: false,
               showgrid: true,
               gridcolor: '#E5E7EB',
+              griddash: 'dash',
               zeroline: true,
               zerolinecolor: '#D5E5EE',
               zerolinewidth: 2,
               tickfont: { size: 10, color: '#666' },
+              showticklabels: false,
             },
             yaxis: {
               visible: false,
@@ -421,7 +436,12 @@ export default function Shap({ rawFeatures, currentFeature }) {
               },
             ],
           }}
-          config={{ displayModeBar: false, responsive: true }}
+          config={{
+            displayModeBar: false,
+            responsive: true,
+            scrollZoom: false,
+            doubleClick: false,
+          }}
           style={{ width: '100%', height: 250 }}
         />
       ) : (

@@ -2,35 +2,27 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function ConfusionMatrix({ model_run_id, modelName }) {
+export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
   const [cmData, setCmData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [inst_id, setInstId] = useState(null);
 
-  // Fetch confusion matrix data when model_run_id is available
+  // Fetch confusion matrix data when model_run_id and inst_id are available
   useEffect(() => {
     const fetchConfusionMatrix = async () => {
-      if (!model_run_id) return;
+      if (!model_run_id || !inst_id) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        // Get the current user's institution ID
-        const instResponse = await axios.get('/user-current-inst-api');
-        if (instResponse.data && instResponse.data.length > 0) {
-          const inst_id = instResponse.data[0];
-          setInstId(inst_id);
+        // Fetch confusion matrix data
+        const response = await axios.get(
+          `/institutions/${inst_id}/training/confusion_matrix/${model_run_id}`,
+        );
 
-          // Fetch confusion matrix data
-          const response = await axios.get(
-            `/institutions/${inst_id}/training/confusion_matrix/${model_run_id}`,
-          );
-
-          if (response.data) {
-            setCmData(response.data);
-          }
+        if (response.data) {
+          setCmData(response.data);
         }
       } catch (error) {
         console.error('Error fetching confusion matrix data:', error);
@@ -50,7 +42,7 @@ export default function ConfusionMatrix({ model_run_id, modelName }) {
     };
 
     fetchConfusionMatrix();
-  }, [model_run_id]);
+  }, [model_run_id, inst_id]);
 
   // Show loading state
   if (loading) {

@@ -69,7 +69,7 @@ const mockInferenceData = [
   },
 ];
 
-export default function SupportOverview({ tab, setTab, run_id }) {
+export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
   // Only use mock data as initial state in local development
   const isLocalDev =
     window.location.hostname === 'localhost' ||
@@ -80,32 +80,6 @@ export default function SupportOverview({ tab, setTab, run_id }) {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [inst_id, setInstId] = useState(null);
-
-  // Get institution ID when component mounts (same pattern as ModelResultsOverview)
-  useEffect(() => {
-    const fetchInstitutionId = async () => {
-      try {
-        const response = await axios.get('/user-current-inst-api');
-        console.log(
-          'SupportOverview - Institution API response:',
-          response.data,
-        );
-        if (response.data && response.data.length > 0) {
-          setInstId(response.data[0]); // First element is the institution ID
-          console.log(
-            'SupportOverview - Set institution ID to:',
-            response.data[0],
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching institution ID:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchInstitutionId();
-  }, []);
 
   useEffect(() => {
     const fetchSupportOverview = async () => {

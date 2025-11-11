@@ -3,33 +3,27 @@ import Plot from 'react-plotly.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-export default function SupportScores({ setTab, model_run_id }) {
+export default function SupportScores({ setTab, model_run_id, inst_id }) {
   const [supportData, setSupportData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch support scores data when model_run_id is available
+  // Fetch support scores data when model_run_id and inst_id are available
   useEffect(() => {
     const fetchSupportScores = async () => {
-      if (!model_run_id) return;
+      if (!model_run_id || !inst_id) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        // Get the current user's institution ID
-        const instResponse = await axios.get('/user-current-inst-api');
-        if (instResponse.data && instResponse.data.length > 0) {
-          const inst_id = instResponse.data[0];
+        // Fetch support scores data
+        const response = await axios.get(
+          `/institutions/${inst_id}/training/support-overview/${model_run_id}`,
+        );
 
-          // Fetch support scores data
-          const response = await axios.get(
-            `/institutions/${inst_id}/training/support-overview/${model_run_id}`,
-          );
-
-          if (response.data) {
-            setSupportData(response.data);
-          }
+        if (response.data) {
+          setSupportData(response.data);
         }
       } catch (error) {
         console.error('Error fetching support scores data:', error);
@@ -49,7 +43,7 @@ export default function SupportScores({ setTab, model_run_id }) {
     };
 
     fetchSupportScores();
-  }, [model_run_id]);
+  }, [model_run_id, inst_id]);
 
   // Show loading state
   if (loading) {

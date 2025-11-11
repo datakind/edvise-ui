@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
 import { formatModelName, toTitleCase } from '../utils/stringUtils';
 
 export default function DataDictionary() {
-  const [inst_id, setInstId] = useState(null);
+  // Get inst_id from Inertia shared props (no API call needed!)
+  const { inst_id } = usePage().props;
+  console.log('DataDictionary - Institution ID from shared props:', inst_id);
+
   const [selectedModel, setSelectedModel] = useState(null);
   const [run_id, setRunId] = useState(null);
   const [model_run_id, setModelRunId] = useState(null);
@@ -14,31 +17,6 @@ export default function DataDictionary() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
-
-  // Get institution ID when component mounts
-  useEffect(() => {
-    const fetchInstitutionId = async () => {
-      try {
-        const response = await axios.get('/user-current-inst-api');
-        console.log(
-          'DataDictionary - Institution API response:',
-          response.data,
-        );
-        if (response.data && response.data.length > 0) {
-          setInstId(response.data[0]); // First element is the institution ID
-          console.log(
-            'DataDictionary - Set institution ID to:',
-            response.data[0],
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching institution ID:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchInstitutionId();
-  }, []);
 
   // Get models when we have inst_id
   useEffect(() => {
@@ -90,45 +68,33 @@ export default function DataDictionary() {
     fetchModelRuns();
   }, [inst_id, selectedModel]);
 
-  // Get model_run_id from .env when inst_id is available
+  // Get model_run_id from job table for the selected run
   useEffect(() => {
-    const fetchModelRunId = async () => {
-      if (!inst_id) return;
+    const fetchModelRunIdFromJob = async () => {
+      if (!run_id) return;
 
       try {
-        // Determine the environment variable prefix based on model name
-        const envPrefix =
-          selectedModel && selectedModel.name && selectedModel.name.toLowerCase().includes('assoc')
-            ? 'ALT2_'
-            : 'ALT_';
-        const envKey = `${envPrefix}${inst_id.toUpperCase()}`;
-
-        // Call a backend endpoint that will read the .env file and return the model_run_id
-        const apiUrl = `/get-model-run-id/${inst_id}?env_key=${envKey}`;
-
-        const response = await axios.get(apiUrl);
-        if (response.data && response.data.model_run_id) {
+        const response = await axios.get(`/get-model-run-id-by-job/${run_id}`);
+        if (response.data?.model_run_id) {
           setModelRunId(response.data.model_run_id);
         } else {
-          console.log(
-            'DataDictionary - No model_run_id found in response',
-          );
+          console.warn('DataDictionary - No model_run_id returned for job:', run_id, response.data);
+          setModelRunId(null);
         }
-      } catch (error) {
-        console.error('Error fetching model_run_id:', error);
-        console.error('Error response:', error.response?.data);
-        console.error('Error status:', error.response?.status);
-        console.error('Error URL:', error.config?.url);
+      } catch (err) {
+        console.error('DataDictionary - Error retrieving model_run_id from job table:', err);
+        console.error('Error response:', err.response?.data);
+        setModelRunId(null);
       }
     };
 
-    fetchModelRunId();
-  }, [inst_id, selectedModel]);
+    fetchModelRunIdFromJob();
+  }, [run_id]);
 
   // Get top features when we have model_run_id
   useEffect(() => {
     const fetchTopFeatures = async () => {
-      if (!inst_id || !model_run_id) return;
+      if (!model_run_id) return;
 
       const apiUrl = `/top-features/${model_run_id}`;
       console.log('Fetching top features from:', apiUrl);
@@ -137,33 +103,27 @@ export default function DataDictionary() {
       try {
         const response = await axios.get(apiUrl);
 
-        // Remove duplicates based on feature_readable_name, keeping only the first occurrence
         const uniqueFeatures = Array.from(
-          new Map(response.data
-            .filter(feature => feature.readable_feature_name) // Remove invalid features
-            .map(feature => [feature.readable_feature_name, feature]) // Create key-value pairs
-          ).values()
+          new Map(
+            response.data
+              .filter(feature => feature.readable_feature_name)
+              .map(feature => [feature.readable_feature_name, feature]),
+          ).values(),
         );
 
         setFeatures(uniqueFeatures);
         console.log('Raw features:', response.data);
         console.log('Top features fetched (deduplicated):', uniqueFeatures);
-        console.log(
-          'Original count:',
-          response.data.length,
-          'Deduplicated count:',
-          uniqueFeatures.length,
-        );
+        console.log('Original count:', response.data.length, 'Deduplicated count:', uniqueFeatures.length);
       } catch (error) {
         console.error('Error fetching top features:', error);
         console.error('Error response:', error.response?.data);
-        // Set empty array as fallback
         setFeatures([]);
       }
     };
 
     fetchTopFeatures();
-  }, [inst_id, model_run_id]);
+  }, [model_run_id]);
 
   // Filter and sort features based on search term and sort settings
   const filteredAndSortedFeatures = features

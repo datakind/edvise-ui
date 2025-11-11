@@ -259,13 +259,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return 0; // Fallback for missing data
     });
 
-    // Detect if feature is categorical (all values are 0 or 1)
-    const allValuesSame =
-      featureValues.length > 0 &&
-      featureValues.every(val => val === featureValues[0]);
+    // Use data_type from backend to determine if feature is categorical
+    const dataType = currentFeature?.data_type || '';
 
     // Color scheme: #B2F1F9 (light blue) for low values, #007C8C (teal) for high values
-
     console.log('Processed plot data:', {
       featureDataLength: featureData.length,
       xValues: x,
@@ -275,7 +272,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
         zeroCount: x.filter(v => v === 0).length,
       },
       featureValues: featureValues,
-      allValuesSame: allValuesSame,
+      dataType: dataType,
       yJitter: y,
       yJitterRange: { min: Math.min(...y), max: Math.max(...y) },
       studentSupportScores: studentSupportScores,
@@ -294,7 +291,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      allValuesSame,
+      dataType
     };
   }, [currentFeature, rawFeatures]);
 
@@ -339,8 +336,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.allValuesSame
-                  ? '#808080'  // Gray for all the same values
+                color: plotData.dataType === 'Categorical'
+                  ? '#808080'  // Gray for categorical features or all the same values
                   : plotData.featureValues.map(val =>
                     typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
                   ),
@@ -363,7 +360,8 @@ export default function Shap({ rawFeatures, currentFeature }) {
                   `SHAP Value: ${shapVal}`,
                 ];
 
-                if (!plotData.allValuesSame) {
+                // Don't show feature value for categorical features or when all values are the same
+                if (plotData.dataType !== 'Categorical') {
                   tooltipLines.push(`Feature Value: ${featureVal}`);
                 }
 

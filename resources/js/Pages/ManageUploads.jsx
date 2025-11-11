@@ -8,8 +8,13 @@ import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import axios from 'axios';
+import { usePage } from '@inertiajs/react';
 
 export default function ManageUploads() {
+  // Get inst_id from Inertia shared props (no API call needed!)
+  const { inst_id } = usePage().props;
+  console.log('ManageUploads - Institution ID from shared props:', inst_id);
+
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,29 +28,6 @@ export default function ManageUploads() {
   const [batchToChange, setBatchToChange] = useState(null);
   const [newBatchName, setNewBatchName] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [inst_id, setInstId] = useState(null);
-
-  // Get institution ID when component mounts
-  useEffect(() => {
-    const fetchInstitutionId = async () => {
-      try {
-        const response = await axios.get('/user-current-inst-api');
-        console.log('ManageUploads - Institution API response:', response.data);
-        if (response.data && response.data.length > 0) {
-          setInstId(response.data[0]); // First element is the institution ID
-          console.log(
-            'ManageUploads - Set institution ID to:',
-            response.data[0],
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching institution ID:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchInstitutionId();
-  }, []);
 
   const actions = [
     { label: 'Change batch name', onClick: upload => showChangeModal(upload) },

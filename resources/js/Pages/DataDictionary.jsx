@@ -328,7 +328,7 @@ export default function DataDictionary() {
                   Original Feature Value Table
                 </h2>
                 <p className="text-base font-light">
-                  The chart shows how all features are weighed in the model.
+                  This chart provides more context on all features utilized by the model.
                 </p>
               </div>
 

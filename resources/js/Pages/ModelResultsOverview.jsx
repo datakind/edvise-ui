@@ -46,6 +46,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
   const [runDetails, setRunDetails] = useState(null);
   const [features, setFeatures] = useState([]);
   const [rawFeatures, setRawFeatures] = useState([]);
+  const [featureImportanceData, setFeatureImportanceData] = useState([]);
 
   // Get model_run_id from job table using job_run_id
   useEffect(() => {
@@ -160,6 +161,66 @@ function ModelResultsOverview({ job_run_id, modelName }) {
 
     fetchTopFeatures();
   }, [inst_id, job_run_id]);
+
+  // Get feature importance data (for data_type) when we have both inst_id and model_run_id
+  useEffect(() => {
+    const fetchFeatureImportance = async () => {
+      if (!inst_id || !model_run_id) return;
+
+      const apiUrl = `/institutions/${inst_id}/training/feature_importance/${model_run_id}`;
+      console.log('Fetching feature importance from:', apiUrl);
+      console.log('Full URL:', window.location.origin + apiUrl);
+
+      try {
+        const response = await axios.get(apiUrl);
+        setFeatureImportanceData(response.data || []);
+      } catch (error) {
+        console.error('Error fetching feature importance:', error);
+        console.error('Error response:', error.response?.data);
+        setFeatureImportanceData([]);
+      }
+    };
+
+    fetchFeatureImportance();
+  }, [inst_id, model_run_id]);
+
+  // Merge data_type from feature importance into features
+  useEffect(() => {
+    if (features.length === 0 || featureImportanceData.length === 0) return;
+
+    // Create a map of feature_name -> data_type for quick lookup
+    const dataTypeMap = {};
+    featureImportanceData.forEach(item => {
+      const key = item.feature_name || item.readable_feature_name;
+      if (key && item.data_type) {
+        dataTypeMap[key] = item.data_type;
+      }
+    });
+
+    // Merge data_type into features
+    const featuresWithDataType = features.map(feature => {
+      // Try to match by feature_name or readable_feature_name
+      const matchKey = feature.feature_name ||
+        feature.feature_readable_name ||
+        feature.readable_feature_name;
+
+      const dataType = dataTypeMap[matchKey] || null;
+
+      return {
+        ...feature,
+        data_type: dataType,
+      };
+    });
+
+    // Only update if data_type was actually added
+    const hasNewDataTypes = featuresWithDataType.some(
+      (f, idx) => f.data_type !== features[idx]?.data_type
+    );
+
+    if (hasNewDataTypes) {
+      setFeatures(featuresWithDataType);
+    }
+  }, [features, featureImportanceData]);
 
   // Get output_link and output_filename from run details
   const output_link = runDetails ? runDetails.output_file_link : null;

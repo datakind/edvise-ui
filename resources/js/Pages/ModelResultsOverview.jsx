@@ -614,23 +614,25 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                   {selectedFeature?.feature_long_desc}
                 </p>
               </div>
-              <div className="mb-6">
-                <h3 className="mb-2 text-xl font-medium">Range</h3>
-                <hr className="mb-4 border-[#4F4F4F]" />
-                <div className="mb-4 text-sm text-[#4F4F4F]">
-                  This box and whiskers plot shows the minimum, median, maximum,
-                  and quartile points for this feature in the student
-                  dataset.{' '}
+              {selectedFeature?.data_type !== 'Categorical' && (
+                <div className="mb-6">
+                  <h3 className="mb-2 text-xl font-medium">Range</h3>
+                  <hr className="mb-4 border-[#4F4F4F]" />
+                  <div className="mb-4 text-sm text-[#4F4F4F]">
+                    This box and whiskers plot shows the minimum, median, maximum,
+                    and quartile points for this feature in the student
+                    dataset.{' '}
+                  </div>
+                  <div className="mb-16">
+                    <BoxWhiskerPlot
+                      key={`${job_run_id}-${selectedFeature?.feature_name}-${inst_id}`}
+                      run_id={job_run_id}
+                      feature_name={selectedFeature?.feature_name}
+                      inst_id={inst_id}
+                    />
+                  </div>
                 </div>
-                <div className="mb-16">
-                  <BoxWhiskerPlot
-                    key={`${job_run_id}-${selectedFeature?.feature_name}-${inst_id}`}
-                    run_id={job_run_id}
-                    feature_name={selectedFeature?.feature_name}
-                    inst_id={inst_id}
-                  />
-                </div>
-              </div>
+              )}
               <div className="mb-6">
                 <h3 className="mb-2 text-xl font-medium">Student Plot Chart</h3>
                 <hr className="mb-4 border-[#4F4F4F]" />

@@ -104,7 +104,7 @@ export default function EdaDashboard() {
     return (
         <AppLayout title="EDA Dashboard">
             <Head title="EDA Dashboard" />
-            <div className="font-[Helvetica Neue] mb-8 min-w-full px-6">
+            <div className="font-[Helvetica Neue] mb-8 min-w-full">
                 <PageHeading>Dashboard Home</PageHeading>
                 <div className="min-w-full bg-[#FAFAFA] p-6">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">

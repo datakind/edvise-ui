@@ -63,6 +63,9 @@ export default {
           'light-blue': '#EEF2F6',
         },
       },
+      boxShadow: {
+        card: '0 10px 20px 0 rgba(92, 115, 160, 0.07)',
+      },
     },
   },
 

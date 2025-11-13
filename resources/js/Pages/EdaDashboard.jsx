@@ -4,6 +4,7 @@ import ReactECharts from 'echarts-for-react';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
 import StatCard from '@/Components/StatCard';
+import Card from '@/Components/Card';
 
 const summaryStats = [
     {
@@ -119,7 +120,7 @@ export default function EdaDashboard() {
                             <StatCard key={stat.label} value={stat.value} label={stat.label} />
                         ))}
                     </div>
-                    <section className="rounded-3xl bg-white p-8 shadow">
+                    <Card>
                         <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]">
                             <div className="rounded-3xl bg-[#F6F7FB] p-6">
                                 <h3 className="text-lg font-medium text-[#1E343F]">
@@ -139,7 +140,7 @@ export default function EdaDashboard() {
                                 />
                             </div>
                         </div>
-                    </section>
+                    </Card>
                 </div>
             </div>
         </AppLayout>

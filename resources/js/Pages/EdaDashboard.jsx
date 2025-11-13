@@ -22,33 +22,59 @@ const summaryStats = [
 ];
 
 const enrollmentTypeOption = {
-    color: ['#F6A623', '#50B7F5'],
+    color: ['#F79222', '#00CFEA'],
     tooltip: {
         trigger: 'axis',
         axisPointer: {
-            type: 'shadow',
+            type: 'line',
         },
     },
     legend: {
         top: 10,
         right: 20,
-        icon: 'roundRect',
-        itemWidth: 14,
-        itemHeight: 14,
+        itemWidth: 16,
+        itemHeight: 16,
         textStyle: {
             color: '#1E343F',
             fontFamily: 'Helvetica Neue',
         },
-        data: ['First Time Student', 'Transfer Student'],
+        data: [
+            {
+                name: 'First Time Student',
+                icon: 'diamond',
+                itemStyle: {
+                    color: '#FDE9D3',
+                    borderColor: '#F79222',
+                    borderWidth: 1,
+                },
+            },
+            {
+                name: 'Transfer Student',
+                icon: 'rect',
+                itemStyle: {
+                    color: '#CCF5FB',
+                    borderColor: '#00CFEA',
+                    borderWidth: 1,
+                },
+            },
+        ],
     },
     grid: {
         left: '3%',
-        right: '3%',
-        bottom: '8%',
+        right: '4%',
+        bottom: '15%',
         containLabel: true,
     },
     xAxis: {
         type: 'category',
+        name: 'Cohort Year',
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
         boundaryGap: false,
         data: ['2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24'],
         axisLine: {
@@ -58,9 +84,24 @@ const enrollmentTypeOption = {
             color: '#637381',
             fontFamily: 'Helvetica Neue',
         },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#E5E7EB',
+                type: 'dashed',
+            },
+        },
     },
     yAxis: {
         type: 'value',
+        name: 'GPA',
+        nameLocation: 'middle',
+        nameGap: 50,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
         min: 2,
         max: 4,
         interval: 0.5,
@@ -68,7 +109,11 @@ const enrollmentTypeOption = {
             color: '#637381',
             fontFamily: 'Helvetica Neue',
         },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
         splitLine: {
+            show: true,
             lineStyle: {
                 color: '#E5E7EB',
                 type: 'dashed',
@@ -79,23 +124,31 @@ const enrollmentTypeOption = {
         {
             name: 'First Time Student',
             type: 'line',
-            smooth: true,
-            symbol: 'circle',
-            symbolSize: 10,
-            data: [2.6, 2.7, 2.6, 2.6, 2.5, 2.7, 2.8],
+            symbol: 'diamond',
+            symbolSize: 16,
+            itemStyle: {
+                color: '#FDE9D3',
+                borderColor: '#F79222',
+                borderWidth: 1,
+            },
+            data: [2.6, 2.7, 2.5, 2.7, 2.7, 2.7, 2.8],
             lineStyle: {
-                width: 3,
+                width: 0,
             },
         },
         {
             name: 'Transfer Student',
             type: 'line',
-            smooth: true,
             symbol: 'rect',
-            symbolSize: 10,
-            data: [3.4, 3.6, 3.2, 3.4, 3.1, 3.5, 3.6],
+            symbolSize: 12,
+            itemStyle: {
+                color: '#CCF5FB',
+                borderColor: '#00CFEA',
+                borderWidth: 1,
+            },
+            data: [3.3, 3.6, 3.1, 3.4, 3.1, 3.5, 3.6],
             lineStyle: {
-                width: 3,
+                width: 0,
             },
         },
     ],
@@ -121,18 +174,21 @@ export default function EdaDashboard() {
                         ))}
                     </div>
                     <Card>
-                        <div className="mt-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]">
-                            <div className="rounded-3xl bg-[#F6F7FB] p-6">
+                        <div className="grid grid-cols-12 gap-6">
+                            <div className="col-span-12 md:col-span-4">
                                 <h3 className="text-lg font-medium text-[#1E343F]">
                                     Average Year 1 GPA by Enrollment Types
                                 </h3>
                                 <p className="mt-4 text-sm font-light text-[#4F4F4F]">
-                                    This chart highlights differences in academic performance between
-                                    first-time and transfer students, helping you identify where each
-                                    cohort may need additional support or separate predictive models.
+                                    This chart shows the average first-year GPA for first-time and transfer students separately. It highlights differences in academic performance by enrollment type, helping you:
                                 </p>
+                                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
+                                    <li>Spot where each group may face challenges</li>
+                                    <li>Shape support strategies tailored to their needs</li>
+                                    <li>Decide whether separate predictive models are needed for these student groups</li>
+                                </ul>
                             </div>
-                            <div className="rounded-3xl bg-white p-4 shadow-inner">
+                            <div className="col-span-12 md:col-span-8">
                                 <ReactECharts
                                     option={enrollmentTypeOption}
                                     style={{ height: '320px', width: '100%' }}

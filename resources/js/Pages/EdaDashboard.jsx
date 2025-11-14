@@ -348,6 +348,349 @@ const courseEnrollmentsOption = createHorizontalStackedBarOption(
     10000
 );
 
+// Donut chart configuration
+const createDonutChartOption = (data) => ({
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
+    },
+    legend: {
+        bottom: 10,
+        itemGap: 20,
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+    },
+    series: [
+        {
+            name: 'Degree Types',
+            type: 'pie',
+            radius: ['40%', '70%'], // Creates donut effect
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 5,
+                borderColor: '#fff',
+                borderWidth: 2,
+            },
+            label: {
+                show: true,
+                formatter: '{d}%',
+                fontSize: 14,
+                fontFamily: 'Helvetica Neue',
+                color: '#1E343F',
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                },
+            },
+            labelLine: {
+                show: true,
+            },
+            data: data,
+        },
+    ],
+});
+
+// Flexible horizontal stacked bar chart for enrollment types
+const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow',
+        },
+    },
+    legend: {
+        bottom: 10,
+        data: legendData,
+        itemGap: 20,
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+    },
+    grid: {
+        left: '20%',
+        right: '4%',
+        bottom: '20%',
+        top: '5%',
+        containLabel: false,
+    },
+    xAxis: {
+        type: 'value',
+        name: xAxisName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
+        max: maxValue,
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#E5E7EB',
+                type: 'dashed',
+            },
+        },
+    },
+    yAxis: {
+        type: 'category',
+        data: categories,
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+    },
+    series: data,
+});
+
+// Hardcoded data for "Most Common Degree Types" donut chart
+const degreeTypesData = [
+    { value: 67, name: "Associate's Degree", itemStyle: { color: '#F79222' } },
+    { value: 15, name: '1 - 2 year certificate', itemStyle: { color: '#00CFEA' } },
+    { value: 8, name: '2 - 4 year certificate', itemStyle: { color: '#25A95A' } },
+    { value: 7, name: 'Degree seeking', itemStyle: { color: '#A92532' } },
+    { value: 3, name: 'Unknown', itemStyle: { color: '#385981' } },
+];
+
+// Hardcoded data for "Student Enrollment Type by Intensity"
+const enrollmentTypeByIntensityData = [
+    {
+        name: 'Full Time',
+        type: 'bar',
+        stack: 'intensity',
+        data: [9800, 600, 8500],
+        itemStyle: {
+            color: '#F79222',
+        },
+    },
+    {
+        name: 'Part Time',
+        type: 'bar',
+        stack: 'intensity',
+        data: [200, 1100, 1200],
+        itemStyle: {
+            color: '#00CFEA',
+        },
+    },
+];
+
+const degreeTypesOption = createDonutChartOption(degreeTypesData);
+
+const enrollmentTypeByIntensityOption = createEnrollmentTypeStackedBarOption(
+    'Number of Students',
+    ['First-Time', 'Re-Admit', 'Transfer-In'],
+    enrollmentTypeByIntensityData,
+    10000,
+    ['Full Time', 'Part Time']
+);
+
+// Vertical stacked bar chart configuration
+const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, maxValue, legendData, legendTitle = null) => ({
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow',
+        },
+    },
+    legend: {
+        bottom: 10,
+        data: legendData,
+        itemGap: 20,
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+        ...(legendTitle && {
+            formatter: (name) => {
+                const index = legendData.indexOf(name);
+                return index === 0 ? `${legendTitle} ${name}` : name;
+            },
+        }),
+    },
+    grid: {
+        left: '15%',
+        right: '4%',
+        bottom: '25%',
+        top: '5%',
+        containLabel: false,
+    },
+    xAxis: {
+        type: 'category',
+        name: xAxisName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
+        data: categories,
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+    },
+    yAxis: {
+        type: 'value',
+        name: yAxisName,
+        nameLocation: 'middle',
+        nameGap: 50,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
+        max: maxValue,
+        interval: maxValue / 5,
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#E5E7EB',
+                type: 'dashed',
+            },
+        },
+    },
+    series: data,
+});
+
+// Hardcoded data for "Pell Recipient by First Generation Status"
+const pellRecipientData = [
+    {
+        name: 'Yes',
+        type: 'bar',
+        stack: 'firstGen',
+        data: [3000, 3700],
+        itemStyle: {
+            color: '#F79222',
+        },
+    },
+    {
+        name: 'No',
+        type: 'bar',
+        stack: 'firstGen',
+        data: [4200, 3000],
+        itemStyle: {
+            color: '#00CFEA',
+        },
+    },
+    {
+        name: 'Nan',
+        type: 'bar',
+        stack: 'firstGen',
+        data: [1800, 1800],
+        itemStyle: {
+            color: '#25A95A',
+        },
+    },
+];
+
+// Hardcoded data for "Student Age by Gender"
+const studentAgeByGenderData = [
+    {
+        name: '20 or younger',
+        type: 'bar',
+        stack: 'age',
+        data: [5000, 5000, 800, 2000, 1500],
+        itemStyle: {
+            color: '#F79222',
+        },
+    },
+    {
+        name: '20 - 24',
+        type: 'bar',
+        stack: 'age',
+        data: [2500, 2500, 100, 1000, 1000],
+        itemStyle: {
+            color: '#00CFEA',
+        },
+    },
+    {
+        name: 'Older than 24',
+        type: 'bar',
+        stack: 'age',
+        data: [2000, 1300, 100, 500, 1000],
+        itemStyle: {
+            color: '#25A95A',
+        },
+    },
+];
+
+const pellRecipientOption = createVerticalStackedBarOption(
+    'Number of Students',
+    'Pell Grant Status',
+    ['Yes', 'No'],
+    pellRecipientData,
+    10000,
+    ['Yes', 'No', 'Nan']
+);
+
+const studentAgeByGenderOption = createEnrollmentTypeStackedBarOption(
+    'Number of Students',
+    ['Female', 'Male', 'Nonbinary, intersex, and gender-nonconforming', 'Prefer not to specify', 'Unknown'],
+    studentAgeByGenderData,
+    10000,
+    ['20 or younger', '20 - 24', 'Older than 24']
+);
+
+// Hardcoded data for "Race by Pell Status"
+const raceByPellStatusData = [
+    {
+        name: 'Yes',
+        type: 'bar',
+        stack: 'pell',
+        data: [30, 250, 400, 20, 50, 100, 150, 2000],
+        itemStyle: {
+            color: '#F79222',
+        },
+    },
+    {
+        name: 'No',
+        type: 'bar',
+        stack: 'pell',
+        data: [20, 50, 200, 10, 25, 50, 50, 250],
+        itemStyle: {
+            color: '#00CFEA',
+        },
+    },
+];
+
+const raceByPellStatusOption = createVerticalStackedBarOption(
+    'Number of Students',
+    '',
+    ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or other Pacific Islander', 'Nonresident Alien', 'Two or More Races', 'Unknown', 'White'],
+    raceByPellStatusData,
+    2500,
+    ['Yes', 'No'],
+    'Pell Status First Year:'
+);
+
 export default function EdaDashboard() {
     return (
         <AppLayout title="EDA Dashboard">
@@ -412,7 +755,7 @@ export default function EdaDashboard() {
                         </div>
                     </Card>
                     <H2 className="mb-6">Key Insights</H2>
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
                         <Card>
                             <div className="mb-4">
                                 <H3>Students by Cohort Year and Term</H3>
@@ -440,6 +783,79 @@ export default function EdaDashboard() {
                             />
                         </Card>
                     </div>
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                        <Card>
+                            <div className="mb-4">
+                                <H3>Most Common Degree Types</H3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    The following is a breakdown of degree types being sought by the student body.
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={degreeTypesOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                        <Card>
+                            <div className="mb-4">
+                                <H3>Student Enrollment Type by Intensity</H3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    This chart signifies students who are first time, re-admitted, or transferred into school, broken down by whether they are enrolled at full time or part time intensity.
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={enrollmentTypeByIntensityOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                    </div>
+                    <H2 className="mb-6">Student Characteristics & Demographics</H2>
+                    <div className="mb-6 text-sm font-light text-[#4F4F4F]">
+                        DataKind does not use any demographic categories to train our model; we only use them to assess bias in the model predictions. We display the full demographics of the raw dataset here to make sure they match your understanding of your student body. If this data looks inaccurate, please confirm you uploaded the correct files. If you have further questions, please contact your account representative.
+                    </div>
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                        <Card>
+                            <div className="mb-4">
+                                <H3>Pell Recipient by First Generation Status</H3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    Here are students who are receiving a Pell Grant and whether they are first generation students.
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={pellRecipientOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                        <Card>
+                            <div className="mb-4">
+                                <H3>Student Age by Gender</H3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    An overview of female-identifying vs male-identifying students. This chart is broken down by gender and then by age categories.
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={studentAgeByGenderOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                    </div>
+                    <Card className="mb-6">
+                        <div className="mb-4">
+                            <H3>Race by Pell Status</H3>
+                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                This chart shows what race students identify as and who are receiving a Pell Grant.
+                            </p>
+                        </div>
+                        <ReactECharts
+                            option={raceByPellStatusOption}
+                            style={{ height: '400px', width: '100%' }}
+                            opts={{ renderer: 'svg' }}
+                        />
+                    </Card>
                 </div>
             </div>
         </AppLayout>

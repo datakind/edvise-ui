@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
+import FeedbackButton from '@/Components/FeedbackButton';
 import AppLogo from '@/Components/Icons/AppLogo';
 import '../../css/landing.css';
 import {
@@ -523,6 +524,7 @@ export default function AppLayout({ title, renderHeader, children }) {
       <div className="min-h-screen basis-full flex-col justify-between">
         <main className="flex w-full pt-12">{children}</main>
         <Footer />
+        <FeedbackButton />
       </div>
     </div>
   );

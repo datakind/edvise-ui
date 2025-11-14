@@ -617,7 +617,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                   {selectedFeature?.feature_long_desc}
                 </p>
               </div>
-              {selectedFeature?.data_type !== 'Categorical' && (
+              {!['Categorical', 'Boolean'].includes(selectedFeature?.data_type) && (
                 <div className="mb-6">
                   <h3 className="mb-2 text-xl font-medium">Range</h3>
                   <hr className="mb-4 border-[#4F4F4F]" />

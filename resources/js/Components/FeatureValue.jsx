@@ -2,33 +2,27 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-export default function FeatureValue({ model_run_id }) {
+export default function FeatureValue({ model_run_id, inst_id }) {
   const [featureData, setFeatureData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch feature importance data when model_run_id is available
+  // Fetch feature importance data when model_run_id and inst_id are available
   useEffect(() => {
     const fetchFeatureImportance = async () => {
-      if (!model_run_id) return;
+      if (!model_run_id || !inst_id) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        // Get the current user's institution ID
-        const instResponse = await axios.get('/user-current-inst-api');
-        if (instResponse.data && instResponse.data.length > 0) {
-          const inst_id = instResponse.data[0];
+        // Fetch feature importance data
+        const response = await axios.get(
+          `/institutions/${inst_id}/training/feature_importance/${model_run_id}`,
+        );
 
-          // Fetch feature importance data
-          const response = await axios.get(
-            `/institutions/${inst_id}/training/feature_importance/${model_run_id}`,
-          );
-
-          if (response.data) {
-            setFeatureData(response.data);
-          }
+        if (response.data) {
+          setFeatureData(response.data);
         }
       } catch (error) {
         console.error('Error fetching feature importance data:', error);
@@ -48,7 +42,7 @@ export default function FeatureValue({ model_run_id }) {
     };
 
     fetchFeatureImportance();
-  }, [model_run_id]);
+  }, [model_run_id, inst_id]);
 
   // Show loading state
   if (loading) {

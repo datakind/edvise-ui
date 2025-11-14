@@ -38,6 +38,14 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
+            // Share institution ID globally to all pages
+            'inst_id' => function () use ($request) {
+                if (!$request->user()) {
+                    return null;
+                }
+                [$inst_id, $error] = \App\Helpers\InstitutionHelper::GetInstitution($request);
+                return $inst_id ?: null;
+            },
         ]);
     }
 }

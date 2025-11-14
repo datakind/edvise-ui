@@ -1,24 +1,24 @@
 <?php
 
+use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Job;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Helpers\InstitutionHelper;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use App\Http\Controllers\DemoRequestController;
-
 
 // PUBLIC ROUTES
 
 // Main app entrypoint.
 
 Route::get('/', function () {
-    //$out = new \Symfony\Component\Console\Output\ConsoleOutput;
-    //$out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
+    // $out = new \Symfony\Component\Console\Output\ConsoleOutput;
+    // $out->writeln('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1_DEBUGGING_LINE');
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -290,7 +290,6 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
 
-
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
@@ -302,6 +301,7 @@ Route::middleware(['auth'])->get('/terms/prompt', function () {
 
 Route::middleware(['auth'])->post('/terms/accept', function () {
     auth()->user()->update(['accepted_terms' => true]);
+
     return redirect()->route('dashboard');
 })->name('terms.accept');
 
@@ -311,7 +311,6 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
-
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');
@@ -334,10 +333,10 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('add-dk');
 
     Route::post('/set-inst-api/{inst}', function (string $inst) {
-        $access_str = Auth::user()->access_type ?? "";
+        $access_str = Auth::user()->access_type ?? '';
         $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
 
-        if ($errStr != "") {
+        if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);
         }
 
@@ -355,6 +354,9 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
     Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
     Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+
+    // DEPRECATED: inst_id is now shared via Inertia props (HandleInertiaRequests middleware)
+    // This route is kept for backward compatibility and debugging purposes
     // The following returns a list of two strings, the first is the inst id, the second is an error if any.
     Route::get('/user-current-inst-api', [InstitutionHelper::class, 'getInstitution']);
 
@@ -367,18 +369,34 @@ Route::middleware(array_filter([
     '/model-results-overview/{run_id}/{modelName}',
     function ($run_id, $modelName, Request $request) {
         return Inertia::render('ModelResultsOverview', [
-            'run_id' => $run_id,
+            'job_run_id' => $run_id,
             'modelName' => $modelName,
         ]);
     }
 )->name('model-results-overview');
 
+// Get model_run_id from job table using job_run_id
+Route::get('/get-model-run-id-by-job/{job_run_id}', function ($job_run_id) {
+    $job = Job::find($job_run_id);
+
+    if (! $job || ! $job->model_run_id) {
+        return response()->json(['error' => 'Model run ID not found for job'], 404);
+    }
+
+    return response()->json([
+        'model_run_id' => $job->model_run_id,
+        'job_id' => $job_run_id,
+        'model_id' => $job->model_id,
+    ]);
+});
+
+// Old route - reads from .env file (still used by DataDictionary)
 Route::get('/get-model-run-id/{inst_id}', function ($inst_id, Request $request) {
     // Get the env_key from query parameter, fallback to ALT_ prefix for backward compatibility
-    $envKey = $request->query('env_key', 'ALT_' . strtoupper($inst_id));
+    $envKey = $request->query('env_key', 'ALT_'.strtoupper($inst_id));
     $modelRunId = env($envKey);
 
-    if (!$modelRunId) {
+    if (! $modelRunId) {
         return response()->json(['error' => 'Model run ID not found for institution'], 404);
     }
 

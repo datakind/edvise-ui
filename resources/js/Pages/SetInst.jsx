@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
@@ -23,11 +23,14 @@ import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 
 export default function SetInstitution() {
+  // Get inst_id from Inertia shared props (no API call needed!)
+  const { inst_id } = usePage().props;
+  
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentInstId, setCurrentInstId] = useState('');
-  const [selectedInstId, setSelectedInstId] = useState('');
+  const [currentInstId, setCurrentInstId] = useState(inst_id || '');
+  const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
   
   useEffect(() => {
     // Fetch all institutions
@@ -42,20 +45,6 @@ export default function SetInstitution() {
       .catch(err => {
         setError(JSON.stringify(err.message));
         setLoading(false);
-      });
-
-    // Fetch current institution
-    axios
-      .get('/user-current-inst-api')
-      .then(res => {
-        if (res.data && res.data.length > 0) {
-          const instId = res.data[0];
-          setCurrentInstId(instId);
-          setSelectedInstId(instId);
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching current institution:', err);
       });
   }, []);
 

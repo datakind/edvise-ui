@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import H2 from '@/Components/H2';
 
 export default function RocCurve({ model_run_id, modelName, inst_id }) {
   const [rocData, setRocData] = useState([]);
@@ -121,7 +122,7 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
   return (
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       <div className="mr-8 flex min-w-[320px] max-w-[420px] flex-1 flex-col justify-start">
-        <h2 className="pb-4 text-2xl font-light">ROC Curve for Test Data</h2>
+        <H2 className="pb-4">ROC Curve for Test Data</H2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-4">
             A Receiver Operating Characteristic Curve (ROC) assesses how well

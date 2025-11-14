@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import H2 from '@/Components/H2';
 
 export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
   const [cmData, setCmData] = useState([]);
@@ -120,9 +121,9 @@ export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
       <div className="flex w-1/2 min-w-[260px] flex-col justify-start p-6">
-        <h2 className="pb-4 text-2xl font-light">
+        <H2 className="pb-4">
           Confusion Matrix for Test Data
-        </h2>
+        </H2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-3">
             A confusion matrix evaluates how well the model is performing.

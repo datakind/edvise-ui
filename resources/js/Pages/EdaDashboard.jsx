@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import ReactECharts from 'echarts-for-react';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
+import H2 from '@/Components/H2';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 
@@ -21,7 +22,8 @@ const summaryStats = [
     },
 ];
 
-const enrollmentTypeOption = {
+// Base chart configuration shared across GPA charts
+const createGpaChartOption = (legendData, seriesData) => ({
     color: ['#F79222', '#00CFEA'],
     tooltip: {
         trigger: 'axis',
@@ -38,26 +40,7 @@ const enrollmentTypeOption = {
             color: '#1E343F',
             fontFamily: 'Helvetica Neue',
         },
-        data: [
-            {
-                name: 'First Time Student',
-                icon: 'diamond',
-                itemStyle: {
-                    color: '#FDE9D3',
-                    borderColor: '#F79222',
-                    borderWidth: 1,
-                },
-            },
-            {
-                name: 'Transfer Student',
-                icon: 'rect',
-                itemStyle: {
-                    color: '#CCF5FB',
-                    borderColor: '#00CFEA',
-                    borderWidth: 1,
-                },
-            },
-        ],
+        data: legendData,
     },
     grid: {
         left: '3%',
@@ -120,10 +103,39 @@ const enrollmentTypeOption = {
             },
         },
     },
-    series: [
+    series: seriesData.map(series => ({
+        ...series,
+        type: 'line',
+        lineStyle: {
+            width: 0,
+        },
+    })),
+});
+
+const enrollmentTypeOption = createGpaChartOption(
+    [
         {
             name: 'First Time Student',
-            type: 'line',
+            icon: 'diamond',
+            itemStyle: {
+                color: '#FDE9D3',
+                borderColor: '#F79222',
+                borderWidth: 1,
+            },
+        },
+        {
+            name: 'Transfer Student',
+            icon: 'rect',
+            itemStyle: {
+                color: '#CCF5FB',
+                borderColor: '#00CFEA',
+                borderWidth: 1,
+            },
+        },
+    ],
+    [
+        {
+            name: 'First Time Student',
             symbol: 'diamond',
             symbolSize: 16,
             itemStyle: {
@@ -132,13 +144,9 @@ const enrollmentTypeOption = {
                 borderWidth: 1,
             },
             data: [2.6, 2.7, 2.5, 2.7, 2.7, 2.7, 2.8],
-            lineStyle: {
-                width: 0,
-            },
         },
         {
             name: 'Transfer Student',
-            type: 'line',
             symbol: 'rect',
             symbolSize: 12,
             itemStyle: {
@@ -147,12 +155,58 @@ const enrollmentTypeOption = {
                 borderWidth: 1,
             },
             data: [3.3, 3.6, 3.1, 3.4, 3.1, 3.5, 3.6],
-            lineStyle: {
-                width: 0,
+        },
+    ]
+);
+
+const enrollmentIntensityOption = createGpaChartOption(
+    [
+        {
+            name: 'Full Time Student',
+            icon: 'diamond',
+            itemStyle: {
+                color: '#FDE9D3',
+                borderColor: '#F79222',
+                borderWidth: 1,
+            },
+        },
+        {
+            name: 'Part Time Student',
+            icon: 'rect',
+            itemWidth: 12,
+            itemHeight: 12,
+            itemStyle: {
+                color: '#CCF5FB',
+                borderColor: '#00CFEA',
+                borderWidth: 1,
             },
         },
     ],
-};
+    [
+        {
+            name: 'Full Time Student',
+            symbol: 'diamond',
+            symbolSize: 16,
+            itemStyle: {
+                color: '#FDE9D3',
+                borderColor: '#F79222',
+                borderWidth: 1,
+            },
+            data: [3.25, 3.15, 3.0, 3.4, 3.25, 3.4, 3.5],
+        },
+        {
+            name: 'Part Time Student',
+            symbol: 'rect',
+            symbolSize: 12,
+            itemStyle: {
+                color: '#CCF5FB',
+                borderColor: '#00CFEA',
+                borderWidth: 1,
+            },
+            data: [2.55, 2.9, 2.75, 3.15, 3.0, 3.15, 3.25],
+        },
+    ]
+);
 
 export default function EdaDashboard() {
     return (
@@ -162,8 +216,8 @@ export default function EdaDashboard() {
                 <PageHeading>Dashboard Home</PageHeading>
                 <div className="min-w-full bg-[#FAFAFA] p-6">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                        <h2 className="text-2xl font-light text-[#1E343F]">At a Glance</h2>
-                        <div className="flex flex-col gap-1 text-right text-sm font-light text-[#1E343F]/80 md:flex-row md:items-center md:gap-6">
+                        <H2>At a Glance</H2>
+                        <div className="flex flex-col gap-1 text-right text-sm font-light text-heading/80 md:flex-row md:items-center md:gap-6">
                             <span>Showing analysis for: &lt;file name&gt;</span>
                             <span className="italic">Last updated August 2025</span>
                         </div>
@@ -173,10 +227,10 @@ export default function EdaDashboard() {
                             <StatCard key={stat.label} value={stat.value} label={stat.label} />
                         ))}
                     </div>
-                    <Card>
+                    <Card className="mb-6">
                         <div className="grid grid-cols-12 gap-6">
                             <div className="col-span-12 md:col-span-4">
-                                <h3 className="text-lg font-medium text-[#1E343F]">
+                                <h3 className="text-lg font-medium text-heading">
                                     Average Year 1 GPA by Enrollment Types
                                 </h3>
                                 <p className="mt-4 text-sm font-light text-[#4F4F4F]">
@@ -197,6 +251,31 @@ export default function EdaDashboard() {
                             </div>
                         </div>
                     </Card>
+                    <Card className="mb-6">
+                        <div className="grid grid-cols-12 gap-6">
+                            <div className="col-span-12 md:col-span-4">
+                                <h3 className="text-lg font-medium text-heading">
+                                    Average Year 1 GPA by Enrollment Intensity
+                                </h3>
+                                <p className="mt-4 text-sm font-light text-[#4F4F4F]">
+                                    This chart shows the average first-year GPA for full-time and part-time students. It highlights differences in academic performance by enrollment intensity, helping you:
+                                </p>
+                                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
+                                    <li>Identify support needs for each group</li>
+                                    <li>Track performance trends over time</li>
+                                    <li>Evaluate potential retention risks</li>
+                                </ul>
+                            </div>
+                            <div className="col-span-12 md:col-span-8">
+                                <ReactECharts
+                                    option={enrollmentIntensityOption}
+                                    style={{ height: '320px', width: '100%' }}
+                                    opts={{ renderer: 'svg' }}
+                                />
+                            </div>
+                        </div>
+                    </Card>
+                    <H2>Key Insights</H2>
                 </div>
             </div>
         </AppLayout>

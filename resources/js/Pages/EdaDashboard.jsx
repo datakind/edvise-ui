@@ -4,6 +4,7 @@ import ReactECharts from 'echarts-for-react';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
 import H2 from '@/Components/H2';
+import H3 from '@/Components/H3';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 
@@ -369,9 +370,7 @@ export default function EdaDashboard() {
                     <Card className="mb-6">
                         <div className="grid grid-cols-12 gap-6">
                             <div className="col-span-12 md:col-span-4">
-                                <h3 className="text-lg font-medium text-heading">
-                                    Average Year 1 GPA by Enrollment Types
-                                </h3>
+                                <H3>Average Year 1 GPA by Enrollment Types</H3>
                                 <p className="mt-4 text-sm font-light text-[#4F4F4F]">
                                     This chart shows the average first-year GPA for first-time and transfer students separately. It highlights differences in academic performance by enrollment type, helping you:
                                 </p>
@@ -393,9 +392,7 @@ export default function EdaDashboard() {
                     <Card className="mb-6">
                         <div className="grid grid-cols-12 gap-6">
                             <div className="col-span-12 md:col-span-4">
-                                <h3 className="text-lg font-medium text-heading">
-                                    Average Year 1 GPA by Enrollment Intensity
-                                </h3>
+                                <H3>Average Year 1 GPA by Enrollment Intensity</H3>
                                 <p className="mt-4 text-sm font-light text-[#4F4F4F]">
                                     This chart shows the average first-year GPA for full-time and part-time students. It highlights differences in academic performance by enrollment intensity, helping you:
                                 </p>
@@ -418,9 +415,7 @@ export default function EdaDashboard() {
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         <Card>
                             <div className="mb-4">
-                                <h3 className="text-lg font-medium text-heading">
-                                    Students by Cohort Year and Term
-                                </h3>
+                                <H3>Students by Cohort Year and Term</H3>
                                 <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                     A year by year analysis of when students started their journey at the institution
                                 </p>
@@ -433,9 +428,7 @@ export default function EdaDashboard() {
                         </Card>
                         <Card>
                             <div className="mb-4">
-                                <h3 className="text-lg font-medium text-heading">
-                                    Course Enrollments Over Time
-                                </h3>
+                                <H3>Course Enrollments Over Time</H3>
                                 <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                     Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
                                 </p>

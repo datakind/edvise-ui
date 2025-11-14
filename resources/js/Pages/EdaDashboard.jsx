@@ -208,6 +208,145 @@ const enrollmentIntensityOption = createGpaChartOption(
     ]
 );
 
+// Term colors for stacked bar charts
+const termColors = {
+    fall: '#F79222',      // Orange
+    winter: '#00CFEA',    // Light blue
+    spring: '#25A95A',    // Teal/green
+    summer: '#A92532',    // Red
+};
+
+// Base configuration for horizontal stacked bar charts
+const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue) => ({
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow',
+        },
+    },
+    legend: {
+        bottom: 10,
+        data: ['Fall', 'Winter', 'Spring', 'Summer'],
+        itemGap: 20,
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+    },
+    grid: {
+        left: '15%',
+        right: '4%',
+        bottom: '20%',
+        top: '5%',
+        containLabel: false,
+    },
+    xAxis: {
+        type: 'value',
+        name: xAxisName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+            fontSize: 14,
+        },
+        max: maxValue,
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#E5E7EB',
+                type: 'dashed',
+            },
+        },
+    },
+    yAxis: {
+        type: 'category',
+        data: ['2017 - 18', '2018 - 19', '2019 - 20', '2020 - 21', '2021 - 22', '2022 - 23', '2023 - 24'],
+        axisLabel: {
+            color: '#637381',
+            fontFamily: 'Helvetica Neue',
+        },
+        axisLine: {
+            lineStyle: { color: '#D7DCE5' },
+        },
+    },
+    series: [
+        {
+            name: 'Fall',
+            type: 'bar',
+            stack: 'terms',
+            data: data.fall,
+            itemStyle: {
+                color: termColors.fall,
+            },
+        },
+        {
+            name: 'Winter',
+            type: 'bar',
+            stack: 'terms',
+            data: data.winter,
+            itemStyle: {
+                color: termColors.winter,
+            },
+        },
+        {
+            name: 'Spring',
+            type: 'bar',
+            stack: 'terms',
+            data: data.spring,
+            itemStyle: {
+                color: termColors.spring,
+            },
+        },
+        {
+            name: 'Summer',
+            type: 'bar',
+            stack: 'terms',
+            data: data.summer,
+            itemStyle: {
+                color: termColors.summer,
+            },
+        },
+    ],
+});
+
+// Hardcoded data for "Students by Cohort Year and Term"
+const studentsByCohortData = {
+    fall: [180, 200, 220, 250, 270, 290, 320],
+    winter: [60, 65, 70, 75, 80, 85, 90],
+    spring: [50, 55, 60, 65, 70, 75, 80],
+    summer: [10, 12, 15, 18, 20, 22, 25],
+};
+
+// Hardcoded data for "Course Enrollments Over Time"
+const courseEnrollmentsData = {
+    fall: [3000, 3200, 3400, 3600, 3800, 4000, 4200],
+    winter: [2000, 2100, 2200, 2300, 2400, 2500, 2600],
+    spring: [1000, 1100, 1200, 1300, 1400, 1500, 1600],
+    summer: [500, 550, 600, 650, 700, 750, 800],
+};
+
+const studentsByCohortOption = createHorizontalStackedBarOption(
+    'Students by Cohort Year and Term',
+    'Number of Students',
+    studentsByCohortData,
+    500
+);
+
+const courseEnrollmentsOption = createHorizontalStackedBarOption(
+    'Course Enrollments Over Time',
+    'Total Number of Course Enrollments',
+    courseEnrollmentsData,
+    10000
+);
+
 export default function EdaDashboard() {
     return (
         <AppLayout title="EDA Dashboard">
@@ -275,7 +414,39 @@ export default function EdaDashboard() {
                             </div>
                         </div>
                     </Card>
-                    <H2>Key Insights</H2>
+                    <H2 className="mb-6">Key Insights</H2>
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <Card>
+                            <div className="mb-4">
+                                <h3 className="text-lg font-medium text-heading">
+                                    Students by Cohort Year and Term
+                                </h3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    A year by year analysis of when students started their journey at the institution
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={studentsByCohortOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                        <Card>
+                            <div className="mb-4">
+                                <h3 className="text-lg font-medium text-heading">
+                                    Course Enrollments Over Time
+                                </h3>
+                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                    Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
+                                </p>
+                            </div>
+                            <ReactECharts
+                                option={courseEnrollmentsOption}
+                                style={{ height: '400px', width: '100%' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </Card>
+                    </div>
                 </div>
             </div>
         </AppLayout>

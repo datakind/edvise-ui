@@ -410,3 +410,13 @@ Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function ()
     Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
     Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
 });
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get(
+    '/eda',
+    function () {
+        return Inertia::render('EdaDashboard');
+    }
+)->name('eda');

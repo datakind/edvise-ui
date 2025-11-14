@@ -66,7 +66,12 @@ var navigationAboveLine = [
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
       { name: 'Start Prediction', href: route('run-inference') },
-      { name: 'Manage Data', href: route('manage-uploads') },
+      {
+        name: 'EDA Dashboard',
+        href: route('eda'),
+        visibility_type: VisibilityType.PRIVATE_ONLY,
+      },
+      { name: 'Manage Uploads', href: route('manage-uploads') },
     ],
   },
   {

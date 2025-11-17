@@ -5,6 +5,8 @@ steps:
   - name: 'gcr.io/k8s-skaffold/pack'
     id: 'BUILD and PUSH with cloudpacks'
     entrypoint: 'pack'
+    env:
+      - 'NODE_OPTIONS=--max-old-space-size=4096'
     args:
       [
         'build',

@@ -3,7 +3,7 @@ import React from 'react';
 export default function Footer() {
   const route = window.route;
   return (
-    <footer className="grid grid-cols-4 items-center pb-12 pr-6 text-black">
+    <footer className="grid grid-cols-4 items-center pb-4 pr-6 text-black">
       <div className="col-span-2 text-left">
         <ul className="items-left justify-left flex flex-wrap pl-12 text-gray-900 dark:text-white">
           <li>

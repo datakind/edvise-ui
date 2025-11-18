@@ -2,6 +2,7 @@ import { router } from '@inertiajs/core';
 import { Link, Head, usePage } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
@@ -162,6 +163,7 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
+  const { inst_id } = usePage().props;
   const user = auth.user;
   const userIsDatakinder =
     auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
@@ -209,10 +211,15 @@ export default function AppLayout({ title, renderHeader, children }) {
   }
 
   useEffect(() => {
+    // Reset navigation to initial state when institution changes
+    setNavAboveLine(navigationAboveLine);
+
     const fetchModels = async () => {
+      if (!inst_id) return; // Don't fetch if no institution is set
+
       try {
         const response = await axios.get('/models-api');
-        let newNav = navAboveLine.map(item =>
+        let newNav = navigationAboveLine.map(item =>
           dashboardNavHelper(item, response.data),
         );
         setNavAboveLine(newNav);
@@ -222,7 +229,7 @@ export default function AppLayout({ title, renderHeader, children }) {
       }
     };
     fetchModels();
-  }, []);
+  }, [inst_id]);
 
   const renderNav = navMap =>
     navMap.map(item =>

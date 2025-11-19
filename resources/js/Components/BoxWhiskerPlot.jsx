@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
 
@@ -13,6 +13,8 @@ export default function BoxWhiskerPlot({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hoveredLabel, setHoveredLabel] = useState(null); // 'min', 'q1', 'median', 'q3', 'max', or null
+  const chartRef = useRef(null);
+  const [overlayStyle, setOverlayStyle] = useState(null);
 
   // Fetch boxplot data from API
   useEffect(() => {
@@ -142,13 +144,13 @@ export default function BoxWhiskerPlot({
           type: 'boxplot',
           data: boxplotDataArray,
           itemStyle: {
-            color: color,
-            borderColor: borderColor,
+            color: '#007c8c', // Dark teal for left half
+            borderColor: '#007c8c',
             borderWidth: 3,
           },
           emphasis: {
             itemStyle: {
-              borderColor: borderColor,
+              borderColor: '#007c8c',
               borderWidth: 3,
             },
             focus: 'self',
@@ -160,6 +162,9 @@ export default function BoxWhiskerPlot({
       ],
     };
   }, [boxplotData, color, borderColor]);
+
+  // Calculate overlay position for light cyan right half (Median to Q3)
+  // This is handled in onChartReady callback instead
 
   // Show loading state
   if (loading) {
@@ -266,12 +271,73 @@ export default function BoxWhiskerPlot({
       }}
     >
       <ReactECharts
+        ref={chartRef}
         option={chartOption}
         style={{ width: '100%', height: '140px' }}
         opts={{ renderer: 'svg' }}
         notMerge={true}
         lazyUpdate={false}
+        onChartReady={(chart) => {
+          // Function to calculate and set overlay position
+          const calculateOverlay = () => {
+            if (!boxplotData) return;
+
+            setTimeout(() => {
+              try {
+                const minVal = parseFloat(boxplotData.min);
+                const maxVal = parseFloat(boxplotData.max);
+                const medianVal = parseFloat(boxplotData.median);
+                const q3Val = parseFloat(boxplotData.q_3);
+
+                if (isFinite(minVal) && isFinite(maxVal) && isFinite(medianVal) && isFinite(q3Val)) {
+                  const medianPixel = chart.convertToPixel('xAxis', medianVal);
+                  const q3Pixel = chart.convertToPixel('xAxis', q3Val);
+                  const categoryPixel = chart.convertToPixel('yAxis', '');
+
+                  // Box height - make taller to fully cover the box
+                  const boxHeight = 54;
+                  const boxTop = categoryPixel - boxHeight / 2;
+
+                  // Start overlay at median (no offset needed if alignment is good)
+                  const overlayLeft = medianPixel;
+                  // Extend overlay to Q3 with slight extension for coverage
+                  const overlayWidth = (q3Pixel - medianPixel) + 1.5;
+
+                  setOverlayStyle({
+                    position: 'absolute',
+                    left: `${overlayLeft}px`,
+                    top: `${boxTop}px`,
+                    width: `${overlayWidth}px`,
+                    height: `${boxHeight}px`,
+                    backgroundColor: '#b2f1f9',
+                    pointerEvents: 'none',
+                    zIndex: 10,
+                  });
+                }
+              } catch (error) {
+                console.error('Error calculating overlay:', error);
+              }
+            }, 100);
+          };
+
+          // Calculate overlay when chart is ready
+          calculateOverlay();
+
+          // Recalculate on resize
+          const handleResize = () => {
+            calculateOverlay();
+          };
+          window.addEventListener('resize', handleResize);
+
+          // Store resize handler for cleanup (if needed)
+          chart.getDom().addEventListener('resize', handleResize);
+        }}
       />
+
+      {/* Light cyan overlay for right half (Median to Q3) */}
+      {overlayStyle && (
+        <div style={overlayStyle} />
+      )}
 
       {/* Dynamic hover labels - only show when hovering */}
       <div className="pointer-events-none absolute left-0 top-0 h-full w-full">

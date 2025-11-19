@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import H2 from '@/Components/H2';
 
 export default function FeatureValue({ model_run_id, inst_id }) {
   const [featureData, setFeatureData] = useState([]);
@@ -86,9 +87,9 @@ export default function FeatureValue({ model_run_id, inst_id }) {
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Left column: heading and description */}
         <div className="mb-4 w-full md:mb-0 md:w-1/4">
-          <h2 className="mb-2 text-2xl font-light">
+          <H2 className="mb-2">
             Original Feature Value Table
-          </h2>
+          </H2>
           <div className="mb-4 text-base text-black">
             The following chart shows how all features are weighted in the
             model.

@@ -12,6 +12,7 @@ import { formatModelName } from '@/utils/stringUtils';
 
 import { ChartBarIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import Button from '@/Components/Landing/Button';
+import PageHeading from '@/Components/PageHeading';
 
 const histogramOptions = {
   title: 'Distribution of Support Scores',
@@ -220,7 +221,7 @@ export default function Dashboard({ modelname }) {
               className="flex w-full flex-col items-center"
               id="main_content"
             >
-              <h1 className="text-center text-5xl font-light">Dashboard</h1>
+              <PageHeading>Dashboard</PageHeading>
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}
                   ? ''

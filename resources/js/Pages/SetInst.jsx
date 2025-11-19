@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
@@ -25,13 +25,13 @@ import Spinner from '@/Components/Spinner';
 export default function SetInstitution() {
   // Get inst_id from Inertia shared props (no API call needed!)
   const { inst_id } = usePage().props;
-  
+
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentInstId, setCurrentInstId] = useState(inst_id || '');
   const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
-  
+
   useEffect(() => {
     // Fetch all institutions
     axios
@@ -52,20 +52,21 @@ export default function SetInstitution() {
     event.preventDefault();
     const inst = selectedInstId;
     const resultArea = document.getElementById('result_area');
-    
+
     if (!inst || inst === '') {
       resultArea.innerHTML = '<span class="text-red-600 font-semibold">Error: Please select an institution</span>';
       return;
     }
-    
+
     resultArea.innerHTML = '<span class="text-gray-600">Setting institution...</span>';
-    
+
     return axios
       .post('/set-inst-api/' + inst)
       .then(res => {
         const institutionName = Object.entries(resultList).find(([name, id]) => id === inst)?.[0] || 'Unknown';
         setCurrentInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
+        router.reload();
       })
       .catch(e => {
         resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;

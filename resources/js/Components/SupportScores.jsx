@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import H2 from '@/Components/H2';
 
 export default function SupportScores({ setTab, model_run_id, inst_id }) {
   const [supportData, setSupportData] = useState([]);
@@ -107,9 +108,9 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
 
   return (
     <div className="mt-6 rounded-3xl bg-white p-8 shadow">
-      <h2 className="pb-4 text-2xl font-light">
+      <H2 className="pb-4">
         Distribution of Support Scores for Test Data
-      </h2>
+      </H2>
       <div className="text-base text-black">
         This chart provides the distribution of student support scores in the
         test dataset. You can use this plot for reference, to see how the

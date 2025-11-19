@@ -7,9 +7,10 @@
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise%20Logo%20Mark%20Black%20Large%20Size.png">
-    <link rel="shortcut icon" type="image/png" href="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise%20Logo%20Mark%20Black%20Large%20Size.png">
-    <link rel="apple-touch-icon" href="https://storage.googleapis.com/staging-sst-01-staging-static/Edvise%20Logo%20Mark%20Black%20Large%20Size.png">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-light-mode.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon-light-mode.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('Edvise-Logo-Mark.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

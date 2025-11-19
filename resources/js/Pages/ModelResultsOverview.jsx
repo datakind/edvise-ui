@@ -12,6 +12,8 @@ import InterpretChart from '../Components/InterpretChart';
 import FeatureValue from '../Components/FeatureValue';
 import BoxWhiskerPlot from '../Components/BoxWhiskerPlot';
 import InterpretChartSimple from '../Components/InterpretChartSimple';
+import PageHeading from '@/Components/PageHeading';
+import H2 from '@/Components/H2';
 import '../../css/landing.css';
 
 // Features will be fetched from API
@@ -262,11 +264,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
     <AppLayout title="Model Results Overview">
       <Head title="Model Results Overview" />
       <div className="font-[Helvetica Neue] mb-8 min-w-full">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="mx-auto text-5xl font-light">
-            Model Results Overview
-          </h1>
-        </div>
+        <PageHeading>Model Results Overview</PageHeading>
         <div className="my-6">
           <button
             onClick={handleExportData}
@@ -334,9 +332,9 @@ function ModelResultsOverview({ job_run_id, modelName }) {
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <h2 className="pb-4 text-2xl font-light">
+                    <H2 className="pb-4">
                       Top 10 Areas with the Most Impact
-                    </h2>
+                    </H2>
                     <div className="text-sm text-black">
                       <div className="mb-1 font-semibold">
                         How to read these charts
@@ -511,7 +509,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
             <>
               {/* Introduction Card */}
               <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-2 text-2xl font-light">Introduction</h2>
+                <H2 className="mb-2">Introduction</H2>
                 <div className="text-xl text-black">
                   This model was built to identify students who may need support
                   to be retained or graduate on time. It&apos;s intended to
@@ -617,7 +615,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                   {selectedFeature?.feature_long_desc}
                 </p>
               </div>
-              {selectedFeature?.data_type !== 'Categorical' && (
+              {!['Categorical', 'Boolean'].includes(selectedFeature?.data_type) && (
                 <div className="mb-6">
                   <h3 className="mb-2 text-xl font-medium">Range</h3>
                   <hr className="mb-4 border-[#4F4F4F]" />

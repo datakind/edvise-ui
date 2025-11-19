@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import PageHeading from '@/Components/PageHeading';
 
 import { formatModelName, toTitleCase } from '../utils/stringUtils';
 
@@ -166,9 +167,7 @@ export default function DataDictionary() {
     <AppLayout title="Data Dictionary">
       <Head title="Data Dictionary" />
       <div className="font-[Helvetica Neue] mb-8 min-w-full">
-        <div className="mb-6 flex items-center justify-center">
-          <h1 className="text-5xl font-light">Data Dictionary</h1>
-        </div>
+        <PageHeading>Data Dictionary</PageHeading>
 
         {/* Unified Content Section */}
         <div className="bg-white p-6 px-12 shadow">

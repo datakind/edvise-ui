@@ -62,6 +62,12 @@ export default {
           gray: '#767676',
           'light-blue': '#EEF2F6',
         },
+        heading: {
+          DEFAULT: '#1E343F',
+        },
+      },
+      boxShadow: {
+        card: '0 10px 20px 0 rgba(92, 115, 160, 0.07)',
       },
     },
   },

@@ -293,6 +293,11 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/institutions/{inst_id}/batch/{batch_id}/eda', [ApiController::class, 'getEdaData']);
+
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
 
 Route::middleware(['auth'])->get('/terms/prompt', function () {
@@ -416,7 +421,11 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/eda',
-    function () {
-        return Inertia::render('EdaDashboard');
+    function (Request $request) {
+        $batch_id = $request->query('batch_id');
+
+        return Inertia::render('EdaDashboard', [
+            'batch_id' => $batch_id,
+        ]);
     }
 )->name('eda');

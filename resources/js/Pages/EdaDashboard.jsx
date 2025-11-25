@@ -9,7 +9,7 @@ import ChartTitle from '@/Components/ChartTitle';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
-import { getMostRecentBatchId } from '@/utils/batchUtils';
+import { getBatchInfo } from '@/utils/batchUtils';
 
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
@@ -565,22 +565,15 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     // Get inst_id from Inertia shared props
     const { inst_id } = usePage().props;
 
-    const [resolvedBatchId, setResolvedBatchId] = useState(propBatchId || null);
-    const [batchLoading, setBatchLoading] = useState(!propBatchId); // Only load if batch_id not provided
+    const [batchInfo, setBatchInfo] = useState(null);
+    const [batchLoading, setBatchLoading] = useState(true);
     const [edaData, setEdaData] = useState(null);
     const [loading, setLoading] = useState(false); // Start false, will be set when batch_id is resolved
     const [error, setError] = useState(null);
 
-    // Fetch most recent batch if batch_id not provided
+    // Fetch batch info - either from propBatchId or get most recent
     useEffect(() => {
-        const fetchMostRecentBatch = async () => {
-            // If batch_id is provided, skip fetching
-            if (propBatchId) {
-                setResolvedBatchId(propBatchId);
-                setBatchLoading(false);
-                return;
-            }
-
+        const fetchBatchInfo = async () => {
             if (!inst_id) {
                 setError('Missing institution ID');
                 setBatchLoading(false);
@@ -591,18 +584,22 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 setBatchLoading(true);
                 setError(null);
                 
-                // Get the most recent batch ID using utility function
-                const mostRecentBatchId = await getMostRecentBatchId();
+                // getBatchInfo returns the most recent batch if no batch_id is provided
+                const batch = await getBatchInfo(propBatchId);
                 
-                if (!mostRecentBatchId) {
-                    throw new Error('No completed batches found. Please create and complete a batch first.');
+                if (!batch) {
+                    if (propBatchId) {
+                        throw new Error(`Batch ${propBatchId} not found or not completed.`);
+                    } else {
+                        throw new Error('No completed batches found. Please create and complete a batch first.');
+                    }
                 }
 
-                setResolvedBatchId(mostRecentBatchId);
+                setBatchInfo(batch);
             } catch (err) {
-                console.error('Error fetching most recent batch:', err);
+                console.error('Error fetching batch info:', err);
                 
-                let errorMessage = 'Failed to fetch batches';
+                let errorMessage = 'Failed to fetch batch';
                 if (err.response) {
                     errorMessage = err.response.data?.error 
                         || err.response.data?.detail 
@@ -611,7 +608,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 } else if (err.request) {
                     errorMessage = 'No response from server. Please check your connection.';
                 } else {
-                    errorMessage = err.message || 'Failed to fetch batches';
+                    errorMessage = err.message || 'Failed to fetch batch';
                 }
                 setError(errorMessage);
             } finally {
@@ -619,10 +616,10 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
             }
         };
 
-        fetchMostRecentBatch();
+        fetchBatchInfo();
     }, [inst_id, propBatchId]);
 
-    // Fetch EDA data from API once batch_id is resolved
+    // Fetch EDA data from API once batch info is resolved
     useEffect(() => {
         const fetchEdaData = async () => {
             if (!inst_id) {
@@ -631,15 +628,15 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 return;
             }
 
-            if (!resolvedBatchId) {
-                // Wait for batch_id to be resolved
+            if (!batchInfo || !batchInfo.batch_id) {
+                // Wait for batch info to be resolved
                 return;
             }
 
             try {
                 setLoading(true);
                 setError(null);
-                const response = await axios.get(`/institutions/${inst_id}/batch/${resolvedBatchId}/eda`);
+                const response = await axios.get(`/institutions/${inst_id}/batch/${batchInfo.batch_id}/eda`);
                 
                 if (!response.data) {
                     throw new Error('No data received from API');
@@ -693,7 +690,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         };
 
         fetchEdaData();
-    }, [inst_id, resolvedBatchId]);
+    }, [inst_id, batchInfo]);
 
     // Create chart options from API data
     const enrollmentTypeOption = edaData?.gpa_by_enrollment_type
@@ -795,10 +792,10 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                         <div className="text-red-600 text-center py-8">
                             <p className="text-lg font-semibold">Error loading EDA data</p>
                             <p className="mt-2">{error}</p>
-                            {!resolvedBatchId && (
+                            {!batchInfo && (
                                 <p className="mt-4 text-sm">Unable to determine which batch to use. Please provide a batch_id in the URL query parameters or ensure you have at least one completed batch.</p>
                             )}
-                            {resolvedBatchId && (
+                            {batchInfo && (
                                 <p className="mt-4 text-sm">Unable to load data from the backend API. Please check that the batch exists and contains valid data.</p>
                             )}
                         </div>
@@ -837,9 +834,15 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 <div className="min-w-full bg-[#FAFAFA] p-6">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                         <H2>At a Glance</H2>
-                        <div className="flex flex-col gap-1 text-right text-sm font-light text-heading/80 md:flex-row md:items-center md:gap-6">
-                            <span>Showing analysis for: Batch {resolvedBatchId}</span>
-                            <span className="italic">Last updated {new Date().toLocaleDateString()}</span>
+                        <div className="flex flex-row items-center gap-6 text-right text-sm font-light text-heading/80">
+                            {batchInfo && (
+                                <>
+                                    <span>Showing analysis for: Batch {batchInfo.batch_id}</span>
+                                    <span className="italic">
+                                        {batchInfo.updated_at || batchInfo.created_at || ''}
+                                    </span>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="grid gap-4 md:grid-cols-3 mb-5">

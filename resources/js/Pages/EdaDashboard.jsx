@@ -9,6 +9,7 @@ import ChartTitle from '@/Components/ChartTitle';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
+import { getMostRecentBatchId } from '@/utils/batchUtils';
 
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
@@ -590,33 +591,13 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 setBatchLoading(true);
                 setError(null);
                 
-                // Fetch batches from /view-uploaded-data endpoint
-                const response = await axios.get('/view-uploaded-data');
+                // Get the most recent batch ID using utility function
+                const mostRecentBatchId = await getMostRecentBatchId();
                 
-                if (!response.data || !response.data.batches) {
-                    throw new Error('No batches data received from API');
-                }
-
-                const batches = response.data.batches;
-
-                // Filter batches: exclude deleted, only include completed
-                const validBatches = batches.filter(batch => 
-                    batch.deleted === false && batch.completed === true
-                );
-
-                if (validBatches.length === 0) {
+                if (!mostRecentBatchId) {
                     throw new Error('No completed batches found. Please create and complete a batch first.');
                 }
 
-                // Sort by created_at descending (most recent first)
-                const sortedBatches = [...validBatches].sort((a, b) => {
-                    const dateA = new Date(a.created_at);
-                    const dateB = new Date(b.created_at);
-                    return dateB - dateA; // Descending order
-                });
-
-                // Use the most recent batch
-                const mostRecentBatchId = sortedBatches[0].batch_id;
                 setResolvedBatchId(mostRecentBatchId);
             } catch (err) {
                 console.error('Error fetching most recent batch:', err);

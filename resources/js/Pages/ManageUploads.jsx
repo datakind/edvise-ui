@@ -309,11 +309,11 @@ export default function ManageUploads() {
         <h1 className="py-12 text-center text-5xl font-light">
           Manage Uploads
         </h1>
-        <div className="overflow-x-auto px-6">
-          <table
-            className="w-full table-auto text-left"
-            id="uploads-table"
-          >
+        <div className="overflow-x-auto px-6" style={{ paddingBottom: '150px' }}>
+            <table
+              className="w-full table-auto text-left"
+              id="uploads-table"
+            >
             <thead>
               <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
                 <th scope="col" className="p-4 px-6">
@@ -344,7 +344,7 @@ export default function ManageUploads() {
                     <SortIcon />
                   </button>
                 </th>
-                <th scope="col" className="p-4 px-6">
+                <th scope="col" className="relative p-4 px-6">
                   <span className="inline-flex pr-2 align-middle">ACTIONS</span>
                 </th>
               </tr>
@@ -373,7 +373,7 @@ export default function ManageUploads() {
                     <td className="p-4 px-6 font-medium">
                       {upload.updated_at}
                     </td>
-                    <td className="p-4 px-6 font-medium">
+                    <td className="relative p-4 px-6 font-medium overflow-visible">
                       <OverflowMenu
                         items={actions.map(action => ({
                           ...action,

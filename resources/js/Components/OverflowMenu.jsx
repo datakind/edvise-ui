@@ -60,7 +60,7 @@ function OverflowMenu({ items }) {
                         position: 'absolute',
                         top: '100%',
                         right: 0,
-                        zIndex: 1,
+                        zIndex: 50,
                         ...menuStyle,
                     }}
                 >

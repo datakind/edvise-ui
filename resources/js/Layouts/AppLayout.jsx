@@ -35,6 +35,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { subtract } from 'lodash';
 import { formatModelName } from '@/utils/stringUtils';
+import CookieConsent from '@/Components/CookieConsent';
 
 const VisibilityType = Object.freeze({
   PUBLIC_ONLY: 'PUBLIC_ONLY',
@@ -532,6 +533,7 @@ export default function AppLayout({ title, renderHeader, children }) {
         <main className="flex w-full flex-1 pt-12">{children}</main>
         <Footer />
         <FeedbackButton />
+        <CookieConsent />
       </div>
     </div>
   );

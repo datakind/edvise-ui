@@ -33,7 +33,10 @@ function ModelResultsOverview({ job_run_id, modelName }) {
 
   // Get inst_id from Inertia shared props (no API call needed!)
   const { inst_id } = usePage().props;
-  console.log('ModelResultsOverview - Institution ID from shared props:', inst_id);
+  console.log(
+    'ModelResultsOverview - Institution ID from shared props:',
+    inst_id,
+  );
 
   const [model_run_id, setModelRunId] = useState(null);
 
@@ -55,11 +58,16 @@ function ModelResultsOverview({ job_run_id, modelName }) {
       if (!job_run_id) return;
 
       try {
-        const response = await axios.get(`/get-model-run-id-by-job/${job_run_id}`);
+        const response = await axios.get(
+          `/get-model-run-id-by-job/${job_run_id}`,
+        );
 
         if (response.data?.model_run_id) {
           setModelRunId(response.data.model_run_id);
-          console.log('Got model_run_id from job table:', response.data.model_run_id);
+          console.log(
+            'Got model_run_id from job table:',
+            response.data.model_run_id,
+          );
         }
       } catch (error) {
         console.error('Error fetching model_run_id:', error);
@@ -141,7 +149,10 @@ function ModelResultsOverview({ job_run_id, modelName }) {
 
         setFeatures(uniqueFeatures);
         console.log('Raw features:', response.data);
-        console.log('Top features sorted by mean absolute SHAP value:', uniqueFeatures);
+        console.log(
+          'Top features sorted by mean absolute SHAP value:',
+          uniqueFeatures,
+        );
         console.log(
           'Original count:',
           response.data.length,
@@ -150,7 +161,10 @@ function ModelResultsOverview({ job_run_id, modelName }) {
         );
         console.log(
           'Feature order by importance:',
-          uniqueFeatures.map(f => `${f.feature_readable_name} (mean abs SHAP: ${f.mean_abs_shap_value.toFixed(4)})`),
+          uniqueFeatures.map(
+            f =>
+              `${f.feature_readable_name} (mean abs SHAP: ${f.mean_abs_shap_value.toFixed(4)})`,
+          ),
         );
       } catch (error) {
         console.error('Error fetching top features:', error);
@@ -201,7 +215,8 @@ function ModelResultsOverview({ job_run_id, modelName }) {
     // Merge data_type into features
     const featuresWithDataType = features.map(feature => {
       // Try to match by feature_name or readable_feature_name
-      const matchKey = feature.feature_name ||
+      const matchKey =
+        feature.feature_name ||
         feature.feature_readable_name ||
         feature.readable_feature_name;
 
@@ -215,7 +230,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
 
     // Only update if data_type was actually added
     const hasNewDataTypes = featuresWithDataType.some(
-      (f, idx) => f.data_type !== features[idx]?.data_type
+      (f, idx) => f.data_type !== features[idx]?.data_type,
     );
 
     if (hasNewDataTypes) {
@@ -269,10 +284,11 @@ function ModelResultsOverview({ job_run_id, modelName }) {
           <button
             onClick={handleExportData}
             disabled={!output_link}
-            className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${output_link
-              ? 'bg-[#f79222] hover:bg-[#e67c00]'
-              : 'cursor-not-allowed bg-gray-400'
-              }`}
+            className={`ml-8 rounded-full px-4 py-2 text-base font-normal text-black shadow ${
+              output_link
+                ? 'bg-[#f79222] hover:bg-[#e67c00]'
+                : 'cursor-not-allowed bg-gray-400'
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -327,14 +343,17 @@ function ModelResultsOverview({ job_run_id, modelName }) {
           {tab === 'results' ? (
             <>
               <div className="mb-8">
-                <SupportOverview tab={tab} setTab={setTab} run_id={job_run_id} inst_id={inst_id} />
+                <SupportOverview
+                  tab={tab}
+                  setTab={setTab}
+                  run_id={job_run_id}
+                  inst_id={inst_id}
+                />
               </div>
               <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
                 <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <H2 className="pb-4">
-                      Top 10 Areas with the Most Impact
-                    </H2>
+                    <H2 className="pb-4">Top 10 Areas with the Most Impact</H2>
                     <div className="text-sm text-black">
                       <div className="mb-1 font-semibold">
                         How to read these charts
@@ -568,13 +587,15 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                 />
               </div>
               {/* Support Scores Histogram */}
-              {/* <div className="mb-8">
-                <SupportScores
-                  tab={tab}
-                  setTab={setTab}
-                  model_run_id={model_run_id}
-                />
-              </div> */}
+              {
+                <div className="mb-8">
+                  <SupportScores
+                    tab={tab}
+                    setTab={setTab}
+                    model_run_id={model_run_id}
+                  />
+                </div>
+              }
             </>
           )}
         </div>
@@ -615,13 +636,15 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                   {selectedFeature?.feature_long_desc}
                 </p>
               </div>
-              {!['Categorical', 'Boolean'].includes(selectedFeature?.data_type) && (
+              {!['Categorical', 'Boolean'].includes(
+                selectedFeature?.data_type,
+              ) && (
                 <div className="mb-6">
                   <h3 className="mb-2 text-xl font-medium">Range</h3>
                   <hr className="mb-4 border-[#4F4F4F]" />
                   <div className="mb-4 text-sm text-[#4F4F4F]">
-                    This box and whiskers plot shows the minimum, median, maximum,
-                    and quartile points for this feature in the student
+                    This box and whiskers plot shows the minimum, median,
+                    maximum, and quartile points for this feature in the student
                     dataset.{' '}
                   </div>
                   <div className="mb-16">

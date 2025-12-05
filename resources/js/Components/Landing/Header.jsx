@@ -79,6 +79,7 @@ export default function Header() {
                       >
                         <a
                           href={link.href}
+                          {...(link.external && { target: '_blank', rel: 'noopener noreferrer' })}
                           className={classNames(
                             link.href === window.location.pathname
                               ? 'after:relative after:-top-1 after:ml-2 after:h-2.5 after:w-2.5 after:rounded-full after:bg-[#F79122] after:content-[""]'
@@ -204,6 +205,7 @@ export default function Header() {
                           'relative flex items-center gap-2 text-[16px] font-normal leading-[100%] text-[#000]',
                         )}
                         href={link.href}
+                        {...(link.external && { target: '_blank', rel: 'noopener noreferrer' })}
                       >
                         <span className="relative top-[0.125em]">
                           {link.label}

@@ -15,6 +15,7 @@ import Footer from '@/Components/Landing/Footer';
 import NewFooter from '@/Components/Landing/NewFooter';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
+import CookieConsent from '@/Components/CookieConsent';
 
 export default function Welcome() {
   return (
@@ -92,6 +93,7 @@ export default function Welcome() {
           </div>
         </main>
       </LenisProvider>
+      <CookieConsent />
     </>
   );
 }

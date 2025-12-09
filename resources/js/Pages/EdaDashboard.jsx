@@ -749,17 +749,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         },
     ] : [];
 
-    // Show loading while fetching batch or EDA data
-    if (batchLoading || loading) {
-        return (
-            <AppLayout title="EDA Dashboard">
-                <Head title="EDA Dashboard" />
-                <div className="flex justify-center items-center min-h-screen">
-                    <Spinner />
-                </div>
-            </AppLayout>
-        );
-    }
+    // Don't show full-screen spinner - use overlay instead
 
     if (error) {
         return (
@@ -804,7 +794,12 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     return (
         <AppLayout title="EDA Dashboard">
             <Head title="EDA Dashboard" />
-            <div className="font-[Helvetica Neue] mb-8 min-w-full">
+            <div className={`font-[Helvetica Neue] mb-8 min-w-full ${batchLoading || loading ? 'waiting' : ''}`}>
+                {(batchLoading || loading) && (
+                    <div className="waiting-overlay">
+                        <div className="waiting-spinner" role="status" aria-label="Loading"></div>
+                    </div>
+                )}
                 <PageHeading>Dashboard Home</PageHeading>
                 <div className="min-w-full bg-[#FAFAFA] p-6">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">

@@ -642,28 +642,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                     throw new Error('No data received from API');
                 }
                 
-                const data = response.data;
-                
-                // Validate that required data fields are present
-                const requiredFields = [
-                    'summary_stats',
-                    'gpa_by_enrollment_type',
-                    'gpa_by_enrollment_intensity',
-                    'students_by_cohort_term',
-                    'course_enrollments',
-                    'degree_types',
-                    'enrollment_type_by_intensity',
-                    'pell_recipient_by_first_gen',
-                    'student_age_by_gender',
-                    'race_by_pell_status'
-                ];
-                
-                const missingFields = requiredFields.filter(field => !data[field]);
-                if (missingFields.length > 0) {
-                    throw new Error(`Missing required data fields from API: ${missingFields.join(', ')}`);
-                }
-                
-                setEdaData(data);
+                setEdaData(response.data);
             } catch (err) {
                 console.error('Error fetching EDA data:', err);
                 console.error('Error response:', err.response);
@@ -805,26 +784,22 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         );
     }
     
-    // Additional validation: if we have edaData but it's missing critical fields, show error
-    if (edaData) {
-        const hasRequiredGpaData = edaData.gpa_by_enrollment_type?.cohort_years && edaData.gpa_by_enrollment_type?.series;
-        if (!hasRequiredGpaData) {
-            return (
-                <AppLayout title="EDA Dashboard">
-                    <Head title="EDA Dashboard" />
-                    <div className="font-[Helvetica Neue] mb-8 min-w-full">
-                        <PageHeading>Dashboard Home</PageHeading>
-                        <div className="min-w-full bg-[#FAFAFA] p-6">
-                            <div className="text-red-600 text-center py-8">
-                                <p className="text-lg font-semibold">Invalid data received from API</p>
-                                <p className="mt-2">The API response is missing required GPA chart data structure (cohort_years or series).</p>
-                            </div>
-                        </div>
-                    </div>
-                </AppLayout>
-            );
+    // Helper to check if data has meaningful values (not all zeros/empty)
+    const hasData = (data) => {
+        if (!data) return false;
+        if (Array.isArray(data)) return data.length > 0;
+        if (typeof data === 'object') {
+            if (data.total_students) {
+                // Summary stats: check if any value is meaningful (not "0", "0", "N/A")
+                const total = parseInt(data.total_students.replace(/,/g, '')) || 0;
+                return total > 0;
+            }
+            if (data.cohort_years) return data.cohort_years.length > 0 && data.series?.some(s => s.data?.some(v => v !== 0));
+            if (data.fall) return [...data.fall, ...data.winter, ...data.spring, ...data.summer].some(v => v > 0);
+            if (data.categories) return data.categories.length > 0 && data.series?.some(s => s.data?.some(v => v > 0));
         }
-    }
+        return true;
+    };
 
     return (
         <AppLayout title="EDA Dashboard">
@@ -845,211 +820,203 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             )}
                         </div>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-3 mb-5">
-                        {summaryStats.map(stat => (
-                            <StatCard key={stat.label} value={stat.value} label={stat.label} />
-                        ))}
-                    </div>
-                    <Card className="mb-6">
-                        <div className="grid grid-cols-12 gap-6">
-                            <div className="col-span-12 md:col-span-4">
-                                <ChartTitle variant="large">Average Year 1 GPA by Enrollment Types</ChartTitle>
-                                <p className="mt-4 text-sm font-light text-[#4F4F4F]">
-                                    This chart shows the average first-year GPA for first-time and transfer students separately. It highlights differences in academic performance by enrollment type, helping you:
-                                </p>
-                                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
-                                    <li>Spot where each group may face challenges</li>
-                                    <li>Shape support strategies tailored to their needs</li>
-                                    <li>Decide whether separate predictive models are needed for these student groups</li>
-                                </ul>
+                    {hasData(edaData?.summary_stats) && (
+                        <div className="grid gap-4 md:grid-cols-3 mb-5">
+                            {summaryStats.map(stat => (
+                                <StatCard key={stat.label} value={stat.value} label={stat.label} />
+                            ))}
+                        </div>
+                    )}
+                    {hasData(edaData?.gpa_by_enrollment_type) && (
+                        <Card className="mb-6">
+                            <div className="grid grid-cols-12 gap-6">
+                                <div className="col-span-12 md:col-span-4">
+                                    <ChartTitle variant="large">Average Year 1 GPA by Enrollment Types</ChartTitle>
+                                    <p className="mt-4 text-sm font-light text-[#4F4F4F]">
+                                        This chart shows the average first-year GPA for first-time and transfer students separately. It highlights differences in academic performance by enrollment type, helping you:
+                                    </p>
+                                    <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
+                                        <li>Spot where each group may face challenges</li>
+                                        <li>Shape support strategies tailored to their needs</li>
+                                        <li>Decide whether separate predictive models are needed for these student groups</li>
+                                    </ul>
+                                </div>
+                                <div className="col-span-12 md:col-span-8">
+                                    {enrollmentTypeOption && (
+                                        <ReactECharts
+                                            option={enrollmentTypeOption}
+                                            style={{ height: '320px', width: '100%' }}
+                                            opts={{ renderer: 'svg' }}
+                                        />
+                                    )}
+                                </div>
                             </div>
-                            <div className="col-span-12 md:col-span-8">
-                                {enrollmentTypeOption ? (
-                                    <ReactECharts
-                                        option={enrollmentTypeOption}
-                                        style={{ height: '320px', width: '100%' }}
-                                        opts={{ renderer: 'svg' }}
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-[320px] text-gray-500">
-                                        No data available
-                                    </div>
+                        </Card>
+                    )}
+                    {hasData(edaData?.gpa_by_enrollment_intensity) && (
+                        <Card className="mb-6">
+                            <div className="grid grid-cols-12 gap-6">
+                                <div className="col-span-12 md:col-span-4">
+                                    <ChartTitle variant="large">Average Year 1 GPA by Enrollment Intensity</ChartTitle>
+                                    <p className="mt-4 text-sm font-light text-[#4F4F4F]">
+                                        This chart shows the average first-year GPA for full-time and part-time students. It highlights differences in academic performance by enrollment intensity, helping you:
+                                    </p>
+                                    <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
+                                        <li>Identify support needs for each group</li>
+                                        <li>Track performance trends over time</li>
+                                        <li>Evaluate potential retention risks</li>
+                                    </ul>
+                                </div>
+                                <div className="col-span-12 md:col-span-8">
+                                    {enrollmentIntensityOption && (
+                                        <ReactECharts
+                                            option={enrollmentIntensityOption}
+                                            style={{ height: '320px', width: '100%' }}
+                                            opts={{ renderer: 'svg' }}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </Card>
+                    )}
+                    {(hasData(edaData?.students_by_cohort_term) || hasData(edaData?.course_enrollments) || hasData(edaData?.degree_types) || hasData(edaData?.enrollment_type_by_intensity)) && (
+                        <>
+                            <H2 className="mb-6">Key Insights</H2>
+                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                                {hasData(edaData?.students_by_cohort_term) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Students by Cohort Year and Term</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                A year by year analysis of when students started their journey at the institution
+                                            </p>
+                                        </div>
+                                        {studentsByCohortOption && (
+                                            <ReactECharts
+                                                option={studentsByCohortOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
+                                )}
+                                {hasData(edaData?.course_enrollments) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Course Enrollments Over Time</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
+                                            </p>
+                                        </div>
+                                        {courseEnrollmentsOption && (
+                                            <ReactECharts
+                                                option={courseEnrollmentsOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
                                 )}
                             </div>
-                        </div>
-                    </Card>
-                    <Card className="mb-6">
-                        <div className="grid grid-cols-12 gap-6">
-                            <div className="col-span-12 md:col-span-4">
-                                <ChartTitle variant="large">Average Year 1 GPA by Enrollment Intensity</ChartTitle>
-                                <p className="mt-4 text-sm font-light text-[#4F4F4F]">
-                                    This chart shows the average first-year GPA for full-time and part-time students. It highlights differences in academic performance by enrollment intensity, helping you:
-                                </p>
-                                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light text-[#4F4F4F]">
-                                    <li>Identify support needs for each group</li>
-                                    <li>Track performance trends over time</li>
-                                    <li>Evaluate potential retention risks</li>
-                                </ul>
-                            </div>
-                            <div className="col-span-12 md:col-span-8">
-                                {enrollmentIntensityOption ? (
-                                    <ReactECharts
-                                        option={enrollmentIntensityOption}
-                                        style={{ height: '320px', width: '100%' }}
-                                        opts={{ renderer: 'svg' }}
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-[320px] text-gray-500">
-                                        No data available
-                                    </div>
+                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                                {hasData(edaData?.degree_types) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Most Common Degree Types</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                The following is a breakdown of degree types being sought by the student body.
+                                            </p>
+                                        </div>
+                                        {degreeTypesOption && (
+                                            <ReactECharts
+                                                option={degreeTypesOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
+                                )}
+                                {hasData(edaData?.enrollment_type_by_intensity) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Student Enrollment Type by Intensity</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                This chart signifies students who are first time, re-admitted, or transferred into school, broken down by whether they are enrolled at full time or part time intensity.
+                                            </p>
+                                        </div>
+                                        {enrollmentTypeByIntensityOption && (
+                                            <ReactECharts
+                                                option={enrollmentTypeByIntensityOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
                                 )}
                             </div>
-                        </div>
-                    </Card>
-                    <H2 className="mb-6">Key Insights</H2>
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Students by Cohort Year and Term</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    A year by year analysis of when students started their journey at the institution
-                                </p>
+                        </>
+                    )}
+                    {(hasData(edaData?.pell_recipient_by_first_gen) || hasData(edaData?.student_age_by_gender) || hasData(edaData?.race_by_pell_status)) && (
+                        <>
+                            <H2 className="mb-6">Student Characteristics & Demographics</H2>
+                            <div className="mb-6 text-sm font-light text-[#4F4F4F]">
+                                DataKind does not use any demographic categories to train our model; we only use them to assess bias in the model predictions. We display the full demographics of the raw dataset here to make sure they match your understanding of your student body. If this data looks inaccurate, please confirm you uploaded the correct files. If you have further questions, please contact your account representative.
                             </div>
-                            {studentsByCohortOption ? (
-                                <ReactECharts
-                                    option={studentsByCohortOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
+                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                                {hasData(edaData?.pell_recipient_by_first_gen) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Pell Recipient by First Generation Status</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                Here are students who are receiving a Pell Grant and whether they are first generation students.
+                                            </p>
+                                        </div>
+                                        {pellRecipientOption && (
+                                            <ReactECharts
+                                                option={pellRecipientOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
+                                )}
+                                {hasData(edaData?.student_age_by_gender) && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Student Age by Gender</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                An overview of female-identifying vs male-identifying students. This chart is broken down by gender and then by age categories.
+                                            </p>
+                                        </div>
+                                        {studentAgeByGenderOption && (
+                                            <ReactECharts
+                                                option={studentAgeByGenderOption}
+                                                style={{ height: '400px', width: '100%' }}
+                                                opts={{ renderer: 'svg' }}
+                                            />
+                                        )}
+                                    </Card>
+                                )}
+                            </div>
+                            {hasData(edaData?.race_by_pell_status) && (
+                                <Card className="mb-6">
+                                    <div className="mb-4">
+                                        <ChartTitle variant="large">Race by Pell Status</ChartTitle>
+                                        <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                            This chart shows what race students identify as and who are receiving a Pell Grant.
+                                        </p>
+                                    </div>
+                                    {raceByPellStatusOption && (
+                                        <ReactECharts
+                                            option={raceByPellStatusOption}
+                                            style={{ height: '400px', width: '100%' }}
+                                            opts={{ renderer: 'svg' }}
+                                        />
+                                    )}
+                                </Card>
                             )}
-                        </Card>
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Course Enrollments Over Time</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
-                                </p>
-                            </div>
-                            {courseEnrollmentsOption ? (
-                                <ReactECharts
-                                    option={courseEnrollmentsOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
-                            )}
-                        </Card>
-                    </div>
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Most Common Degree Types</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    The following is a breakdown of degree types being sought by the student body.
-                                </p>
-                            </div>
-                            {degreeTypesOption ? (
-                                <ReactECharts
-                                    option={degreeTypesOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
-                            )}
-                        </Card>
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Student Enrollment Type by Intensity</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    This chart signifies students who are first time, re-admitted, or transferred into school, broken down by whether they are enrolled at full time or part time intensity.
-                                </p>
-                            </div>
-                            {enrollmentTypeByIntensityOption ? (
-                                <ReactECharts
-                                    option={enrollmentTypeByIntensityOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
-                            )}
-                        </Card>
-                    </div>
-                    <H2 className="mb-6">Student Characteristics & Demographics</H2>
-                    <div className="mb-6 text-sm font-light text-[#4F4F4F]">
-                        DataKind does not use any demographic categories to train our model; we only use them to assess bias in the model predictions. We display the full demographics of the raw dataset here to make sure they match your understanding of your student body. If this data looks inaccurate, please confirm you uploaded the correct files. If you have further questions, please contact your account representative.
-                    </div>
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Pell Recipient by First Generation Status</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    Here are students who are receiving a Pell Grant and whether they are first generation students.
-                                </p>
-                            </div>
-                            {pellRecipientOption ? (
-                                <ReactECharts
-                                    option={pellRecipientOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
-                            )}
-                        </Card>
-                        <Card>
-                            <div className="mb-4">
-                                <ChartTitle variant="small">Student Age by Gender</ChartTitle>
-                                <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                    An overview of female-identifying vs male-identifying students. This chart is broken down by gender and then by age categories.
-                                </p>
-                            </div>
-                            {studentAgeByGenderOption ? (
-                                <ReactECharts
-                                    option={studentAgeByGenderOption}
-                                    style={{ height: '400px', width: '100%' }}
-                                    opts={{ renderer: 'svg' }}
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                    No data available
-                                </div>
-                            )}
-                        </Card>
-                    </div>
-                    <Card className="mb-6">
-                        <div className="mb-4">
-                            <ChartTitle variant="large">Race by Pell Status</ChartTitle>
-                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
-                                This chart shows what race students identify as and who are receiving a Pell Grant.
-                            </p>
-                        </div>
-                        {raceByPellStatusOption ? (
-                            <ReactECharts
-                                option={raceByPellStatusOption}
-                                style={{ height: '400px', width: '100%' }}
-                                opts={{ renderer: 'svg' }}
-                            />
-                        ) : (
-                            <div className="flex items-center justify-center h-[400px] text-gray-500">
-                                No data available
-                            </div>
-                        )}
-                    </Card>
+                        </>
+                    )}
                 </div>
             </div>
         </AppLayout>

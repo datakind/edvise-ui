@@ -550,7 +550,7 @@ const createRaceByPellStatusOptionFromData = (data) => {
         ...s,
         itemStyle: { color: s.color },
     }));
-    return createVerticalStackedBarOption(
+    const baseOption = createVerticalStackedBarOption(
         'Number of Students',
         '',
         data.categories,
@@ -559,6 +559,34 @@ const createRaceByPellStatusOptionFromData = (data) => {
         data.series.map(s => s.name),
         'Pell Status First Year:'
     );
+    // Override grid, xAxis, and legend settings to ensure all race labels are visible
+    return {
+        ...baseOption,
+        grid: {
+            ...baseOption.grid,
+            left: '25%', // Increased from 15% to accommodate longer race category names
+            bottom: '25%',
+        },
+        xAxis: {
+            ...baseOption.xAxis,
+            axisLabel: {
+                ...baseOption.xAxis.axisLabel,
+                rotate: 25, // Rotate labels 45 degrees to prevent overlap
+                interval: 0, // Show all labels
+                formatter: (value) => {
+                    // Truncate very long labels and add ellipsis if needed
+                    return value.length > 20 ? value.substring(0, 17) + '...' : value;
+                },
+            },
+        },
+        legend: {
+            ...baseOption.legend,
+            formatter: (name) => {
+                // Show consistent format for both legend items
+                return `Pell Status First Year: ${name}`;
+            },
+        },
+    };
 };
 
 export default function EdaDashboard({ batch_id: propBatchId }) {

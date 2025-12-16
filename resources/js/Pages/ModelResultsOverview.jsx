@@ -587,15 +587,16 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                 />
               </div>
               {/* Support Scores Histogram */}
-              {
+              {/*
                 <div className="mb-8">
                   <SupportScores
                     tab={tab}
                     setTab={setTab}
                     model_run_id={model_run_id}
+                    inst_id={inst_id}
                   />
                 </div>
-              }
+              */}
             </>
           )}
         </div>

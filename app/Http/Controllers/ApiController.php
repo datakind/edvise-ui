@@ -1393,4 +1393,32 @@ class ApiController extends Controller
             return response()->json(['error' => 'Failed to update batch'], 500);
         }
     }
+
+    public function getEdaData(Request $request, $inst_id, $batch_id)
+    {
+        try {
+            if (!$batch_id) {
+                return response()->json(['error' => 'Batch ID is required'], 400);
+            }
+
+            \Log::info('getEdaData called with inst_id: '.$inst_id.', batch_id: '.$batch_id);
+
+            [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+            if ($inst == null || $inst == '') {
+                return response()->json(['error' => $instErr], 401);
+            }
+
+            \Log::info('getEdaData - Production request - Institution ID: '.$inst);
+            $externalUrl = '/batch/'.$batch_id.'/eda';
+            \Log::info('getEdaData - External API URL: '.$externalUrl);
+
+            return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
+
+        } catch (\Exception $e) {
+            \Log::error('getEdaData error: '.$e->getMessage());
+            \Log::error('getEdaData error trace: '.$e->getTraceAsString());
+
+            return response()->json(['error' => 'Failed to fetch EDA data: '.$e->getMessage()], 500);
+        }
+    }
 }

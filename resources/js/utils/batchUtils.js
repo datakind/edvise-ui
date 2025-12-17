@@ -47,7 +47,7 @@ export const fetchValidBatches = async () => {
 
   // Filter batches: exclude deleted, only include completed
   const validBatches = batches.filter(batch => 
-    batch.deleted === false && batch.completed === true
+    batch.deleted === false
   );
 
   return validBatches;

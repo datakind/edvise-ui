@@ -401,19 +401,6 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
     series: data,
 });
 
-// Helper function to create degree types option from API data
-const createDegreeTypesOptionFromData = (degreeTypes) => {
-    if (!degreeTypes || !Array.isArray(degreeTypes)) {
-        return null;
-    }
-    const data = degreeTypes.map(dt => ({
-        value: dt.value,
-        name: dt.name,
-        itemStyle: { color: dt.color },
-    }));
-    return createDonutChartOption(data);
-};
-
 // Helper function to create enrollment type by intensity option from API data
 const createEnrollmentTypeByIntensityOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
@@ -753,10 +740,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         )
         : null;
 
-    const degreeTypesOption = edaData?.degree_types
-        ? createDegreeTypesOptionFromData(edaData.degree_types)
-        : null;
-
     const enrollmentTypeByIntensityOption = edaData?.enrollment_type_by_intensity
         ? createEnrollmentTypeByIntensityOptionFromData(edaData.enrollment_type_by_intensity)
         : null;
@@ -962,9 +945,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 The following is a breakdown of degree types being sought by the student body.
                                             </p>
                                         </div>
-                                        {degreeTypesOption && (
+                                        {edaData?.degree_types && (
                                             <ReactECharts
-                                                option={degreeTypesOption}
+                                                option={createDonutChartOption(edaData.degree_types)}
                                                 style={{ height: '400px', width: '100%' }}
                                                 opts={{ renderer: 'svg' }}
                                             />

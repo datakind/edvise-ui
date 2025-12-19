@@ -11,6 +11,15 @@ import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
 import { getBatchInfo } from '@/utils/batchUtils';
 
+// Wrapper component with default props for ECharts
+const EChart = ({ option, style, ...props }) => (
+    <ReactECharts
+        option={option}
+        opts={{ renderer: 'svg' }}
+        {...props}
+    />
+);
+
 // Centralized color palette for all charts
 // Based on existing design system colors
 const CHART_COLOR_PALETTE = [
@@ -861,10 +870,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 </div>
                                 <div className="col-span-12 md:col-span-8">
                                     {enrollmentTypeOption && (
-                                        <ReactECharts
+                                        <EChart
                                             option={enrollmentTypeOption}
                                             style={{ height: '320px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
                                         />
                                     )}
                                 </div>
@@ -887,10 +895,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 </div>
                                 <div className="col-span-12 md:col-span-8">
                                     {enrollmentIntensityOption && (
-                                        <ReactECharts
+                                        <EChart
                                             option={enrollmentIntensityOption}
                                             style={{ height: '320px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
                                         />
                                     )}
                                 </div>
@@ -910,11 +917,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {studentsByCohortOption && (
-                                            <ReactECharts
-                                                option={studentsByCohortOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={studentsByCohortOption} />
                                         )}
                                     </Card>
                                 )}
@@ -927,11 +930,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {courseEnrollmentsOption && (
-                                            <ReactECharts
-                                                option={courseEnrollmentsOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={courseEnrollmentsOption} />
                                         )}
                                     </Card>
                                 )}
@@ -946,11 +945,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {edaData?.degree_types && (
-                                            <ReactECharts
-                                                option={createDonutChartOption(edaData.degree_types)}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={degreeTypesChartOptions(edaData.degree_types, edaData.summary_stats?.total_students)} />
                                         )}
                                     </Card>
                                 )}
@@ -963,11 +958,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {enrollmentTypeByIntensityOption && (
-                                            <ReactECharts
-                                                option={enrollmentTypeByIntensityOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={enrollmentTypeByIntensityOption} />
                                         )}
                                     </Card>
                                 )}
@@ -990,11 +981,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {pellRecipientOption && (
-                                            <ReactECharts
-                                                option={pellRecipientOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={pellRecipientOption} />
                                         )}
                                     </Card>
                                 )}
@@ -1007,11 +994,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {studentAgeByGenderOption && (
-                                            <ReactECharts
-                                                option={studentAgeByGenderOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={studentAgeByGenderOption} />
                                         )}
                                     </Card>
                                 )}
@@ -1025,11 +1008,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                         </p>
                                     </div>
                                     {raceByPellStatusOption && (
-                                        <ReactECharts
-                                            option={raceByPellStatusOption}
-                                            style={{ height: '400px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
-                                        />
+                                        <EChart option={raceByPellStatusOption} />
                                     )}
                                 </Card>
                             )}

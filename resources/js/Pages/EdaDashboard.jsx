@@ -11,9 +11,32 @@ import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
 import { getBatchInfo } from '@/utils/batchUtils';
 
+// Centralized color palette for all charts
+// Based on existing design system colors
+const CHART_COLOR_PALETTE = [
+    '#F79222', // Orange
+    '#00CFEA', // Light blue
+    '#25A95A', // Teal/green
+    '#A92532', // Red
+    '#385981', // Dark blue
+    '#8B5CF6', // Purple
+    '#EC4899', // Pink
+    '#10B981', // Green
+    '#F59E0B', // Amber
+    '#3B82F6', // Blue
+];
+
+// Term-specific colors (for seasonal charts)
+const termColors = {
+    fall: CHART_COLOR_PALETTE[0],      // Orange
+    winter: CHART_COLOR_PALETTE[1],    // Light blue
+    spring: CHART_COLOR_PALETTE[2],    // Teal/green
+    summer: CHART_COLOR_PALETTE[3],    // Red
+};
+
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
-    color: ['#F79222', '#00CFEA'],
+    color: CHART_COLOR_PALETTE.slice(0, 2), // Use first 2 colors for GPA charts
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -165,16 +188,10 @@ const createEnrollmentIntensityOptionFromData = (gpaData) => {
     return createGpaChartOption(legendData, seriesData, gpaData.cohort_years);
 };
 
-// Term colors for stacked bar charts
-const termColors = {
-    fall: '#F79222',      // Orange
-    winter: '#00CFEA',    // Light blue
-    spring: '#25A95A',    // Teal/green
-    summer: '#A92532',    // Red
-};
 
 // Base configuration for horizontal stacked bar charts
 const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, cohortYears = null) => ({
+    color: [termColors.fall, termColors.winter, termColors.spring, termColors.summer], // Term-specific colors
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -240,36 +257,24 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
             type: 'bar',
             stack: 'terms',
             data: data.fall,
-            itemStyle: {
-                color: termColors.fall,
-            },
         },
         {
             name: 'Winter',
             type: 'bar',
             stack: 'terms',
             data: data.winter,
-            itemStyle: {
-                color: termColors.winter,
-            },
         },
         {
             name: 'Spring',
             type: 'bar',
             stack: 'terms',
             data: data.spring,
-            itemStyle: {
-                color: termColors.spring,
-            },
         },
         {
             name: 'Summer',
             type: 'bar',
             stack: 'terms',
             data: data.summer,
-            itemStyle: {
-                color: termColors.summer,
-            },
         },
     ],
 });
@@ -284,6 +289,7 @@ const createTermChartOption = (title, xAxisName, termData, maxValue, cohortYears
 
 // Donut chart configuration
 const createDonutChartOption = (data) => ({
+    color: CHART_COLOR_PALETTE, // Use full palette for donut charts
     tooltip: {
         trigger: 'item',
         formatter: '{b}: {c} ({d}%)',
@@ -332,6 +338,7 @@ const createDonutChartOption = (data) => ({
 
 // Flexible horizontal stacked bar chart for enrollment types
 const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
+    color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -412,10 +419,11 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
+    // Remove color from series data - let ECharts use the palette
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
     return createEnrollmentTypeStackedBarOption(
         'Number of Students',
         data.categories,
@@ -427,6 +435,7 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
 
 // Vertical stacked bar chart configuration
 const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, maxValue, legendData, legendTitle = null) => ({
+    color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -509,10 +518,11 @@ const createPellRecipientOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
+    // Remove color from series data - let ECharts use the palette
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
     return createVerticalStackedBarOption(
         'Number of Students',
         'Pell Grant Status',
@@ -528,10 +538,11 @@ const createStudentAgeByGenderOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
+    // Remove color from series data - let ECharts use the palette
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
     return createEnrollmentTypeStackedBarOption(
         'Number of Students',
         data.categories,
@@ -546,10 +557,11 @@ const createRaceByPellStatusOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
+    // Remove color from series data - let ECharts use the palette
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
     const baseOption = createVerticalStackedBarOption(
         'Number of Students',
         '',

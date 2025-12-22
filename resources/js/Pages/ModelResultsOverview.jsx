@@ -587,7 +587,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                 />
               </div>
               {/* Support Scores Histogram */}
-              {/*
+              {
                 <div className="mb-8">
                   <SupportScores
                     tab={tab}
@@ -596,7 +596,7 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                     inst_id={inst_id}
                   />
                 </div>
-              */}
+              }
             </>
           )}
         </div>

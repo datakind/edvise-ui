@@ -96,6 +96,14 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
   );
   const yValues = sortedData.map(item => parseInt(item.count_of_students));
 
+  // Calculate dynamic x-axis range from the data
+  const minBinLower = Math.min(
+    ...sortedData.map(item => parseFloat(item.bin_lower)),
+  );
+  const maxBinUpper = Math.max(
+    ...sortedData.map(item => parseFloat(item.bin_upper)),
+  );
+
   // Create color array based on the number of bins
   const colors = sortedData.map((_, i) => {
     const position = (i / (sortedData.length - 1)) * 0.8 + 0.1; // Map 0-1 to 0.1-0.9
@@ -162,7 +170,7 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
               text: 'Support Score',
               font: { size: 18, family: 'inherit', color: '#222' },
             },
-            range: [0.05, 0.95],
+            range: [minBinLower, maxBinUpper],
             tickfont: { size: 16, color: '#222' },
             showgrid: false,
             zeroline: false,
@@ -183,9 +191,9 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
           shapes: [
             {
               type: 'line',
-              x0: 0.0,
+              x0: minBinLower,
               y0: 0,
-              x1: 1,
+              x1: maxBinUpper,
               y1: 0,
               line: {
                 color: '#80868B',

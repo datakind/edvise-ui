@@ -104,6 +104,14 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
     ...sortedData.map(item => parseFloat(item.bin_upper)),
   );
 
+  // Calculate bin width dynamically (assuming uniform bin widths)
+  // Use the first bin's width as the standard width
+  const binWidth =
+    sortedData.length > 0
+      ? parseFloat(sortedData[0].bin_upper) -
+        parseFloat(sortedData[0].bin_lower)
+      : 0.1;
+
   // Create color array based on the number of bins
   const colors = sortedData.map((_, i) => {
     const position = (i / (sortedData.length - 1)) * 0.8 + 0.1; // Map 0-1 to 0.1-0.9
@@ -142,7 +150,7 @@ export default function SupportScores({ setTab, model_run_id, inst_id }) {
               item.bin_upper,
             ]),
             type: 'bar',
-            width: 0.1,
+            width: binWidth,
             marker: {
               color: colors,
               line: { color: 'rgba(247,146,34,1)', width: 0 },

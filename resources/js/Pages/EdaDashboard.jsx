@@ -219,7 +219,6 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
     grid: {
         left: '15%',
         right: '4%',
-        bottom: '20%',
         top: '5%',
         containLabel: false,
     },
@@ -296,28 +295,29 @@ const createTermChartOption = (title, xAxisName, termData, maxValue, cohortYears
     return createHorizontalStackedBarOption(title, xAxisName, termData, maxValue, cohortYears);
 };
 
-// Donut chart configuration
-const createDonutChartOption = (data) => ({
-    color: CHART_COLOR_PALETTE, // Use full palette for donut charts
-    tooltip: {
-        trigger: 'item',
-        formatter: '{b}: {c} ({d}%)',
-    },
-    legend: {
-        bottom: 10,
-        itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
+// Degree types donut chart configuration
+const degreeTypesChartOptions = (data, totalStudents) => {
+    const total = parseInt(totalStudents?.replace(/,/g, '') || '0', 10);
+    return {
+        color: CHART_COLOR_PALETTE, // Use full palette for donut charts
+        tooltip: {
+            trigger: 'item',
+            formatter: (params) => {
+                const count = params.value;
+                const percentage = Math.round(params.data.percentage);
+                return `${params.name}: ${count.toLocaleString()} out of ${total.toLocaleString()} total students (${percentage}%)`;
+            },
         },
-    },
+        legend: {
+            show: true,
+            bottom: -8,
+        },
     series: [
         {
             name: 'Degree Types',
             type: 'pie',
             radius: ['40%', '70%'], // Creates donut effect
             center: ['50%', '45%'],
-            avoidLabelOverlap: false,
             itemStyle: {
                 borderRadius: 5,
                 borderColor: '#fff',
@@ -325,10 +325,11 @@ const createDonutChartOption = (data) => ({
             },
             label: {
                 show: true,
-                formatter: '{d}%',
                 fontSize: 14,
-                fontFamily: 'Helvetica Neue',
-                color: '#1E343F',
+                fontWeight: 'bold',
+                formatter: (params) => {
+                    return `${Math.round(params.data.percentage)}%`;
+                },
             },
             emphasis: {
                 label: {
@@ -337,13 +338,17 @@ const createDonutChartOption = (data) => ({
                     fontWeight: 'bold',
                 },
             },
-            labelLine: {
-                show: true,
-            },
-            data: data,
+            data: data
+                .filter(dt => dt.percentage > 0)
+                .map(dt => ({
+                    value: dt.count,
+                    name: dt.name,
+                    percentage: dt.percentage,
+                })),
         },
     ],
-});
+    };
+};
 
 // Flexible horizontal stacked bar chart for enrollment types
 const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
@@ -366,7 +371,6 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
     grid: {
         left: '20%',
         right: '4%',
-        bottom: '20%',
         top: '5%',
         containLabel: false,
     },
@@ -456,7 +460,6 @@ const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, 
     grid: {
         left: '15%',
         right: '4%',
-        bottom: '25%',
         top: '5%',
         containLabel: false,
     },
@@ -573,7 +576,6 @@ const createRaceByPellStatusOptionFromData = (data) => {
         grid: {
             ...baseOption.grid,
             left: '25%', // Increased from 15% to accommodate longer race category names
-            bottom: '25%',
         },
         xAxis: {
             ...baseOption.xAxis,

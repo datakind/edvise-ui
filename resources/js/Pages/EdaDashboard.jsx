@@ -44,8 +44,20 @@ const termColors = {
     summer: CHART_COLOR_PALETTE[3],    // Red
 };
 
+// Base ECharts configuration with defaults
+const baseEChartsConfig = {
+    legend: {
+        icon: 'circle',
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+    },
+};
+
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
+    ...baseEChartsConfig,
     color: CHART_COLOR_PALETTE.slice(0, 2), // Use first 2 colors for GPA charts
     tooltip: {
         trigger: 'axis',
@@ -54,14 +66,11 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         top: 10,
         right: 20,
         itemWidth: 16,
         itemHeight: 16,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
         data: legendData,
     },
     grid: {
@@ -201,6 +210,7 @@ const createEnrollmentIntensityOptionFromData = (gpaData) => {
 
 // Base configuration for horizontal stacked bar charts
 const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, cohortYears = null) => ({
+    ...baseEChartsConfig,
     color: [termColors.fall, termColors.winter, termColors.spring, termColors.summer], // Term-specific colors
     tooltip: {
         trigger: 'axis',
@@ -209,13 +219,10 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: ['Fall', 'Winter', 'Spring', 'Summer'],
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
     },
     grid: {
         left: '15%',
@@ -300,6 +307,7 @@ const createTermChartOption = (title, xAxisName, termData, maxValue, cohortYears
 const degreeTypesChartOptions = (data, totalStudents) => {
     const total = parseInt(totalStudents?.replace(/,/g, '') || '0', 10);
     return {
+        ...baseEChartsConfig,
         color: CHART_COLOR_PALETTE, // Use full palette for donut charts
         tooltip: {
             trigger: 'item',
@@ -310,6 +318,7 @@ const degreeTypesChartOptions = (data, totalStudents) => {
             },
         },
         legend: {
+            ...baseEChartsConfig.legend,
             show: true,
             bottom: -8,
         },
@@ -353,6 +362,7 @@ const degreeTypesChartOptions = (data, totalStudents) => {
 
 // Flexible horizontal stacked bar chart for enrollment types
 const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
+    ...baseEChartsConfig,
     color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
@@ -361,13 +371,10 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: legendData,
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
     },
     grid: {
         left: '20%',
@@ -435,6 +442,7 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
 
 // Vertical stacked bar chart configuration
 const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data, maxValue, legendData }) => ({
+    ...baseEChartsConfig,
     color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
@@ -443,13 +451,10 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: legendData,
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
     },
     grid: {
         left: '15%',
@@ -596,7 +601,6 @@ const createRaceByPellStatusOptionFromData = (data) => {
             top: 10,
             right: 20,
             bottom: undefined,
-            icon: 'circle',
         },
         graphic: [
             {

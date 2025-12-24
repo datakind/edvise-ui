@@ -466,6 +466,7 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
         },
     },
     yAxis: {
+        show: true,
         type: 'value',
         name: yAxisName,
         nameLocation: 'middle',
@@ -475,8 +476,6 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
             fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
-        max: maxValue,
-        interval: maxValue / 5,
         axisLabel: {
             color: '#637381',
             fontFamily: 'Helvetica Neue',
@@ -509,7 +508,6 @@ const createPellRecipientByGenerationOptions = (data) => {
         xAxisName: 'Pell Grant Status',
         categories: data.categories,
         data: seriesData,
-        maxValue: 10000,
         legendData: data.series.map(s => s.name),
     });
 };
@@ -545,7 +543,6 @@ const createRaceByPellStatusOptionFromData = (data) => {
         xAxisName: '',
         categories: data.categories,
         data: seriesData,
-        maxValue: 2500,
         legendData: data.series.map(s => s.name),
     });
     const wrapText = (text, maxLength = 20) => {

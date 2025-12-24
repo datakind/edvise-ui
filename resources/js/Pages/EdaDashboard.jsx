@@ -219,7 +219,6 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
             color: '#637381',
             fontSize: 14,
         },
-        max: maxValue,
         axisLabel: {
             color: '#637381',
         },
@@ -337,7 +336,7 @@ const degreeTypesChartOptions = (data, totalStudents) => {
 };
 
 // Flexible horizontal stacked bar chart for enrollment types
-const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
+const createEnrollmentTypeStackedBarOption = ({ xAxisName, categories, data, legendData }) => ({
     ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
@@ -366,7 +365,6 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
             color: '#637381',
             fontSize: 14,
         },
-        max: maxValue,
         axisLabel: {
             color: '#637381',
         },
@@ -403,13 +401,12 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
         const { color, ...rest } = s;
         return rest;
     });
-    return createEnrollmentTypeStackedBarOption(
-        'Number of Students',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    return createEnrollmentTypeStackedBarOption({
+        xAxisName: 'Number of Students',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
 };
 
 // Vertical stacked bar chart configuration
@@ -513,13 +510,12 @@ const createStudentAgeByGenderOptionFromData = (data) => {
         const { color, ...rest } = s;
         return rest;
     });
-    return createEnrollmentTypeStackedBarOption(
-        'Number of Students',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    return createEnrollmentTypeStackedBarOption({
+        xAxisName: 'Number of Students',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
 };
 
 const createRaceByPellStatusOptionFromData = (data) => {

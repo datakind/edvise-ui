@@ -21,31 +21,20 @@ const EChart = ({ option, style, ...props }) => (
     />
 );
 
-// Centralized color palette for all charts
-// Based on existing design system colors
-const CHART_COLOR_PALETTE = [
-    '#F79222', // Orange
-    '#00CFEA', // Light blue
-    '#25A95A', // Teal/green
-    '#A92532', // Red
-    '#385981', // Dark blue
-    '#8B5CF6', // Purple
-    '#EC4899', // Pink
-    '#10B981', // Green
-    '#F59E0B', // Amber
-    '#3B82F6', // Blue
-];
-
-// Term-specific colors (for seasonal charts)
-const termColors = {
-    fall: CHART_COLOR_PALETTE[0],      // Orange
-    winter: CHART_COLOR_PALETTE[1],    // Light blue
-    spring: CHART_COLOR_PALETTE[2],    // Teal/green
-    summer: CHART_COLOR_PALETTE[3],    // Red
-};
-
 // Base ECharts configuration with defaults
 const baseEChartsConfig = {
+    color: [
+        '#F79222', // Orange
+        '#00CFEA', // Light blue
+        '#25A95A', // Teal/green
+        '#A92532', // Red
+        '#385981', // Dark blue
+        '#8B5CF6', // Purple
+        '#EC4899', // Pink
+        '#10B981', // Green
+        '#F59E0B', // Amber
+        '#3B82F6', // Blue
+    ],
     legend: {
         icon: 'circle',
         textStyle: {
@@ -58,7 +47,6 @@ const baseEChartsConfig = {
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
     ...baseEChartsConfig,
-    color: CHART_COLOR_PALETTE.slice(0, 2), // Use first 2 colors for GPA charts
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -211,7 +199,6 @@ const createEnrollmentIntensityOptionFromData = (gpaData) => {
 // Base configuration for horizontal stacked bar charts
 const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, cohortYears = null) => ({
     ...baseEChartsConfig,
-    color: [termColors.fall, termColors.winter, termColors.spring, termColors.summer], // Term-specific colors
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -308,7 +295,6 @@ const degreeTypesChartOptions = (data, totalStudents) => {
     const total = parseInt(totalStudents?.replace(/,/g, '') || '0', 10);
     return {
         ...baseEChartsConfig,
-        color: CHART_COLOR_PALETTE, // Use full palette for donut charts
         tooltip: {
             trigger: 'item',
             formatter: (params) => {
@@ -363,7 +349,6 @@ const degreeTypesChartOptions = (data, totalStudents) => {
 // Flexible horizontal stacked bar chart for enrollment types
 const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
     ...baseEChartsConfig,
-    color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -443,7 +428,6 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
 // Vertical stacked bar chart configuration
 const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data, maxValue, legendData }) => ({
     ...baseEChartsConfig,
-    color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
         axisPointer: {

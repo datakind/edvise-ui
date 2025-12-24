@@ -15,6 +15,7 @@ import { getBatchInfo } from '@/utils/batchUtils';
 const EChart = ({ option, style, ...props }) => (
     <ReactECharts
         option={option}
+        style={style || { height: '400px', width: '100%' }}
         opts={{ renderer: 'svg' }}
         {...props}
     />
@@ -449,12 +450,6 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
             color: '#1E343F',
             fontFamily: 'Helvetica Neue',
         },
-        ...(legendTitle && {
-            formatter: (name) => {
-                const index = legendData.indexOf(name);
-                return index === 0 ? `${legendTitle} ${name}` : name;
-            },
-        }),
     },
     grid: {
         left: '15%',
@@ -586,27 +581,37 @@ const createRaceByPellStatusOptionFromData = (data) => {
         ...baseOption,
         grid: {
             ...baseOption.grid,
-            left: '25%', // Increased from 15% to accommodate longer race category names
+            top: '15%',
         },
         xAxis: {
             ...baseOption.xAxis,
             axisLabel: {
                 ...baseOption.xAxis.axisLabel,
-                rotate: 25, // Rotate labels 45 degrees to prevent overlap
-                interval: 0, // Show all labels
-                formatter: (value) => {
-                    // Truncate very long labels and add ellipsis if needed
-                    return value.length > 20 ? value.substring(0, 17) + '...' : value;
-                },
+                interval: 0,
+                formatter: wrapText,
             },
         },
         legend: {
             ...baseOption.legend,
-            formatter: (name) => {
-                // Show consistent format for both legend items
-                return `Pell Status First Year: ${name}`;
-            },
+            top: 10,
+            right: 20,
+            bottom: undefined,
+            icon: 'circle',
         },
+        graphic: [
+            {
+                type: 'text',
+                right: 140,
+                top: 15,
+                style: {
+                    text: 'Race by Pell Status:',
+                    textAlign: 'left',
+                    fill: '#767676',
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                },
+            },
+        ],
     };
 };
 
@@ -774,9 +779,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         ? createStudentAgeByGenderOptionFromData(edaData.student_age_by_gender)
         : null;
 
-    const raceByPellStatusOption = edaData?.race_by_pell_status
-        ? createRaceByPellStatusOptionFromData(edaData.race_by_pell_status)
-        : null;
 
     // Create summary stats from API data
     const summaryStats = edaData?.summary_stats ? [
@@ -1013,16 +1015,19 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 )}
                             </div>
                             {hasData(edaData?.race_by_pell_status) && (
-                                <Card className="mb-6">
-                                    <div className="mb-4">
+                                <Card className="mb-6 grid grid-cols-6 gap-6">
+                                    <div>
                                         <ChartTitle variant="large">Race by Pell Status</ChartTitle>
                                         <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                             This chart shows what race students identify as and who are receiving a Pell Grant.
                                         </p>
                                     </div>
-                                    {raceByPellStatusOption && (
-                                        <EChart option={raceByPellStatusOption} />
-                                    )}
+                                    <div className="col-span-5">
+                                        <EChart 
+                                            option={createRaceByPellStatusOptionFromData(edaData.race_by_pell_status)} 
+                                            style={{ height: '600px', width: '100%' }}
+                                        />
+                                    </div>
                                 </Card>
                             )}
                         </>

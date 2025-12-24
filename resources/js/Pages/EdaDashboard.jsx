@@ -480,13 +480,28 @@ const createPellRecipientByGenerationOptions = (data) => {
         const { color, ...rest } = s;
         return rest;
     });
-    return createVerticalStackedBarOption({
+    const baseOption = createVerticalStackedBarOption({
         yAxisName: 'Number of Students',
         xAxisName: 'Pell Grant Status',
         categories: data.categories,
         data: seriesData,
         legendData: data.series.map(s => s.name),
     });
+
+    return {
+        ...baseOption,
+        graphic: [
+            {
+                type: 'text',
+                left: 125,
+                bottom: 15,
+                style: {
+                    text: 'First Generation Status:',
+                    fontSize: 12,
+                },
+            },
+        ],
+    };
 };
 
 // Helper function to create student age by gender option from API data

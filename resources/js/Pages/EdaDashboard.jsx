@@ -512,7 +512,7 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
 });
 
 // Helper function to create pell recipient option from API data
-const createPellRecipientOptionFromData = (data) => {
+const createPellRecipientByGenerationOptions = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
@@ -775,9 +775,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         ? createEnrollmentTypeByIntensityOptionFromData(edaData.enrollment_type_by_intensity)
         : null;
 
-    const pellRecipientOption = edaData?.pell_recipient_by_first_gen
-        ? createPellRecipientOptionFromData(edaData.pell_recipient_by_first_gen)
-        : null;
 
     const studentAgeByGenderOption = edaData?.student_age_by_gender
         ? createStudentAgeByGenderOptionFromData(edaData.student_age_by_gender)
@@ -999,8 +996,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 Here are students who are receiving a Pell Grant and whether they are first generation students.
                                             </p>
                                         </div>
-                                        {pellRecipientOption && (
-                                            <EChart option={pellRecipientOption} />
+                                        {edaData?.pell_recipient_by_first_gen && (
+                                            <EChart option={createPellRecipientByGenerationOptions(edaData.pell_recipient_by_first_gen)} />
                                         )}
                                     </Card>
                                 )}

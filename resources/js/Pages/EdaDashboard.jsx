@@ -64,12 +64,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         itemHeight: 16,
         data: legendData,
     },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '15%',
-        containLabel: true,
-    },
     xAxis: {
         type: 'category',
         name: 'Cohort Year',
@@ -433,12 +427,6 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
         data: legendData,
         itemGap: 20,
     },
-    grid: {
-        left: '15%',
-        right: '4%',
-        top: '5%',
-        containLabel: false,
-    },
     xAxis: {
         type: 'category',
         name: xAxisName,
@@ -554,10 +542,6 @@ const createRaceByPellStatusOptionFromData = (data) => {
     
     return {
         ...baseOption,
-        grid: {
-            ...baseOption.grid,
-            top: '15%',
-        },
         xAxis: {
             ...baseOption.xAxis,
             axisLabel: {

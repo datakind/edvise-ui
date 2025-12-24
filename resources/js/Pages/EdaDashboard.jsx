@@ -42,6 +42,9 @@ const baseEChartsConfig = {
             fontFamily: 'Helvetica Neue',
         },
     },
+    textStyle: {
+        fontFamily: 'Helvetica Neue',
+    },
 };
 
 // Base chart configuration shared across GPA charts
@@ -74,7 +77,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         boundaryGap: false,
@@ -84,7 +86,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         },
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         splitLine: {
             show: true,
@@ -101,7 +102,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         nameGap: 50,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         min: 2,
@@ -109,7 +109,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         interval: 0.5,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -224,13 +223,11 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         max: maxValue,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -248,7 +245,6 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         data: cohortYears ? cohortYears.map(year => year.replace('-', ' - ')) : [],
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -374,13 +370,11 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         max: maxValue,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -398,7 +392,6 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         data: categories,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -453,13 +446,11 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         data: categories,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -473,12 +464,10 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
         nameGap: 50,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },

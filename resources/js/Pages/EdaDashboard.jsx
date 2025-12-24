@@ -419,7 +419,6 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    // Remove color from series data - let ECharts use the palette
     const seriesData = data.series.map(s => {
         const { color, ...rest } = s;
         return rest;
@@ -517,7 +516,6 @@ const createPellRecipientOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    // Remove color from series data - let ECharts use the palette
     const seriesData = data.series.map(s => {
         const { color, ...rest } = s;
         return rest;
@@ -537,7 +535,6 @@ const createStudentAgeByGenderOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    // Remove color from series data - let ECharts use the palette
     const seriesData = data.series.map(s => {
         const { color, ...rest } = s;
         return rest;
@@ -551,12 +548,10 @@ const createStudentAgeByGenderOptionFromData = (data) => {
     );
 };
 
-// Helper function to create race by pell status option from API data
 const createRaceByPellStatusOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    // Remove color from series data - let ECharts use the palette
     const seriesData = data.series.map(s => {
         const { color, ...rest } = s;
         return rest;

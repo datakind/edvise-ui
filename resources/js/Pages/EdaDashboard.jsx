@@ -434,7 +434,7 @@ const createEnrollmentTypeByIntensityOptionFromData = (data) => {
 };
 
 // Vertical stacked bar chart configuration
-const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, maxValue, legendData, legendTitle = null) => ({
+const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data, maxValue, legendData }) => ({
     color: CHART_COLOR_PALETTE, // Use full palette
     tooltip: {
         trigger: 'axis',
@@ -522,14 +522,14 @@ const createPellRecipientOptionFromData = (data) => {
         const { color, ...rest } = s;
         return rest;
     });
-    return createVerticalStackedBarOption(
-        'Number of Students',
-        'Pell Grant Status',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    return createVerticalStackedBarOption({
+        yAxisName: 'Number of Students',
+        xAxisName: 'Pell Grant Status',
+        categories: data.categories,
+        data: seriesData,
+        maxValue: 10000,
+        legendData: data.series.map(s => s.name),
+    });
 };
 
 // Helper function to create student age by gender option from API data
@@ -561,16 +561,32 @@ const createRaceByPellStatusOptionFromData = (data) => {
         const { color, ...rest } = s;
         return rest;
     });
-    const baseOption = createVerticalStackedBarOption(
-        'Number of Students',
-        '',
-        data.categories,
-        seriesData,
-        2500,
-        data.series.map(s => s.name),
-        'Pell Status First Year:'
-    );
-    // Override grid, xAxis, and legend settings to ensure all race labels are visible
+    const baseOption = createVerticalStackedBarOption({
+        yAxisName: 'Number of Students',
+        xAxisName: '',
+        categories: data.categories,
+        data: seriesData,
+        maxValue: 2500,
+        legendData: data.series.map(s => s.name),
+    });
+    const wrapText = (text, maxLength = 20) => {
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        words.forEach(word => {
+            if ((currentLine + word).length <= maxLength) {
+                currentLine += (currentLine ? ' ' : '') + word;
+            } else {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+            }
+        });
+        if (currentLine) lines.push(currentLine);
+        
+        return lines.length > 1 ? lines.join('\n') : text;
+    };
+    
     return {
         ...baseOption,
         grid: {

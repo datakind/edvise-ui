@@ -11,9 +11,45 @@ import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
 import { getBatchInfo } from '@/utils/batchUtils';
 
+// Wrapper component with default props for ECharts
+const EChart = ({ option, style, ...props }) => (
+    <ReactECharts
+        option={option}
+        style={style || { height: '400px', width: '100%' }}
+        opts={{ renderer: 'svg' }}
+        {...props}
+    />
+);
+
+// Base ECharts configuration with defaults
+const baseEChartsConfig = {
+    color: [
+        '#F79222', // Orange
+        '#00CFEA', // Light blue
+        '#25A95A', // Teal/green
+        '#A92532', // Red
+        '#385981', // Dark blue
+        '#8B5CF6', // Purple
+        '#EC4899', // Pink
+        '#10B981', // Green
+        '#F59E0B', // Amber
+        '#3B82F6', // Blue
+    ],
+    legend: {
+        icon: 'circle',
+        textStyle: {
+            color: '#1E343F',
+            fontFamily: 'Helvetica Neue',
+        },
+    },
+    textStyle: {
+        fontFamily: 'Helvetica Neue',
+    },
+};
+
 // Base chart configuration shared across GPA charts
 const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
-    color: ['#F79222', '#00CFEA'],
+    ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -21,21 +57,12 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         top: 10,
         right: 20,
         itemWidth: 16,
         itemHeight: 16,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
         data: legendData,
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '15%',
-        containLabel: true,
     },
     xAxis: {
         type: 'category',
@@ -44,7 +71,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         boundaryGap: false,
@@ -54,7 +80,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         },
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         splitLine: {
             show: true,
@@ -71,7 +96,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         nameGap: 50,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         min: 2,
@@ -79,7 +103,6 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
         interval: 0.5,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -165,16 +188,10 @@ const createEnrollmentIntensityOptionFromData = (gpaData) => {
     return createGpaChartOption(legendData, seriesData, gpaData.cohort_years);
 };
 
-// Term colors for stacked bar charts
-const termColors = {
-    fall: '#F79222',      // Orange
-    winter: '#00CFEA',    // Light blue
-    spring: '#25A95A',    // Teal/green
-    summer: '#A92532',    // Red
-};
 
 // Base configuration for horizontal stacked bar charts
 const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, cohortYears = null) => ({
+    ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -182,18 +199,14 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: ['Fall', 'Winter', 'Spring', 'Summer'],
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
     },
     grid: {
         left: '15%',
         right: '4%',
-        bottom: '20%',
         top: '5%',
         containLabel: false,
     },
@@ -204,13 +217,10 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
-        max: maxValue,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -228,7 +238,6 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
         data: cohortYears ? cohortYears.map(year => year.replace('-', ' - ')) : [],
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -240,36 +249,24 @@ const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, coho
             type: 'bar',
             stack: 'terms',
             data: data.fall,
-            itemStyle: {
-                color: termColors.fall,
-            },
         },
         {
             name: 'Winter',
             type: 'bar',
             stack: 'terms',
             data: data.winter,
-            itemStyle: {
-                color: termColors.winter,
-            },
         },
         {
             name: 'Spring',
             type: 'bar',
             stack: 'terms',
             data: data.spring,
-            itemStyle: {
-                color: termColors.spring,
-            },
         },
         {
             name: 'Summer',
             type: 'bar',
             stack: 'terms',
             data: data.summer,
-            itemStyle: {
-                color: termColors.summer,
-            },
         },
     ],
 });
@@ -282,27 +279,30 @@ const createTermChartOption = (title, xAxisName, termData, maxValue, cohortYears
     return createHorizontalStackedBarOption(title, xAxisName, termData, maxValue, cohortYears);
 };
 
-// Donut chart configuration
-const createDonutChartOption = (data) => ({
-    tooltip: {
-        trigger: 'item',
-        formatter: '{b}: {c} ({d}%)',
-    },
-    legend: {
-        bottom: 10,
-        itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
+// Degree types donut chart configuration
+const degreeTypesChartOptions = (data, totalStudents) => {
+    const total = parseInt(totalStudents?.replace(/,/g, '') || '0', 10);
+    return {
+        ...baseEChartsConfig,
+        tooltip: {
+            trigger: 'item',
+            formatter: (params) => {
+                const count = params.value;
+                const percentage = Math.round(params.data.percentage);
+                return `${params.name}: ${count.toLocaleString()} out of ${total.toLocaleString()} total students (${percentage}%)`;
+            },
         },
-    },
+        legend: {
+            ...baseEChartsConfig.legend,
+            show: true,
+            bottom: -8,
+        },
     series: [
         {
             name: 'Degree Types',
             type: 'pie',
             radius: ['40%', '70%'], // Creates donut effect
             center: ['50%', '45%'],
-            avoidLabelOverlap: false,
             itemStyle: {
                 borderRadius: 5,
                 borderColor: '#fff',
@@ -310,10 +310,11 @@ const createDonutChartOption = (data) => ({
             },
             label: {
                 show: true,
-                formatter: '{d}%',
                 fontSize: 14,
-                fontFamily: 'Helvetica Neue',
-                color: '#1E343F',
+                fontWeight: 'bold',
+                formatter: (params) => {
+                    return `${Math.round(params.data.percentage)}%`;
+                },
             },
             emphasis: {
                 label: {
@@ -322,16 +323,21 @@ const createDonutChartOption = (data) => ({
                     fontWeight: 'bold',
                 },
             },
-            labelLine: {
-                show: true,
-            },
-            data: data,
+            data: data
+                .filter(dt => dt.percentage > 0)
+                .map(dt => ({
+                    value: dt.count,
+                    name: dt.name,
+                    percentage: dt.percentage,
+                })),
         },
     ],
-});
+    };
+};
 
 // Flexible horizontal stacked bar chart for enrollment types
-const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxValue, legendData) => ({
+const createEnrollmentTypeStackedBarOption = ({ xAxisName, categories, data, legendData }) => ({
+    ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -339,18 +345,14 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: legendData,
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
     },
     grid: {
         left: '20%',
         right: '4%',
-        bottom: '20%',
         top: '5%',
         containLabel: false,
     },
@@ -361,13 +363,10 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
-        max: maxValue,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -385,7 +384,6 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
         data: categories,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -394,39 +392,26 @@ const createEnrollmentTypeStackedBarOption = (xAxisName, categories, data, maxVa
     series: data,
 });
 
-// Helper function to create degree types option from API data
-const createDegreeTypesOptionFromData = (degreeTypes) => {
-    if (!degreeTypes || !Array.isArray(degreeTypes)) {
-        return null;
-    }
-    const data = degreeTypes.map(dt => ({
-        value: dt.value,
-        name: dt.name,
-        itemStyle: { color: dt.color },
-    }));
-    return createDonutChartOption(data);
-};
-
 // Helper function to create enrollment type by intensity option from API data
 const createEnrollmentTypeByIntensityOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
-    return createEnrollmentTypeStackedBarOption(
-        'Number of Students',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
+    return createEnrollmentTypeStackedBarOption({
+        xAxisName: 'Number of Students',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
 };
 
 // Vertical stacked bar chart configuration
-const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, maxValue, legendData, legendTitle = null) => ({
+const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data, maxValue, legendData }) => ({
+    ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -434,26 +419,10 @@ const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, 
         },
     },
     legend: {
+        ...baseEChartsConfig.legend,
         bottom: 10,
         data: legendData,
         itemGap: 20,
-        textStyle: {
-            color: '#1E343F',
-            fontFamily: 'Helvetica Neue',
-        },
-        ...(legendTitle && {
-            formatter: (name) => {
-                const index = legendData.indexOf(name);
-                return index === 0 ? `${legendTitle} ${name}` : name;
-            },
-        }),
-    },
-    grid: {
-        left: '15%',
-        right: '4%',
-        bottom: '25%',
-        top: '5%',
-        containLabel: false,
     },
     xAxis: {
         type: 'category',
@@ -462,33 +431,28 @@ const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, 
         nameGap: 30,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
         data: categories,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
         },
     },
     yAxis: {
+        show: true,
         type: 'value',
         name: yAxisName,
         nameLocation: 'middle',
         nameGap: 50,
         nameTextStyle: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
             fontSize: 14,
         },
-        max: maxValue,
-        interval: maxValue / 5,
         axisLabel: {
             color: '#637381',
-            fontFamily: 'Helvetica Neue',
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -505,22 +469,36 @@ const createVerticalStackedBarOption = (yAxisName, xAxisName, categories, data, 
 });
 
 // Helper function to create pell recipient option from API data
-const createPellRecipientOptionFromData = (data) => {
+const createPellRecipientByGenerationOptions = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
-    return createVerticalStackedBarOption(
-        'Number of Students',
-        'Pell Grant Status',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
+    const baseOption = createVerticalStackedBarOption({
+        yAxisName: 'Number of Students',
+        xAxisName: 'Pell Grant Status',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
+
+    return {
+        ...baseOption,
+        graphic: [
+            {
+                type: 'text',
+                left: 125,
+                bottom: 15,
+                style: {
+                    text: 'First Generation Status:',
+                    fontSize: 12,
+                },
+            },
+        ],
+    };
 };
 
 // Helper function to create student age by gender option from API data
@@ -528,64 +506,81 @@ const createStudentAgeByGenderOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
-    return createEnrollmentTypeStackedBarOption(
-        'Number of Students',
-        data.categories,
-        seriesData,
-        10000,
-        data.series.map(s => s.name)
-    );
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
+    return createEnrollmentTypeStackedBarOption({
+        xAxisName: 'Number of Students',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
 };
 
-// Helper function to create race by pell status option from API data
 const createRaceByPellStatusOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => ({
-        ...s,
-        itemStyle: { color: s.color },
-    }));
-    const baseOption = createVerticalStackedBarOption(
-        'Number of Students',
-        '',
-        data.categories,
-        seriesData,
-        2500,
-        data.series.map(s => s.name),
-        'Pell Status First Year:'
-    );
-    // Override grid, xAxis, and legend settings to ensure all race labels are visible
+    const seriesData = data.series.map(s => {
+        const { color, ...rest } = s;
+        return rest;
+    });
+    const baseOption = createVerticalStackedBarOption({
+        yAxisName: 'Number of Students',
+        xAxisName: '',
+        categories: data.categories,
+        data: seriesData,
+        legendData: data.series.map(s => s.name),
+    });
+    const wrapText = (text, maxLength = 20) => {
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        words.forEach(word => {
+            if ((currentLine + word).length <= maxLength) {
+                currentLine += (currentLine ? ' ' : '') + word;
+            } else {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+            }
+        });
+        if (currentLine) lines.push(currentLine);
+        
+        return lines.length > 1 ? lines.join('\n') : text;
+    };
+    
     return {
         ...baseOption,
-        grid: {
-            ...baseOption.grid,
-            left: '25%', // Increased from 15% to accommodate longer race category names
-            bottom: '25%',
-        },
         xAxis: {
             ...baseOption.xAxis,
             axisLabel: {
                 ...baseOption.xAxis.axisLabel,
-                rotate: 25, // Rotate labels 45 degrees to prevent overlap
-                interval: 0, // Show all labels
-                formatter: (value) => {
-                    // Truncate very long labels and add ellipsis if needed
-                    return value.length > 20 ? value.substring(0, 17) + '...' : value;
-                },
+                interval: 0,
+                formatter: wrapText,
             },
         },
         legend: {
             ...baseOption.legend,
-            formatter: (name) => {
-                // Show consistent format for both legend items
-                return `Pell Status First Year: ${name}`;
-            },
+            top: 10,
+            right: 20,
+            bottom: undefined,
         },
+        graphic: [
+            {
+                type: 'text',
+                right: 140,
+                top: 15,
+                style: {
+                    text: 'Race by Pell Status:',
+                    textAlign: 'left',
+                    fill: '#767676',
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                },
+            },
+        ],
     };
 };
 
@@ -741,25 +736,15 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         )
         : null;
 
-    const degreeTypesOption = edaData?.degree_types
-        ? createDegreeTypesOptionFromData(edaData.degree_types)
-        : null;
-
     const enrollmentTypeByIntensityOption = edaData?.enrollment_type_by_intensity
         ? createEnrollmentTypeByIntensityOptionFromData(edaData.enrollment_type_by_intensity)
         : null;
 
-    const pellRecipientOption = edaData?.pell_recipient_by_first_gen
-        ? createPellRecipientOptionFromData(edaData.pell_recipient_by_first_gen)
-        : null;
 
     const studentAgeByGenderOption = edaData?.student_age_by_gender
         ? createStudentAgeByGenderOptionFromData(edaData.student_age_by_gender)
         : null;
 
-    const raceByPellStatusOption = edaData?.race_by_pell_status
-        ? createRaceByPellStatusOptionFromData(edaData.race_by_pell_status)
-        : null;
 
     // Create summary stats from API data
     const summaryStats = edaData?.summary_stats ? [
@@ -866,10 +851,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 </div>
                                 <div className="col-span-12 md:col-span-8">
                                     {enrollmentTypeOption && (
-                                        <ReactECharts
+                                        <EChart
                                             option={enrollmentTypeOption}
                                             style={{ height: '320px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
                                         />
                                     )}
                                 </div>
@@ -892,10 +876,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 </div>
                                 <div className="col-span-12 md:col-span-8">
                                     {enrollmentIntensityOption && (
-                                        <ReactECharts
+                                        <EChart
                                             option={enrollmentIntensityOption}
                                             style={{ height: '320px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
                                         />
                                     )}
                                 </div>
@@ -915,11 +898,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {studentsByCohortOption && (
-                                            <ReactECharts
-                                                option={studentsByCohortOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={studentsByCohortOption} />
                                         )}
                                     </Card>
                                 )}
@@ -932,11 +911,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {courseEnrollmentsOption && (
-                                            <ReactECharts
-                                                option={courseEnrollmentsOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={courseEnrollmentsOption} />
                                         )}
                                     </Card>
                                 )}
@@ -950,12 +925,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 The following is a breakdown of degree types being sought by the student body.
                                             </p>
                                         </div>
-                                        {degreeTypesOption && (
-                                            <ReactECharts
-                                                option={degreeTypesOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                        {edaData?.degree_types && (
+                                            <EChart option={degreeTypesChartOptions(edaData.degree_types, edaData.summary_stats?.total_students)} />
                                         )}
                                     </Card>
                                 )}
@@ -968,11 +939,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {enrollmentTypeByIntensityOption && (
-                                            <ReactECharts
-                                                option={enrollmentTypeByIntensityOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={enrollmentTypeByIntensityOption} />
                                         )}
                                     </Card>
                                 )}
@@ -994,12 +961,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 Here are students who are receiving a Pell Grant and whether they are first generation students.
                                             </p>
                                         </div>
-                                        {pellRecipientOption && (
-                                            <ReactECharts
-                                                option={pellRecipientOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                        {edaData?.pell_recipient_by_first_gen && (
+                                            <EChart option={createPellRecipientByGenerationOptions(edaData.pell_recipient_by_first_gen)} />
                                         )}
                                     </Card>
                                 )}
@@ -1012,30 +975,25 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {studentAgeByGenderOption && (
-                                            <ReactECharts
-                                                option={studentAgeByGenderOption}
-                                                style={{ height: '400px', width: '100%' }}
-                                                opts={{ renderer: 'svg' }}
-                                            />
+                                            <EChart option={studentAgeByGenderOption} />
                                         )}
                                     </Card>
                                 )}
                             </div>
                             {hasData(edaData?.race_by_pell_status) && (
-                                <Card className="mb-6">
-                                    <div className="mb-4">
+                                <Card className="mb-6 grid grid-cols-6 gap-6">
+                                    <div>
                                         <ChartTitle variant="large">Race by Pell Status</ChartTitle>
                                         <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                             This chart shows what race students identify as and who are receiving a Pell Grant.
                                         </p>
                                     </div>
-                                    {raceByPellStatusOption && (
-                                        <ReactECharts
-                                            option={raceByPellStatusOption}
-                                            style={{ height: '400px', width: '100%' }}
-                                            opts={{ renderer: 'svg' }}
+                                    <div className="col-span-5">
+                                        <EChart 
+                                            option={createRaceByPellStatusOptionFromData(edaData.race_by_pell_status)} 
+                                            style={{ height: '600px', width: '100%' }}
                                         />
-                                    )}
+                                    </div>
                                 </Card>
                             )}
                         </>

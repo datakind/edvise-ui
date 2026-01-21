@@ -91,3 +91,16 @@ a {
   overflow: hidden;
   padding: 8px !important;
 }
+
+/* Waiting overlay - dims container and shows spinner */
+.waiting {
+  @apply relative;
+}
+
+.waiting > .waiting-overlay {
+  @apply absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50;
+}
+
+.waiting > .waiting-overlay > .waiting-spinner {
+  @apply text-gray-700 inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent;
+}

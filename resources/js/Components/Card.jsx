@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  */
 export default function Card({ children, className = '' }) {
   return (
-    <div className={`rounded-[2.5rem] bg-white shadow-card p-8 ${className}`}>
+    <div className={`rounded-[2.5rem] bg-white shadow-card p-6 ${className}`}>
       {children}
     </div>
   );

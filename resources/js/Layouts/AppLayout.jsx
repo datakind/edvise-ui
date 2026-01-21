@@ -8,6 +8,7 @@ import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
 import FeedbackButton from '@/Components/FeedbackButton';
 import AppLogo from '@/Components/Icons/AppLogo';
+import { hasValidBatches } from '@/utils/batchUtils';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -35,6 +36,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { subtract } from 'lodash';
 import { formatModelName } from '@/utils/stringUtils';
+import CookieConsent from '@/Components/CookieConsent';
 
 const VisibilityType = Object.freeze({
   PUBLIC_ONLY: 'PUBLIC_ONLY',
@@ -68,11 +70,6 @@ var navigationAboveLine = [
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
       { name: 'Start Prediction', href: route('run-inference') },
-      {
-        name: 'EDA Dashboard',
-        href: route('eda'),
-        visibility_type: VisibilityType.PRIVATE_ONLY,
-      },
       { name: 'Manage Uploads', href: route('manage-uploads') },
     ],
   },
@@ -214,22 +211,47 @@ export default function AppLayout({ title, renderHeader, children }) {
     // Reset navigation to initial state when institution changes
     setNavAboveLine(navigationAboveLine);
 
-    const fetchModels = async () => {
+    const updateNavigation = async () => {
       if (!inst_id) return; // Don't fetch if no institution is set
 
+      let newNav = [...navigationAboveLine];
+
+      // Fetch models and update Model Results navigation
       try {
         const response = await axios.get('/models-api');
-        let newNav = navigationAboveLine.map(item =>
+        newNav = newNav.map(item =>
           dashboardNavHelper(item, response.data),
         );
-        setNavAboveLine(newNav);
       } catch (err) {
-        //console.log(JSON.stringify(err));
         console.log('error during fetchModels');
       }
+
+      // Check for completed batches and update Home link
+      if (user) {
+        try {
+          const hasBatches = await hasValidBatches();
+
+          // Update Home link based on whether we have completed batches
+          newNav = newNav.map(item => {
+            if (item.name === 'Home') {
+              return {
+                ...item,
+                href: hasBatches ? route('eda') : route('new-home'),
+              };
+            }
+            return item;
+          });
+        } catch (err) {
+          console.log('error during checkCompletedBatches:', err);
+          // On error, keep default Home link
+        }
+      }
+
+      setNavAboveLine(newNav);
     };
-    fetchModels();
-  }, [inst_id]);
+
+    updateNavigation();
+  }, [inst_id, user]);
 
   const renderNav = navMap =>
     navMap.map(item =>
@@ -532,6 +554,7 @@ export default function AppLayout({ title, renderHeader, children }) {
         <main className="flex w-full flex-1 pt-12">{children}</main>
         <Footer />
         <FeedbackButton />
+        <CookieConsent />
       </div>
     </div>
   );

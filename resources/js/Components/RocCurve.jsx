@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -8,6 +8,43 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
   const [rocData, setRocData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const sortedRocData = useMemo(() => {
+    if (!rocData || rocData.length === 0) return [];
+    return [...rocData].sort(
+      (a, b) => Number(a.false_positive_rate) - Number(b.false_positive_rate),
+    );
+  }, [rocData]);
+
+  const chartData = useMemo(() => {
+    return sortedRocData.map(d => ({
+      fpr: Number(d.false_positive_rate),
+      tpr: Number(d.true_positive_rate),
+      threshold: d.threshold,
+    }));
+  }, [sortedRocData]);
+
+  const calculateAUC = useMemo(() => {
+    if (chartData.length < 2) return 0;
+
+    let auc = 0;
+    for (let i = 0; i < chartData.length - 1; i++) {
+      const fpr1 = chartData[i].fpr;
+      const tpr1 = chartData[i].tpr;
+      const fpr2 = chartData[i + 1].fpr;
+      const tpr2 = chartData[i + 1].tpr;
+      
+      const width = fpr2 - fpr1;
+      const avgHeight = (tpr1 + tpr2) / 2;
+      auc += width * avgHeight;
+    }
+
+    return Math.max(0, Math.min(1, auc));
+  }, [chartData]);
+
+  const aucPercentage = useMemo(() => {
+    return (calculateAUC * 100).toFixed(1);
+  }, [calculateAUC]);
 
   // Fetch ROC curve data when model_run_id and inst_id are available
   useEffect(() => {
@@ -81,23 +118,6 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
     );
   }
 
-  // Transform data for Recharts
-  const sortedRocData = [...rocData].sort(
-    (a, b) => Number(a.false_positive_rate) - Number(b.false_positive_rate),
-  );
-
-  const chartData = sortedRocData.map(d => ({
-    fpr: Number(d.false_positive_rate),
-    tpr: Number(d.true_positive_rate),
-    threshold: d.threshold,
-  }));
-
-  // Diagonal reference line data
-  const diagonalData = [
-    { fpr: 0, tpr: 0 },
-    { fpr: 1, tpr: 1 },
-  ];
-
   // Custom tooltip
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -125,13 +145,16 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
         <H2 className="pb-4">ROC Curve for Test Data</H2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-4">
-            A Receiver Operating Characteristic Curve (ROC) assesses how well
+            A Receiver Operating Characteristic Curve (ROC) shows how well
             the model distinguishes between students who need support and those
             who do not.
           </li>
           <li className="mb-4">
-            The closer the curve hugs the top-left corner, the <b>better</b> the
+            The closer the curve hugs the top-left corner, the better the
             model is at separating the two groups.
+          </li>
+          <li className="mb-4">
+            The dashed line shows the accurate classification rate you would get from random guessing (50%). The solid line shows that your model performs better, correctly classifying students about <b>{aucPercentage}%</b> of the time.
           </li>
           <li>
             This ROC curve shows the results for a subset of the original data
@@ -240,4 +263,5 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
 RocCurve.propTypes = {
   model_run_id: PropTypes.string,
   modelName: PropTypes.string,
+  inst_id: PropTypes.string,
 };

@@ -53,6 +53,7 @@
     "mapbox-gl": "^3.3.0",
     "papaparse": "^5.4.1",
     "plotly.js": "^3.0.1",
+    "react-cookie-consent": "^9.0.0",
     "react-drag-drop-files": "^2.3.10",
     "react-ga4": "^2.1.0",
     "react-google-charts": "^5.2.1",

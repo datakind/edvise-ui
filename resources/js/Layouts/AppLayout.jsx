@@ -236,7 +236,7 @@ export default function AppLayout({ title, renderHeader, children }) {
             if (item.name === 'Home') {
               return {
                 ...item,
-                href: hasBatches ? route('new-home') : route('new-home'),
+                href: hasBatches ? route('eda') : route('new-home'),
               };
             }
             return item;

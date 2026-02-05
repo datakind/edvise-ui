@@ -6,6 +6,7 @@ use App\Models\Invite;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -165,9 +166,11 @@ class InviteController extends Controller
             'inst_id' => $invite->institution_id,
         ];
 
-        // Only set password if not an SSO user
+        // Set password: required for non-SSO; use random placeholder for SSO (column is NOT NULL)
         if (!$isSsoUser) {
             $userData['password'] = Hash::make($request->password);
+        } else {
+            $userData['password'] = Hash::make(Str::random(64));
         }
 
         // Add SSO provider IDs if available

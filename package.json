@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "edvise-ui",
   "type": "module",
   "scripts": {
     "dev": "vite",

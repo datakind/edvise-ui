@@ -10,7 +10,7 @@ steps:
         'build',
         '--builder=gcr.io/buildpacks/builder',
         '--publish',
-        'gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA',
+        'gcr.io/{PROJECT_NAME}/github.com/datakind/edvise-ui:$COMMIT_SHA',
       ]
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'DEPLOY to cloud run'
@@ -21,7 +21,7 @@ steps:
         'deploy',
         'dev-frontend',
         '--image',
-        'gcr.io/{PROJECT_NAME}/github.com/datakind/sst-app-ui:$COMMIT_SHA',
+        'gcr.io/{PROJECT_NAME}/github.com/datakind/edvise-ui:$COMMIT_SHA',
         '--region',
         '{REGION}',
       ]

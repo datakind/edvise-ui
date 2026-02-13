@@ -791,10 +791,10 @@ class ApiController extends Controller
         return $result;
     }
 
-    // Downloads model card for a given model
-    public function downloadModelCard(Request $request, string $inst_id, string $model_name)
+    // Downloads model card for a given model run (model_run_id from inference job)
+    public function downloadModelCard(Request $request, string $inst_id, string $model_run_id)
     {
-        \Log::info('downloadModelCard called with inst_id: '.$inst_id.', model_name: '.$model_name);
+        \Log::info('downloadModelCard called with inst_id: '.$inst_id.', model_run_id: '.$model_run_id);
 
         if (ApiController::isLocalRequest()) {
             \Log::info('Local request - Institution ID: '.$inst_id);
@@ -805,13 +805,13 @@ class ApiController extends Controller
             // Mock response for local development
             return response()->json([
                 'message' => 'Model card download initiated',
-                'model_name' => $model_name,
+                'model_run_id' => $model_run_id,
                 'institution_id' => $inst_id,
             ], 200);
         }
 
         \Log::info('Production request - Institution ID: '.$inst_id);
-        $externalUrl = '/training/model-cards/'.$model_name;
+        $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
         \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
 
@@ -819,8 +819,8 @@ class ApiController extends Controller
 
         // If we got a successful response, add download headers
         if ($response && $response->getStatusCode() == 200) {
-            // Get the filename from the response headers or create a default one
-            $filename = $model_name.'_model_card.pdf';
+            $name = $request->query('name', $model_run_id);
+            $filename = $name.'_model_card.pdf';
 
             // Add download headers to force file download
             return response()->streamDownload(

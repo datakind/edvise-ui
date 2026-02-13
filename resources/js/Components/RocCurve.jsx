@@ -165,9 +165,8 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
                 href="#"
                 onClick={e => {
                   e.preventDefault();
-                  if (inst_id && modelName) {
-                    const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
-                    console.log('Downloading model card from:', apiUrl);
+                  if (inst_id && model_run_id) {
+                    const apiUrl = `/institutions/${inst_id}/training/model-cards/${model_run_id}`;
                     const link = document.createElement('a');
                     link.href = apiUrl;
                     link.download = `${modelName}_model_card.pdf`;
@@ -175,11 +174,6 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                  } else {
-                    console.error(
-                      'Missing inst_id or modelName for model card download',
-                      { inst_id, modelName },
-                    );
                   }
                 }}
                 className="cursor-pointer font-semibold text-[#222] underline hover:opacity-80"

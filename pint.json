@@ -1,0 +1,12 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "phpdoc_line_length": 120,
+        "binary_operator_spaces": {
+            "default": "single",
+            "operators": {
+                "=>": "align_single_space_minimal"
+            }
+        }
+    }
+}

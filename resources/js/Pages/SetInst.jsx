@@ -67,6 +67,7 @@ export default function SetInstitution() {
         setCurrentInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
         setHideSetInstError(true);
+        router.visit(route('set-inst'));
       })
       .catch(e => {
         resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;

@@ -212,7 +212,12 @@ export default function AppLayout({ title, renderHeader, children }) {
     setNavAboveLine(navigationAboveLine);
 
     const updateNavigation = async () => {
-      if (!inst_id) return; // Don't fetch if no institution is set
+      if (!inst_id) {
+        setNavAboveLine(
+          navigationAboveLine.filter(item => item.name !== 'Model Results'),
+        );
+        return;
+      }
 
       let newNav = [...navigationAboveLine];
 
@@ -221,6 +226,13 @@ export default function AppLayout({ title, renderHeader, children }) {
         const response = await axios.get('/models-api');
         newNav = newNav.map(item =>
           dashboardNavHelper(item, response.data),
+        );
+        newNav = newNav.filter(
+          item =>
+            !(
+              item.name === 'Model Results' &&
+              (!item.children || item.children.length === 0)
+            ),
         );
       } catch (err) {
         console.log('error during fetchModels');

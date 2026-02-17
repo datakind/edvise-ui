@@ -30,6 +30,7 @@ export default function SetInstitution() {
   const [loading, setLoading] = useState(true);
   const [currentInstId, setCurrentInstId] = useState(inst_id || '');
   const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
+  const [hideSetInstError, setHideSetInstError] = useState(false);
 
   useEffect(() => {
     // Fetch all institutions
@@ -65,7 +66,7 @@ export default function SetInstitution() {
         const institutionName = Object.entries(resultList).find(([name, id]) => id === inst)?.[0] || 'Unknown';
         setCurrentInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
-        router.reload();
+        setHideSetInstError(true);
       })
       .catch(e => {
         resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;
@@ -92,7 +93,7 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
-        {message && (
+        {message && !hideSetInstError && (
           <div className="mt-6 w-full max-w-2xl">
             <ErrorAlert
               mainMsg={`Error: ${message} Select an institution below to proceed.`}

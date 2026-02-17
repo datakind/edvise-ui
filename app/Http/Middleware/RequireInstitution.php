@@ -24,7 +24,7 @@ class RequireInstitution
             return $next($request);
         }
 
-        if ($request->routeIs('set-inst') || $request->routeIs('logout') || $request->is('set-inst-api*')) {
+        if ($request->routeIs('set-inst') || $request->routeIs('logout') || $request->routeIs('profile.*') || $request->is('set-inst-api*')) {
             return $next($request);
         }
 

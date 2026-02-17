@@ -10,12 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RequireInstitution
 {
-    /** ApiController methods that do not require a current institution. */
     private const SKIP_ACTIONS = [
-        'createInstApi',
-        'addDatakinderApi',
-        'viewAllInstitutions',
-        'EditInstApi',
+        'createInstApi', 'addDatakinderApi', 'viewAllInstitutions', 'EditInstApi',
     ];
 
     public function handle(Request $request, Closure $next): Response
@@ -24,23 +20,34 @@ class RequireInstitution
             return $next($request);
         }
 
-        $action = $request->route()?->getActionName();
-        if (! $action || str_contains($action, ApiController::class.'@') !== true) {
+        if ($request->user()->access_type !== 'DATAKINDER') {
             return $next($request);
         }
 
-        $method = \Illuminate\Support\Str::after($action, '@');
-        if ($method === '' || in_array($method, self::SKIP_ACTIONS, true)) {
+        if ($request->routeIs('set-inst') || $request->is('set-inst-api*')) {
             return $next($request);
+        }
+
+        $action = $request->route()?->getActionName();
+        if ($action && str_contains($action, ApiController::class.'@')) {
+            $method = \Illuminate\Support\Str::after($action, '@');
+            if (in_array($method, self::SKIP_ACTIONS, true)) {
+                return $next($request);
+            }
         }
 
         [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
-        if ($inst === null || $inst === '') {
-            return response()->json(['error' => $instErr], 401);
+        if ($inst !== null && $inst !== '') {
+            $request->attributes->set('inst_id', $inst);
+
+            return $next($request);
         }
 
-        $request->attributes->set('inst_id', $inst);
+        $message = InstitutionHelper::SET_INST_REQUIRED_MESSAGE;
+        if ($request->expectsJson()) {
+            return response()->json(['error' => $message], 401);
+        }
 
-        return $next($request);
+        return redirect()->route('set-inst', ['message' => $message]);
     }
 }

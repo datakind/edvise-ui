@@ -330,7 +330,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('create-model');
 
     Route::get('/set-inst', function () {
-        return Inertia::render('SetInst');
+        return Inertia::render('SetInst', ['message' => request('message')]);
     })->name('set-inst');
 
     Route::get('/add-dk', function () {

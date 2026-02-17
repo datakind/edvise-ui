@@ -23,8 +23,7 @@ import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 
 export default function SetInstitution() {
-  // Get inst_id from Inertia shared props (no API call needed!)
-  const { inst_id } = usePage().props;
+  const { inst_id, message } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
@@ -93,6 +92,14 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
+        {message && (
+          <div className="mt-6 w-full max-w-2xl">
+            <ErrorAlert
+              mainMsg={`Error: ${message} Select an institution below to proceed.`}
+            />
+          </div>
+        )}
+
         {error && (
           <div className="mt-8 w-full max-w-2xl rounded-lg bg-red-100 p-4 text-center text-red-700">
             <p className="font-semibold">Error loading institutions:</p>
@@ -153,7 +160,7 @@ export default function SetInstitution() {
               disabled={loading}
               className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Submit
+              Set Institution
             </button>
           </div>
         </form>

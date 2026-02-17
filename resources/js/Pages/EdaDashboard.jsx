@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout';
@@ -9,6 +9,7 @@ import ChartTitle from '@/Components/ChartTitle';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
+import wrap from 'word-wrap';
 import { getBatchInfo } from '@/utils/batchUtils';
 
 // Wrapper component with default props for ECharts
@@ -26,8 +27,8 @@ const baseEChartsConfig = {
     color: [
         '#F79222', // Orange
         '#00CFEA', // Light blue
-        '#25A95A', // Teal/green
-        '#A92532', // Red
+        '#00CAAC', // Teal/green
+        '#F66760', // Red
         '#385981', // Dark blue
         '#8B5CF6', // Purple
         '#EC4899', // Pink
@@ -47,13 +48,73 @@ const baseEChartsConfig = {
     },
 };
 
+const lightenHexColor = (hexColor, amount = 0.75) => {
+    const normalized = hexColor.replace('#', '');
+    const r = parseInt(normalized.slice(0, 2), 16);
+    const g = parseInt(normalized.slice(2, 4), 16);
+    const b = parseInt(normalized.slice(4, 6), 16);
+    const toHex = (value) => Math.round(value).toString(16).padStart(2, '0');
+    const mix = (value) => value + (255 - value) * amount;
+    return `#${toHex(mix(r))}${toHex(mix(g))}${toHex(mix(b))}`;
+};
+
 // Base chart configuration shared across GPA charts
-const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
+const GpaChartOptions = ({ gpaData }) => {
+    const styles = [
+        { symbol: 'diamond', color: baseEChartsConfig.color[0] },
+        { symbol: 'rect', color: baseEChartsConfig.color[1] },
+        { symbol: 'circle', color: baseEChartsConfig.color[2] },
+    ];
+
+    const legendData = gpaData.series.map((series, index) => {
+        const displayName = series.name.includes('Student')
+            ? series.name
+            : `${series.name} Student`;
+        return {
+            name: displayName,
+            icon: styles[index].symbol,
+            itemStyle: {
+                color: lightenHexColor(styles[index].color),
+                borderColor: styles[index].color,
+                borderWidth: 1,
+            },
+        };
+    });
+
+    const seriesData = gpaData.series.map((series, index) => {
+        const displayName = series.name.includes('Student')
+            ? series.name
+            : `${series.name} Student`;
+        return {
+            name: displayName,
+            symbol: styles[index].symbol,
+            symbolSize: styles[index].symbol === 'diamond' ? 16 : 12,
+            itemStyle: {
+                color: lightenHexColor(styles[index].color),
+                borderColor: styles[index].color,
+                borderWidth: 1,
+            },
+            data: series.data,
+        };
+    });
+
+    return ({
     ...baseEChartsConfig,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
             type: 'line',
+        },
+        formatter: (params) => {
+            if (!params?.length) return '';
+            let result = params[0].axisValue + '<br/>';
+            params.forEach(param => {
+                if (typeof param.value !== 'number' || !Number.isFinite(param.value)) {
+                    return;
+                }
+                result += `${param.marker}${param.seriesName}: ${param.value.toFixed(2)}<br/>`;
+            });
+            return result;
         },
     },
     legend: {
@@ -74,7 +135,7 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
             fontSize: 14,
         },
         boundaryGap: false,
-        data: cohortYears || [],
+        data: gpaData?.cohort_years || [],
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
         },
@@ -98,11 +159,11 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
             color: '#637381',
             fontSize: 14,
         },
-        min: 2,
-        max: 4,
-        interval: 0.5,
+        startValue: Math.round((gpaData.min_gpa - 0.2) / 0.2) * 0.2,
+        interval: 0.2,
         axisLabel: {
             color: '#637381',
+            formatter: (value) => value.toFixed(2),
         },
         axisLine: {
             lineStyle: { color: '#D7DCE5' },
@@ -117,221 +178,122 @@ const createGpaChartOption = (legendData, seriesData, cohortYears) => ({
     },
     series: seriesData.map(series => ({
         ...series,
-        type: 'line',
-        lineStyle: {
-            width: 0,
-        },
+        type: 'scatter',
     })),
-});
+    });
+};
 
 // Helper function to create enrollment type option from API data
-const createEnrollmentTypeOptionFromData = (gpaData) => {
+const GPAByEnrollmentType = (gpaData) => {
     if (!gpaData || !gpaData.series) {
         return null;
     }
 
-    const legendData = gpaData.series.map(series => ({
-        name: series.name,
-        icon: series.name === 'First Time Student' ? 'diamond' : 'rect',
-        itemStyle: {
-            color: series.name === 'First Time Student' ? '#FDE9D3' : '#CCF5FB',
-            borderColor: series.name === 'First Time Student' ? '#F79222' : '#00CFEA',
-            borderWidth: 1,
-        },
-    }));
-
-    const seriesData = gpaData.series.map(series => ({
-        name: series.name,
-        symbol: series.name === 'First Time Student' ? 'diamond' : 'rect',
-        symbolSize: series.name === 'First Time Student' ? 16 : 12,
-        itemStyle: {
-            color: series.name === 'First Time Student' ? '#FDE9D3' : '#CCF5FB',
-            borderColor: series.name === 'First Time Student' ? '#F79222' : '#00CFEA',
-            borderWidth: 1,
-        },
-        data: series.data,
-    }));
-
-    return createGpaChartOption(legendData, seriesData, gpaData.cohort_years);
+    return GpaChartOptions({ gpaData });
 };
 
-// Helper function to create enrollment intensity option from API data
-const createEnrollmentIntensityOptionFromData = (gpaData) => {
+const enrollmentIntensityOptions = (gpaData) => {
     if (!gpaData || !gpaData.series) {
         return null;
     }
 
-    const legendData = gpaData.series.map(series => ({
-        name: series.name,
-        icon: series.name === 'Full Time Student' ? 'diamond' : 'rect',
-        itemWidth: series.name === 'Part Time Student' ? 12 : undefined,
-        itemHeight: series.name === 'Part Time Student' ? 12 : undefined,
-        itemStyle: {
-            color: series.name === 'Full Time Student' ? '#FDE9D3' : '#CCF5FB',
-            borderColor: series.name === 'Full Time Student' ? '#F79222' : '#00CFEA',
-            borderWidth: 1,
-        },
-    }));
-
-    const seriesData = gpaData.series.map(series => ({
-        name: series.name,
-        symbol: series.name === 'Full Time Student' ? 'diamond' : 'rect',
-        symbolSize: series.name === 'Full Time Student' ? 16 : 12,
-        itemStyle: {
-            color: series.name === 'Full Time Student' ? '#FDE9D3' : '#CCF5FB',
-            borderColor: series.name === 'Full Time Student' ? '#F79222' : '#00CFEA',
-            borderWidth: 1,
-        },
-        data: series.data,
-    }));
-
-    return createGpaChartOption(legendData, seriesData, gpaData.cohort_years);
+    return GpaChartOptions({ gpaData });
 };
 
-
-// Base configuration for horizontal stacked bar charts
-const createHorizontalStackedBarOption = (title, xAxisName, data, maxValue, cohortYears = null) => ({
-    ...baseEChartsConfig,
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow',
-        },
-    },
-    legend: {
-        ...baseEChartsConfig.legend,
-        bottom: 10,
-        data: ['Fall', 'Winter', 'Spring', 'Summer'],
-        itemGap: 20,
-    },
-    grid: {
-        left: '15%',
-        right: '4%',
-        top: '5%',
-        containLabel: false,
-    },
-    xAxis: {
-        type: 'value',
-        name: xAxisName,
-        nameLocation: 'middle',
-        nameGap: 30,
-        nameTextStyle: {
-            color: '#637381',
-            fontSize: 14,
-        },
-        axisLabel: {
-            color: '#637381',
-        },
-        axisLine: {
-            lineStyle: { color: '#D7DCE5' },
-        },
-        splitLine: {
-            show: true,
-            lineStyle: {
-                color: '#E5E7EB',
-                type: 'dashed',
-            },
-        },
-    },
-    yAxis: {
-        type: 'category',
-        data: cohortYears ? cohortYears.map(year => year.replace('-', ' - ')) : [],
-        axisLabel: {
-            color: '#637381',
-        },
-        axisLine: {
-            lineStyle: { color: '#D7DCE5' },
-        },
-    },
-    series: [
-        {
-            name: 'Fall',
-            type: 'bar',
-            stack: 'terms',
-            data: data.fall,
-        },
-        {
-            name: 'Winter',
-            type: 'bar',
-            stack: 'terms',
-            data: data.winter,
-        },
-        {
-            name: 'Spring',
-            type: 'bar',
-            stack: 'terms',
-            data: data.spring,
-        },
-        {
-            name: 'Summer',
-            type: 'bar',
-            stack: 'terms',
-            data: data.summer,
-        },
-    ],
-});
-
-// Helper function to create term-based chart options from API data
-const createTermChartOption = (title, xAxisName, termData, maxValue, cohortYears = null) => {
-    if (!termData) {
-        return null;
-    }
-    return createHorizontalStackedBarOption(title, xAxisName, termData, maxValue, cohortYears);
-};
-
-// Degree types donut chart configuration
-const degreeTypesChartOptions = (data, totalStudents) => {
-    const total = parseInt(totalStudents?.replace(/,/g, '') || '0', 10);
+const createHorizontalStackedBarOption = ({ xAxisName, termChartData, yAxisName = 'Cohort Year' }) => {
+    const y_axis_labels = termChartData?.years || termChartData?.y_axis_labels || [];
+    const terms = termChartData?.terms || [];
+    
     return {
         ...baseEChartsConfig,
         tooltip: {
-            trigger: 'item',
-            formatter: (params) => {
-                const count = params.value;
-                const percentage = Math.round(params.data.percentage);
-                return `${params.name}: ${count.toLocaleString()} out of ${total.toLocaleString()} total students (${percentage}%)`;
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
             },
         },
         legend: {
             ...baseEChartsConfig.legend,
-            show: true,
-            bottom: -8,
+            bottom: 10,
+            data: terms.map((t) => t.label),
+            itemGap: 20,
         },
-    series: [
-        {
-            name: 'Degree Types',
-            type: 'pie',
-            radius: ['40%', '70%'], // Creates donut effect
-            center: ['50%', '45%'],
-            itemStyle: {
-                borderRadius: 5,
-                borderColor: '#fff',
-                borderWidth: 2,
-            },
-            label: {
-                show: true,
+        grid: {
+            left: '15%',
+            right: '4%',
+            top: '5%',
+            containLabel: false,
+        },
+        xAxis: {
+            type: 'value',
+            name: xAxisName,
+            nameLocation: 'middle',
+            nameGap: 30,
+            nameTextStyle: {
+                color: '#637381',
                 fontSize: 14,
-                fontWeight: 'bold',
-                formatter: (params) => {
-                    return `${Math.round(params.data.percentage)}%`;
+            },
+            axisLabel: {
+                color: '#637381',
+            },
+            axisLine: {
+                lineStyle: { color: '#D7DCE5' },
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: '#E5E7EB',
+                    type: 'dashed',
                 },
             },
-            emphasis: {
+        },
+        yAxis: {
+            type: 'category',
+            inverse: true,
+            data: y_axis_labels,
+            axisLabel: {
+                color: '#637381',
+            },
+            axisLine: {
+                lineStyle: { color: '#D7DCE5' },
+            },
+        },
+        series: terms.map((t) => ({
+            name: t.label,
+            type: 'bar',
+            stack: 'terms',
+            data: t.data ?? [],
+        })),
+    };
+};
+
+// Degree types donut – API returns degree_types: { total, degrees: [{ count, percentage, name }] }
+const degreeTypesOptions = (edaData) => {
+    const { total = 0, degrees: items = [] } = edaData.degree_types ?? {};
+    return {
+        ...baseEChartsConfig,
+        tooltip: {
+            trigger: 'item',
+            formatter: (params) =>
+                `${params.name}: ${Number(params.value).toLocaleString()} of ${total.toLocaleString()} (${params.data.percentage}%)`,
+        },
+        series: [
+            {
+                name: 'Degree Types',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '45%'],
+                itemStyle: { borderRadius: 5, borderColor: '#fff', borderWidth: 2 },
                 label: {
                     show: true,
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: 'bold',
+                    formatter: (params) => `${params.data.percentage}%`,
                 },
+                emphasis: { label: { show: true } },
+                data: items.map((d) => ({ value: d.count, name: d.name, percentage: d.percentage > 1 ? Math.round(d.percentage) : d.percentage })),
             },
-            data: data
-                .filter(dt => dt.percentage > 0)
-                .map(dt => ({
-                    value: dt.count,
-                    name: dt.name,
-                    percentage: dt.percentage,
-                })),
-        },
-    ],
+        ],
     };
 };
 
@@ -392,15 +354,16 @@ const createEnrollmentTypeStackedBarOption = ({ xAxisName, categories, data, leg
     series: data,
 });
 
+// Build ECharts stacked-bar series from API payload (categories + series with name/data only).
+const toStackedBarSeries = (series, stackId) =>
+    series.map(s => ({ name: s.name, data: s.data, type: 'bar', stack: stackId }));
+
 // Helper function to create enrollment type by intensity option from API data
 const createEnrollmentTypeByIntensityOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => {
-        const { color, ...rest } = s;
-        return rest;
-    });
+    const seriesData = toStackedBarSeries(data.series, 'intensity');
     return createEnrollmentTypeStackedBarOption({
         xAxisName: 'Number of Students',
         categories: data.categories,
@@ -469,14 +432,11 @@ const createVerticalStackedBarOption = ({ yAxisName, xAxisName, categories, data
 });
 
 // Helper function to create pell recipient option from API data
-const createPellRecipientByGenerationOptions = (data) => {
+const pellRecipientByGeneration = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => {
-        const { color, ...rest } = s;
-        return rest;
-    });
+    const seriesData = toStackedBarSeries(data.series, 'first_gen');
     const baseOption = createVerticalStackedBarOption({
         yAxisName: 'Number of Students',
         xAxisName: 'Pell Grant Status',
@@ -501,15 +461,40 @@ const createPellRecipientByGenerationOptions = (data) => {
     };
 };
 
+const pellRecipientStatus = (data) => {
+    if (!data || !data.series) {
+        return null;
+    }
+    const derivedCategories = data.categories || Object.keys(data.series[0]?.data || {}).sort();
+    const normalizedSeries = data.series.map(series => ({
+        ...series,
+        data: Array.isArray(series.data)
+            ? series.data
+            : derivedCategories.map(category => series.data?.[category] ?? 0),
+    }));
+    const seriesData = toStackedBarSeries(normalizedSeries, 'pell_status');
+    const baseOption = createVerticalStackedBarOption({
+        yAxisName: 'Number of Students',
+        xAxisName: 'Pell Grant Status',
+        categories: derivedCategories,
+        data: seriesData,
+        legendData: normalizedSeries.map(s => s.name),
+    });
+    return {
+        ...baseOption,
+        legend: {
+            ...baseOption.legend,
+            show: false,
+        },
+    };
+};
+
 // Helper function to create student age by gender option from API data
 const createStudentAgeByGenderOptionFromData = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => {
-        const { color, ...rest } = s;
-        return rest;
-    });
+    const seriesData = toStackedBarSeries(data.series, 'age_gender');
     return createEnrollmentTypeStackedBarOption({
         xAxisName: 'Number of Students',
         categories: data.categories,
@@ -518,39 +503,17 @@ const createStudentAgeByGenderOptionFromData = (data) => {
     });
 };
 
-const createRaceByPellStatusOptionFromData = (data) => {
+const raceByPellStatusOptions = (data) => {
     if (!data || !data.categories || !data.series) {
         return null;
     }
-    const seriesData = data.series.map(s => {
-        const { color, ...rest } = s;
-        return rest;
-    });
+    const seriesData = toStackedBarSeries(data.series, 'pell');
     const baseOption = createVerticalStackedBarOption({
         yAxisName: 'Number of Students',
-        xAxisName: '',
         categories: data.categories,
         data: seriesData,
         legendData: data.series.map(s => s.name),
     });
-    const wrapText = (text, maxLength = 20) => {
-        const words = text.split(' ');
-        const lines = [];
-        let currentLine = '';
-        
-        words.forEach(word => {
-            if ((currentLine + word).length <= maxLength) {
-                currentLine += (currentLine ? ' ' : '') + word;
-            } else {
-                if (currentLine) lines.push(currentLine);
-                currentLine = word;
-            }
-        });
-        if (currentLine) lines.push(currentLine);
-        
-        return lines.length > 1 ? lines.join('\n') : text;
-    };
-    
     return {
         ...baseOption,
         xAxis: {
@@ -558,7 +521,7 @@ const createRaceByPellStatusOptionFromData = (data) => {
             axisLabel: {
                 ...baseOption.xAxis.axisLabel,
                 interval: 0,
-                formatter: wrapText,
+                formatter: (value) => wrap(String(value ?? ''), { width: 15, trim: true }),
             },
         },
         legend: {
@@ -573,7 +536,7 @@ const createRaceByPellStatusOptionFromData = (data) => {
                 right: 140,
                 top: 15,
                 style: {
-                    text: 'Race by Pell Status:',
+                    text: 'Pell Status First Year',
                     textAlign: 'left',
                     fill: '#767676',
                     fontFamily: 'Helvetica Neue',
@@ -585,8 +548,8 @@ const createRaceByPellStatusOptionFromData = (data) => {
 };
 
 export default function EdaDashboard({ batch_id: propBatchId }) {
-    // Get inst_id from Inertia shared props
-    const { inst_id } = usePage().props;
+    // Get inst_id and set-inst message from Inertia shared props
+    const { inst_id, set_inst_required_message } = usePage().props;
 
     const [batchInfo, setBatchInfo] = useState(null);
     const [batchLoading, setBatchLoading] = useState(true);
@@ -594,11 +557,17 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     const [loading, setLoading] = useState(false); // Start false, will be set when batch_id is resolved
     const [error, setError] = useState(null);
 
+    useEffect(() => {
+        if (!inst_id) {
+            const msg = set_inst_required_message ?? 'Set an institution to proceed.';
+            router.visit(`/set-inst?message=${encodeURIComponent(msg)}`);
+        }
+    }, [inst_id, set_inst_required_message]);
+
     // Fetch batch info - either from propBatchId or get most recent
     useEffect(() => {
         const fetchBatchInfo = async () => {
             if (!inst_id) {
-                setError('Missing institution ID');
                 setBatchLoading(false);
                 return;
             }
@@ -606,10 +575,10 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
             try {
                 setBatchLoading(true);
                 setError(null);
-                
+
                 // getBatchInfo returns the most recent batch if no batch_id is provided
                 const batch = await getBatchInfo(propBatchId);
-                
+
                 if (!batch) {
                     if (propBatchId) {
                         throw new Error(`Batch ${propBatchId} not found or not completed.`);
@@ -621,11 +590,11 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 setBatchInfo(batch);
             } catch (err) {
                 console.error('Error fetching batch info:', err);
-                
+
                 let errorMessage = 'Failed to fetch batch';
                 if (err.response) {
-                    errorMessage = err.response.data?.error 
-                        || err.response.data?.detail 
+                    errorMessage = err.response.data?.error
+                        || err.response.data?.detail
                         || err.response.data?.message
                         || `HTTP ${err.response.status}: ${err.response.statusText}`;
                 } else if (err.request) {
@@ -646,7 +615,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     useEffect(() => {
         const fetchEdaData = async () => {
             if (!inst_id) {
-                setError('Missing institution ID');
                 setLoading(false);
                 return;
             }
@@ -660,11 +628,11 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 setLoading(true);
                 setError(null);
                 const response = await axios.get(`/institutions/${inst_id}/batch/${batchInfo.batch_id}/eda`);
-                
+
                 if (!response.data) {
                     throw new Error('No data received from API');
                 }
-                
+
                 setEdaData(response.data);
             } catch (err) {
                 console.error('Error fetching EDA data:', err);
@@ -672,12 +640,12 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 console.error('Error status:', err.response?.status);
                 console.error('Error details:', err.response?.data);
                 console.error('Error config:', err.config);
-                
+
                 let errorMessage = 'Failed to load EDA data';
                 if (err.response) {
                     // Try to extract error message from various possible formats
-                    errorMessage = err.response.data?.error 
-                        || err.response.data?.detail 
+                    errorMessage = err.response.data?.error
+                        || err.response.data?.detail
                         || err.response.data?.message
                         || `HTTP ${err.response.status}: ${err.response.statusText}`;
                 } else if (err.request) {
@@ -695,45 +663,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     }, [inst_id, batchInfo]);
 
     // Create chart options from API data
-    const enrollmentTypeOption = edaData?.gpa_by_enrollment_type
-        ? createEnrollmentTypeOptionFromData(edaData.gpa_by_enrollment_type)
-        : null;
-
     const enrollmentIntensityOption = edaData?.gpa_by_enrollment_intensity
-        ? createEnrollmentIntensityOptionFromData(edaData.gpa_by_enrollment_intensity)
-        : null;
-
-    // Get cohort years from GPA data (they should be the same across all charts)
-    const cohortYears = edaData?.gpa_by_enrollment_type?.cohort_years || null;
-
-    const studentsByCohortOption = edaData?.students_by_cohort_term
-        ? createTermChartOption(
-            'Students by Cohort Year and Term',
-            'Number of Students',
-            edaData.students_by_cohort_term,
-            Math.max(...[
-                ...edaData.students_by_cohort_term.fall,
-                ...edaData.students_by_cohort_term.winter,
-                ...edaData.students_by_cohort_term.spring,
-                ...edaData.students_by_cohort_term.summer
-            ]) * 1.2,
-            cohortYears
-        )
-        : null;
-
-    const courseEnrollmentsOption = edaData?.course_enrollments
-        ? createTermChartOption(
-            'Course Enrollments Over Time',
-            'Total Number of Course Enrollments',
-            edaData.course_enrollments,
-            Math.max(...[
-                ...edaData.course_enrollments.fall,
-                ...edaData.course_enrollments.winter,
-                ...edaData.course_enrollments.spring,
-                ...edaData.course_enrollments.summer
-            ]) * 1.2,
-            cohortYears
-        )
+        ? enrollmentIntensityOptions(edaData.gpa_by_enrollment_intensity)
         : null;
 
     const enrollmentTypeByIntensityOption = edaData?.enrollment_type_by_intensity
@@ -745,25 +676,10 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         ? createStudentAgeByGenderOptionFromData(edaData.student_age_by_gender)
         : null;
 
-
-    // Create summary stats from API data
-    const summaryStats = edaData?.summary_stats ? [
-        {
-            label: 'Total Students',
-            value: edaData.summary_stats.total_students,
-        },
-        {
-            label: 'Transfer Students',
-            value: edaData.summary_stats.transfer_students,
-        },
-        {
-            label: 'Avg. Year 1 GPA - All Students',
-            value: edaData.summary_stats.avg_year1_gpa_all_students,
-        },
-    ] : [];
-
-    // Don't show full-screen spinner - use overlay instead
-
+    const summaryStats = ['total_students', 'transfer_students', 'avg_year1_gpa_all_students'].filter((k) => edaData?.[k] != null);
+    if (!inst_id) {
+        return null;
+    }
     if (error) {
         return (
             <AppLayout title="EDA Dashboard">
@@ -786,23 +702,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
             </AppLayout>
         );
     }
-    
-    // Helper to check if data has meaningful values (not all zeros/empty)
-    const hasData = (data) => {
-        if (!data) return false;
-        if (Array.isArray(data)) return data.length > 0;
-        if (typeof data === 'object') {
-            if (data.total_students) {
-                // Summary stats: check if any value is meaningful (not "0", "0", "N/A")
-                const total = parseInt(data.total_students.replace(/,/g, '')) || 0;
-                return total > 0;
-            }
-            if (data.cohort_years) return data.cohort_years.length > 0 && data.series?.some(s => s.data?.some(v => v !== 0));
-            if (data.fall) return [...data.fall, ...data.winter, ...data.spring, ...data.summer].some(v => v > 0);
-            if (data.categories) return data.categories.length > 0 && data.series?.some(s => s.data?.some(v => v > 0));
-        }
-        return true;
-    };
 
     return (
         <AppLayout title="EDA Dashboard">
@@ -828,14 +727,14 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             )}
                         </div>
                     </div>
-                    {hasData(edaData?.summary_stats) && (
+                    {summaryStats.length > 0 && (
                         <div className="grid gap-4 md:grid-cols-3 mb-5">
-                            {summaryStats.map(stat => (
-                                <StatCard key={stat.label} value={stat.value} label={stat.label} />
+                            {summaryStats.map((k) => (
+                                <StatCard key={k} label={edaData[k].name} value={edaData[k].value} />
                             ))}
                         </div>
                     )}
-                    {hasData(edaData?.gpa_by_enrollment_type) && (
+                    {edaData?.gpa_by_enrollment_type && (
                         <Card className="mb-6">
                             <div className="grid grid-cols-12 gap-6">
                                 <div className="col-span-12 md:col-span-4">
@@ -850,9 +749,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </ul>
                                 </div>
                                 <div className="col-span-12 md:col-span-8">
-                                    {enrollmentTypeOption && (
+                                    {edaData?.gpa_by_enrollment_type && (
                                         <EChart
-                                            option={enrollmentTypeOption}
+                                            option={GPAByEnrollmentType(edaData.gpa_by_enrollment_type)}
                                             style={{ height: '320px', width: '100%' }}
                                         />
                                     )}
@@ -860,7 +759,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             </div>
                         </Card>
                     )}
-                    {hasData(edaData?.gpa_by_enrollment_intensity) && (
+                    {edaData?.gpa_by_enrollment_intensity && (
                         <Card className="mb-6">
                             <div className="grid grid-cols-12 gap-6">
                                 <div className="col-span-12 md:col-span-4">
@@ -885,11 +784,11 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             </div>
                         </Card>
                     )}
-                    {(hasData(edaData?.students_by_cohort_term) || hasData(edaData?.course_enrollments) || hasData(edaData?.degree_types) || hasData(edaData?.enrollment_type_by_intensity)) && (
+                    {(edaData?.students_by_cohort_term || edaData?.course_enrollments || edaData?.degree_types?.degrees || edaData?.enrollment_type_by_intensity) && (
                         <>
                             <H2 className="mb-6">Key Insights</H2>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                                {hasData(edaData?.students_by_cohort_term) && (
+                                {edaData?.students_by_cohort_term && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Students by Cohort Year and Term</ChartTitle>
@@ -897,12 +796,18 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 A year by year analysis of when students started their journey at the institution
                                             </p>
                                         </div>
-                                        {studentsByCohortOption && (
-                                            <EChart option={studentsByCohortOption} />
+                                        {edaData?.students_by_cohort_term && (
+                                            <EChart
+                                                option={createHorizontalStackedBarOption({
+                                                    xAxisName: 'Number of Students',
+                                                    termChartData: edaData.students_by_cohort_term,
+                                                    yAxisName: 'Cohort Year',
+                                                })}
+                                            />
                                         )}
                                     </Card>
                                 )}
-                                {hasData(edaData?.course_enrollments) && (
+                                {edaData?.course_enrollments && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Course Enrollments Over Time</ChartTitle>
@@ -910,14 +815,18 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
                                             </p>
                                         </div>
-                                        {courseEnrollmentsOption && (
-                                            <EChart option={courseEnrollmentsOption} />
+                                        {edaData?.course_enrollments && (
+                                            <EChart option={createHorizontalStackedBarOption({
+                                                title: 'Course Enrollments Over Time',
+                                                xAxisName: 'Total Number of Course Enrollments',
+                                                termChartData: edaData.course_enrollments
+                                            })} />
                                         )}
                                     </Card>
                                 )}
                             </div>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                                {hasData(edaData?.degree_types) && (
+                                {edaData?.degree_types?.degrees && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Most Common Degree Types</ChartTitle>
@@ -925,12 +834,12 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                                 The following is a breakdown of degree types being sought by the student body.
                                             </p>
                                         </div>
-                                        {edaData?.degree_types && (
-                                            <EChart option={degreeTypesChartOptions(edaData.degree_types, edaData.summary_stats?.total_students)} />
+                                        {edaData?.degree_types?.degrees && (
+                                            <EChart option={degreeTypesOptions(edaData)} />
                                         )}
                                     </Card>
                                 )}
-                                {hasData(edaData?.enrollment_type_by_intensity) && (
+                                {edaData?.enrollment_type_by_intensity && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Student Enrollment Type by Intensity</ChartTitle>
@@ -946,14 +855,14 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             </div>
                         </>
                     )}
-                    {(hasData(edaData?.pell_recipient_by_first_gen) || hasData(edaData?.student_age_by_gender) || hasData(edaData?.race_by_pell_status)) && (
+                    {(edaData?.pell_recipient_by_first_gen || edaData?.pell_recipient_status || edaData?.student_age_by_gender) && (
                         <>
                             <H2 className="mb-6">Student Characteristics & Demographics</H2>
                             <div className="mb-6 text-sm font-light text-[#4F4F4F]">
                                 DataKind does not use any demographic categories to train our model; we only use them to assess bias in the model predictions. We display the full demographics of the raw dataset here to make sure they match your understanding of your student body. If this data looks inaccurate, please confirm you uploaded the correct files. If you have further questions, please contact your account representative.
                             </div>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-                                {hasData(edaData?.pell_recipient_by_first_gen) && (
+                                {edaData?.pell_recipient_by_first_gen && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Pell Recipient by First Generation Status</ChartTitle>
@@ -962,11 +871,24 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                             </p>
                                         </div>
                                         {edaData?.pell_recipient_by_first_gen && (
-                                            <EChart option={createPellRecipientByGenerationOptions(edaData.pell_recipient_by_first_gen)} />
+                                            <EChart option={pellRecipientByGeneration(edaData.pell_recipient_by_first_gen)} />
                                         )}
                                     </Card>
                                 )}
-                                {hasData(edaData?.student_age_by_gender) && (
+                                {!edaData?.pell_recipient_by_first_gen && edaData?.pell_recipient_status && (
+                                    <Card>
+                                        <div className="mb-4">
+                                            <ChartTitle variant="small">Pell Grant Status</ChartTitle>
+                                            <p className="mt-2 text-sm font-light text-[#4F4F4F]">
+                                                An overview of Pell Grant recipient status.
+                                            </p>
+                                        </div>
+                                        {edaData?.pell_recipient_status && (
+                                            <EChart option={pellRecipientStatus(edaData.pell_recipient_status)} />
+                                        )}
+                                    </Card>
+                                )}
+                                {edaData?.student_age_by_gender && (
                                     <Card>
                                         <div className="mb-4">
                                             <ChartTitle variant="small">Student Age by Gender</ChartTitle>
@@ -980,7 +902,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </Card>
                                 )}
                             </div>
-                            {hasData(edaData?.race_by_pell_status) && (
+                            {edaData?.race_by_pell_status && (
                                 <Card className="mb-6 grid grid-cols-6 gap-6">
                                     <div>
                                         <ChartTitle variant="large">Race by Pell Status</ChartTitle>
@@ -989,8 +911,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                         </p>
                                     </div>
                                     <div className="col-span-5">
-                                        <EChart 
-                                            option={createRaceByPellStatusOptionFromData(edaData.race_by_pell_status)} 
+                                        <EChart
+                                            option={raceByPellStatusOptions(edaData.race_by_pell_status)}
                                             style={{ height: '600px', width: '100%' }}
                                         />
                                     </div>

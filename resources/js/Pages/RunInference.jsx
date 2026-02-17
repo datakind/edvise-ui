@@ -6,7 +6,7 @@ import HeaderLabel from '@/Components/HeaderLabel';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from '@inertiajs/react';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import BigDangerAlert from '@/Components/BigDangerAlert';
+import ErrorAlert from '@/Components/ErrorAlert';
 
 export default function RunInference() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -99,7 +99,7 @@ export default function RunInference() {
       msg = '[ERROR] Prediction request failed with: ' + error;
       return (
         <div className="flex px-36">
-          <BigDangerAlert mainMsg={msg}></BigDangerAlert>
+          <ErrorAlert mainMsg={msg}></ErrorAlert>
         </div>
       );
     }

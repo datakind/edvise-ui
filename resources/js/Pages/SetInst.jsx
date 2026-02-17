@@ -18,7 +18,7 @@ import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import BigDangerAlert from '@/Components/BigDangerAlert';
+import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 

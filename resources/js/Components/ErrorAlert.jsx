@@ -2,7 +2,7 @@ import React from 'react';
 import { XCircleIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 
-export default function BigDangerAlert({
+export default function ErrorAlert({
   mainMsg,
   msgDict,
   excludeValue,

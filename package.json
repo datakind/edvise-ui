@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "edvise-ui",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,6 +21,7 @@
     "@vitejs/plugin-react": "^2.2.0",
     "autoprefixer": "^10.4.16",
     "axios": "^0.26.1",
+    "baseline-browser-mapping": "^2.9.19",
     "bootstrap": "^5.2.3",
     "eslint": "^9.18.0",
     "eslint-plugin-react": "^7.37.4",
@@ -64,6 +66,7 @@
     "react-range-slider-input": "^3.0.7",
     "recharts": "^3.3.0",
     "turf-polygon": "^1.0.3",
+    "word-wrap": "^1.2.5",
     "xlsx": "^0.18.5",
     "yarn": "^1.22.22",
     "ziggy-js": "^1.8.1"

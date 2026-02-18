@@ -60,10 +60,10 @@ return [
             'engine' => null,
             'sslmode' => 'require',
             'options' => [
-                PDO::MYSQL_ATTR_SSL_CA => env('SSL_CA_PATH'),
-                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-                PDO::MYSQL_ATTR_SSL_KEY => env('SSL_KEY_PATH'),
-                PDO::MYSQL_ATTR_SSL_CERT => env('SSL_CERT_PATH'),
+                \Pdo\Mysql::ATTR_SSL_CA => env('SSL_CA_PATH'),
+                \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT => false,
+                \Pdo\Mysql::ATTR_SSL_KEY => env('SSL_KEY_PATH'),
+                \Pdo\Mysql::ATTR_SSL_CERT => env('SSL_CERT_PATH'),
             ],
         ],
 
@@ -83,7 +83,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                \Pdo\Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

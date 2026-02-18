@@ -15,7 +15,7 @@ import SuccessAlert from '@/Components/SuccessAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import BigDangerAlert from '@/Components/BigDangerAlert';
+import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 import { set } from 'lodash';
@@ -70,7 +70,7 @@ export default function FileUpload() {
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <BigDangerAlert mainMsg={msg}></BigDangerAlert>
+          <ErrorAlert mainMsg={msg}></ErrorAlert>
         </div>
       );
     }
@@ -95,7 +95,7 @@ export default function FileUpload() {
       let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <BigDangerAlert mainMsg={msg}></BigDangerAlert>
+          <ErrorAlert mainMsg={msg}></ErrorAlert>
           <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}
@@ -140,11 +140,11 @@ export default function FileUpload() {
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <BigDangerAlert
+          <ErrorAlert
             mainMsg="[ERROR] The following files must be re-uploaded"
             msgDict={validationResults}
             excludeValue="ok"
-          ></BigDangerAlert>
+          ></ErrorAlert>
           <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}

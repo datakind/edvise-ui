@@ -75,7 +75,7 @@ export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
   const isLocalDev =
     window.location.hostname === 'localhost' ||
     window.location.hostname === '127.0.0.1' ||
-    window.location.hostname === 'sst-app-ui.test';
+    window.location.hostname === 'edvise-ui.test';
   const [inferenceData, setInferenceData] = useState(
     isLocalDev ? mockInferenceData : [],
   );
@@ -120,7 +120,7 @@ export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
         if (
           window.location.hostname === 'localhost' ||
           window.location.hostname === '127.0.0.1' ||
-          window.location.hostname === 'sst-app-ui.test'
+          window.location.hostname === 'edvise-ui.test'
         ) {
           setInferenceData(mockInferenceData);
         }

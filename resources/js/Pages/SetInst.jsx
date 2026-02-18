@@ -18,19 +18,19 @@ import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import ProgressBar from '@/Components/ProgressBar';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import BigDangerAlert from '@/Components/BigDangerAlert';
+import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 
 export default function SetInstitution() {
-  // Get inst_id from Inertia shared props (no API call needed!)
-  const { inst_id } = usePage().props;
+  const { inst_id, message } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentInstId, setCurrentInstId] = useState(inst_id || '');
   const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
+  const [hideSetInstError, setHideSetInstError] = useState(false);
 
   useEffect(() => {
     // Fetch all institutions
@@ -66,7 +66,8 @@ export default function SetInstitution() {
         const institutionName = Object.entries(resultList).find(([name, id]) => id === inst)?.[0] || 'Unknown';
         setCurrentInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
-        router.reload();
+        setHideSetInstError(true);
+        router.visit(route('set-inst'));
       })
       .catch(e => {
         resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;
@@ -92,6 +93,14 @@ export default function SetInstitution() {
           majorTitle="Admin Actions"
           minorTitle="Act as Institution"
         ></HeaderLabel>
+
+        {message && !hideSetInstError && (
+          <div className="mt-6 w-full max-w-2xl">
+            <ErrorAlert
+              mainMsg={`Error: ${message} Select an institution below to proceed.`}
+            />
+          </div>
+        )}
 
         {error && (
           <div className="mt-8 w-full max-w-2xl rounded-lg bg-red-100 p-4 text-center text-red-700">
@@ -153,7 +162,7 @@ export default function SetInstitution() {
               disabled={loading}
               className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Submit
+              Set Institution
             </button>
           </div>
         </form>

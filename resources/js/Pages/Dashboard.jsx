@@ -6,7 +6,7 @@ import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import ModelRunHistory from '@/Components/ModelRunHistory';
 import HeaderLabel from '@/Components/HeaderLabel';
-import BigDangerAlert from '@/Components/BigDangerAlert';
+import ErrorAlert from '@/Components/ErrorAlert';
 import classNames from 'classnames';
 import { formatModelName } from '@/utils/stringUtils';
 
@@ -212,10 +212,10 @@ export default function Dashboard({ modelname }) {
             </div>
           ) : error != null &&
             !(error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
-            <BigDangerAlert
+            <ErrorAlert
               mainMsg={'Error: ' + error.message}
               className="ml-24 mr-24 flex h-fit"
-            ></BigDangerAlert>
+            ></ErrorAlert>
           ) : (
             <div
               className="flex w-full flex-col items-center"

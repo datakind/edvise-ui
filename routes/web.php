@@ -189,7 +189,7 @@ Route::middleware(array_filter([
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+]))->get('/institutions/{inst_id}/training/model-cards/{model_run_id}', [ApiController::class, 'downloadModelCard']);
 
 // Top features with institution context
 Route::middleware(array_filter([
@@ -330,7 +330,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('create-model');
 
     Route::get('/set-inst', function () {
-        return Inertia::render('SetInst');
+        return Inertia::render('SetInst', ['message' => request('message')]);
     })->name('set-inst');
 
     Route::get('/add-dk', function () {
@@ -358,7 +358,7 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Route::get('/institutions/{inst_id}/training/confusion_matrix/{model_run_id}', [ApiController::class, 'getConfusionMatrix']);
     Route::get('/institutions/{inst_id}/training/roc_curve/{model_run_id}', [ApiController::class, 'getRocCurve']);
     Route::get('/institutions/{inst_id}/training/support-overview/{model_run_id}', [ApiController::class, 'getTrainingSupportOverview']);
-    Route::get('/institutions/{inst_id}/training/model-cards/{model_name}', [ApiController::class, 'downloadModelCard']);
+    Route::get('/institutions/{inst_id}/training/model-cards/{model_run_id}', [ApiController::class, 'downloadModelCard']);
 
     // DEPRECATED: inst_id is now shared via Inertia props (HandleInertiaRequests middleware)
     // This route is kept for backward compatibility and debugging purposes

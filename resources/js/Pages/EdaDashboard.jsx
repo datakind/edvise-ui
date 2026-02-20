@@ -5,7 +5,6 @@ import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
 import H2 from '@/Components/H2';
-import ChartTitle from '@/Components/ChartTitle';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
 import Spinner from '@/Components/Spinner';
@@ -735,10 +734,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                         </div>
                     )}
                     {edaData?.gpa_by_enrollment_type && (
-                        <Card className="mb-6">
+                        <Card className="mb-6" titleLarge="Average Year 1 GPA by Enrollment Types">
                             <div className="grid grid-cols-12 gap-6">
                                 <div className="col-span-12 md:col-span-4">
-                                    <ChartTitle variant="large">Average Year 1 GPA by Enrollment Types</ChartTitle>
                                     <p className="mt-4 text-sm font-light text-[#4F4F4F]">
                                         This chart shows the average first-year GPA for first-time and transfer students separately. It highlights differences in academic performance by enrollment type, helping you:
                                     </p>
@@ -760,10 +758,9 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                         </Card>
                     )}
                     {edaData?.gpa_by_enrollment_intensity && (
-                        <Card className="mb-6">
+                        <Card className="mb-6" titleLarge="Average Year 1 GPA by Enrollment Intensity">
                             <div className="grid grid-cols-12 gap-6">
                                 <div className="col-span-12 md:col-span-4">
-                                    <ChartTitle variant="large">Average Year 1 GPA by Enrollment Intensity</ChartTitle>
                                     <p className="mt-4 text-sm font-light text-[#4F4F4F]">
                                         This chart shows the average first-year GPA for full-time and part-time students. It highlights differences in academic performance by enrollment intensity, helping you:
                                     </p>
@@ -789,9 +786,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             <H2 className="mb-6">Key Insights</H2>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
                                 {edaData?.students_by_cohort_term && (
-                                    <Card>
+                                    <Card title="Students by Cohort Year and Term">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Students by Cohort Year and Term</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 A year by year analysis of when students started their journey at the institution
                                             </p>
@@ -808,9 +804,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </Card>
                                 )}
                                 {edaData?.course_enrollments && (
-                                    <Card>
+                                    <Card title="Course Enrollments Over Time">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Course Enrollments Over Time</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 Displays total student course enrollments per academic year and semester, showing trends in overall enrollment activity.
                                             </p>
@@ -827,9 +822,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             </div>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
                                 {edaData?.degree_types?.degrees && (
-                                    <Card>
+                                    <Card title="Most Common Degree Types">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Most Common Degree Types</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 The following is a breakdown of degree types being sought by the student body.
                                             </p>
@@ -840,9 +834,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </Card>
                                 )}
                                 {edaData?.enrollment_type_by_intensity && (
-                                    <Card>
+                                    <Card title="Student Enrollment Type by Intensity">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Student Enrollment Type by Intensity</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 This chart signifies students who are first time, re-admitted, or transferred into school, broken down by whether they are enrolled at full time or part time intensity.
                                             </p>
@@ -863,9 +856,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                             </div>
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
                                 {edaData?.pell_recipient_by_first_gen && (
-                                    <Card>
+                                    <Card title="Pell Recipient by First Generation Status">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Pell Recipient by First Generation Status</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 Here are students who are receiving a Pell Grant and whether they are first generation students.
                                             </p>
@@ -876,9 +868,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </Card>
                                 )}
                                 {!edaData?.pell_recipient_by_first_gen && edaData?.pell_recipient_status && (
-                                    <Card>
+                                    <Card title="Pell Grant Status">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Pell Grant Status</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 An overview of Pell Grant recipient status.
                                             </p>
@@ -889,9 +880,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                     </Card>
                                 )}
                                 {edaData?.student_age_by_gender && (
-                                    <Card>
+                                    <Card title="Student Age by Gender">
                                         <div className="mb-4">
-                                            <ChartTitle variant="small">Student Age by Gender</ChartTitle>
                                             <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                                 An overview of female-identifying vs male-identifying students. This chart is broken down by gender and then by age categories.
                                             </p>
@@ -903,9 +893,8 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                                 )}
                             </div>
                             {edaData?.race_by_pell_status && (
-                                <Card className="mb-6 grid grid-cols-6 gap-6">
+                                <Card className="mb-6 grid grid-cols-6 gap-6" titleLarge="Race by Pell Status">
                                     <div>
-                                        <ChartTitle variant="large">Race by Pell Status</ChartTitle>
                                         <p className="mt-2 text-sm font-light text-[#4F4F4F]">
                                             This chart shows what race students identify as and who are receiving a Pell Grant.
                                         </p>

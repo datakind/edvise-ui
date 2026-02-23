@@ -927,33 +927,31 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                 account representative.
               </div>
               <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {edaData?.pell_recipient_by_first_gen && (
-                  <Card
-                    title="Pell Recipient by First Generation Status"
-                    description="Here are students who are receiving a Pell Grant and whether they are first generation students."
-                  >
-                    {edaData?.pell_recipient_by_first_gen && (
+                {edaData?.pell_recipient_by_first_gen?.categories?.length &&
+                  edaData?.pell_recipient_by_first_gen?.series?.length && (
+                    <Card
+                      title="Pell Recipient by First Generation Status"
+                      description="Here are students who are receiving a Pell Grant and whether they are first generation students."
+                    >
                       <EChart
                         option={pellRecipientByGeneration(
                           edaData.pell_recipient_by_first_gen,
                         )}
                       />
-                    )}
-                  </Card>
-                )}
-                {!edaData?.pell_recipient_by_first_gen &&
+                    </Card>
+                  )}
+                {(!edaData?.pell_recipient_by_first_gen?.categories?.length ||
+                  !edaData?.pell_recipient_by_first_gen?.series?.length) &&
                   edaData?.pell_recipient_status && (
                     <Card
                       title="Pell Grant Status"
                       description="An overview of Pell Grant recipient status."
                     >
-                      {edaData?.pell_recipient_status && (
-                        <EChart
-                          option={pellRecipientStatus(
-                            edaData.pell_recipient_status,
-                          )}
-                        />
-                      )}
+                      <EChart
+                        option={pellRecipientStatus(
+                          edaData.pell_recipient_status,
+                        )}
+                      />
                     </Card>
                   )}
                 {edaData?.student_age_by_gender && (

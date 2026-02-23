@@ -290,7 +290,6 @@ const degreeTypesOptions = edaData => {
         type: 'pie',
         radius: ['40%', '70%'],
         center: ['50%', '45%'],
-        itemStyle: { borderRadius: 5, borderColor: '#fff', borderWidth: 2 },
         label: {
           show: true,
           fontSize: 14,
@@ -479,11 +478,12 @@ const pellRecipientByGeneration = data => {
     graphic: [
       {
         type: 'text',
-        left: 125,
+        left: '80',
         bottom: 15,
         style: {
           text: 'First Generation Status:',
           fontSize: 12,
+          fill: '#4F4F4F',
         },
       },
     ],

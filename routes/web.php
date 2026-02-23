@@ -136,7 +136,13 @@ Route::middleware(array_filter([
     }
 )->name('dashboard');
 
-// The default home page when logged in.
+// App home: route decides whether to show EDA or new-home (fixes "EDA only loads on second click").
+Route::middleware(array_filter([
+    'auth', 'terms.accepted',
+    env('APP_ENV') === 'prod' ? 'verified' : null,
+]))->get('/app-home', [ApiController::class, 'appHomeRedirect'])->name('app-home');
+
+// The default home page when logged in (no EDA).
 Route::middleware(array_filter([
     'auth', 'terms.accepted',
     env('APP_ENV') === 'prod' ? 'verified' : null,

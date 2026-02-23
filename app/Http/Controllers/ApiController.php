@@ -598,6 +598,30 @@ class ApiController extends Controller
         return $result;
     }
 
+    /**
+     * Redirect to the appropriate app home: EDA dashboard if the user's institution
+     * has at least one valid (non-deleted) batch, otherwise the generic new-home page.
+     */
+    public function appHomeRedirect(Request $request)
+    {
+        $hasBatches = false;
+        $inst_id = $request->attributes->get('inst_id') ?? \App\Helpers\InstitutionHelper::GetInstitution($request)[0];
+        if ($request->user() && $inst_id) {
+            $request->attributes->set('inst_id', $inst_id);
+            $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
+            if ($result !== null && $result->getStatusCode() === 200) {
+                $output = $result->json();
+                $batches = $output['batches'] ?? [];
+                $validCount = collect($batches)->filter(fn ($b) => empty($b['deleted']))->count();
+                $hasBatches = $validCount > 0;
+            }
+        }
+
+        return $hasBatches
+            ? redirect()->route('eda')
+            : redirect()->route('new-home');
+    }
+
     // The below provided by DK.
     public function exampleFunction(Request $request)
     {

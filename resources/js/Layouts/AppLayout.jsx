@@ -8,7 +8,6 @@ import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
 import FeedbackButton from '@/Components/FeedbackButton';
 import AppLogo from '@/Components/Icons/AppLogo';
-import { hasValidBatches } from '@/utils/batchUtils';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -48,7 +47,7 @@ const VisibilityType = Object.freeze({
 var navigationAboveLine = [
   {
     name: 'Home',
-    href: route('new-home'),
+    href: route('app-home'),
     icon: HomeIcon,
     visibility_type: VisibilityType.BOTH,
   },
@@ -236,27 +235,6 @@ export default function AppLayout({ title, renderHeader, children }) {
         );
       } catch (err) {
         console.log('error during fetchModels');
-      }
-
-      // Check for completed batches and update Home link
-      if (user) {
-        try {
-          const hasBatches = await hasValidBatches();
-
-          // Update Home link based on whether we have completed batches
-          newNav = newNav.map(item => {
-            if (item.name === 'Home') {
-              return {
-                ...item,
-                href: hasBatches ? route('eda') : route('new-home'),
-              };
-            }
-            return item;
-          });
-        } catch (err) {
-          console.log('error during checkCompletedBatches:', err);
-          // On error, keep default Home link
-        }
       }
 
       setNavAboveLine(newNav);

@@ -68,7 +68,9 @@ In ModelResultsOverview (and similar pages) you have several independent `useEff
 - **Standard Inertia approach:** The server (Laravel) loads all data needed for the page and passes it as props. The page then just renders; no (or minimal) client-side fetching. That makes the “what does this page need?” contract obvious on the server and avoids loading states and duplication.
 - If you keep client fetching, consider a small data layer (e.g. a `useModelRunDetails(runId, modelName)` hook or a single “page API” that returns one DTO) so the page doesn’t orchestrate many raw axios calls.
 
-### 6. route in JS: global vs import
+**Status:** ✅ Done — ModelResultsOverview is now thick server / thin client: controller loads run details, top features, and feature importance and passes them as props; the page uses useMemo for derived state. No client-side axios for initial data.
+
+### 6. route in JS: global vs import route in JS: global vs import
 
 Some components use `const route = window.route;`, others `import route from 'ziggy-js'`. Using one approach (e.g. always `import route from 'ziggy-js'` and ensuring Ziggy is in the app bootstrap) is clearer and avoids “where does route come from?” confusion.
 

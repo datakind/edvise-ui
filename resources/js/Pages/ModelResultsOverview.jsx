@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '../Layouts/AppLayout';
@@ -16,9 +15,9 @@ import PageHeading from '@/Components/PageHeading';
 import H2 from '@/Components/H2';
 import '../../css/landing.css';
 
-// Features will be fetched from API
-
 import { formatModelName } from '../utils/stringUtils';
+
+const route = window.route;
 
 // Helper function to convert to title case
 const capitalizeFirstWord = str => {
@@ -26,225 +25,64 @@ const capitalizeFirstWord = str => {
   return str.replace(/(^|\s)[a-z]/g, l => l.toUpperCase());
 };
 
-function ModelResultsOverview({ job_run_id, modelName }) {
-  console.log('job_run_id:', job_run_id);
-  console.log('ModelResultsOverview - Received job_run_id:', job_run_id);
-  console.log('ModelResultsOverview - Received modelName:', modelName);
-
-  // Get inst_id from Inertia shared props (no API call needed!)
+function ModelResultsOverview({
+  job_run_id,
+  modelName,
+  model_run_id: modelRunIdProp,
+  runDetails: runDetailsProp,
+  rawFeatures: rawFeaturesProp = [],
+  featureImportanceData: featureImportanceDataProp = [],
+}) {
   const { inst_id } = usePage().props;
-  console.log(
-    'ModelResultsOverview - Institution ID from shared props:',
-    inst_id,
-  );
 
-  const [model_run_id, setModelRunId] = useState(null);
+  const runDetails = runDetailsProp ?? null;
+  const rawFeatures = Array.isArray(rawFeaturesProp) ? rawFeaturesProp : [];
+  const featureImportanceData = Array.isArray(featureImportanceDataProp)
+    ? featureImportanceDataProp
+    : [];
+  const model_run_id = modelRunIdProp ?? null;
 
-  // Log when model_run_id changes
-  useEffect(() => {
-    console.log(
-      'ModelResultsOverview - model_run_id state changed to:',
-      model_run_id,
-    );
-  }, [model_run_id]);
-  const [runDetails, setRunDetails] = useState(null);
-  const [features, setFeatures] = useState([]);
-  const [rawFeatures, setRawFeatures] = useState([]);
-  const [featureImportanceData, setFeatureImportanceData] = useState([]);
-
-  // Get model_run_id from job table using job_run_id
-  useEffect(() => {
-    const fetchModelRunId = async () => {
-      if (!job_run_id) return;
-
-      try {
-        const response = await axios.get(
-          `/get-model-run-id-by-job/${job_run_id}`,
-        );
-
-        if (response.data?.model_run_id) {
-          setModelRunId(response.data.model_run_id);
-          console.log(
-            'Got model_run_id from job table:',
-            response.data.model_run_id,
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching model_run_id:', error);
+  const featuresFromRaw = useMemo(() => {
+    if (rawFeatures.length === 0) return [];
+    const featureGroups = {};
+    rawFeatures.forEach(item => {
+      const featureName = item.feature_readable_name;
+      if (!featureGroups[featureName]) {
+        featureGroups[featureName] = { feature: item, shapValues: [] };
       }
-    };
+      const shapValue = parseFloat(item.shap_value || item.importance || 0);
+      featureGroups[featureName].shapValues.push(Math.abs(shapValue));
+    });
+    return Object.keys(featureGroups)
+      .map(featureName => {
+        const group = featureGroups[featureName];
+        const meanAbsShapValue =
+          group.shapValues.reduce((sum, val) => sum + val, 0) /
+          group.shapValues.length;
+        return { ...group.feature, mean_abs_shap_value: meanAbsShapValue };
+      })
+      .sort((a, b) => b.mean_abs_shap_value - a.mean_abs_shap_value);
+  }, [rawFeatures]);
 
-    fetchModelRunId();
-  }, [job_run_id]);
-
-  // Get run details when we have both inst_id and job_run_id
-  useEffect(() => {
-    const fetchRunDetails = async () => {
-      if (!inst_id || !job_run_id) return;
-
-      const apiUrl = `/institutions/${inst_id}/models/${modelName}/run/${job_run_id}`;
-      console.log('ModelResultsOverview - Making API call to:', apiUrl);
-      console.log(
-        'ModelResultsOverview - Full URL:',
-        window.location.origin + apiUrl,
-      );
-
-      try {
-        const response = await axios.get(apiUrl);
-        setRunDetails(response.data);
-        console.log('Run details fetched:', response.data);
-      } catch (error) {
-        console.error('Error fetching run details:', error);
-        console.error('Error response:', error.response?.data);
-      }
-    };
-
-    fetchRunDetails();
-  }, [inst_id, job_run_id, modelName]);
-
-  // Get top features when we have both inst_id and job_run_id
-  useEffect(() => {
-    const fetchTopFeatures = async () => {
-      if (!inst_id || !job_run_id) return;
-
-      const apiUrl = `/institutions/${inst_id}/inference/top-features/${job_run_id}`;
-      console.log('Fetching top features from:', apiUrl);
-      console.log('Full URL:', window.location.origin + apiUrl);
-
-      try {
-        const response = await axios.get(apiUrl);
-
-        // Store the raw API response
-        setRawFeatures(response.data);
-
-        // Group features by name and calculate mean absolute SHAP value
-        const featureGroups = {};
-        response.data.forEach(item => {
-          const featureName = item.feature_readable_name;
-          if (!featureGroups[featureName]) {
-            featureGroups[featureName] = {
-              feature: item, // Keep first occurrence as template
-              shapValues: [],
-            };
-          }
-          // Extract SHAP value and take absolute value
-          const shapValue = parseFloat(item.shap_value || item.importance || 0);
-          featureGroups[featureName].shapValues.push(Math.abs(shapValue));
-        });
-
-        // Calculate mean absolute SHAP value and create sorted feature list
-        const uniqueFeatures = Object.keys(featureGroups)
-          .map(featureName => {
-            const group = featureGroups[featureName];
-            const meanAbsShapValue =
-              group.shapValues.reduce((sum, val) => sum + val, 0) /
-              group.shapValues.length;
-
-            return {
-              ...group.feature,
-              mean_abs_shap_value: meanAbsShapValue,
-            };
-          })
-          .sort((a, b) => b.mean_abs_shap_value - a.mean_abs_shap_value); // Descending order
-
-        setFeatures(uniqueFeatures);
-        console.log('Raw features:', response.data);
-        console.log(
-          'Top features sorted by mean absolute SHAP value:',
-          uniqueFeatures,
-        );
-        console.log(
-          'Original count:',
-          response.data.length,
-          'Deduplicated count:',
-          uniqueFeatures.length,
-        );
-        console.log(
-          'Feature order by importance:',
-          uniqueFeatures.map(
-            f =>
-              `${f.feature_readable_name} (mean abs SHAP: ${f.mean_abs_shap_value.toFixed(4)})`,
-          ),
-        );
-      } catch (error) {
-        console.error('Error fetching top features:', error);
-        console.error('Error response:', error.response?.data);
-        // Set empty array as fallback
-        setFeatures([]);
-      }
-    };
-
-    fetchTopFeatures();
-  }, [inst_id, job_run_id]);
-
-  // Get feature importance data (for data_type) when we have both inst_id and model_run_id
-  useEffect(() => {
-    const fetchFeatureImportance = async () => {
-      if (!inst_id || !model_run_id) return;
-
-      const apiUrl = `/institutions/${inst_id}/training/feature_importance/${model_run_id}`;
-      console.log('Fetching feature importance from:', apiUrl);
-      console.log('Full URL:', window.location.origin + apiUrl);
-
-      try {
-        const response = await axios.get(apiUrl);
-        setFeatureImportanceData(response.data || []);
-      } catch (error) {
-        console.error('Error fetching feature importance:', error);
-        console.error('Error response:', error.response?.data);
-        setFeatureImportanceData([]);
-      }
-    };
-
-    fetchFeatureImportance();
-  }, [inst_id, model_run_id]);
-
-  // Merge data_type from feature importance into features
-  useEffect(() => {
-    if (features.length === 0 || featureImportanceData.length === 0) return;
-
-    // Create a map of feature_name -> data_type for quick lookup
+  const features = useMemo(() => {
+    if (featuresFromRaw.length === 0 || featureImportanceData.length === 0) {
+      return featuresFromRaw;
+    }
     const dataTypeMap = {};
     featureImportanceData.forEach(item => {
       const key = item.feature_name || item.readable_feature_name;
-      if (key && item.data_type) {
-        dataTypeMap[key] = item.data_type;
-      }
+      if (key && item.data_type) dataTypeMap[key] = item.data_type;
     });
-
-    // Merge data_type into features
-    const featuresWithDataType = features.map(feature => {
-      // Try to match by feature_name or readable_feature_name
+    return featuresFromRaw.map(feature => {
       const matchKey =
         feature.feature_name ||
         feature.feature_readable_name ||
         feature.readable_feature_name;
-
-      const dataType = dataTypeMap[matchKey] || null;
-
-      return {
-        ...feature,
-        data_type: dataType,
-      };
+      return { ...feature, data_type: dataTypeMap[matchKey] ?? null };
     });
-
-    // Only update if data_type was actually added
-    const hasNewDataTypes = featuresWithDataType.some(
-      (f, idx) => f.data_type !== features[idx]?.data_type,
-    );
-
-    if (hasNewDataTypes) {
-      setFeatures(featuresWithDataType);
-    }
-  }, [features, featureImportanceData]);
-
-  // Get output_link and output_filename from run details
+  }, [featuresFromRaw, featureImportanceData]);
   const output_link = runDetails ? runDetails.output_file_link : null;
   const output_filename = runDetails ? runDetails.output_filename : null;
-
-  console.log('ModelResultsOverview - Fetched inst_id:', inst_id);
-  console.log('ModelResultsOverview - Run details:', runDetails);
-  console.log('ModelResultsOverview - Constructed output_link:', output_link);
 
   const [tab, setTab] = useState('results');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -537,25 +375,13 @@ function ModelResultsOverview({ job_run_id, modelName }) {
                   support. The following figures demonstrate the performance of
                   the model. You can also{' '}
                   <a
-                    href="#"
+                    href={
+                      inst_id && model_run_id
+                        ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
+                        : '#'
+                    }
                     onClick={e => {
-                      e.preventDefault();
-                      if (inst_id && modelName) {
-                        const apiUrl = `/institutions/${inst_id}/training/model-cards/${modelName}`;
-                        console.log('Downloading model card from:', apiUrl);
-                        // Create a temporary link element to force download
-                        const link = document.createElement('a');
-                        link.href = apiUrl;
-                        link.download = `${modelName}_model_card.pdf`; // Suggest filename
-                        link.target = '_blank';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      } else {
-                        console.error(
-                          'Missing inst_id or modelName for model card download',
-                        );
-                      }
+                      if (!inst_id || !model_run_id) e.preventDefault();
                     }}
                     className="cursor-pointer font-semibold text-black underline hover:opacity-80"
                   >
@@ -579,7 +405,6 @@ function ModelResultsOverview({ job_run_id, modelName }) {
               </div>
               {/* ROC Curve */}
               <div className="mb-8">
-                {console.log('RocCurve - model_run_id:', model_run_id)}
                 <RocCurve
                   model_run_id={model_run_id}
                   modelName={modelName || ''}
@@ -748,8 +573,11 @@ function ModelResultsOverview({ job_run_id, modelName }) {
 
 ModelResultsOverview.propTypes = {
   job_run_id: PropTypes.string.isRequired,
-  output_link: PropTypes.string,
   modelName: PropTypes.string,
+  model_run_id: PropTypes.string,
+  runDetails: PropTypes.object,
+  rawFeatures: PropTypes.arrayOf(PropTypes.object),
+  featureImportanceData: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ModelResultsOverview;

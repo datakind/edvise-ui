@@ -4,8 +4,9 @@ use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ModelResultsOverviewController;
+use App\Http\Controllers\ModelRunIdController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Job;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -378,41 +379,11 @@ Route::middleware(array_filter([
     env('APP_ENV') === 'prod' ? 'verified' : null,
 ]))->get(
     '/model-results-overview/{run_id}/{modelName}',
-    function ($run_id, $modelName, Request $request) {
-        return Inertia::render('ModelResultsOverview', [
-            'job_run_id' => $run_id,
-            'modelName' => $modelName,
-        ]);
-    }
+    [ModelResultsOverviewController::class, 'show']
 )->name('model-results-overview');
 
-// Get model_run_id from job table using job_run_id
-Route::get('/get-model-run-id-by-job/{job_run_id}', function ($job_run_id) {
-    $job = Job::find($job_run_id);
-
-    if (! $job || ! $job->model_run_id) {
-        return response()->json(['error' => 'Model run ID not found for job'], 404);
-    }
-
-    return response()->json([
-        'model_run_id' => $job->model_run_id,
-        'job_id' => $job_run_id,
-        'model_id' => $job->model_id,
-    ]);
-});
-
-// Old route - reads from .env file (still used by DataDictionary)
-Route::get('/get-model-run-id/{inst_id}', function ($inst_id, Request $request) {
-    // Get the env_key from query parameter, fallback to ALT_ prefix for backward compatibility
-    $envKey = $request->query('env_key', 'ALT_'.strtoupper($inst_id));
-    $modelRunId = env($envKey);
-
-    if (! $modelRunId) {
-        return response()->json(['error' => 'Model run ID not found for institution'], 404);
-    }
-
-    return response()->json(['model_run_id' => $modelRunId]);
-});
+Route::get('/get-model-run-id-by-job/{job_run_id}', [ModelRunIdController::class, 'getByJob']);
+Route::get('/get-model-run-id/{inst_id}', [ModelRunIdController::class, 'getByInst']);
 
 // Admin invite management routes
 Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {

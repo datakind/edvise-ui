@@ -1,133 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
+import PropTypes from 'prop-types';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
 
-import { formatModelName, toTitleCase } from '../utils/stringUtils';
+import { toTitleCase } from '../utils/stringUtils';
 
-export default function DataDictionary() {
-  // Get inst_id from Inertia shared props (no API call needed!)
-  const { inst_id } = usePage().props;
-  console.log('DataDictionary - Institution ID from shared props:', inst_id);
-
-  const [selectedModel, setSelectedModel] = useState(null);
-  const [run_id, setRunId] = useState(null);
-  const [model_run_id, setModelRunId] = useState(null);
-  const [features, setFeatures] = useState([]);
+export default function DataDictionary({ features = [] }) {
+  usePage().props; // shared props (e.g. inst_id) available if needed
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
 
-  // Get models when we have inst_id
-  useEffect(() => {
-    const fetchModels = async () => {
-      if (!inst_id) return;
-
-      try {
-        const response = await axios.get('/models-api');
-        console.log('Models fetched:', response.data);
-
-        if (response.data && response.data.length > 0) {
-          // Get the first valid model
-          const validModel = response.data.find(
-            model => model.valid === true || model.valid === 1,
-          );
-          if (validModel) {
-            setSelectedModel(validModel);
-            console.log('Selected model:', validModel);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching models:', error);
-      }
-    };
-
-    fetchModels();
-  }, [inst_id]);
-
-  // Get most recent run when we have a selected model
-  useEffect(() => {
-    const fetchModelRuns = async () => {
-      if (!inst_id || !selectedModel) return;
-
-      try {
-        const response = await axios.get(`/model-runs/${selectedModel.name}`);
-        console.log('Model runs fetched:', response.data);
-
-        if (response.data && response.data.length > 0) {
-          // Get the most recent run (assuming runs are sorted by date, get the first one)
-          const mostRecentRun = response.data[0];
-          setRunId(mostRecentRun.run_id);
-          console.log('Most recent run ID:', mostRecentRun.run_id);
-        }
-      } catch (error) {
-        console.error('Error fetching model runs:', error);
-      }
-    };
-
-    fetchModelRuns();
-  }, [inst_id, selectedModel]);
-
-  // Get model_run_id from job table for the selected run
-  useEffect(() => {
-    const fetchModelRunIdFromJob = async () => {
-      if (!run_id) return;
-
-      try {
-        const response = await axios.get(`/get-model-run-id-by-job/${run_id}`);
-        if (response.data?.model_run_id) {
-          setModelRunId(response.data.model_run_id);
-        } else {
-          console.warn('DataDictionary - No model_run_id returned for job:', run_id, response.data);
-          setModelRunId(null);
-        }
-      } catch (err) {
-        console.error('DataDictionary - Error retrieving model_run_id from job table:', err);
-        console.error('Error response:', err.response?.data);
-        setModelRunId(null);
-      }
-    };
-
-    fetchModelRunIdFromJob();
-  }, [run_id]);
-
-  // Get top features when we have model_run_id
-  useEffect(() => {
-    const fetchTopFeatures = async () => {
-      if (!model_run_id) return;
-
-      const apiUrl = `/top-features/${model_run_id}`;
-      console.log('Fetching top features from:', apiUrl);
-      console.log('Full URL:', window.location.origin + apiUrl);
-
-      try {
-        const response = await axios.get(apiUrl);
-
-        const uniqueFeatures = Array.from(
-          new Map(
-            response.data
-              .filter(feature => feature.readable_feature_name)
-              .map(feature => [feature.readable_feature_name, feature]),
-          ).values(),
-        );
-
-        setFeatures(uniqueFeatures);
-        console.log('Raw features:', response.data);
-        console.log('Top features fetched (deduplicated):', uniqueFeatures);
-        console.log('Original count:', response.data.length, 'Deduplicated count:', uniqueFeatures.length);
-      } catch (error) {
-        console.error('Error fetching top features:', error);
-        console.error('Error response:', error.response?.data);
-        setFeatures([]);
-      }
-    };
-
-    fetchTopFeatures();
-  }, [model_run_id]);
-
-  // Filter and sort features based on search term and sort settings
-  const filteredAndSortedFeatures = features
+  const filteredAndSortedFeatures = (Array.isArray(features) ? features : [])
     .filter(
       feature =>
         feature.readable_feature_name
@@ -147,12 +32,6 @@ export default function DataDictionary() {
         return bValue.localeCompare(aValue);
       }
     });
-
-  // Debug logging
-  console.log('Features after deduplication:', features);
-  console.log('Filtered and sorted features:', filteredAndSortedFeatures);
-  console.log('Search term:', searchTerm);
-  console.log('Sort field:', sortField);
 
   const handleSort = field => {
     if (sortField === field) {
@@ -417,3 +296,7 @@ export default function DataDictionary() {
     </AppLayout>
   );
 }
+
+DataDictionary.propTypes = {
+  features: PropTypes.arrayOf(PropTypes.object),
+};

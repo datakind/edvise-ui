@@ -4,11 +4,13 @@ use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ModelResultsOverviewController;
+use App\Http\Controllers\ModelRunIdController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Job;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,9 +29,7 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/data-dictionary', function () {
-    return Inertia::render('DataDictionary');
-})->name('data-dictionary');
+Route::get('/data-dictionary', [App\Http\Controllers\DataDictionaryController::class, 'show'])->name('data-dictionary');
 
 Route::get('/faq', function () {
     return Inertia::render('Faq');
@@ -93,218 +93,53 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 */
 
 // PROFILE RELATED ROUTES
-
-Route::middleware(array_filter([
-    'auth', 'invite.validated', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->group(function () {
+Route::middleware('auth.app.invite')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// AUTHED ROUTES
+// AUTHED ROUTES (invite + terms + verified)
+Route::middleware('auth.app.invite')->group(function () {
+    Route::get('/file-upload', fn () => Inertia::render('FileUpload'))->name('file-upload');
+    Route::get('/dashboard/{modelname}', fn ($modelname) => Inertia::render('Dashboard', ['modelname' => $modelname]))->name('dashboard_modelname');
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+});
 
-Route::middleware(array_filter([
-    'auth', 'invite.validated', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/file-upload',
-    function () {
-        return Inertia::render('FileUpload');
-    }
-)->name('file-upload');
+// App home and main app routes (auth + terms + verified)
+Route::middleware('auth.app')->group(function () {
+    Route::get('/app-home', [ApiController::class, 'appHomeRedirect'])->name('app-home');
+    Route::get('/new-home', fn () => Inertia::render('NewHome'))->name('new-home');
+    Route::post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
+    Route::post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
+    Route::post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
+    Route::post('/create-batch', [ApiController::class, 'createBatch']);
+    Route::get('/models-api', [ApiController::class, 'getModels']);
+    Route::get('/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
+    Route::get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
+    Route::get('/institutions/{inst_id}/training/model-cards/{model_run_id}', [ApiController::class, 'downloadModelCard']);
+    Route::get('/institutions/{inst_id}/inference/top-features/{run_id}', [ApiController::class, 'getTopFeatures']);
+    Route::get('/institutions/{inst_id}/inference/features-boxplot-stat/{run_id}', [ApiController::class, 'getFeaturesBoxplotStat']);
+    Route::get('/view-input-data', [ApiController::class, 'viewInputData']);
+    Route::get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
+    Route::get('/view-output-data', [ApiController::class, 'viewOutputData']);
+    Route::get('/run-inference', fn () => Inertia::render('RunInference'))->name('run-inference');
+    Route::get('/manage-uploads', fn () => Inertia::render('ManageUploads'))->name('manage-uploads');
+    Route::get('/file-management', fn () => Inertia::render('FileManagement'))->name('file-management');
+    Route::get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename', '.*');
+    Route::get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename', '.*');
+    Route::get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
+    Route::get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
+    Route::get('/model/{model_name}', [ApiController::class, 'modelRuns']);
+    Route::get('/model-runs/{model_name}', [ApiController::class, 'modelRunsWithContext']);
+    Route::get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
+    Route::delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
+    Route::patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
+    Route::get('/institutions/{inst_id}/batch/{batch_id}/eda', [ApiController::class, 'getEdaData']);
+    Route::get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
+});
 
-Route::middleware(array_filter([
-    'auth', 'invite.validated', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/dashboard/{modelname}',
-    function ($modelname) {
-        return Inertia::render('Dashboard', ['modelname' => $modelname]);
-    }
-)->name('dashboard_modelname');
-
-// The default dashboard page.
-Route::middleware(array_filter([
-    'auth', 'invite.validated', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/dashboard',
-    function () {
-        return Inertia::render('Dashboard');
-    }
-)->name('dashboard');
-
-// App home: route decides whether to show EDA or new-home (fixes "EDA only loads on second click").
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/app-home', [ApiController::class, 'appHomeRedirect'])->name('app-home');
-
-// The default home page when logged in (no EDA).
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/new-home',
-    function () {
-        return Inertia::render('NewHome');
-    }
-)->name('new-home');
-
-// difficult to get params working with named routes
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->post('/create-batch', [ApiController::class, 'createBatch']);
-Route::middleware(array_filter([
-    'auth',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->post('/create-model', [ApiController::class, 'createModelApi']);
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/models-api', [ApiController::class, 'getModels']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
-
-// Support overview with institution context (follows same pattern as other API endpoints)
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
-
-// Model card download with institution context
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/training/model-cards/{model_run_id}', [ApiController::class, 'downloadModelCard']);
-
-// Top features with institution context
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/inference/top-features/{run_id}', [ApiController::class, 'getTopFeatures']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/inference/features-boxplot-stat/{run_id}', [ApiController::class, 'getFeaturesBoxplotStat']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/view-input-data', [ApiController::class, 'viewInputData']);
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/view-uploaded-data', [ApiController::class, 'viewUploadedData']);
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/view-output-data', [ApiController::class, 'viewOutputData']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/run-inference',
-    function () {
-        return Inertia::render('RunInference');
-    }
-)->name('run-inference');
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/manage-uploads',
-    function () {
-        return Inertia::render('ManageUploads');
-    }
-)->name('manage-uploads');
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/file-management',
-    function () {
-        return Inertia::render('FileManagement');
-    }
-)->name('file-management');
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/download-inf-data/{filename}', [ApiController::class, 'downloadInfData'])->where('filename', '.*');
-
-// Since the filename may contain forward slashes, we have to explicitly use regex so Laravel can recognize this route.
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-bytes/{filename}', [ApiController::class, 'fileBytes'])->where('filename', '.*');
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/model/{model_name}', [ApiController::class, 'modelRuns']);
-
-// New routes that use request context for institution
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/model-runs/{model_name}', [ApiController::class, 'modelRunsWithContext']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->patch('/institutions/{inst_id}/batch/{batch_id}', [ApiController::class, 'updateBatch']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/institutions/{inst_id}/batch/{batch_id}/eda', [ApiController::class, 'getEdaData']);
-
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
+Route::middleware(['auth', 'verified'])->post('/create-model', [ApiController::class, 'createModelApi']);
 
 Route::middleware(['auth'])->get('/terms/prompt', function () {
     return Inertia::render('Auth/AcceptTerms');
@@ -373,46 +208,13 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
 
 });
 
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
+Route::middleware('auth.app')->get(
     '/model-results-overview/{run_id}/{modelName}',
-    function ($run_id, $modelName, Request $request) {
-        return Inertia::render('ModelResultsOverview', [
-            'job_run_id' => $run_id,
-            'modelName' => $modelName,
-        ]);
-    }
+    [ModelResultsOverviewController::class, 'show']
 )->name('model-results-overview');
 
-// Get model_run_id from job table using job_run_id
-Route::get('/get-model-run-id-by-job/{job_run_id}', function ($job_run_id) {
-    $job = Job::find($job_run_id);
-
-    if (! $job || ! $job->model_run_id) {
-        return response()->json(['error' => 'Model run ID not found for job'], 404);
-    }
-
-    return response()->json([
-        'model_run_id' => $job->model_run_id,
-        'job_id' => $job_run_id,
-        'model_id' => $job->model_id,
-    ]);
-});
-
-// Old route - reads from .env file (still used by DataDictionary)
-Route::get('/get-model-run-id/{inst_id}', function ($inst_id, Request $request) {
-    // Get the env_key from query parameter, fallback to ALT_ prefix for backward compatibility
-    $envKey = $request->query('env_key', 'ALT_'.strtoupper($inst_id));
-    $modelRunId = env($envKey);
-
-    if (! $modelRunId) {
-        return response()->json(['error' => 'Model run ID not found for institution'], 404);
-    }
-
-    return response()->json(['model_run_id' => $modelRunId]);
-});
+Route::get('/get-model-run-id-by-job/{job_run_id}', [ModelRunIdController::class, 'getByJob']);
+Route::get('/get-model-run-id/{inst_id}', [ModelRunIdController::class, 'getByInst']);
 
 // Admin invite management routes
 Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
@@ -422,16 +224,8 @@ Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function ()
     Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
 });
 
-Route::middleware(array_filter([
-    'auth', 'terms.accepted',
-    env('APP_ENV') === 'prod' ? 'verified' : null,
-]))->get(
-    '/eda',
-    function (Request $request) {
-        $batch_id = $request->query('batch_id');
-
-        return Inertia::render('EdaDashboard', [
-            'batch_id' => $batch_id,
-        ]);
-    }
-)->name('eda');
+Route::middleware('auth.app')->get('/eda', function (Request $request) {
+    return Inertia::render('EdaDashboard', [
+        'batch_id' => $request->query('batch_id'),
+    ]);
+})->name('eda');

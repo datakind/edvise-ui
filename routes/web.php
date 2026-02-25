@@ -29,9 +29,7 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/data-dictionary', function () {
-    return Inertia::render('DataDictionary');
-})->name('data-dictionary');
+Route::get('/data-dictionary', [App\Http\Controllers\DataDictionaryController::class, 'show'])->name('data-dictionary');
 
 Route::get('/faq', function () {
     return Inertia::render('Faq');
@@ -95,7 +93,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 */
 
 // PROFILE RELATED ROUTES
-
 Route::middleware('auth.app.invite')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -103,7 +100,6 @@ Route::middleware('auth.app.invite')->group(function () {
 });
 
 // AUTHED ROUTES (invite + terms + verified)
-
 Route::middleware('auth.app.invite')->group(function () {
     Route::get('/file-upload', fn () => Inertia::render('FileUpload'))->name('file-upload');
     Route::get('/dashboard/{modelname}', fn ($modelname) => Inertia::render('Dashboard', ['modelname' => $modelname]))->name('dashboard_modelname');

@@ -50,14 +50,12 @@ class Kernel extends HttpKernel
         'auth.app' => [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\EnsureTermsAccepted::class,
-            \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ],
 
         'auth.app.invite' => [
             \App\Http\Middleware\Authenticate::class,
             \App\Http\Middleware\CheckInviteValidated::class,
             \App\Http\Middleware\EnsureTermsAccepted::class,
-            \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ],
     ];
 

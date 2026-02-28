@@ -135,6 +135,18 @@ class ApiController extends Controller
         if ($request->input('pdp_id') != null) {
             $post_request_body['pdp_id'] = $request->input('pdp_id');
         }
+        if ($request->input('is_edvise') != null) {
+            $post_request_body['is_edvise'] = $request->input('is_edvise');
+        }
+        if ($request->input('edvise_id') != null && $request->input('edvise_id') != '') {
+            $post_request_body['edvise_id'] = $request->input('edvise_id');
+        }
+        if ($request->input('is_legacy') != null) {
+            $post_request_body['is_legacy'] = $request->input('is_legacy');
+        }
+        if ($request->input('legacy_id') != null && $request->input('legacy_id') != '') {
+            $post_request_body['legacy_id'] = $request->input('legacy_id');
+        }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $post_request_body['retention_days'] = $request->input('retention_days');
         }
@@ -236,6 +248,18 @@ class ApiController extends Controller
         }
         if ($request->input('pdp_id') != null) {
             $req_body['pdp_id'] = $request->input('pdp_id');
+        }
+        if ($request->input('is_edvise') != null) {
+            $req_body['is_edvise'] = $request->input('is_edvise');
+        }
+        if ($request->input('edvise_id') != null && $request->input('edvise_id') != '') {
+            $req_body['edvise_id'] = $request->input('edvise_id');
+        }
+        if ($request->input('is_legacy') != null) {
+            $req_body['is_legacy'] = $request->input('is_legacy');
+        }
+        if ($request->input('legacy_id') != null && $request->input('legacy_id') != '') {
+            $req_body['legacy_id'] = $request->input('legacy_id');
         }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $req_body['retention_days'] = $request->input('retention_days');

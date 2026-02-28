@@ -246,20 +246,21 @@ class ApiController extends Controller
             }
             $req_body['is_pdp'] = $request->input('is_pdp');
         }
-        if ($request->input('pdp_id') != null) {
-            $req_body['pdp_id'] = $request->input('pdp_id');
+        // Forward school-type IDs when present (including null) so API can clear when switching type
+        if ($request->has('pdp_id')) {
+            $req_body['pdp_id'] = $request->input('pdp_id') ?: null;
         }
         if ($request->input('is_edvise') != null) {
             $req_body['is_edvise'] = $request->input('is_edvise');
         }
-        if ($request->input('edvise_id') != null && $request->input('edvise_id') != '') {
-            $req_body['edvise_id'] = $request->input('edvise_id');
+        if ($request->has('edvise_id')) {
+            $req_body['edvise_id'] = $request->input('edvise_id') ?: null;
         }
         if ($request->input('is_legacy') != null) {
             $req_body['is_legacy'] = $request->input('is_legacy');
         }
-        if ($request->input('legacy_id') != null && $request->input('legacy_id') != '') {
-            $req_body['legacy_id'] = $request->input('legacy_id');
+        if ($request->has('legacy_id')) {
+            $req_body['legacy_id'] = $request->input('legacy_id') ?: null;
         }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $req_body['retention_days'] = $request->input('retention_days');

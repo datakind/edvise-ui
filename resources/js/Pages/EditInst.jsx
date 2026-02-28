@@ -122,20 +122,25 @@ export default function EditInst() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    const pdp = formData.get('PDP') === 'on';
     const edvise = formData.get('Edvise') === 'on';
     const legacy = formData.get('Legacy') === 'on';
-    const schoolTypeCount = [formData.get('PDP') === 'on', edvise, legacy].filter(Boolean).length;
+    const schoolTypeCount = [pdp, edvise, legacy].filter(Boolean).length;
     if (schoolTypeCount > 1) {
       setError('Select at most one of PDP, Edvise, or Legacy.');
       return;
     }
+    // API only updates fields that are sent; to clear a school type we must send null explicitly.
+    // Omit edvise_id/legacy_id when that type is selected (no input to set; preserve existing).
     const payload = {
       name: formData.get('inst_name'),
       state: formData.get('state'),
       allowed_schemas: formData.get('Custom') ? ['UNKNOWN'] : null,
       allowed_emails: constructEmailDict(formData),
-      is_pdp: formData.get('PDP') === 'on',
-      pdp_id: formData.get('pdp_id') || null,
+      is_pdp: pdp,
+      pdp_id: pdp ? (formData.get('pdp_id') || null) : null,
+      edvise_id: edvise ? undefined : null, // omit when Edvise so API keeps existing; null clears
+      legacy_id: legacy ? undefined : null,  // omit when Legacy so API keeps existing; null clears
     };
     if (edvise) payload.is_edvise = true;
     if (legacy) payload.is_legacy = true;

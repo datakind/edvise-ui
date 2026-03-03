@@ -412,7 +412,7 @@ function ModelResultsOverview({
                 />
               </div>
               {/* Support Scores Histogram */}
-              {
+              {false && inst_id && model_run_id && (
                 <div className="mb-8">
                   <SupportScores
                     tab={tab}
@@ -421,7 +421,7 @@ function ModelResultsOverview({
                     inst_id={inst_id}
                   />
                 </div>
-              }
+              )}
             </>
           )}
         </div>

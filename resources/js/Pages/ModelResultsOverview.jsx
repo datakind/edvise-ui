@@ -377,12 +377,9 @@ function ModelResultsOverview({
                   <a
                     href={
                       inst_id && model_run_id
-                        ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
+                        ? `/institutions/${inst_id}/training/model-cards/${modelName}`
                         : '#'
                     }
-                    onClick={e => {
-                      if (!inst_id || !model_run_id) e.preventDefault();
-                    }}
                     className="cursor-pointer font-semibold text-black underline hover:opacity-80"
                   >
                     download the model card here

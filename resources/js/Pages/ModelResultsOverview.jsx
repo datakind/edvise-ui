@@ -377,7 +377,7 @@ function ModelResultsOverview({
                   <a
                     href={
                       inst_id && model_run_id
-                        ? `/institutions/${inst_id}/training/model-cards/${modelName}`
+                        ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
                         : '#'
                     }
                     className="cursor-pointer font-semibold text-black underline hover:opacity-80"

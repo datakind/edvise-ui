@@ -1,8 +1,8 @@
 import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
-import NewHomeSection from '@/Components/Landing/NewHomeSection';
+import HomeSection from '@/Components/Landing/HomeSection';
 
-export default function NewHome() {
+export default function Home() {
   return (
     <AppLayout
       title="Home"
@@ -12,7 +12,7 @@ export default function NewHome() {
         </h2>
       )}
     >
-      <NewHomeSection />
+      <HomeSection />
     </AppLayout>
   );
 }

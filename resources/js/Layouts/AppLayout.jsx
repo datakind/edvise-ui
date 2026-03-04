@@ -16,9 +16,7 @@ import {
 } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
-  CalendarIcon,
   ChartPieIcon,
-  PhoneIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
   HomeIcon,
@@ -26,12 +24,9 @@ import {
   Cog8ToothIcon,
   BookOpenIcon,
   ArrowRightStartOnRectangleIcon,
-  AdjustmentsVerticalIcon,
   ChartBarIcon,
   ClipboardDocumentListIcon,
-  PlusIcon,
   PlusCircleIcon,
-  InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { subtract } from 'lodash';
 import { formatModelName } from '@/utils/stringUtils';
@@ -223,9 +218,7 @@ export default function AppLayout({ title, renderHeader, children }) {
       // Fetch models and update Model Results navigation
       try {
         const response = await axios.get('/models-api');
-        newNav = newNav.map(item =>
-          dashboardNavHelper(item, response.data),
-        );
+        newNav = newNav.map(item => dashboardNavHelper(item, response.data));
         newNav = newNav.filter(
           item =>
             !(
@@ -246,9 +239,9 @@ export default function AppLayout({ title, renderHeader, children }) {
   const renderNav = navMap =>
     navMap.map(item =>
       (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
-        (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-        (!userIsDatakinder &&
-          item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
+      (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
+      (!userIsDatakinder &&
+        item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
         <></>
       ) : (
         <li key={item.name}>
@@ -436,9 +429,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                   {renderNav(navigationBelowLine)}
                   {user ? (
                     <li key="profile" className="flex hidden items-end">
-                      <div
-                        className="flex w-full items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50"
-                      >
+                      <div className="flex w-full items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50">
                         <span className="sr-only">Your profile</span>
                         <Dropdown>
                           <Dropdown.Trigger>
@@ -480,7 +471,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                                       >
                                         <Dropdown.Link as="button">
                                           <div className="flex items-center">
-                                            {team.id === user.current_team_id && (
+                                            {team.id ===
+                                              user.current_team_id && (
                                               <svg
                                                 className="me-2 h-5 w-5 text-green-400"
                                                 xmlns="http://www.w3.org/2000/svg"

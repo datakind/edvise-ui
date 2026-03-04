@@ -600,7 +600,7 @@ class ApiController extends Controller
 
     /**
      * Redirect to the appropriate app home: EDA dashboard if the user's institution
-     * has at least one valid (non-deleted) batch, otherwise the generic new-home page.
+     * has at least one valid (non-deleted) batch, otherwise the generic home page.
      */
     public function appHomeRedirect(Request $request)
     {
@@ -619,7 +619,7 @@ class ApiController extends Controller
 
         return $hasBatches
             ? redirect()->route('eda')
-            : redirect()->route('new-home');
+            : redirect()->route('home');
     }
 
     // The below provided by DK.

@@ -1,26 +1,10 @@
-import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Link, usePage, router } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { usePage, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
-import {
-  DocumentDuplicateIcon,
-  TrashIcon,
-  DocumentIcon,
-  CheckIcon,
-  XMarkIcon,
-  PlusCircleIcon,
-  Cog8ToothIcon,
-} from '@heroicons/react/24/outline';
-import DangerAlert from '@/Components/DangerAlert';
-import SuccessAlert from '@/Components/SuccessAlert';
-import Steppers from '@/Components/Steppers';
-import classNames from 'classnames';
-import ProgressBar from '@/Components/ProgressBar';
-import BigSuccessAlert from '@/Components/BigSuccessAlert';
+import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
-import Spinner from '@/Components/Spinner';
 
 export default function SetInstitution() {
   const { inst_id, message } = usePage().props;
@@ -54,16 +38,20 @@ export default function SetInstitution() {
     const resultArea = document.getElementById('result_area');
 
     if (!inst || inst === '') {
-      resultArea.innerHTML = '<span class="text-red-600 font-semibold">Error: Please select an institution</span>';
+      resultArea.innerHTML =
+        '<span class="text-red-600 font-semibold">Error: Please select an institution</span>';
       return;
     }
 
-    resultArea.innerHTML = '<span class="text-gray-600">Setting institution...</span>';
+    resultArea.innerHTML =
+      '<span class="text-gray-600">Setting institution...</span>';
 
     return axios
       .post('/set-inst-api/' + inst)
       .then(res => {
-        const institutionName = Object.entries(resultList).find(([name, id]) => id === inst)?.[0] || 'Unknown';
+        const institutionName =
+          Object.entries(resultList).find(([name, id]) => id === inst)?.[0] ||
+          'Unknown';
         setCurrentInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
         setHideSetInstError(true);
@@ -125,12 +113,14 @@ export default function SetInstitution() {
                     style={{ backgroundImage: 'none' }}
                     name="instid"
                     value={selectedInstId}
-                    onChange={(e) => setSelectedInstId(e.target.value)}
+                    onChange={e => setSelectedInstId(e.target.value)}
                     required
                     disabled={loading}
                   >
                     <option value="">
-                      {loading ? 'Loading institutions...' : 'Choose an institution...'}
+                      {loading
+                        ? 'Loading institutions...'
+                        : 'Choose an institution...'}
                     </option>
                     {Object.entries(resultList)
                       .sort(([nameA], [nameB]) => nameA.localeCompare(nameB))

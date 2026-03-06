@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
@@ -146,40 +147,42 @@ function ModelResultsOverview({
           </button>
         </div>
         <div className="min-w-full bg-[#FAFAFA] p-6">
-          <div className="mb-2 flex items-center gap-4">
-            <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
-              onClick={() => setTab('results')}
-            >
-              Latest Model Results
-            </button>
-            <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'about' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
-              onClick={() => setTab('about')}
-            >
-              About this Model
-            </button>
-          </div>
-          <hr className="-mt-2 mb-4 w-full border-black" />
-
-          {/* Show batch and model info on both tabs */}
-          <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
-            <div>
-              Showing results for data batch:{' '}
-              <a
-                href={route('manage-uploads')}
-                className="text-black hover:underline"
+          <TabGroup
+            selectedIndex={tab === 'results' ? 0 : 1}
+            onChange={idx => setTab(idx === 0 ? 'results' : 'about')}
+          >
+            <TabList className="mb-2 flex items-center gap-4">
+              <Tab
+                className="px-2 pb-1 text-xl font-light text-[#637381] outline-none data-[selected]:rounded-t-lg data-[selected]:border-b-2 data-[selected]:border-black data-[selected]:bg-[#EEF2F6] data-[selected]:p-1 data-[selected]:font-semibold data-[selected]:text-black"
               >
-                {runDetails?.batch_name || 'Loading...'}
-              </a>
-            </div>
-            <div>
-              Run on model: {formatModelName(modelName || 'Unknown Model')}
-            </div>
-          </div>
+                Latest Model Results
+              </Tab>
+              <Tab
+                className="px-2 pb-1 text-xl font-light text-[#637381] outline-none data-[selected]:rounded-t-lg data-[selected]:border-b-2 data-[selected]:border-black data-[selected]:bg-[#EEF2F6] data-[selected]:p-1 data-[selected]:font-semibold data-[selected]:text-black"
+              >
+                About this Model
+              </Tab>
+            </TabList>
+            <hr className="-mt-2 mb-4 w-full border-black" />
 
-          {tab === 'results' ? (
-            <>
+            {/* Show batch and model info on both tabs */}
+            <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
+              <div>
+                Showing results for data batch:{' '}
+                <a
+                  href={route('manage-uploads')}
+                  className="text-black hover:underline"
+                >
+                  {runDetails?.batch_name || 'Loading...'}
+                </a>
+              </div>
+              <div>
+                Run on model: {formatModelName(modelName || 'Unknown Model')}
+              </div>
+            </div>
+
+            <TabPanels>
+              <TabPanel>
               <div className="mb-8">
                 <SupportOverview
                   tab={tab}
@@ -361,9 +364,8 @@ function ModelResultsOverview({
                   </div>
                 </div>
               </div>
-            </>
-          ) : (
-            <>
+            </TabPanel>
+            <TabPanel>
               {/* Introduction Card */}
               <div className="mb-8 rounded-2xl bg-white p-6 shadow">
                 <H2 className="mb-2">Introduction</H2>
@@ -419,8 +421,9 @@ function ModelResultsOverview({
                   />
                 </div>
               )}
-            </>
-          )}
+            </TabPanel>
+          </TabPanels>
+        </TabGroup>
         </div>
       </div>
       {isModalOpen && (

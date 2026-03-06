@@ -65,6 +65,16 @@ export default {
         heading: {
           DEFAULT: '#1E343F',
         },
+        tabs: {
+          default: '#637381',
+          selectedBg: '#EEF2F6',
+          selectedBorder: '#000000',
+          selectedText: '#000000',
+        },
+        input: {
+          border: '#E5E7EB',
+          focus: '#007C8C',
+        },
       },
       boxShadow: {
         card: '0 10px 20px 0 rgba(92, 115, 160, 0.07)',

@@ -104,3 +104,26 @@ a {
 .waiting > .waiting-overlay > .waiting-spinner {
   @apply text-gray-700 inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent;
 }
+
+/* Headless UI tabs */
+.app-tabs [role="tablist"] {
+  @apply mb-2 flex items-center gap-4;
+}
+.app-tabs [role="tab"] {
+  @apply outline-none px-2 pb-1 text-xl font-light text-tabs-default;
+}
+.app-tabs [role="tab"][data-selected] {
+  @apply rounded-t-lg border-b-2 border-tabs-selectedBorder bg-tabs-selectedBg p-1 font-semibold text-tabs-selectedText;
+}
+.app-tabs [role="tablist"] + hr {
+  @apply -mt-2 mb-4 w-full border-t-2 border-tabs-selectedBorder;
+}
+
+/* Edvise theme: text inputs – style by element, no class needed */
+input[type="text"]:not(.mapboxgl-ctrl-geocoder--input) {
+  @apply w-full rounded-full border px-4 py-2 pr-10 focus:outline-none;
+  border-color: theme('colors.input.border');
+}
+input[type="text"]:not(.mapboxgl-ctrl-geocoder--input):focus {
+  border-color: theme('colors.input.focus');
+}

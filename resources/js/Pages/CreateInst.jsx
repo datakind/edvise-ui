@@ -13,8 +13,6 @@ export default function CreateInst() {
   const schemas = [
     { name: 'Custom', selected: false },
     { name: 'PDP', selected: false },
-    { name: 'Edvise', selected: false },
-    { name: 'Legacy', selected: false },
   ];
 
   const [addUserCounter, setAddUserCounter] = useState(0);
@@ -85,26 +83,16 @@ export default function CreateInst() {
       return;
     }
     // Enforce the selection of at least one schema type.
-    const edvise = event.target.elements.Edvise?.checked ?? false;
-    const legacy = event.target.elements.Legacy?.checked ?? false;
+    // NOTE: As schemas get added here, you'll need to expand this if check to include those schemas as well.
     if (
       !event.target.elements.Custom.checked &&
-      !event.target.elements.PDP.checked &&
-      !edvise &&
-      !legacy
+      !event.target.elements.PDP.checked
     ) {
       document.getElementById('result_area').innerHTML =
         'Error: Schema type must contain at least one selection.';
       return;
     }
-    // At most one of PDP, Edvise, or Legacy (API allows only one school type).
-    const schoolTypeCount = [event.target.elements.PDP.checked, edvise, legacy].filter(Boolean).length;
-    if (schoolTypeCount > 1) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Select at most one of PDP, Edvise, or Legacy.';
-      return;
-    }
-    // We currently only have custom for potential other schemas. Note that the schema passed to the API call must match the corresponding backend schema enum value.
+    // We currently only have custom for potential other schemas. NOte that the shema passed to the API call must match the corresponding backend schema enum value.
     let other_schemas = event.target.elements.Custom.checked
       ? ['UNKNOWN']
       : null;
@@ -127,21 +115,18 @@ export default function CreateInst() {
         constructedEmailDict[value] = accessDict[key];
       }
     }
-    const payload = {
-      name: event.target.elements.inst_name.value,
-      state: event.target.elements.state.value,
-      allowed_schemas: other_schemas,
-      allowed_emails:
-        constructedEmailDict.length == 0 ? null : constructedEmailDict,
-      is_pdp: pdp,
-      pdp_id: event.target.elements.pdp_id?.value || null,
-    };
-    if (edvise) payload.is_edvise = true;
-    if (legacy) payload.is_legacy = true;
     return axios({
       method: 'post',
       url: '/create-inst-api',
-      data: payload,
+      data: {
+        name: event.target.elements.inst_name.value,
+        state: event.target.elements.state.value,
+        allowed_schemas: other_schemas,
+        allowed_emails:
+          constructedEmailDict.length == 0 ? null : constructedEmailDict,
+        is_pdp: pdp,
+        pdp_id: event.target.elements.pdp_id.value,
+      },
     })
       .then(res => {
         document.getElementById('result_area').innerHTML =

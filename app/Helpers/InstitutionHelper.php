@@ -15,8 +15,8 @@ class InstitutionHelper
     // Returns the institution id, access_type of the current user if set anywhere.
     public static function checkSelfInst(Request $request)
     {
-        // To allow for local testing.
-        if (strtoupper(env('APP_ENV')) == 'LOCAL') {
+        // Skip backend API when running locally or in tests (no real backend available).
+        if (in_array(strtoupper(env('APP_ENV', '')), ['LOCAL', 'TESTING'], true)) {
             return ['', '', 'User does not have an institution nor access type.'];
         }
         [$tok, $tokErr] = TokenHelper::GetToken($request);

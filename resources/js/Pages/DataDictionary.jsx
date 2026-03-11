@@ -3,9 +3,166 @@ import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
-
 import { toTitleCase } from '../utils/stringUtils';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+
+const MODEL_CARD_SECTIONS = [
+  {
+    title: 'Statistical and Data Processing',
+    terms: [
+      {
+        term: 'Null values',
+        def: 'Empty or missing data entries in a dataset.',
+      },
+      {
+        term: 'Duplicate values',
+        def: 'Repeated records of the same data point.',
+      },
+      {
+        term: 'Variance',
+        def: 'A measure of how spread out values are from the average.',
+      },
+      {
+        term: 'Collinearity / Multicollinearity',
+        def: 'When two or more features (variables) in a dataset are strongly related, which can confuse a model.',
+      },
+      {
+        term: 'Variance Inflation Factor (VIF)',
+        def: 'A number that tells how much multicollinearity exists among features; higher values mean more redundancy.',
+      },
+      {
+        term: 'Low variance threshold',
+        def: "A cutoff used to remove variables that don't vary much and therefore add little useful information.",
+      },
+      {
+        term: 'Missing data threshold',
+        def: 'A rule for deciding when too much data is missing for a variable to be reliable.',
+      },
+      {
+        term: 'Sample weights',
+        def: 'A way of giving more or less importance to certain examples during model training.',
+      },
+    ],
+  },
+  {
+    title: 'Machine Learning and Modeling Terms',
+    terms: [
+      {
+        term: 'AutoML (Automated Machine Learning)',
+        def: 'Software that automatically tests and tunes many machine learning models to find the best one.',
+      },
+      {
+        term: 'Feature Engineering',
+        def: 'Turning raw data into meaningful inputs ("features") that the model can learn from.',
+      },
+      {
+        term: 'Feature Importance Plot',
+        def: 'A visual showing which features influenced predictions the most.',
+      },
+      {
+        term: 'Feature Selection',
+        def: 'Choosing the most useful features and removing redundant or irrelevant ones.',
+      },
+      {
+        term: 'Model Interpretability',
+        def: 'How easily a person can understand how and why the model made a certain prediction.',
+      },
+      {
+        term: 'Model Pipeline / MLOps',
+        def: 'The process and infrastructure for managing how data is processed, models are trained, and results are deployed.',
+      },
+      {
+        term: 'SHAP (Shapley Additive Explanations)',
+        def: "A method for explaining a model's predictions by showing how much each feature contributed to a particular prediction.",
+      },
+    ],
+  },
+  {
+    title: 'Model Evaluation Metrics',
+    terms: [
+      {
+        term: 'Accuracy',
+        def: 'The percentage of predictions the model got right.',
+      },
+      {
+        term: 'Precision',
+        def: 'Of the cases the model predicted as "at-risk," how many were actually at-risk.',
+      },
+      {
+        term: 'Recall',
+        def: 'Of all the truly at-risk students, how many the model correctly identified.',
+      },
+      { term: 'F1 Score', def: 'A balance between precision and recall.' },
+      {
+        term: 'AUC (Area Under the Curve)',
+        def: 'Measures how well the model distinguishes between positive and negative cases; closer to 1 is better.',
+      },
+      {
+        term: 'Log Loss',
+        def: "A measure of how accurate the model's probability predictions are (lower is better).",
+      },
+      {
+        term: 'Confusion matrix',
+        def: "A table showing how often the model's predictions matched or mismatched the true outcomes.",
+      },
+      {
+        term: 'Calibration curve',
+        def: 'A plot showing how well the predicted probabilities match real-world outcomes.',
+      },
+    ],
+  },
+  {
+    title: 'Bias Terms',
+    terms: [
+      {
+        term: 'False Negative Rate (FNR)',
+        def: 'The proportion of true positive cases that the model missed (predicted as negative).',
+      },
+      {
+        term: 'False Negative Rate Parity (FNR Parity)',
+        def: 'Checking whether the false negative rate is similar across different groups (e.g., gender, race).',
+      },
+      {
+        term: 'Statistical significance',
+        def: 'Whether differences in model results are likely to be real or just due to random chance.',
+      },
+      {
+        term: 'Confidence interval (CI)',
+        def: 'A range showing the uncertainty of a metric (e.g., "we\'re 95% confident the true value is between these two numbers").',
+      },
+    ],
+  },
+  {
+    title: 'Education Specific/Domain Terms',
+    terms: [
+      {
+        term: 'Program of study area',
+        def: "The student's academic discipline or field.",
+      },
+      {
+        term: 'Enrollment intensity',
+        def: 'Whether the student is studying full-time or part-time.',
+      },
+      {
+        term: '"Peak COVID" term',
+        def: 'The academic terms that occurred during the height of the COVID-19 pandemic.',
+      },
+      {
+        term: 'Pell Grant recipient',
+        def: 'A student receiving a U.S. federal grant for low-income students.',
+      },
+      {
+        term: 'Term-over-term comparisons',
+        def: 'Measuring how metrics change between academic terms (e.g., between fall and spring semesters).',
+      },
+    ],
+  },
+];
 
 export default function DataDictionary({ features = [] }) {
   usePage().props; // shared props (e.g. inst_id) available if needed
@@ -46,45 +203,46 @@ export default function DataDictionary({ features = [] }) {
   return (
     <AppLayout title="Data Dictionary">
       <Head title="Data Dictionary" />
-      <div className="font-[Helvetica Neue] mb-8 min-w-full">
+      <div className="font-[Helvetica Neue] min-w-full bg-background py-8">
         <PageHeading>Data Dictionary</PageHeading>
 
-        {/* Unified Content Section */}
-        <div className="bg-white p-6 px-12 shadow">
-          {/* Submission Data Requirements Section */}
-          <div className="mb-8">
-            <h2 className="mb-4 text-3xl font-light">
+        <div className="mx-auto max-w-5xl rounded-[40px] bg-white px-10 py-10 shadow-card sm:px-12">
+          {/* Submission Data Requirements */}
+          <div className="mb-10">
+            <h2 className="mb-4 text-3xl font-light text-heading">
               Submission Data Requirements
             </h2>
-            <div className="space-y-4 text-xl font-light">
-              <p>
-                DataKind receives de-identified &ldquo;Analysis Ready
-                (AR)&rdquo; files from the National Student Clearinghouse (NSC)
-                using a &ldquo;StudyID&rdquo; field. Users should upload files
-                aligned with{' '}
-                <span className="font-bold underline">
-                  AR file templates provided by NSC
-                </span>
-                .
-              </p>
-              <p>
-                Important: If uploading a StudyID file, the &ldquo;Student
-                ID&rdquo; column must be deleted. Only &ldquo;Study ID&rdquo; or
-                &ldquo;Student GUID&rdquo; (both in quotes) should be included
-                in data uploaded to Edvise.
-              </p>
+            <p className="mb-4 text-xl font-light text-[#171717]">
+              DataKind receives de-identified &ldquo;Analysis Ready (AR)&rdquo;
+              files from the National Student Clearinghouse (NSC) using a
+              &ldquo;StudyID&rdquo; field. Users should upload files aligned
+              with{' '}
+              <a
+                href="https://www.studentclearinghouse.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-link underline"
+              >
+                AR file templates provided by NSC
+              </a>
+              .
+            </p>
+            <div className="border-l-4 border-secondary bg-landing-light-blue py-3 pl-4 pr-4 text-xl font-light text-[#171717]">
+              <span className="font-semibold">Important:</span> If uploading a
+              StudyID file, the &ldquo;Student ID&rdquo; column must be deleted.
+              Only &ldquo;Study ID&rdquo; or &ldquo;Student GUID&rdquo; (both in
+              quotes) should be included in data uploaded to Edvise.
             </div>
           </div>
 
-          {/* Output Data Format Section */}
-          <div className="mb-8">
-            <TabGroup className="app-tabs">
+          {/* Tabs */}
+          <div className="mb-10">
+            <TabGroup className="data-dictionary-tabs">
               <TabList>
                 <Tab>Output Data Format</Tab>
                 <Tab>Original Feature Value Table</Tab>
                 <Tab>Data Science Terminology</Tab>
               </TabList>
-              <hr />
               {/* Original Feature Value Table Section */}
               <TabPanels>
                 <TabPanel>
@@ -291,287 +449,48 @@ export default function DataDictionary({ features = [] }) {
                   </div>
                 </TabPanel>
                 <TabPanel>
-                  <div className="space-y-8 text-base font-light">
-                    <section>
-                      <h3 className="mb-3 text-xl font-medium">
-                        Statistical and Data Processing terms
-                      </h3>
-                      <dl className="space-y-2">
-                        <div>
-                          <dt className="font-medium">Null values</dt>
-                          <dd>Empty or missing data entries in a dataset.</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Duplicate values</dt>
-                          <dd>Repeated records of the same data point.</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Variance</dt>
-                          <dd>
-                            A measure of how spread out values are from the
-                            average.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Collinearity / Multicollinearity
-                          </dt>
-                          <dd>
-                            When two or more features (variables) in a dataset
-                            are strongly related, which can confuse a model.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Variance Inflation Factor (VIF)
-                          </dt>
-                          <dd>
-                            A number that tells how much multicollinearity
-                            exists among features; higher values mean more
-                            redundancy.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Low variance threshold
-                          </dt>
-                          <dd>
-                            A cutoff used to remove variables that don’t vary
-                            much and therefore add little useful information.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Missing data threshold
-                          </dt>
-                          <dd>
-                            A rule for deciding when too much data is missing
-                            for a variable to be reliable.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Sample weights</dt>
-                          <dd>
-                            A way of giving more or less importance to certain
-                            examples during model training.
-                          </dd>
-                        </div>
-                      </dl>
-                    </section>
-                    <section>
-                      <h3 className="mb-3 text-xl font-medium">
-                        Machine Learning and Modeling Terms
-                      </h3>
-                      <dl className="space-y-2">
-                        <div>
-                          <dt className="font-medium">Feature engineering</dt>
-                          <dd>
-                            Turning raw data into meaningful inputs (“features”)
-                            that the model can learn from.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Feature selection</dt>
-                          <dd>
-                            Choosing the most useful features and removing
-                            redundant or irrelevant ones.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Model pipeline / MLOps
-                          </dt>
-                          <dd>
-                            The process and infrastructure for managing how data
-                            is processed, models are trained, and results are
-                            deployed.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            AutoML (Automated Machine Learning)
-                          </dt>
-                          <dd>
-                            Software that automatically tests and tunes many
-                            machine learning models to find the best one.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Model interpretability
-                          </dt>
-                          <dd>
-                            How easily a person can understand how and why the
-                            model made a certain prediction.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            SHAP (Shapley Additive Explanations)
-                          </dt>
-                          <dd>
-                            A method for explaining a model’s predictions by
-                            showing how much each feature contributed to a
-                            particular prediction.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Feature importance plot
-                          </dt>
-                          <dd>
-                            A visual showing which features influenced
-                            predictions the most.
-                          </dd>
-                        </div>
-                      </dl>
-                    </section>
-                    <section>
-                      <h3 className="mb-3 text-xl font-medium">
-                        Model Evaluation Metrics
-                      </h3>
-                      <dl className="space-y-2">
-                        <div>
-                          <dt className="font-medium">Accuracy</dt>
-                          <dd>
-                            The percentage of predictions the model got right.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Precision</dt>
-                          <dd>
-                            Of the cases the model predicted as “at-risk,” how
-                            many were actually at-risk.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Recall</dt>
-                          <dd>
-                            Of all the truly at-risk students, how many the
-                            model correctly identified.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">F1 Score</dt>
-                          <dd>A balance between precision and recall.</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            AUC (Area Under the Curve)
-                          </dt>
-                          <dd>
-                            Measures how well the model distinguishes between
-                            positive and negative cases; closer to 1 is better.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Log Loss</dt>
-                          <dd>
-                            A measure of how accurate the model’s probability
-                            predictions are (lower is better).
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Confusion matrix</dt>
-                          <dd>
-                            A table showing how often the model’s predictions
-                            matched or mismatched the true outcomes.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Calibration curve</dt>
-                          <dd>
-                            A plot showing how well the predicted probabilities
-                            match real-world outcomes.
-                          </dd>
-                        </div>
-                      </dl>
-                    </section>
-                    <section>
-                      <h3 className="mb-3 text-xl font-medium">Bias Terms</h3>
-                      <dl className="space-y-2">
-                        <div>
-                          <dt className="font-medium">
-                            False Negative Rate (FNR)
-                          </dt>
-                          <dd>
-                            The proportion of true positive cases that the model
-                            missed (predicted as negative).
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            False Negative Rate Parity (FNR Parity)
-                          </dt>
-                          <dd>
-                            Checking whether the false negative rate is similar
-                            across different groups (e.g., gender, race).
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Statistical significance
-                          </dt>
-                          <dd>
-                            Whether differences in model results are likely to
-                            be real or just due to random chance.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Confidence interval (CI)
-                          </dt>
-                          <dd>
-                            A range showing the uncertainty of a metric (e.g.,
-                            “we’re 95% confident the true value is between these
-                            two numbers”).
-                          </dd>
-                        </div>
-                      </dl>
-                    </section>
-                    <section>
-                      <h3 className="mb-3 text-xl font-medium">
-                        Education Specific/Domain Terms
-                      </h3>
-                      <dl className="space-y-2">
-                        <div>
-                          <dt className="font-medium">Program of study area</dt>
-                          <dd>The student’s academic discipline or field.</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Enrollment intensity</dt>
-                          <dd>
-                            Whether the student is studying full-time or
-                            part-time.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            &ldquo;Peak COVID&rdquo; term
-                          </dt>
-                          <dd>
-                            The academic terms that occurred during the height
-                            of the COVID-19 pandemic.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">Pell Grant recipient</dt>
-                          <dd>
-                            A student receiving a U.S. federal grant for
-                            low-income students.
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium">
-                            Term-over-term comparisons
-                          </dt>
-                          <dd>
-                            Measuring how metrics change between academic terms
-                            (e.g., between fall and spring semesters).
-                          </dd>
-                        </div>
-                      </dl>
-                    </section>
+                  {/* Model Card Dictionary */}
+                  <div>
+                    <h2 className="mb-4 text-3xl font-light text-heading">
+                      Model Card Dictionary
+                    </h2>
+                    <div className="accordion">
+                      {MODEL_CARD_SECTIONS.map(section => (
+                        <Disclosure
+                          key={section.title}
+                          as="div"
+                          className="accordion__item"
+                        >
+                          {({ open }) => (
+                            <>
+                              <DisclosureButton
+                                className={`accordion__trigger ${open ? 'accordion__trigger--open' : ''}`}
+                              >
+                                <span>{section.title}</span>
+                                <span
+                                  className="accordion__trigger-icon"
+                                  aria-hidden
+                                >
+                                  {open ? '−' : '+'}
+                                </span>
+                              </DisclosureButton>
+                              <DisclosurePanel className="accordion__panel">
+                                <dl className="accordion__dl">
+                                  {section.terms.map(({ term, def }) => (
+                                    <div key={term}>
+                                      <dt className="accordion__term">
+                                        {term}
+                                      </dt>
+                                      <dd className="accordion__def">{def}</dd>
+                                    </div>
+                                  ))}
+                                </dl>
+                              </DisclosurePanel>
+                            </>
+                          )}
+                        </Disclosure>
+                      ))}
+                    </div>
                   </div>
                 </TabPanel>
               </TabPanels>

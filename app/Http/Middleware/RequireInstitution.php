@@ -14,6 +14,17 @@ class RequireInstitution
         'createInstApi', 'addDatakinderApi', 'viewAllInstitutions', 'EditInstApi',
     ];
 
+    /** Route names (and patterns) that do not require an institution. */
+    private const SKIP_ROUTES = [
+        'set-inst',
+        'logout',
+        'profile.*',
+        'add-dk',
+        'create-inst',
+        'admin.invites',
+        'admin.invites.*',
+    ];
+
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user()) {
@@ -24,7 +35,12 @@ class RequireInstitution
             return $next($request);
         }
 
-        if ($request->routeIs('set-inst') || $request->routeIs('logout') || $request->routeIs('profile.*') || $request->is('set-inst-api*')) {
+        foreach (self::SKIP_ROUTES as $pattern) {
+            if ($request->routeIs($pattern)) {
+                return $next($request);
+            }
+        }
+        if ($request->is('set-inst-api*')) {
             return $next($request);
         }
 

@@ -209,7 +209,20 @@ const createHorizontalStackedBarOption = ({
 }) => {
   const y_axis_labels =
     termChartData?.years || termChartData?.y_axis_labels || [];
-  const terms = termChartData?.terms || [];
+  const by_year = termChartData?.by_year || [];
+  const termNames = by_year[0]?.terms?.map(t => t.name);
+
+  const series = termNames.map(name => ({
+    name,
+    type: 'bar',
+    stack: 'terms',
+    data: by_year.map(y => {
+      const t = y.terms.find(term => term.name === name);
+      return t
+        ? { value: t.count, percentage: t.percentage }
+        : { value: 0, percentage: 0 };
+    }),
+  }));
 
   return {
     ...baseEChartsConfig,
@@ -218,11 +231,35 @@ const createHorizontalStackedBarOption = ({
       axisPointer: {
         type: 'shadow',
       },
+      formatter: params => {
+        if (!params?.length || !params[0].axisValueLabel) return '';
+        const lines = params
+          .filter(p => {
+            const v = p.data?.value ?? p.value;
+            return v != null && v !== 0;
+          })
+          .map(p => {
+            const d = p.data;
+            const count =
+              typeof d === 'object' && d && 'value' in d ? d.value : p.value;
+            const pct =
+              typeof d === 'object' && d && 'percentage' in d
+                ? d.percentage
+                : null;
+            const pctStr =
+              pct != null ? (pct < 1 ? '<1%' : `${Math.round(pct)}%`) : '';
+            return `${p.seriesName}: ${Number(count).toLocaleString()}${pctStr ? ` (${pctStr})` : ''}`;
+          });
+        const total = by_year[params[0].dataIndex]?.total;
+        const totalStr =
+          total != null ? `<br/>Total: ${Number(total).toLocaleString()}` : '';
+        return `${params[0].axisValueLabel}${totalStr}<br/>${lines.join('<br/>')}`;
+      },
     },
     legend: {
       ...baseEChartsConfig.legend,
       bottom: 10,
-      data: terms.map(t => t.label),
+      data: termNames,
       itemGap: 20,
     },
     grid: {
@@ -265,12 +302,7 @@ const createHorizontalStackedBarOption = ({
         lineStyle: { color: '#D7DCE5' },
       },
     },
-    series: terms.map(t => ({
-      name: t.label,
-      type: 'bar',
-      stack: 'terms',
-      data: t.data ?? [],
-    })),
+    series,
   };
 };
 
@@ -281,8 +313,11 @@ const degreeTypesOptions = edaData => {
     ...baseEChartsConfig,
     tooltip: {
       trigger: 'item',
-      formatter: params =>
-        `${params.name}: ${Number(params.value).toLocaleString()} of ${total.toLocaleString()} (${params.data.percentage}%)`,
+      formatter: params => {
+        const pct =
+          params.data.percentage < 1 ? '<1%' : `${params.data.percentage}%`;
+        return `${params.name}: ${Number(params.value).toLocaleString()} of ${total.toLocaleString()} (${pct})`;
+      },
     },
     series: [
       {
@@ -294,7 +329,8 @@ const degreeTypesOptions = edaData => {
           show: true,
           fontSize: 14,
           fontWeight: 'bold',
-          formatter: params => `${params.data.percentage}%`,
+          formatter: params =>
+            params.data.percentage < 1 ? '<1%' : `${params.data.percentage}%`,
         },
         emphasis: { label: { show: true } },
         data: items.map(d => ({

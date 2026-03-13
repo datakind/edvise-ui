@@ -1,0 +1,86 @@
+steps:
+  - name: node
+    args:
+      - install
+    id: INSTALL npm
+    entrypoint: npm
+  - name: node
+    env:
+      - NODE_OPTIONS=--max-old-space-size=4096
+    args:
+      - run
+      - build
+    id: CREATE vite assets
+    entrypoint: npm
+  - name: gcr.io/cloud-builders/gsutil
+    args:
+      - '-c'
+      - gsutil -m cp -r public/* gs://dev-sst-02-dev-static
+    id: COPY to gcs bucket
+    entrypoint: bash
+  - name: gcr.io/k8s-skaffold/pack
+    args:
+      - build
+      - '--builder=gcr.io/buildpacks/builder'
+      - '--publish'
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+    id: BUILD and PUSH with cloudpacks
+    entrypoint: pack
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - pull
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+    id: PULL and TAG latest
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    args:
+      - run
+      - jobs
+      - deploy
+      - dev-migrate
+      - >-
+        --image=us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - '--region=us-east4'
+      - '--execute-now'
+    id: DEPLOY and RUN migration job
+    entrypoint: gcloud
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - run
+      - deploy
+      - dev-frontend
+      - '--image'
+      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - '--region'
+      - us-east4
+    id: DEPLOY to cloud run
+    entrypoint: gcloud
+  - name: curlimages/curl
+    args:
+      - '-X'
+      - POST
+      - '-H'
+      - 'Content-Type: application/json'
+      - '-f'
+      - '-d'
+      - >-
+        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME · $BUILD_ID"}
+      - >-
+        https://hooks.slack.com/triggers/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
+    id: notify-slack
+timeout: 600s
+options:
+  logging: CLOUD_LOGGING_ONLY
+  dynamicSubstitutions: true

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
@@ -146,281 +147,281 @@ function ModelResultsOverview({
           </button>
         </div>
         <div className="min-w-full bg-[#FAFAFA] p-6">
-          <div className="mb-2 flex items-center gap-4">
-            <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'results' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
-              onClick={() => setTab('results')}
-            >
-              Latest Model Results
-            </button>
-            <button
-              className={`px-2 pb-1 text-xl font-light ${tab === 'about' ? 'rounded-t-lg border-b-2 border-black bg-[#EEF2F6] p-1 font-semibold text-black' : 'text-[#637381]'}`}
-              onClick={() => setTab('about')}
-            >
-              About this Model
-            </button>
-          </div>
-          <hr className="-mt-2 mb-4 w-full border-black" />
+          <TabGroup
+            className="app-tabs"
+            selectedIndex={tab === 'results' ? 0 : 1}
+            onChange={idx => setTab(idx === 0 ? 'results' : 'about')}
+          >
+            <TabList>
+              <Tab>Latest Model Results</Tab>
+              <Tab>About this Model</Tab>
+            </TabList>
+            <hr />
 
-          {/* Show batch and model info on both tabs */}
-          <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
-            <div>
-              Showing results for data batch:{' '}
-              <a
-                href={route('manage-uploads')}
-                className="text-black hover:underline"
-              >
-                {runDetails?.batch_name || 'Loading...'}
-              </a>
+            {/* Show batch and model info on both tabs */}
+            <div className="mb-4 flex justify-between px-2 text-lg font-light text-black">
+              <div>
+                Showing results for data batch:{' '}
+                <a
+                  href={route('manage-uploads')}
+                  className="text-black hover:underline"
+                >
+                  {runDetails?.batch_name || 'Loading...'}
+                </a>
+              </div>
+              <div>
+                Run on model: {formatModelName(modelName || 'Unknown Model')}
+              </div>
             </div>
-            <div>
-              Run on model: {formatModelName(modelName || 'Unknown Model')}
-            </div>
-          </div>
 
-          {tab === 'results' ? (
-            <>
-              <div className="mb-8">
-                <SupportOverview
-                  tab={tab}
-                  setTab={setTab}
-                  run_id={job_run_id}
-                  inst_id={inst_id}
-                />
-              </div>
-              <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
-                <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <H2 className="pb-4">Top 10 Areas with the Most Impact</H2>
-                    <div className="text-sm text-black">
-                      <div className="mb-1 font-semibold">
-                        How to read these charts
-                      </div>
-                      <ul className="ml-5 list-disc">
-                        <li>
-                          Charts show the features that have the most influence
-                          on this cohort of students&apos; support scores.
-                        </li>
-                        <li>
-                          Features are sorted from top to bottom in order of
-                          importance.
-                        </li>
-                        <li>Each dot represents a student record.</li>
-                        <li>
-                          The relation between dot distribution and color tells
-                          you how each feature affects student support needs.
-                          <ul className="ml-5 list-disc">
-                            <li>
-                              For example, if darker dots are all clustered
-                              further to the right, that means students with a
-                              higher value for that feature are more likely to
-                              need support.
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <InterpretChart />
-                </div>
-                <div className="-mx-8 -mb-8 overflow-x-auto rounded-b-3xl bg-white">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="w-1/3 p-2 text-sm text-xs font-bold text-black"
-                        >
-                          Click any of the feature names to learn more
-                        </th>
-                        <th
-                          className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
-                          colSpan="2"
-                          scope="col"
-                        >
-                          <span className="text-grey-700 float-left text-xs font-medium">
-                            <span className="font-bold">Decreasing</span>{' '}
-                            likelihood of support needs
-                            {/* Left arrow */}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="#000"
-                              className="size-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                              />
-                            </svg>
-                          </span>
-                          <span className="float-right font-medium">
-                            <span className="font-bold">Increasing</span>{' '}
-                            likelihood of support needs
-                            {/* Right arrow */}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="#000"
-                              className="size-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                              />
-                            </svg>
-                          </span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {features.slice(0, 10).map((feature, idx) => (
-                        <tr
-                          key={feature.feature_readable_name}
-                          className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
-                        >
-                          <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
-                            <div
-                              className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
-                              onClick={() => handleFeatureClick(feature)}
-                            >
-                              {capitalizeFirstWord(
-                                feature.feature_readable_name,
-                              )}
-                            </div>
-                            <div className="text-base text-[#4F4F4F]">
-                              {feature.feature_short_desc}
-                            </div>
-                          </td>
-                          <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
-                            <Shap
-                              rawFeatures={rawFeatures}
-                              currentFeature={feature}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td className="w-1/3 p-2 text-sm text-xs font-bold text-black"></td>
-                        <td
-                          className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
-                          colSpan="2"
-                        >
-                          <span className="text-grey-700 float-left text-xs font-medium">
-                            <span className="font-bold">Decreasing</span>{' '}
-                            likelihood of support needs
-                            {/* Left arrow */}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="#000"
-                              className="size-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                              />
-                            </svg>
-                          </span>
-                          <span className="float-right font-medium">
-                            <span className="font-bold">Increasing</span>{' '}
-                            likelihood of support needs
-                            {/* Right arrow */}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="#000"
-                              className="size-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                              />
-                            </svg>
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">
-                    Questions about how to interpret these results? Contact your
-                    account representative, and they&apos;d be happy to help!
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Introduction Card */}
-              <div className="mb-8 rounded-2xl bg-white p-6 shadow">
-                <H2 className="mb-2">Introduction</H2>
-                <div className="text-xl text-black">
-                  This model was built to identify students who may need support
-                  to be retained or graduate on time. It&apos;s intended to
-                  empower academic advisors who provide intervention strategies
-                  with information on the factors impacting student need for
-                  support. The following figures demonstrate the performance of
-                  the model. You can also{' '}
-                  <a
-                    href={
-                      inst_id && model_run_id
-                        ? `/institutions/${inst_id}/training/model-cards/${modelName}`
-                        : '#'
-                    }
-                    className="cursor-pointer font-semibold text-black underline hover:opacity-80"
-                  >
-                    download the model card here
-                  </a>{' '}
-                  for a comprehensive report on the model, including
-                  methodology, performance, and bias assessment.
-                </div>
-              </div>
-              <div className="mb-8">
-                {/* Feature Value Table */}
-                <FeatureValue model_run_id={model_run_id} inst_id={inst_id} />
-              </div>
-              {/* Confusion Matrix */}
-              <div className="mb-8">
-                <ConfusionMatrix
-                  model_run_id={model_run_id}
-                  modelName={modelName || ''}
-                  inst_id={inst_id}
-                />
-              </div>
-              {/* ROC Curve */}
-              <div className="mb-8">
-                <RocCurve
-                  model_run_id={model_run_id}
-                  modelName={modelName || ''}
-                  inst_id={inst_id}
-                />
-              </div>
-              {/* Support Scores Histogram */}
-              {false && inst_id && model_run_id && (
+            <TabPanels>
+              <TabPanel>
                 <div className="mb-8">
-                  <SupportScores
+                  <SupportOverview
                     tab={tab}
                     setTab={setTab}
-                    model_run_id={model_run_id}
+                    run_id={job_run_id}
                     inst_id={inst_id}
                   />
                 </div>
-              )}
-            </>
-          )}
+                <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
+                  <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <H2 className="pb-4">
+                        Top 10 Areas with the Most Impact
+                      </H2>
+                      <div className="text-sm text-black">
+                        <div className="mb-1 font-semibold">
+                          How to read these charts
+                        </div>
+                        <ul className="ml-5 list-disc">
+                          <li>
+                            Charts show the features that have the most
+                            influence on this cohort of students&apos; support
+                            scores.
+                          </li>
+                          <li>
+                            Features are sorted from top to bottom in order of
+                            importance.
+                          </li>
+                          <li>Each dot represents a student record.</li>
+                          <li>
+                            The relation between dot distribution and color
+                            tells you how each feature affects student support
+                            needs.
+                            <ul className="ml-5 list-disc">
+                              <li>
+                                For example, if darker dots are all clustered
+                                further to the right, that means students with a
+                                higher value for that feature are more likely to
+                                need support.
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <InterpretChart />
+                  </div>
+                  <div className="-mx-8 -mb-8 overflow-x-auto rounded-b-3xl bg-white">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="w-1/3 p-2 text-sm text-xs font-bold text-black"
+                          >
+                            Click any of the feature names to learn more
+                          </th>
+                          <th
+                            className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
+                            colSpan="2"
+                            scope="col"
+                          >
+                            <span className="text-grey-700 float-left text-xs font-medium">
+                              <span className="font-bold">Decreasing</span>{' '}
+                              likelihood of support needs
+                              {/* Left arrow */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="#000"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                                />
+                              </svg>
+                            </span>
+                            <span className="float-right font-medium">
+                              <span className="font-bold">Increasing</span>{' '}
+                              likelihood of support needs
+                              {/* Right arrow */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="#000"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                                />
+                              </svg>
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {features.slice(0, 10).map((feature, idx) => (
+                          <tr
+                            key={feature.feature_readable_name}
+                            className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
+                          >
+                            <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
+                              <div
+                                className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
+                                onClick={() => handleFeatureClick(feature)}
+                              >
+                                {capitalizeFirstWord(
+                                  feature.feature_readable_name,
+                                )}
+                              </div>
+                              <div className="text-base text-[#4F4F4F]">
+                                {feature.feature_short_desc}
+                              </div>
+                            </td>
+                            <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
+                              <Shap
+                                rawFeatures={rawFeatures}
+                                currentFeature={feature}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                        <tr>
+                          <td className="w-1/3 p-2 text-sm text-xs font-bold text-black"></td>
+                          <td
+                            className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
+                            colSpan="2"
+                          >
+                            <span className="text-grey-700 float-left text-xs font-medium">
+                              <span className="font-bold">Decreasing</span>{' '}
+                              likelihood of support needs
+                              {/* Left arrow */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="#000"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                                />
+                              </svg>
+                            </span>
+                            <span className="float-right font-medium">
+                              <span className="font-bold">Increasing</span>{' '}
+                              likelihood of support needs
+                              {/* Right arrow */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="#000"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                                />
+                              </svg>
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <div className="my-8 text-center text-sm font-bold text-[#4F4F4F]">
+                      Questions about how to interpret these results? Contact
+                      your account representative, and they&apos;d be happy to
+                      help!
+                    </div>
+                  </div>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                {/* Introduction Card */}
+                <div className="mb-8 rounded-2xl bg-white p-6 shadow">
+                  <H2 className="mb-2">Introduction</H2>
+                  <div className="text-xl text-black">
+                    This model was built to identify students who may need
+                    support to be retained or graduate on time. It&apos;s
+                    intended to empower academic advisors who provide
+                    intervention strategies with information on the factors
+                    impacting student need for support. The following figures
+                    demonstrate the performance of the model. You can also{' '}
+                    <a
+                      href={
+                        inst_id && model_run_id
+                          ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
+                          : '#'
+                      }
+                      className="cursor-pointer font-semibold text-black underline hover:opacity-80"
+                    >
+                      download the model card here
+                    </a>{' '}
+                    for a comprehensive report on the model, including
+                    methodology, performance, and bias assessment.
+                  </div>
+                </div>
+                <div className="mb-8">
+                  {/* Feature Value Table */}
+                  <FeatureValue model_run_id={model_run_id} inst_id={inst_id} />
+                </div>
+                {/* Confusion Matrix */}
+                <div className="mb-8">
+                  <ConfusionMatrix
+                    model_run_id={model_run_id}
+                    modelName={modelName || ''}
+                    inst_id={inst_id}
+                  />
+                </div>
+                {/* ROC Curve */}
+                <div className="mb-8">
+                  <RocCurve
+                    model_run_id={model_run_id}
+                    modelName={modelName || ''}
+                    inst_id={inst_id}
+                  />
+                </div>
+                {/* Support Scores Histogram */}
+                {false && inst_id && model_run_id && (
+                  <div className="mb-8">
+                    <SupportScores
+                      tab={tab}
+                      setTab={setTab}
+                      model_run_id={model_run_id}
+                      inst_id={inst_id}
+                    />
+                  </div>
+                )}
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
         </div>
       </div>
       {isModalOpen && (

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
 use Tests\TestCase;
@@ -12,6 +13,16 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** Skip open-registration tests when the app uses invite-only registration. */
+    private function skipIfInviteOnlyRegistration(): void
+    {
+        $registerAction = optional(Route::getRoutes()->getByName('register'))->getActionName() ?? '';
+
+        if (str_contains($registerAction, 'InviteController')) {
+            $this->markTestSkipped('Registration is invite-only in this application.');
+        }
+    }
+
     public function test_registration_screen_can_be_rendered(): void
     {
         if (! Features::enabled(Features::registration())) {
@@ -19,6 +30,8 @@ class RegistrationTest extends TestCase
 
             return;
         }
+
+        $this->skipIfInviteOnlyRegistration();
 
         $response = $this->get('/register');
 
@@ -45,6 +58,8 @@ class RegistrationTest extends TestCase
 
             return;
         }
+
+        $this->skipIfInviteOnlyRegistration();
 
         $response = $this->post('/register', [
             'name' => 'Test User',

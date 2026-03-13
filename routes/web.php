@@ -114,6 +114,7 @@ Route::middleware('auth.app')->group(function () {
     Route::post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);
     Route::post('/run-inference/{model_name}', [ApiController::class, 'runInferenceApi']);
     Route::post('/create-batch', [ApiController::class, 'createBatch']);
+    Route::post('/create-model', [ApiController::class, 'createModelApi']);
     Route::get('/models-api', [ApiController::class, 'getModels']);
     Route::get('/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
     Route::get('/institutions/{inst_id}/inference/support-overview/{run_id}', [ApiController::class, 'getSupportOverview']);
@@ -138,8 +139,6 @@ Route::middleware('auth.app')->group(function () {
     Route::get('/institutions/{inst_id}/batch/{batch_id}/eda', [ApiController::class, 'getEdaData']);
     Route::get('/read-data-dictionary', [ApiController::class, 'readDataDictionary'])->name('read.data-dictionary');
 });
-
-Route::middleware(['auth', 'verified'])->post('/create-model', [ApiController::class, 'createModelApi']);
 
 Route::middleware(['auth'])->get('/terms/prompt', function () {
     return Inertia::render('Auth/AcceptTerms');

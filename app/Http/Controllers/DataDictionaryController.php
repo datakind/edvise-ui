@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\InstitutionHelper;
 use App\Models\Job;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,8 +14,7 @@ class DataDictionaryController extends Controller
 {
     public function show(Request $request): InertiaResponse
     {
-        $inst_id = $request->attributes->get('inst_id')
-            ?? InstitutionHelper::GetInstitution($request)[0] ?? null;
+        $inst_id = $request->attributes->get('inst_id');
 
         Log::info('DataDictionary: inst_id', ['inst_id' => $inst_id]);
 
@@ -28,7 +26,6 @@ class DataDictionaryController extends Controller
             ]);
         }
 
-        $request->attributes->set('inst_id', $inst_id);
         $api = app(ApiController::class);
 
         $modelsResp = $api->getModels($request);

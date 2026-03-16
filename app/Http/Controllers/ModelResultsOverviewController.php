@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Helpers\InstitutionHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -14,8 +13,7 @@ class ModelResultsOverviewController extends Controller
 {
     public function show(Request $request, string $run_id, string $modelName): InertiaResponse|JsonResponse
     {
-        $inst_id = $request->attributes->get('inst_id')
-            ?? InstitutionHelper::GetInstitution($request)[0] ?? null;
+        $inst_id = $request->attributes->get('inst_id');
 
         if (! $inst_id) {
             return Inertia::render('ModelResultsOverview', [
@@ -28,8 +26,6 @@ class ModelResultsOverviewController extends Controller
                 'error' => 'No institution context',
             ]);
         }
-
-        $request->attributes->set('inst_id', $inst_id);
 
         $job = Job::find($run_id);
         $model_run_id = $job?->model_run_id;

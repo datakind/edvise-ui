@@ -12,7 +12,7 @@ export default function SetInstitution() {
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentInstId, setCurrentInstId] = useState(inst_id || '');
+  const [currentInstId, setInstId] = useState(inst_id || '');
   const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
   const [hideSetInstError, setHideSetInstError] = useState(false);
 
@@ -52,7 +52,7 @@ export default function SetInstitution() {
         const institutionName =
           Object.entries(resultList).find(([name, id]) => id === inst)?.[0] ||
           'Unknown';
-        setCurrentInstId(inst); // Update current institution after successful change
+        setInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
         setHideSetInstError(true);
         router.visit(route('set-inst'));

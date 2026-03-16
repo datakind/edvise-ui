@@ -59,39 +59,47 @@ class InstitutionHelper
         return [$resp['inst_id'], $resp['access_type'], ''];
     }
 
-    // Returns the institution id and an error if any, as a tuple.
+    // Returns the current institution id and an error if any, as a tuple.
+    // Single source: session('inst_id'). DataKinders set it via setInst; non-DataKinders get it from user/check-self and we cache it in session.
     public static function GetInstitution(Request $request)
     {
-        if ($request->user()->inst_id != null) {
-            return [$request->user()->inst_id, ''];
+        $inst = session('inst_id');
+        if ($inst !== null && $inst !== '') {
+            return [$inst, ''];
         }
-        if ($request->user()->access_type == 'DATAKINDER') {
-            if (session()->has('datakinder_inst_id') && session('datakinder_inst_id') != '') {
-                return [session()->get('datakinder_inst_id'), ''];
-            }
 
+        if ($request->user()->access_type === 'DATAKINDER') {
             return ['', self::SET_INST_REQUIRED_MESSAGE];
         }
 
-        // Call check self in case the user is set as an allowed user for any institution.
-        [$inst, $access, $err] = InstitutionHelper::checkSelfInst($request);
-        if ($err != '') {
+        // Non-DATAKINDER: resolve from user row or backend, then cache in session so next request uses the same path.
+        if ($request->user()->inst_id !== null && $request->user()->inst_id !== '') {
+            session(['inst_id' => $request->user()->inst_id]);
+
+            return [$request->user()->inst_id, ''];
+        }
+
+        [$inst, $access, $err] = self::checkSelfInst($request);
+        if ($err !== '') {
             return ['', $err];
+        }
+        if ($inst !== null && $inst !== '') {
+            session(['inst_id' => $inst]);
         }
 
         return [$inst, ''];
     }
 
-    // Set the institution id for Datakinders, return an error if any.
-    public static function setDatakinderInst(string $access_type, string $inst)
+    // Set the current institution id. Only DataKinders may set it (they choose institution via Set Institution page).
+    public static function setInst(string $access_type, string $inst): string
     {
-        if ($access_type != 'DATAKINDER') {
+        if ($access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution.';
         }
-        if ($inst == '') {
+        if ($inst === '') {
             return 'No institution id specified.';
         }
-        session(['datakinder_inst_id' => $inst]);
+        session(['inst_id' => $inst]);
 
         return '';
     }

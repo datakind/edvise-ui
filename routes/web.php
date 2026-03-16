@@ -180,7 +180,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
 
     Route::post('/set-inst-api/{inst}', function (string $inst) {
         $access_str = Auth::user()->access_type ?? '';
-        $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
+        $errStr = InstitutionHelper::setInst($access_str, $inst);
 
         if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);

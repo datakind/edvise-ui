@@ -178,9 +178,9 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
         return Inertia::render('AddDatakinders');
     })->name('add-dk');
 
-    Route::post('/set-inst-api/{inst}', function (string $inst) {
+    Route::post('/set-inst-api/{inst}', function (Request $request, string $inst) {
         $access_str = Auth::user()->access_type ?? '';
-        $errStr = InstitutionHelper::setInst($access_str, $inst);
+        $errStr = InstitutionHelper::setInst($request, $access_str, $inst);
 
         if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);

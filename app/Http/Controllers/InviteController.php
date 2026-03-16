@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InstitutionHelper;
 use App\Models\Invite;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -144,8 +145,8 @@ class InviteController extends Controller
                 session()->forget('sso_user');
                 session()->forget('sso_user_data');
 
-                // Log the user in
                 Auth::login($existingUser);
+                InstitutionHelper::syncUserFromBackend($request);
 
                 return redirect()->intended(route('dashboard'));
             } else {
@@ -202,19 +203,18 @@ class InviteController extends Controller
         // Mark invite as used
         $invite->markAsUsed();
 
-        // Clear session
         session()->forget('valid_invite');
         session()->forget('sso_user');
         session()->forget('sso_user_data');
 
-        // Log the user in
         Auth::login($user);
+        InstitutionHelper::syncUserFromBackend($request);
 
         return redirect()->intended(route('dashboard'));
     }
 
     /**
-     * Create a new invite (admin only)
+     * Create an invite (admin only)
      */
     public function createInvite(Request $request)
     {

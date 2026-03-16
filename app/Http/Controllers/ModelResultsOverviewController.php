@@ -13,7 +13,7 @@ class ModelResultsOverviewController extends Controller
 {
     public function show(Request $request, string $run_id, string $modelName): InertiaResponse|JsonResponse
     {
-        $inst_id = $request->attributes->get('inst_id');
+        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
 
         if (! $inst_id) {
             return Inertia::render('ModelResultsOverview', [

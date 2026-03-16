@@ -14,7 +14,7 @@ class DataDictionaryController extends Controller
 {
     public function show(Request $request): InertiaResponse
     {
-        $inst_id = $request->attributes->get('inst_id');
+        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
 
         Log::info('DataDictionary: inst_id', ['inst_id' => $inst_id]);
 

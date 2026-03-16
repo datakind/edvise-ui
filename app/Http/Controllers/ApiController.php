@@ -160,7 +160,7 @@ class ApiController extends Controller
     {
         [$tok, $tokErr] = TokenHelper::GetToken($request);
 
-        \Log::info('constructInstRequest - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('constructInstRequest - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         \Log::info('constructInstRequest - Token Error: '.$tokErr);
         \Log::info('constructInstRequest - URL piece: '.$url_piece);
         \Log::info('constructInstRequest - Method: '.$method);
@@ -176,7 +176,7 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        $url = env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$url_piece;
+        $url = env('BACKEND_URL').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
         $resp = null;
@@ -243,7 +243,7 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
             return response()->json([
-                'inst_id' => $request->attributes->get('inst_id'),
+                'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
                 'name'    => $request->input('name'),
                 'state'   => $request->input('state'),
                 'pdp_id'  => $request->input('pdp_id'),
@@ -282,7 +282,7 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
 
-            return response()->json(['inst_id' => $request->attributes->get('inst_id'), 'name' => $request->input('name'), 'm_id' => 'e4862c62829440d8ab4c9c298f02f619', 'created_by' => $request->user()->id, 'valid' => true, 'deleted' => false], 200);
+            return response()->json(['inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'name' => $request->input('name'), 'm_id' => 'e4862c62829440d8ab4c9c298f02f619', 'created_by' => $request->user()->id, 'valid' => true, 'deleted' => false], 200);
         }
 
         return ApiController::constructInstRequest($request, '/models/', 'POST', $post_request_body);
@@ -305,7 +305,7 @@ class ApiController extends Controller
 
             return response()->json([
                 'batch_id' => '1bc27bbe2a124dda983d156fafcca649',
-                'inst_id' => $request->attributes->get('inst_id'),
+                'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
                 'file_names_to_ids' => [],
                 'name' => $request->input('name'),
                 'created_by' => $request->user()->id,
@@ -336,7 +336,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json(['name' => 'foo_file.csv', 'inst_id' => $request->attributes->get('inst_id'), 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
+            return response()->json(['name' => 'foo_file.csv', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
         }
 
         return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
@@ -376,7 +376,7 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
 
-            return response()->json(['run_id' => '123', 'inst_id' => $request->attributes->get('inst_id'), 'm_name' => $model_name, 'created_by' => $request->user()->id, 'triggered_at' => '2025-02-02T19:19:19'], 200);
+            return response()->json(['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->id, 'triggered_at' => '2025-02-02T19:19:19'], 200);
         }
 
         return ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/run-inference', 'POST', $post_request_body);
@@ -461,7 +461,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => $request->attributes->get('inst_id'), 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -605,7 +605,7 @@ class ApiController extends Controller
     public function appHomeRedirect(Request $request)
     {
         $hasBatches = false;
-        $inst_id = $request->attributes->get('inst_id');
+        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
         if ($request->user() && $inst_id) {
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
             if ($result !== null && $result->getStatusCode() === 200) {
@@ -901,7 +901,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => $request->attributes->get('inst_id'), 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -1067,10 +1067,10 @@ class ApiController extends Controller
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1086,15 +1086,15 @@ class ApiController extends Controller
             return response()->json([
                 'message' => 'Batch deleted successfully',
                 'batch_id' => $batch_id,
-                'institution_id' => $request->attributes->get('inst_id'),
+                'institution_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
             ], 200);
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/batch/'.$batch_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'DELETE', null);
     }
@@ -1124,10 +1124,10 @@ class ApiController extends Controller
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1148,10 +1148,10 @@ class ApiController extends Controller
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/confusion_matrix/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1193,10 +1193,10 @@ class ApiController extends Controller
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/roc_curve/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1256,10 +1256,10 @@ class ApiController extends Controller
         }
 
 
-        \Log::info('Production request - Institution ID: '.$request->attributes->get('inst_id'));
+        \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/support-overview/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$externalUrl);
+        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1293,7 +1293,7 @@ class ApiController extends Controller
 
             // Handle production - use constructInstRequest
 
-            \Log::info('updateBatch - Production request - Institution ID: '.$request->attributes->get('inst_id'));
+            \Log::info('updateBatch - Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
             $externalUrl = '/batch/'.$batch_id;
             \Log::info('updateBatch - External API URL: '.$externalUrl);
 
@@ -1328,7 +1328,7 @@ class ApiController extends Controller
             \Log::info('getEdaData called with inst_id: '.$inst_id.', batch_id: '.$batch_id);
 
 
-            \Log::info('getEdaData - Production request - Institution ID: '.$request->attributes->get('inst_id'));
+            \Log::info('getEdaData - Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
             $externalUrl = '/batch/'.$batch_id.'/eda';
             \Log::info('getEdaData - External API URL: '.$externalUrl);
 

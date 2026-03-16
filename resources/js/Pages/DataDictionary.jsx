@@ -8,7 +8,7 @@ import { toTitleCase } from '../utils/stringUtils';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
 
 export default function DataDictionary({ features = [] }) {
-  usePage().props; // shared props (e.g. inst_id) available if needed
+  usePage().props; // shared props (e.g. institution) available if needed
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');

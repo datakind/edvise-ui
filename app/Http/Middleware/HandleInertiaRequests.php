@@ -38,7 +38,8 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
-            'inst_id' => fn () => $request->user() ? $request->attributes->get('inst_id') : null,
+            'user' => fn () => $request->user(),
+            'institution' => fn () => $request->user() ? ($request->attributes->get('institution') ?? $request->session()->get('institution')) : null,
             'set_inst_required_message' => \App\Helpers\InstitutionHelper::SET_INST_REQUIRED_MESSAGE,
         ]);
     }

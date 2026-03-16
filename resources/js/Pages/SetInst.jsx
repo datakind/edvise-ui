@@ -7,14 +7,20 @@ import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function SetInstitution() {
-  const { inst_id, message } = usePage().props;
+  const { institution, message } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentInstId, setInstId] = useState(inst_id || '');
-  const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
+  const [instId, setInstId] = useState(institution?.inst_id ?? '');
+  const [selectedInstId, setSelectedInstId] = useState(institution?.inst_id ?? '');
   const [hideSetInstError, setHideSetInstError] = useState(false);
+
+  useEffect(() => {
+    const next = institution?.inst_id ?? '';
+    setInstId(next);
+    setSelectedInstId(next);
+  }, [institution?.inst_id]);
 
   useEffect(() => {
     // Fetch all institutions

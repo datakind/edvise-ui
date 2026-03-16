@@ -34,7 +34,7 @@ function ModelResultsOverview({
   rawFeatures: rawFeaturesProp = [],
   featureImportanceData: featureImportanceDataProp = [],
 }) {
-  const { inst_id } = usePage().props;
+  const { institution } = usePage().props;
 
   const runDetails = runDetailsProp ?? null;
   const rawFeatures = Array.isArray(rawFeaturesProp) ? rawFeaturesProp : [];
@@ -181,7 +181,6 @@ function ModelResultsOverview({
                     tab={tab}
                     setTab={setTab}
                     run_id={job_run_id}
-                    inst_id={inst_id}
                   />
                 </div>
                 <div className="rounded-3xl bg-[#EEF2F6] p-8 shadow">
@@ -376,8 +375,8 @@ function ModelResultsOverview({
                     demonstrate the performance of the model. You can also{' '}
                     <a
                       href={
-                        inst_id && model_run_id
-                          ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
+                        institution?.inst_id && model_run_id
+                          ? `/institutions/${institution?.inst_id}/training/model-cards/${model_run_id}`
                           : '#'
                       }
                       className="cursor-pointer font-semibold text-black underline hover:opacity-80"
@@ -390,14 +389,14 @@ function ModelResultsOverview({
                 </div>
                 <div className="mb-8">
                   {/* Feature Value Table */}
-                  <FeatureValue model_run_id={model_run_id} inst_id={inst_id} />
+                  <FeatureValue model_run_id={model_run_id} inst_id={institution?.inst_id} />
                 </div>
                 {/* Confusion Matrix */}
                 <div className="mb-8">
                   <ConfusionMatrix
                     model_run_id={model_run_id}
                     modelName={modelName || ''}
-                    inst_id={inst_id}
+                    inst_id={institution?.inst_id}
                   />
                 </div>
                 {/* ROC Curve */}
@@ -405,17 +404,17 @@ function ModelResultsOverview({
                   <RocCurve
                     model_run_id={model_run_id}
                     modelName={modelName || ''}
-                    inst_id={inst_id}
+                    inst_id={institution?.inst_id}
                   />
                 </div>
                 {/* Support Scores Histogram */}
-                {false && inst_id && model_run_id && (
+                {false && institution?.inst_id && model_run_id && (
                   <div className="mb-8">
                     <SupportScores
                       tab={tab}
                       setTab={setTab}
                       model_run_id={model_run_id}
-                      inst_id={inst_id}
+                      inst_id={institution?.inst_id}
                     />
                   </div>
                 )}
@@ -473,10 +472,10 @@ function ModelResultsOverview({
                   </div>
                   <div className="mb-16">
                     <BoxWhiskerPlot
-                      key={`${job_run_id}-${selectedFeature?.feature_name}-${inst_id}`}
+                      key={`${job_run_id}-${selectedFeature?.feature_name}-${institution?.inst_id}`}
                       run_id={job_run_id}
                       feature_name={selectedFeature?.feature_name}
-                      inst_id={inst_id}
+                      inst_id={institution?.inst_id}
                     />
                   </div>
                 </div>

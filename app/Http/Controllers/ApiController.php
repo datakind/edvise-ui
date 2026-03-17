@@ -780,21 +780,6 @@ class ApiController extends Controller
     public function downloadModelCard(Request $request, string $inst_id, string $model_run_id)
     {
         \Log::info('downloadModelCard called with inst_id: '.$inst_id.', model_run_id: '.$model_run_id);
-
-        if (ApiController::isLocalRequest()) {
-            \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
-
-            // Mock response for local development
-            return response()->json([
-                'message' => 'Model card download initiated',
-                'model_run_id' => $model_run_id,
-                'institution_id' => $inst_id,
-            ], 200);
-        }
-
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);

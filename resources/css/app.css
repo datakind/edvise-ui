@@ -119,6 +119,53 @@ a {
   @apply -mt-2 mb-4 w-full border-t-2 border-tabs-selectedBorder;
 }
 
+/* Data Dictionary tabs */
+.data-dictionary-tabs [role="tablist"] {
+  @apply flex items-end gap-2 border-b border-[#E5E7EB];
+}
+.data-dictionary-tabs [role="tab"] {
+  @apply outline-none px-4 py-3 text-xl font-light text-[#637381];
+  border-bottom: 4px solid transparent;
+}
+.data-dictionary-tabs [role="tab"][data-selected] {
+  @apply rounded-t-lg bg-[#EEF2F6] font-semibold text-black;
+  border-bottom: 4px solid #000;
+}
+
+.data-dictionary-tabs [role="tabpanel"] {
+  @apply pt-5;
+}
+
+/* Accordion (Headless UI Disclosure) */
+.accordion {
+  @apply space-y-3;
+}
+.accordion__item {
+  @apply overflow-hidden rounded-3xl border border-[#E5E7EB] bg-[#F5F5F5];
+}
+.accordion__trigger {
+  @apply flex w-full items-center justify-between py-4 pl-5 pr-4 text-left text-xl font-light outline-none;
+  @apply text-heading bg-[#F5F5F5] hover:bg-[#EBEBEB];
+}
+.accordion__trigger--open {
+  @apply bg-[#D5E5EE] hover:bg-[#D5E5EE];
+}
+.accordion__trigger-icon {
+  @apply flex h-8 w-8 shrink-0 items-center justify-center text-2xl text-[#4B5563];
+}
+.accordion__panel {
+  @apply bg-[#D5E5EE] px-5 pb-5 pt-3;
+}
+.accordion__dl {
+  @apply space-y-4 text-base font-light;
+}
+.accordion__term {
+  @apply font-semibold text-heading;
+}
+.accordion__def {
+  @apply mt-1 text-[#4F4F4F];
+}
+
 /* Edvise theme: text inputs – style by element, no class needed */
 input[type="text"]:not(.mapboxgl-ctrl-geocoder--input) {
   @apply w-full rounded-full border px-4 py-2 pr-10 focus:outline-none;

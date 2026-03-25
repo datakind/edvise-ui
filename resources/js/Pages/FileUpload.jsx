@@ -20,6 +20,35 @@ import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 import { set } from 'lodash';
 
+/** Human-readable message from axios errors (Laravel `error`, FastAPI `detail`, etc.). */
+function axiosErrorMessage(e) {
+  if (!e.response) {
+    return e.message || 'Network error (no response)';
+  }
+  const d = e.response.data;
+  if (d == null) {
+    return `HTTP ${e.response.status}`;
+  }
+  if (typeof d === 'string') {
+    return d;
+  }
+  if (typeof d === 'object') {
+    if (d.error != null) {
+      return String(d.error);
+    }
+    if (d.detail != null) {
+      return typeof d.detail === 'object'
+        ? JSON.stringify(d.detail)
+        : String(d.detail);
+    }
+    if (d.message != null) {
+      return String(d.message);
+    }
+    return JSON.stringify(d);
+  }
+  return String(d);
+}
+
 export default function FileUpload() {
   // TODO: Change the state structure to handle multiple file status
   // TODO: Use buttons where static onclick changes are happenings and links otherwise.
@@ -508,6 +537,8 @@ export default function FileUpload() {
         'Content-Type': 'text/csv',
       },
     };
+    // Align with Laravel proxy BACKEND_HTTP_TIMEOUT_SECONDS (large CSV validate can take minutes).
+    const validateRequestMs = 300000;
     Promise.allSettled(
       files.map(file => {
         var filenameConstructed = Date.now() + '_' + file.name;
@@ -526,39 +557,28 @@ export default function FileUpload() {
               .put(res.data, file, config)
               .then(res1 => {
                 return axios
-                  .post('/file-validate-api/' + filenameConstructed)
+                  .post(
+                    '/file-validate-api/' + filenameConstructed,
+                    {},
+                    { timeout: validateRequestMs },
+                  )
                   .then(res2 => {
                     localValidationResults[filenameConstructed] = 'ok';
                     return;
                   })
                   .catch(e => {
-                    if (e.response) {
-                      localValidationResults[filenameConstructed] =
-                        '[Validation] ' + e.response.data.error;
-                    } else {
-                      localValidationResults[filenameConstructed] =
-                        '[Validation] ' + JSON.stringify(e);
-                    }
+                    localValidationResults[filenameConstructed] =
+                      '[Validation] ' + axiosErrorMessage(e);
                   });
               })
               .catch(e => {
-                if (e.response) {
-                  localValidationResults[filenameConstructed] =
-                    '[Upload] ' + e.response.data.error;
-                } else {
-                  localValidationResults[filenameConstructed] =
-                    '[Upload] ' + JSON.stringify(e);
-                }
+                localValidationResults[filenameConstructed] =
+                  '[Upload] ' + axiosErrorMessage(e);
               });
           })
           .catch(e => {
-            if (e.response) {
-              localValidationResults[filenameConstructed] =
-                '[Upload URL retrieval] ' + e.response.data.error;
-            } else {
-              localValidationResults[filenameConstructed] =
-                '[Upload URL retrieval] ' + JSON.stringify(e);
-            }
+            localValidationResults[filenameConstructed] =
+              '[Upload URL retrieval] ' + axiosErrorMessage(e);
           });
       }),
     ).then(() => {

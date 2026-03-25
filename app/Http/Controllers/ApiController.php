@@ -191,23 +191,30 @@ class ApiController extends Controller
         $url = env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
+        // Large CSV validate-upload can exceed Laravel's default ~30s HTTP client timeout while
+        // Cloud Run may allow up to e.g. 300s; keep proxy wait aligned with the API.
+        $backendTimeoutSeconds = (int) env('BACKEND_HTTP_TIMEOUT_SECONDS', 300);
+        if ($backendTimeoutSeconds < 1) {
+            $backendTimeoutSeconds = 300;
+        }
+        $http = Http::withHeaders($headers)->timeout($backendTimeoutSeconds);
         $resp = null;
         if ($method == 'GET') {
-            $resp = Http::withHeaders($headers)->get($url, $request->query());
+            $resp = $http->get($url, $request->query());
         } elseif ($method == 'POST') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->post($url);
+                $resp = $http->post($url);
             } else {
-                $resp = Http::withHeaders($headers)->post($url, $req_body);
+                $resp = $http->post($url, $req_body);
             }
         } elseif ($method == 'PATCH') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->patch($url);
+                $resp = $http->patch($url);
             } else {
-                $resp = Http::withHeaders($headers)->patch($url, $req_body);
+                $resp = $http->patch($url, $req_body);
             }
         } elseif ($method == 'DELETE') {
-            $resp = Http::withHeaders($headers)->delete($url);
+            $resp = $http->delete($url);
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }

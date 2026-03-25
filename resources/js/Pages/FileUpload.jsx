@@ -537,7 +537,7 @@ export default function FileUpload() {
         'Content-Type': 'text/csv',
       },
     };
-    // Align with Laravel proxy BACKEND_HTTP_TIMEOUT_SECONDS (large CSV validate can take minutes).
+    // Align with Laravel validate-upload proxy timeout (BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS, default 300s).
     const validateRequestMs = 300000;
     Promise.allSettled(
       files.map(file => {

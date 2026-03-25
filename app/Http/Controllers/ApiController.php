@@ -191,11 +191,23 @@ class ApiController extends Controller
         $url = env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
-        // Large CSV validate-upload can exceed Laravel's default ~30s HTTP client timeout while
-        // Cloud Run may allow up to e.g. 300s; keep proxy wait aligned with the API.
-        $backendTimeoutSeconds = (int) env('BACKEND_HTTP_TIMEOUT_SECONDS', 300);
-        if ($backendTimeoutSeconds < 1) {
-            $backendTimeoutSeconds = 300;
+        // Only validate-upload needs a long wait (large CSV); other institution calls keep a short timeout.
+        $isValidateUpload = str_starts_with($url_piece, '/input/validate-upload');
+        if ($isValidateUpload) {
+            $validateTimeoutRaw = env('BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS');
+            if ($validateTimeoutRaw === null || $validateTimeoutRaw === '') {
+                // Deprecated name; kept for env files deployed from earlier UI releases.
+                $validateTimeoutRaw = env('BACKEND_HTTP_TIMEOUT_SECONDS', 300);
+            }
+            $backendTimeoutSeconds = (int) $validateTimeoutRaw;
+            if ($backendTimeoutSeconds < 1) {
+                $backendTimeoutSeconds = 300;
+            }
+        } else {
+            $backendTimeoutSeconds = (int) env('BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS', 30);
+            if ($backendTimeoutSeconds < 1) {
+                $backendTimeoutSeconds = 30;
+            }
         }
         $http = Http::withHeaders($headers)->timeout($backendTimeoutSeconds);
         $resp = null;

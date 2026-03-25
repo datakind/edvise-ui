@@ -16,6 +16,12 @@ class ApiController extends Controller
 {
     use UsesApi;
 
+    /** Fallback when BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS is unset or invalid (below 1 second). */
+    private const BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS = 300;
+
+    /** Fallback when BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS is unset or invalid (below 1 second). */
+    private const BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS = 30;
+
     // For printline debugging the following example added in the function will output to console in the 'php artisan serve' pane.
     // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
@@ -155,6 +161,29 @@ class ApiController extends Controller
         return ApiController::constructDatakinderRequest($request, '/institutions', 'GET', /* No POST body */ null);
     }
 
+    /**
+     * HTTP client timeout (seconds) when proxying institution requests to BACKEND_URL.
+     * Validate-upload needs a long wait for large CSV processing; other paths stay short.
+     */
+    private static function institutionBackendTimeoutSeconds(string $urlPiece): int
+    {
+        $isValidateUpload = str_starts_with($urlPiece, '/input/validate-upload');
+        if ($isValidateUpload) {
+            $seconds = (int) env(
+                'BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS',
+                self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS
+            );
+
+            return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
+        }
+        $seconds = (int) env(
+            'BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS',
+            self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS
+        );
+
+        return $seconds >= 1 ? $seconds : self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS;
+    }
+
     // Constructs a query with the BACKEND_URL+/institutions/<inst> prefix.
     public function constructInstRequest(Request $request, string $url_piece, string $method, $req_body)
     {
@@ -179,23 +208,24 @@ class ApiController extends Controller
         $url = env('BACKEND_URL').'/institutions/'.$request->attributes->get('inst_id').$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
+        $http = Http::withHeaders($headers)->timeout(self::institutionBackendTimeoutSeconds($url_piece));
         $resp = null;
         if ($method == 'GET') {
-            $resp = Http::withHeaders($headers)->get($url, $request->query());
+            $resp = $http->get($url, $request->query());
         } elseif ($method == 'POST') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->post($url);
+                $resp = $http->post($url);
             } else {
-                $resp = Http::withHeaders($headers)->post($url, $req_body);
+                $resp = $http->post($url, $req_body);
             }
         } elseif ($method == 'PATCH') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->patch($url);
+                $resp = $http->patch($url);
             } else {
-                $resp = Http::withHeaders($headers)->patch($url, $req_body);
+                $resp = $http->patch($url, $req_body);
             }
         } elseif ($method == 'DELETE') {
-            $resp = Http::withHeaders($headers)->delete($url);
+            $resp = $http->delete($url);
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }

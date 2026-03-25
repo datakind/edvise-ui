@@ -20,33 +20,39 @@ import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
 import { set } from 'lodash';
 
-/** Human-readable message from axios errors (Laravel `error`, FastAPI `detail`, etc.). */
-function axiosErrorMessage(e) {
-  if (!e.response) {
-    return e.message || 'Network error (no response)';
+/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
+const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
+
+/**
+ * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
+ * @param {unknown} error
+ */
+function formatAxiosErrorMessage(error) {
+  if (error == null || !error.response) {
+    return (error && error.message) || 'Network error (no response)';
   }
-  const d = e.response.data;
-  if (d == null) {
-    return `HTTP ${e.response.status}`;
+  const responseData = error.response.data;
+  if (responseData == null) {
+    return `HTTP ${error.response.status}`;
   }
-  if (typeof d === 'string') {
-    return d;
+  if (typeof responseData === 'string') {
+    return responseData;
   }
-  if (typeof d === 'object') {
-    if (d.error != null) {
-      return String(d.error);
+  if (typeof responseData === 'object') {
+    if (responseData.error != null) {
+      return String(responseData.error);
     }
-    if (d.detail != null) {
-      return typeof d.detail === 'object'
-        ? JSON.stringify(d.detail)
-        : String(d.detail);
+    if (responseData.detail != null) {
+      return typeof responseData.detail === 'object'
+        ? JSON.stringify(responseData.detail)
+        : String(responseData.detail);
     }
-    if (d.message != null) {
-      return String(d.message);
+    if (responseData.message != null) {
+      return String(responseData.message);
     }
-    return JSON.stringify(d);
+    return JSON.stringify(responseData);
   }
-  return String(d);
+  return String(responseData);
 }
 
 export default function FileUpload() {
@@ -537,8 +543,6 @@ export default function FileUpload() {
         'Content-Type': 'text/csv',
       },
     };
-    // Align with Laravel validate-upload proxy timeout (BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS, default 300s).
-    const validateRequestMs = 300000;
     Promise.allSettled(
       files.map(file => {
         var filenameConstructed = Date.now() + '_' + file.name;
@@ -560,7 +564,7 @@ export default function FileUpload() {
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
-                    { timeout: validateRequestMs },
+                    { timeout: VALIDATE_UPLOAD_TIMEOUT_MS },
                   )
                   .then(res2 => {
                     localValidationResults[filenameConstructed] = 'ok';
@@ -568,17 +572,17 @@ export default function FileUpload() {
                   })
                   .catch(e => {
                     localValidationResults[filenameConstructed] =
-                      '[Validation] ' + axiosErrorMessage(e);
+                      '[Validation] ' + formatAxiosErrorMessage(e);
                   });
               })
               .catch(e => {
                 localValidationResults[filenameConstructed] =
-                  '[Upload] ' + axiosErrorMessage(e);
+                  '[Upload] ' + formatAxiosErrorMessage(e);
               });
           })
           .catch(e => {
             localValidationResults[filenameConstructed] =
-              '[Upload URL retrieval] ' + axiosErrorMessage(e);
+              '[Upload URL retrieval] ' + formatAxiosErrorMessage(e);
           });
       }),
     ).then(() => {

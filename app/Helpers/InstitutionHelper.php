@@ -82,6 +82,40 @@ class InstitutionHelper
         return [$inst, ''];
     }
 
+    /** @return array<string, mixed>|null */
+    public static function GetInstitution(Request $request): ?array
+    {
+        if (! $request->user()) {
+            return null;
+        }
+        $instId = $request->attributes->get('inst_id');
+        if ($instId === null || $instId === '') {
+            $instId = self::GetInstitutionId($request)[0];
+        }
+        if ($instId === null || $instId === '') {
+            return null;
+        }
+        [$tok] = TokenHelper::GetToken($request);
+        if ($tok === '') {
+            return null;
+        }
+        $base = rtrim((string) env('BACKEND_URL'), '/');
+        $resp = Http::withHeaders([
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ])->get($base.'/institutions/'.$instId);
+        if ($resp->getStatusCode() !== 200) {
+            return null;
+        }
+        $data = $resp->json();
+        if (! is_array($data)) {
+            return null;
+        }
+
+        return $data;
+    }
+
     // Set the institution id for Datakinders, return an error if any.
     public static function setDatakinderInst(string $access_type, string $inst)
     {

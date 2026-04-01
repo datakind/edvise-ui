@@ -660,7 +660,7 @@ class ApiController extends Controller
     public function appHomeRedirect(Request $request)
     {
         $hasBatches = false;
-        $inst_id = $request->attributes->get('inst_id') ?? \App\Helpers\InstitutionHelper::GetInstitution($request)[0];
+        $inst_id = $request->attributes->get('inst_id') ?? \App\Helpers\InstitutionHelper::GetInstitutionId($request)[0];
         if ($request->user() && $inst_id) {
             $request->attributes->set('inst_id', $inst_id);
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);

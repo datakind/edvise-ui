@@ -32,7 +32,7 @@ class RequireInstitution
         }
 
         if ($request->user()->access_type !== 'DATAKINDER') {
-            [$inst, ] = InstitutionHelper::GetInstitution($request);
+            [$inst, ] = InstitutionHelper::GetInstitutionId($request);
             if ($inst !== null && $inst !== '') {
                 $request->attributes->set('inst_id', $inst);
             }
@@ -57,7 +57,7 @@ class RequireInstitution
             }
         }
 
-        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        [$inst, $instErr] = InstitutionHelper::GetInstitutionId($request);
         if ($inst !== null && $inst !== '') {
             $request->attributes->set('inst_id', $inst);
 

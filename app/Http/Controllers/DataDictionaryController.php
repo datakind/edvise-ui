@@ -16,7 +16,7 @@ class DataDictionaryController extends Controller
     public function show(Request $request): InertiaResponse
     {
         $inst_id = $request->attributes->get('inst_id')
-            ?? InstitutionHelper::GetInstitution($request)[0] ?? null;
+            ?? InstitutionHelper::GetInstitutionId($request)[0] ?? null;
 
         Log::info('DataDictionary: inst_id', ['inst_id' => $inst_id]);
 

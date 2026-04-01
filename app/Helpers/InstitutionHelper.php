@@ -60,7 +60,7 @@ class InstitutionHelper
     }
 
     // Returns the institution id and an error if any, as a tuple.
-    public static function GetInstitution(Request $request)
+    public static function GetInstitutionId(Request $request)
     {
         if ($request->user()->inst_id != null) {
             return [$request->user()->inst_id, ''];

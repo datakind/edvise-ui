@@ -15,7 +15,7 @@ class ModelResultsOverviewController extends Controller
     public function show(Request $request, string $run_id, string $modelName): InertiaResponse|JsonResponse
     {
         $inst_id = $request->attributes->get('inst_id')
-            ?? InstitutionHelper::GetInstitution($request)[0] ?? null;
+            ?? InstitutionHelper::GetInstitutionId($request)[0] ?? null;
 
         if (! $inst_id) {
             return Inertia::render('ModelResultsOverview', [

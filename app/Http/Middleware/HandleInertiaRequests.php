@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
                     return null;
                 }
                 $inst = $request->attributes->get('inst_id')
-                    ?? \App\Helpers\InstitutionHelper::GetInstitution($request)[0];
+                    ?? \App\Helpers\InstitutionHelper::GetInstitutionId($request)[0];
 
                 return $inst ?: null;
             },

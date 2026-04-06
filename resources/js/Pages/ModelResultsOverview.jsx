@@ -373,19 +373,25 @@ function ModelResultsOverview({
                     intended to empower academic advisors who provide
                     intervention strategies with information on the factors
                     impacting student need for support. The following figures
-                    demonstrate the performance of the model. You can also{' '}
-                    <a
-                      href={
-                        inst_id && model_run_id
-                          ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
-                          : '#'
-                      }
-                      className="cursor-pointer font-semibold text-black underline hover:opacity-80"
-                    >
-                      download the model card here
-                    </a>{' '}
-                    for a comprehensive report on the model, including
-                    methodology, performance, and bias assessment.
+                    demonstrate the performance of the model.
+                    {inst_id && model_run_id && (
+                      <>
+                        {' '}
+                        You can also{' '}
+                        <a
+                          href={modelCardDownloadUrl(
+                            inst_id,
+                            model_run_id,
+                            modelName || '',
+                          )}
+                          className="cursor-pointer font-semibold text-black underline hover:opacity-80"
+                        >
+                          download the model card here
+                        </a>{' '}
+                        for a comprehensive report on the model, including
+                        methodology, performance, and bias assessment.
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="mb-8">

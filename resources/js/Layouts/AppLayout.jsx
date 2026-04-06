@@ -154,7 +154,7 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
-  const { inst_id } = usePage().props;
+  const { inst_id, institution } = usePage().props;
   const user = auth.user;
   const userIsDatakinder =
     auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
@@ -407,18 +407,20 @@ export default function AppLayout({ title, renderHeader, children }) {
       <header>
         <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
           <div className="flex flex-col justify-between">
-            <ul role="list" className="flex flex-1 flex-col gap-y-12">
-              <li
-                className="flex h-16 shrink-0 flex-col items-center pt-12"
-                key="logo"
-              >
+            <ul role="list" className="flex flex-1 flex-col">
+              <li className="my-10" key="logo">
                 <a href={route('home')}>
                   <img
-                    className="w-full pb-12"
+                    className="w-full"
                     src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
                 </a>
+                {userIsDatakinder && institution?.name && (
+                  <a href={route('set-inst')} className="mt-2">
+                    {institution.name}
+                  </a>
+                )}
               </li>
               <li key="navigation">
                 <ul>

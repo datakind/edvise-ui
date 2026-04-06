@@ -417,7 +417,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                   />
                 </a>
                 {userIsDatakinder && institution?.name && (
-                  <a href={route('set-inst')} className="mt-2">
+                  <a href={route('set-inst')} className="mt-3 block">
                     {institution.name}
                   </a>
                 )}

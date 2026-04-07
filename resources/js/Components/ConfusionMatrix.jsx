@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import H2 from '@/Components/H2';
+import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
 
 export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
   const [cmData, setCmData] = useState([]);
@@ -121,9 +122,7 @@ export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
     <div className="mt-6 flex items-stretch rounded-3xl bg-white p-8 shadow">
       {/* Left: Title and description */}
       <div className="flex w-1/2 min-w-[260px] flex-col justify-start p-6">
-        <H2 className="pb-4">
-          Confusion Matrix for Test Data
-        </H2>
+        <H2 className="pb-4">Confusion Matrix for Test Data</H2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-3">
             A confusion matrix evaluates how well the model is performing.
@@ -142,11 +141,12 @@ export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
                 onClick={e => {
                   e.preventDefault();
                   if (inst_id && model_run_id) {
-                    const apiUrl = `/institutions/${inst_id}/training/model-cards/${model_run_id}`;
                     const link = document.createElement('a');
-                    link.href = apiUrl;
-                    link.download = `${modelName}_model_card.pdf`; // Suggest filename
-                    link.target = '_blank';
+                    link.href = modelCardDownloadUrl(
+                      inst_id,
+                      model_run_id,
+                      modelName,
+                    );
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

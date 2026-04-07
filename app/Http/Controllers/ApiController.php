@@ -789,8 +789,13 @@ class ApiController extends Controller
 
         // If we got a successful response, add download headers
         if ($response && $response->getStatusCode() == 200) {
-            $name = $request->query('name', $model_run_id);
-            $filename = $name.'_model_card.pdf';
+            $name = $request->query('name', '');
+            $name = is_string($name) ? $name : '';
+            $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $name);
+            if ($segment === '') {
+                $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $model_run_id) ?: 'model';
+            }
+            $filename = 'edvise-model-card-'.$segment.'.pdf';
 
             // Add download headers to force file download
             return response()->streamDownload(

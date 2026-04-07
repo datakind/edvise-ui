@@ -9,9 +9,7 @@ export default function CreateInst() {
   // TODO: switch to error instead of setting result_area
   const [error, setError] = useState(null);
 
-  // Any update to this schemas list needs to be reflected in the handleSubmit() function call as a checkbox.
   const schemas = [
-    { name: 'Custom', selected: false },
     { name: 'PDP', selected: false },
     { name: 'Edvise', selected: false },
     { name: 'Legacy', selected: false },
@@ -84,30 +82,17 @@ export default function CreateInst() {
         'Error: Institution name is required.';
       return;
     }
-    // Enforce the selection of at least one schema type.
     const edvise = event.target.elements.Edvise?.checked ?? false;
     const legacy = event.target.elements.Legacy?.checked ?? false;
-    if (
-      !event.target.elements.Custom.checked &&
-      !event.target.elements.PDP.checked &&
-      !edvise &&
-      !legacy
-    ) {
+    const pdpChecked = event.target.elements.PDP.checked;
+    const schoolTypeCount = [pdpChecked, edvise, legacy].filter(Boolean).length;
+    if (schoolTypeCount !== 1) {
       document.getElementById('result_area').innerHTML =
-        'Error: Schema type must contain at least one selection.';
+        schoolTypeCount === 0
+          ? 'Error: Select exactly one of PDP, Edvise, or Legacy.'
+          : 'Error: Select at most one of PDP, Edvise, or Legacy.';
       return;
     }
-    // At most one of PDP, Edvise, or Legacy (API allows only one school type).
-    const schoolTypeCount = [event.target.elements.PDP.checked, edvise, legacy].filter(Boolean).length;
-    if (schoolTypeCount > 1) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Select at most one of PDP, Edvise, or Legacy.';
-      return;
-    }
-    // We currently only have custom for potential other schemas. Note that the schema passed to the API call must match the corresponding backend schema enum value.
-    let other_schemas = event.target.elements.Custom.checked
-      ? ['UNKNOWN']
-      : null;
     var emailDict = {};
     var accessDict = {};
     Array.from(event.target.elements).forEach(input => {
@@ -130,7 +115,6 @@ export default function CreateInst() {
     const payload = {
       name: event.target.elements.inst_name.value,
       state: event.target.elements.state.value,
-      allowed_schemas: other_schemas,
       allowed_emails:
         constructedEmailDict.length == 0 ? null : constructedEmailDict,
       is_pdp: pdp,
@@ -270,7 +254,7 @@ export default function CreateInst() {
               <div className="flex flex-col w-1/2">
                 <fieldset>
                   <legend className="text-base font-semibold text-gray-900">
-                    Schemas accepted by this institution
+                    Institution type
                   </legend>
                   <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
                     {schemas.map((schem, idx) => (

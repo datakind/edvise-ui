@@ -17,7 +17,6 @@ export default function EditInst() {
   const [error, setError] = useState(null);
   const [addUserCounter, setAddUserCounter] = useState(1);
   const [schemas] = useState([
-    { name: 'Custom', selected: false },
     { name: 'PDP', selected: false },
     { name: 'Edvise', selected: false },
     { name: 'Legacy', selected: false },
@@ -135,7 +134,6 @@ export default function EditInst() {
     const payload = {
       name: formData.get('inst_name'),
       state: formData.get('state'),
-      allowed_schemas: formData.get('Custom') ? ['UNKNOWN'] : null,
       allowed_emails: constructEmailDict(formData),
       is_pdp: pdp,
       pdp_id: pdp ? (formData.get('pdp_id') || null) : null,
@@ -216,7 +214,7 @@ export default function EditInst() {
               <div className="flex flex-col w-1/2">
                 <fieldset>
                   <legend className="text-base font-semibold text-gray-900">
-                    Schemas accepted by this institution
+                    Institution type
                   </legend>
                   <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
                     {schemas.map((schem, idx) => (

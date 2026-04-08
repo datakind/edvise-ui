@@ -9,8 +9,6 @@ use TokenHelper;
 
 class InstitutionHelper
 {
-    public const SET_INST_REQUIRED_MESSAGE = 'Datakinder must set an institution to proceed.';
-
     // This calls the API endpoint that checks if the current self user has been allowlisted in any institution's email lists.
     // Returns the institution id, access_type of the current user if set anywhere.
     public static function checkSelfInst(Request $request)
@@ -70,7 +68,7 @@ class InstitutionHelper
                 return [session()->get('datakinder_inst_id'), ''];
             }
 
-            return ['', self::SET_INST_REQUIRED_MESSAGE];
+            return ['', ''];
         }
 
         // Call check self in case the user is set as an allowed user for any institution.

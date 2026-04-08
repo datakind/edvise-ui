@@ -7,14 +7,15 @@ import Alert from '@/Components/Alert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function SetInstitution() {
-  const { inst_id, message } = usePage().props;
+  const { inst_id } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentInstId, setCurrentInstId] = useState(inst_id || '');
   const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
-  const [hideSetInstError, setHideSetInstError] = useState(false);
+  const [setInstSuccess, setSetInstSuccess] = useState(null);
+  const [settingInst, setSettingInst] = useState(false);
+  const [setInstSubmitError, setSetInstSubmitError] = useState(null);
 
   useEffect(() => {
     // Fetch all institutions
@@ -35,30 +36,30 @@ export default function SetInstitution() {
   const handleSubmit = event => {
     event.preventDefault();
     const inst = selectedInstId;
-    const resultArea = document.getElementById('result_area');
 
+    setSetInstSuccess(null);
     if (!inst || inst === '') {
-      resultArea.innerHTML =
-        '<span class="text-red-600 font-semibold">Error: Please select an institution</span>';
+      setSetInstSubmitError('Please select an institution');
       return;
     }
 
-    resultArea.innerHTML =
-      '<span class="text-gray-600">Setting institution...</span>';
-
+    setSetInstSubmitError(null);
+    setSettingInst(true);
     return axios
       .post('/set-inst-api/' + inst)
-      .then(res => {
+      .then(() => {
+        setSettingInst(false);
         const institutionName =
-          Object.entries(resultList).find(([name, id]) => id === inst)?.[0] ||
+          Object.entries(resultList).find(([, id]) => id === inst)?.[0] ||
           'Unknown';
-        setCurrentInstId(inst); // Update current institution after successful change
-        resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
-        setHideSetInstError(true);
-        router.visit(route('set-inst'));
+        setSetInstSuccess(
+          `Successfully set institution to: ${institutionName}`,
+        );
+        router.reload({ only: ['inst_id'] });
       })
       .catch(e => {
-        resultArea.innerHTML = `<span class="text-red-600 font-semibold">Error: ${e.message || e}</span>`;
+        setSettingInst(false);
+        setSetInstSubmitError(e.message || String(e));
       });
   };
 
@@ -82,10 +83,11 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
-        {message && !hideSetInstError && (
+        {!inst_id && (
           <div className="mt-6 w-full max-w-2xl">
             <Alert
               variant="warning"
+              mainMsg="Datakinder must set an institution to proceed. Select an institution below to proceed."
             />
           </div>
         )}
@@ -113,7 +115,10 @@ export default function SetInstitution() {
                     style={{ backgroundImage: 'none' }}
                     name="instid"
                     value={selectedInstId}
-                    onChange={e => setSelectedInstId(e.target.value)}
+                    onChange={e => {
+                      setSelectedInstId(e.target.value);
+                      setSetInstSubmitError(null);
+                    }}
                     required
                     disabled={loading}
                   >
@@ -149,14 +154,30 @@ export default function SetInstitution() {
           <div className="flex justify-center">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || settingInst}
               className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               Set Institution
             </button>
           </div>
         </form>
-        <div className="flex" id="result_area"></div>
+        {settingInst && (
+          <div className="mt-4 flex w-full max-w-2xl justify-center text-gray-600">
+            Setting institution...
+          </div>
+        )}
+        {setInstSubmitError && (
+          <div className="mt-4 flex w-full max-w-2xl justify-center">
+            <span className="font-semibold text-red-600">
+              Error: {setInstSubmitError}
+            </span>
+          </div>
+        )}
+        {setInstSuccess && (
+          <div className="mt-6 w-full max-w-2xl">
+            <Alert variant="success" mainMsg={setInstSuccess} />
+          </div>
+        )}
       </div>
     </AppLayout>
   );

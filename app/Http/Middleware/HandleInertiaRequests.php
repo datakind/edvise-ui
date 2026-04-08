@@ -47,7 +47,6 @@ class HandleInertiaRequests extends Middleware
 
                 return $inst ?: null;
             },
-            'set_inst_required_message' => \App\Helpers\InstitutionHelper::SET_INST_REQUIRED_MESSAGE,
         ]);
     }
 }

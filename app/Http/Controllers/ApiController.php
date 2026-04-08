@@ -835,21 +835,6 @@ class ApiController extends Controller
     public function downloadModelCard(Request $request, string $inst_id, string $model_run_id)
     {
         \Log::info('downloadModelCard called with inst_id: '.$inst_id.', model_run_id: '.$model_run_id);
-
-        if (ApiController::isLocalRequest()) {
-            \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
-
-            // Mock response for local development
-            return response()->json([
-                'message' => 'Model card download initiated',
-                'model_run_id' => $model_run_id,
-                'institution_id' => $inst_id,
-            ], 200);
-        }
-
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
@@ -859,8 +844,13 @@ class ApiController extends Controller
 
         // If we got a successful response, add download headers
         if ($response && $response->getStatusCode() == 200) {
-            $name = $request->query('name', $model_run_id);
-            $filename = $name.'_model_card.pdf';
+            $name = $request->query('name', '');
+            $name = is_string($name) ? $name : '';
+            $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $name);
+            if ($segment === '') {
+                $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $model_run_id) ?: 'model';
+            }
+            $filename = 'edvise-model-card-'.$segment.'.pdf';
 
             // Add download headers to force file download
             return response()->streamDownload(

@@ -17,6 +17,7 @@ import H2 from '@/Components/H2';
 import '../../css/landing.css';
 
 import { formatModelName } from '../utils/stringUtils';
+import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
 
 const route = window.route;
 
@@ -375,11 +376,11 @@ function ModelResultsOverview({
                     impacting student need for support. The following figures
                     demonstrate the performance of the model. You can also{' '}
                     <a
-                      href={
-                        inst_id && model_run_id
-                          ? `/institutions/${inst_id}/training/model-cards/${model_run_id}`
-                          : '#'
-                      }
+                      href={modelCardDownloadUrl(
+                        inst_id,
+                        model_run_id,
+                        modelName,
+                      )}
                       className="cursor-pointer font-semibold text-black underline hover:opacity-80"
                     >
                       download the model card here

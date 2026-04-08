@@ -1,17 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
-
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import ModelRunHistory from '@/Components/ModelRunHistory';
-import HeaderLabel from '@/Components/HeaderLabel';
-import classNames from 'classnames';
 import Alert from '@/Components/Alert';
 import { formatModelName } from '@/utils/stringUtils';
-
-import { ChartBarIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import Button from '@/Components/Landing/Button';
 import PageHeading from '@/Components/PageHeading';
 
 const histogramOptions = {

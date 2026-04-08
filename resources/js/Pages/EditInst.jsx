@@ -125,8 +125,12 @@ export default function EditInst() {
     const edvise = formData.get('Edvise') === 'on';
     const legacy = formData.get('Legacy') === 'on';
     const schoolTypeCount = [pdp, edvise, legacy].filter(Boolean).length;
-    if (schoolTypeCount > 1) {
-      setError('Select at most one of PDP, Edvise, or Legacy.');
+    if (schoolTypeCount !== 1) {
+      setError(
+        schoolTypeCount === 0
+          ? 'Select exactly one of PDP, Edvise, or Legacy.'
+          : 'Select at most one of PDP, Edvise, or Legacy.',
+      );
       return;
     }
     // API only updates fields that are sent; to clear a school type we must send null explicitly.

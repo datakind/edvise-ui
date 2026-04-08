@@ -116,9 +116,15 @@ export default function CreateInst() {
       name: event.target.elements.inst_name.value,
       state: event.target.elements.state.value,
       allowed_emails:
-        constructedEmailDict.length == 0 ? null : constructedEmailDict,
+        Object.keys(constructedEmailDict).length === 0
+          ? null
+          : constructedEmailDict,
       is_pdp: pdp,
-      pdp_id: event.target.elements.pdp_id?.value || null,
+      // Only send PDP id when PDP is selected; leftover text would otherwise
+      // combine with Edvise/Legacy and trip API mutual-exclusivity checks.
+      pdp_id: pdpChecked
+        ? (event.target.elements.pdp_id?.value || null)
+        : null,
     };
     if (edvise) payload.is_edvise = true;
     if (legacy) payload.is_legacy = true;

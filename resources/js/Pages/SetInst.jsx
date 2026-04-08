@@ -3,7 +3,7 @@ import { usePage, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
-import ErrorAlert from '@/Components/ErrorAlert';
+import Alert from '@/Components/Alert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function SetInstitution() {
@@ -84,8 +84,8 @@ export default function SetInstitution() {
 
         {message && !hideSetInstError && (
           <div className="mt-6 w-full max-w-2xl">
-            <ErrorAlert
-              mainMsg={`Error: ${message} Select an institution below to proceed.`}
+            <Alert
+              variant="warning"
             />
           </div>
         )}

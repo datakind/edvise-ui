@@ -615,21 +615,12 @@ const raceByPellStatusOptions = data => {
 };
 
 export default function EdaDashboard({ batch_id: propBatchId }) {
-  // Get inst_id and set-inst message from Inertia shared props
-  const { inst_id, set_inst_required_message } = usePage().props;
-
+  const { inst_id } = usePage().props;
   const [batchInfo, setBatchInfo] = useState(null);
   const [batchLoading, setBatchLoading] = useState(true);
   const [edaData, setEdaData] = useState(null);
   const [loading, setLoading] = useState(false); // Start false, will be set when batch_id is resolved
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!inst_id) {
-      const msg = set_inst_required_message ?? 'Set an institution to proceed.';
-      router.visit(`/set-inst?message=${encodeURIComponent(msg)}`);
-    }
-  }, [inst_id, set_inst_required_message]);
 
   // Fetch batch info - either from propBatchId or get most recent
   useEffect(() => {

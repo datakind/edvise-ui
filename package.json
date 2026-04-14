@@ -20,7 +20,7 @@
     "@types/ziggy-js": "^1.8.0",
     "@vitejs/plugin-react": "^2.2.0",
     "autoprefixer": "^10.4.16",
-    "axios": "^0.26.1",
+    "axios": "^1.15.0",
     "baseline-browser-mapping": "^2.9.19",
     "bootstrap": "^5.2.3",
     "eslint": "^9.18.0",

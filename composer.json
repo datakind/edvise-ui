@@ -21,7 +21,7 @@
     "laravel/socialite": "^5.16",
     "laravel/tinker": "^3.0.0 !=3.0.1",
     "laravel/ui": "^4.2",
-    "livewire/livewire": "^3.5",
+    "livewire/livewire": "^4.2",
     "socialiteproviders/manager": "^4.6",
     "socialiteproviders/microsoft-azure": "^5.2",
     "tightenco/ziggy": "^2.4",

@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "2d3d914fc1cc9ebe25154fbb53c20ec2",
+  "content-hash": "aef3633936a208a6ac1f63629118d970",
   "packages": [
     {
       "name": "bacon/bacon-qr-code",
@@ -3247,16 +3247,16 @@
     },
     {
       "name": "livewire/livewire",
-      "version": "v3.7.15",
+      "version": "v4.2.4",
       "source": {
         "type": "git",
         "url": "https://github.com/livewire/livewire.git",
-        "reference": "d68e65beb7717eaabef74a1cf63cd1670260ff5f"
+        "reference": "7d0bfa46269b1ec186b8cdd38baffee5cc647d10"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/livewire/livewire/zipball/d68e65beb7717eaabef74a1cf63cd1670260ff5f",
-        "reference": "d68e65beb7717eaabef74a1cf63cd1670260ff5f",
+        "url": "https://api.github.com/repos/livewire/livewire/zipball/7d0bfa46269b1ec186b8cdd38baffee5cc647d10",
+        "reference": "7d0bfa46269b1ec186b8cdd38baffee5cc647d10",
         "shasum": ""
       },
       "require": {
@@ -3311,7 +3311,7 @@
       "description": "A front-end framework for Laravel.",
       "support": {
         "issues": "https://github.com/livewire/livewire/issues",
-        "source": "https://github.com/livewire/livewire/tree/v3.7.15"
+        "source": "https://github.com/livewire/livewire/tree/v4.2.4"
       },
       "funding": [
         {
@@ -3319,7 +3319,7 @@
           "type": "github"
         }
       ],
-      "time": "2026-04-03T13:08:41+00:00"
+      "time": "2026-04-02T20:48:35+00:00"
     },
     {
       "name": "mobiledetect/mobiledetectlib",
@@ -6144,7 +6144,7 @@
     },
     {
       "name": "symfony/polyfill-ctype",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -6203,7 +6203,7 @@
         "portable"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-ctype/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-ctype/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6227,7 +6227,7 @@
     },
     {
       "name": "symfony/polyfill-intl-grapheme",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
@@ -6285,7 +6285,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6309,7 +6309,7 @@
     },
     {
       "name": "symfony/polyfill-intl-idn",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-intl-idn.git",
@@ -6372,7 +6372,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6396,7 +6396,7 @@
     },
     {
       "name": "symfony/polyfill-intl-normalizer",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
@@ -6457,7 +6457,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6481,7 +6481,7 @@
     },
     {
       "name": "symfony/polyfill-mbstring",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -6542,7 +6542,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6566,7 +6566,7 @@
     },
     {
       "name": "symfony/polyfill-php80",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-php80.git",
@@ -6626,7 +6626,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-php80/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-php80/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6650,7 +6650,7 @@
     },
     {
       "name": "symfony/polyfill-php84",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-php84.git",
@@ -6706,7 +6706,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-php84/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-php84/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6730,7 +6730,7 @@
     },
     {
       "name": "symfony/polyfill-php85",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-php85.git",
@@ -6786,7 +6786,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-php85/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-php85/tree/v1.36.0"
       },
       "funding": [
         {
@@ -6810,7 +6810,7 @@
     },
     {
       "name": "symfony/polyfill-uuid",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-uuid.git",
@@ -6869,7 +6869,7 @@
         "uuid"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-uuid/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-uuid/tree/v1.36.0"
       },
       "funding": [
         {
@@ -11628,7 +11628,7 @@
     },
     {
       "name": "symfony/polyfill-php81",
-      "version": "v1.35.0",
+      "version": "v1.36.0",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/polyfill-php81.git",
@@ -11684,7 +11684,7 @@
         "shim"
       ],
       "support": {
-        "source": "https://github.com/symfony/polyfill-php81/tree/v1.35.0"
+        "source": "https://github.com/symfony/polyfill-php81/tree/v1.36.0"
       },
       "funding": [
         {

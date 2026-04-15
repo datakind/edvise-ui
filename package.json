@@ -67,7 +67,7 @@
     "recharts": "^3.3.0",
     "turf-polygon": "^1.0.3",
     "word-wrap": "^1.2.5",
-    "xlsx": "^0.18.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "yarn": "^1.22.22",
     "ziggy-js": "^1.8.1"
   },

@@ -404,8 +404,8 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   return (
     <div className="flex flex-row bg-[#EEF2F6]">
-      <header>
-        <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
+      <header className="shrink-0">
+        <nav className="flex min-h-screen w-52 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
           <div className="flex flex-col justify-between">
             <ul role="list" className="flex flex-1 flex-col gap-y-12">
               <li
@@ -532,7 +532,7 @@ export default function AppLayout({ title, renderHeader, children }) {
           </div>
         </nav>
       </header>
-      <div className="flex min-h-screen basis-full flex-col justify-between">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col justify-between">
         <main className="flex w-full flex-1 pt-12">{children}</main>
         <Footer />
         <FeedbackButton />

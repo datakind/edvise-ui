@@ -154,7 +154,8 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
-  const { inst_id } = usePage().props;
+  const { institution } = usePage().props;
+  const hasInstId = institution?.inst_id;
   const user = auth.user;
   const userIsDatakinder =
     auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
@@ -206,7 +207,7 @@ export default function AppLayout({ title, renderHeader, children }) {
     setNavAboveLine(navigationAboveLine);
 
     const updateNavigation = async () => {
-      if (!inst_id) {
+      if (!hasInstId) {
         setNavAboveLine(
           navigationAboveLine.filter(item => item.name !== 'Model Results'),
         );
@@ -234,7 +235,7 @@ export default function AppLayout({ title, renderHeader, children }) {
     };
 
     updateNavigation();
-  }, [inst_id, user]);
+  }, [hasInstId, user]);
 
   const renderNav = navMap =>
     navMap.map(item =>
@@ -407,12 +408,17 @@ export default function AppLayout({ title, renderHeader, children }) {
                 className="flex h-16 shrink-0 flex-col items-center pt-12"
                 key="logo"
               >
-                <a href={route('home')}>
+                <a href={route('app-home')}>
                   <img
-                    className="w-full pb-12"
+                    className="w-full pb-2"
                     src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
+                  {institution?.name && (
+                    <p className="text-center text-sm font-medium text-[#637381]">
+                      {institution.name}
+                    </p>
+                  )}
                 </a>
               </li>
               <li key="navigation">

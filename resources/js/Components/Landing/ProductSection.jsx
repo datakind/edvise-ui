@@ -1,4 +1,6 @@
-import ReactPlayer from 'react-player';
+import ReactPlayerImport from 'react-player';
+
+const ReactPlayer = ReactPlayerImport.default ?? ReactPlayerImport;
 
 export default function ProductSection(props) {
   const products = [

@@ -84,6 +84,43 @@ a {
   @apply text-blue-700;
 }
 
+/* App sidebar — full-bleed row (matches DS: tabs default, primary accent, landing bg).
+   Add Tailwind `group` in JSX next to these classes (not in @apply — v4 limitation). */
+.app-nav-link {
+  @apply -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left text-sm/12 font-semibold text-tabs-default hover:text-black;
+}
+
+.app-nav-link--active {
+  @apply border-r-2 border-primary bg-landing-light-blue text-black;
+}
+
+button.app-nav-link {
+  @apply w-full cursor-pointer appearance-none border-0 bg-transparent font-sans;
+  font: inherit;
+}
+
+/* Section headers with children (Headless Disclosure); pair with `group` in JSX */
+.app-nav-disclosure-trigger {
+  @apply -mx-6 flex w-[calc(100%+3rem)] cursor-pointer items-center gap-x-3 border-0 bg-transparent px-6 py-2 text-left text-sm/12 font-semibold text-tabs-default hover:text-black;
+}
+
+.app-nav-disclosure-trigger--active {
+  @apply border-r-2 border-primary bg-landing-light-blue text-black;
+}
+
+/* Nested items under a section */
+.app-nav-sublink {
+  @apply relative block rounded-md py-2 pr-2 pl-9 text-sm/12 font-semibold text-tabs-default hover:text-black;
+}
+
+.app-nav-sublink--active {
+  @apply text-black;
+}
+
+.app-nav-sublink-dot {
+  @apply absolute top-1/2 left-4 h-2 w-2 -translate-y-1/2 rounded-full bg-primary;
+}
+
 /* Rounded corners for Plotly tooltips */
 .js-plotly-plot .hoverlayer .hovertext {
   border-radius: 16px !important;

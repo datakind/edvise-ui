@@ -253,7 +253,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 href={item.href}
                 method="post"
                 as="button"
-                className="text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold text-[#637381] hover:text-black"
+                className="app-nav-link group"
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log
                 out
@@ -263,10 +263,8 @@ export default function AppLayout({ title, renderHeader, children }) {
                 <a
                   href={item.href}
                   className={classNames(
-                    item.name == title
-                      ? 'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black'
-                      : 'text-[#637381] hover:text-black',
-                    'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                    'app-nav-link group',
+                    item.name == title && 'app-nav-link--active',
                   )}
                 >
                   <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
@@ -279,8 +277,8 @@ export default function AppLayout({ title, renderHeader, children }) {
             <Disclosure defaultOpen as="div">
               <DisclosureButton
                 className={classNames(
-                  'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
+                  'app-nav-disclosure-trigger group',
+                  'app-nav-disclosure-trigger--active',
                 )}
               >
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
@@ -309,14 +307,15 @@ export default function AppLayout({ title, renderHeader, children }) {
                         as="a"
                         href={subItem.href}
                         className={classNames(
-                          subItem.name == title
-                            ? 'text-black'
-                            : 'text-[#637381] hover:text-black',
-                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
+                          'app-nav-sublink',
+                          subItem.name == title && 'app-nav-sublink--active',
                         )}
                       >
                         {subItem.name == title && (
-                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
+                          <span
+                            className="app-nav-sublink-dot"
+                            aria-hidden
+                          />
                         )}
                         {item.name === 'Model Results'
                           ? formatModelName(subItem.name)
@@ -328,12 +327,7 @@ export default function AppLayout({ title, renderHeader, children }) {
             </Disclosure>
           ) : (
             <Disclosure as="div">
-              <DisclosureButton
-                className={classNames(
-                  'text-[#637381] hover:text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+2rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
-                )}
-              >
+              <DisclosureButton className="app-nav-disclosure-trigger group">
                 <item.icon aria-hidden="true" className="size-6 shrink-0" />
                 {item.name}
                 <ChevronRightIcon
@@ -360,14 +354,15 @@ export default function AppLayout({ title, renderHeader, children }) {
                         as="a"
                         href={subItem.href}
                         className={classNames(
-                          subItem.name == title
-                            ? 'text-black'
-                            : 'text-[#637381] hover:text-black',
-                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
+                          'app-nav-sublink',
+                          subItem.name == title && 'app-nav-sublink--active',
                         )}
                       >
                         {subItem.name == title && (
-                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
+                          <span
+                            className="app-nav-sublink-dot"
+                            aria-hidden
+                          />
                         )}
                         {item.name === 'Model Results'
                           ? formatModelName(subItem.name)
@@ -385,7 +380,7 @@ export default function AppLayout({ title, renderHeader, children }) {
   if (isMobile) {
     return (
       <div className="flex min-h-screen flex-col">
-        <header className="flex items-center justify-between p-4 text-secondary-dark">
+        <header className="text-secondary-dark flex items-center justify-between p-4">
           <img
             className="w-full pb-12"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
@@ -405,7 +400,7 @@ export default function AppLayout({ title, renderHeader, children }) {
   return (
     <div className="flex flex-row bg-[#EEF2F6]">
       <header className="shrink-0">
-        <nav className="flex min-h-screen w-52 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
+        <nav className="flex min-h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
           <div className="flex flex-col justify-between">
             <ul role="list" className="flex flex-1 flex-col gap-y-12">
               <li
@@ -509,21 +504,21 @@ export default function AppLayout({ title, renderHeader, children }) {
               <div></div>
             ) : (
               <div
-                className="flex items-center justify-between pb-6 pl-6 pr-6 pt-6"
+                className="flex items-center justify-between pt-6 pr-6 pb-6 pl-6"
                 id="login-register"
               >
                 <a
                   href={route('login')}
-                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
+                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
                 >
                   Login
                 </a>
-                <div className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline">
+                <div className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline">
                   &middot;
                 </div>
                 <a
                   href={route('register')}
-                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
+                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
                 >
                   Register
                 </a>

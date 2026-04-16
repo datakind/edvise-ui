@@ -413,7 +413,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 className="flex h-16 shrink-0 flex-col items-center pt-12"
                 key="logo"
               >
-                <a href={route('home')} className="block pb-12">
+                <a href={route('app-home')}>
                   <img
                     className="w-full pb-2"
                     src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"

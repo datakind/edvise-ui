@@ -1,8 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from 'recharts';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import H2 from '@/Components/H2';
+import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
 
 export default function RocCurve({ model_run_id, modelName, inst_id }) {
   const [rocData, setRocData] = useState([]);
@@ -33,7 +43,7 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
       const tpr1 = chartData[i].tpr;
       const fpr2 = chartData[i + 1].fpr;
       const tpr2 = chartData[i + 1].tpr;
-      
+
       const width = fpr2 - fpr1;
       const avgHeight = (tpr1 + tpr2) / 2;
       auc += width * avgHeight;
@@ -145,16 +155,19 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
         <H2 className="pb-4">ROC Curve for Test Data</H2>
         <ul className="list-disc pl-6 text-base text-black">
           <li className="mb-4">
-            A Receiver Operating Characteristic Curve (ROC) shows how well
-            the model distinguishes between students who need support and those
-            who do not.
+            A Receiver Operating Characteristic Curve (ROC) shows how well the
+            model distinguishes between students who need support and those who
+            do not.
           </li>
           <li className="mb-4">
-            The closer the curve hugs the top-left corner, the better the
-            model is at separating the two groups.
+            The closer the curve hugs the top-left corner, the better the model
+            is at separating the two groups.
           </li>
           <li className="mb-4">
-            The dashed line shows the accurate classification rate you would get from random guessing (50%). The solid line shows that your model performs better, correctly classifying students about <b>{aucPercentage}%</b> of the time.
+            The dashed line shows the accurate classification rate you would get
+            from random guessing (50%). The solid line shows that your model
+            performs better, correctly classifying students about{' '}
+            <b>{aucPercentage}%</b> of the time.
           </li>
           <li>
             This ROC curve shows the results for a subset of the original data
@@ -166,11 +179,12 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
                 onClick={e => {
                   e.preventDefault();
                   if (inst_id && model_run_id) {
-                    const apiUrl = `/institutions/${inst_id}/training/model-cards/${model_run_id}`;
                     const link = document.createElement('a');
-                    link.href = apiUrl;
-                    link.download = `${modelName}_model_card.pdf`;
-                    link.target = '_blank';
+                    link.href = modelCardDownloadUrl(
+                      inst_id,
+                      model_run_id,
+                      modelName,
+                    );
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -232,7 +246,10 @@ export default function RocCurve({ model_run_id, modelName, inst_id }) {
             <Tooltip content={<CustomTooltip />} />
             {/* Diagonal reference line */}
             <ReferenceLine
-              segment={[{ x: 0, y: 0 }, { x: 1, y: 1 }]}
+              segment={[
+                { x: 0, y: 0 },
+                { x: 1, y: 1 },
+              ]}
               stroke="#999"
               strokeWidth={1.5}
               strokeDasharray="4 4"

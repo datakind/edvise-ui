@@ -16,6 +16,12 @@ class ApiController extends Controller
 {
     use UsesApi;
 
+    /** Fallback when BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS is unset or invalid (below 1 second). */
+    private const BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS = 300;
+
+    /** Fallback when BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS is unset or invalid (below 1 second). */
+    private const BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS = 30;
+
     // For printline debugging the following example added in the function will output to console in the 'php artisan serve' pane.
     // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
@@ -135,6 +141,18 @@ class ApiController extends Controller
         if ($request->input('pdp_id') != null) {
             $post_request_body['pdp_id'] = $request->input('pdp_id');
         }
+        if ($request->input('is_edvise') != null) {
+            $post_request_body['is_edvise'] = $request->input('is_edvise');
+        }
+        if ($request->input('edvise_id') != null && $request->input('edvise_id') != '') {
+            $post_request_body['edvise_id'] = $request->input('edvise_id');
+        }
+        if ($request->input('is_legacy') != null) {
+            $post_request_body['is_legacy'] = $request->input('is_legacy');
+        }
+        if ($request->input('legacy_id') != null && $request->input('legacy_id') != '') {
+            $post_request_body['legacy_id'] = $request->input('legacy_id');
+        }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $post_request_body['retention_days'] = $request->input('retention_days');
         }
@@ -153,6 +171,29 @@ class ApiController extends Controller
         }
 
         return ApiController::constructDatakinderRequest($request, '/institutions', 'GET', /* No POST body */ null);
+    }
+
+    /**
+     * HTTP client timeout (seconds) when proxying institution requests to BACKEND_URL.
+     * Validate-upload needs a long wait for large CSV processing; other paths stay short.
+     */
+    private static function institutionBackendTimeoutSeconds(string $urlPiece): int
+    {
+        $isValidateUpload = str_starts_with($urlPiece, '/input/validate-upload');
+        if ($isValidateUpload) {
+            $seconds = (int) env(
+                'BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS',
+                self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS
+            );
+
+            return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
+        }
+        $seconds = (int) env(
+            'BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS',
+            self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS
+        );
+
+        return $seconds >= 1 ? $seconds : self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS;
     }
 
     // Constructs a query with the BACKEND_URL+/institutions/<inst> prefix.
@@ -179,23 +220,24 @@ class ApiController extends Controller
         $url = env('BACKEND_URL').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
+        $http = Http::withHeaders($headers)->timeout(self::institutionBackendTimeoutSeconds($url_piece));
         $resp = null;
         if ($method == 'GET') {
-            $resp = Http::withHeaders($headers)->get($url, $request->query());
+            $resp = $http->get($url, $request->query());
         } elseif ($method == 'POST') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->post($url);
+                $resp = $http->post($url);
             } else {
-                $resp = Http::withHeaders($headers)->post($url, $req_body);
+                $resp = $http->post($url, $req_body);
             }
         } elseif ($method == 'PATCH') {
             if ($req_body == null) {
-                $resp = Http::withHeaders($headers)->patch($url);
+                $resp = $http->patch($url);
             } else {
-                $resp = Http::withHeaders($headers)->patch($url, $req_body);
+                $resp = $http->patch($url, $req_body);
             }
         } elseif ($method == 'DELETE') {
-            $resp = Http::withHeaders($headers)->delete($url);
+            $resp = $http->delete($url);
         } else {
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }
@@ -234,8 +276,21 @@ class ApiController extends Controller
             }
             $req_body['is_pdp'] = $request->input('is_pdp');
         }
-        if ($request->input('pdp_id') != null) {
-            $req_body['pdp_id'] = $request->input('pdp_id');
+        // Forward school-type IDs when present (including null) so API can clear when switching type
+        if ($request->has('pdp_id')) {
+            $req_body['pdp_id'] = $request->input('pdp_id') ?: null;
+        }
+        if ($request->input('is_edvise') != null) {
+            $req_body['is_edvise'] = $request->input('is_edvise');
+        }
+        if ($request->has('edvise_id')) {
+            $req_body['edvise_id'] = $request->input('edvise_id') ?: null;
+        }
+        if ($request->input('is_legacy') != null) {
+            $req_body['is_legacy'] = $request->input('is_legacy');
+        }
+        if ($request->has('legacy_id')) {
+            $req_body['legacy_id'] = $request->input('legacy_id') ?: null;
         }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $req_body['retention_days'] = $request->input('retention_days');
@@ -779,21 +834,6 @@ class ApiController extends Controller
     public function downloadModelCard(Request $request, string $inst_id, string $model_run_id)
     {
         \Log::info('downloadModelCard called with inst_id: '.$inst_id.', model_run_id: '.$model_run_id);
-
-        if (ApiController::isLocalRequest()) {
-            \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
-
-            // Mock response for local development
-            return response()->json([
-                'message' => 'Model card download initiated',
-                'model_run_id' => $model_run_id,
-                'institution_id' => $inst_id,
-            ], 200);
-        }
-
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
@@ -803,8 +843,13 @@ class ApiController extends Controller
 
         // If we got a successful response, add download headers
         if ($response && $response->getStatusCode() == 200) {
-            $name = $request->query('name', $model_run_id);
-            $filename = $name.'_model_card.pdf';
+            $name = $request->query('name', '');
+            $name = is_string($name) ? $name : '';
+            $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $name);
+            if ($segment === '') {
+                $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $model_run_id) ?: 'model';
+            }
+            $filename = 'edvise-model-card-'.$segment.'.pdf';
 
             // Add download headers to force file download
             return response()->streamDownload(

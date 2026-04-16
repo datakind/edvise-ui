@@ -32,10 +32,6 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
     }
   }, [runInfos]);
 
-  const createViewLink = run => {
-    return route('model-results-overview', [run.run_id, modelName]);
-  };
-
   return (
     <div className="full flex flex-col">
       <div className="flex w-full justify-center">
@@ -94,7 +90,14 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
                       {run.outputFile == 'Pending' ? (
                         <>Pending</>
                       ) : (
-                        <a href={createViewLink(run)}>View</a>
+                        <a
+                          href={route('model-results-overview', [
+                            run.run_id,
+                            modelName,
+                          ])}
+                        >
+                          View
+                        </a>
                       )}
                     </td>
                     <td className="p-4 px-6">

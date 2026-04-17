@@ -7,18 +7,24 @@ import Alert from '@/Components/Alert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function SetInstitution() {
-  const { inst_id } = usePage().props;
+  const { institution, set_inst_required_message } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
+  const [selectedInstId, setSelectedInstId] = useState(
+    institution?.inst_id ?? '',
+  );
   const [setInstSuccess, setSetInstSuccess] = useState(null);
   const [settingInst, setSettingInst] = useState(false);
   const [setInstSubmitError, setSetInstSubmitError] = useState(null);
 
   useEffect(() => {
-    // Fetch all institutions
+    const next = institution?.inst_id ?? '';
+    setSelectedInstId(next);
+  }, [institution?.inst_id]);
+
+  useEffect(() => {
     axios
       .get('/view-all-institutions-api')
       .then(res => {
@@ -55,7 +61,7 @@ export default function SetInstitution() {
         setSetInstSuccess(
           `Successfully set institution to: ${institutionName}`,
         );
-        router.reload({ only: ['inst_id'] });
+        router.reload({ only: ['institution', 'user', 'set_inst_required_message'] });
       })
       .catch(e => {
         setSettingInst(false);
@@ -63,7 +69,6 @@ export default function SetInstitution() {
       });
   };
 
-  // The title in AppLayout needs to match the nav bar label.
   return (
     <AppLayout
       title="Set Institution"
@@ -83,11 +88,11 @@ export default function SetInstitution() {
           minorTitle="Act as Institution"
         ></HeaderLabel>
 
-        {!inst_id && (
+        {!institution?.inst_id && (
           <div className="mt-6 w-full max-w-2xl">
             <Alert
               variant="warning"
-              mainMsg="Datakinder must set an institution to proceed. Select an institution below to proceed."
+              mainMsg={`${set_inst_required_message} Select an institution below to proceed.`}
             />
           </div>
         )}

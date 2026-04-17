@@ -615,7 +615,8 @@ const raceByPellStatusOptions = data => {
 };
 
 export default function EdaDashboard({ batch_id: propBatchId }) {
-  const { inst_id } = usePage().props;
+  const { institution } = usePage().props;
+  const inst_id = institution?.inst_id;
   const [batchInfo, setBatchInfo] = useState(null);
   const [batchLoading, setBatchLoading] = useState(true);
   const [edaData, setEdaData] = useState(null);

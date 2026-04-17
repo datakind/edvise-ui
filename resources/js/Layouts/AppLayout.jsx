@@ -1,13 +1,10 @@
-import { router } from '@inertiajs/core';
-import { Link, Head, usePage } from '@inertiajs/react';
-import classNames from 'classnames';
+import { Link, usePage } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
 import FeedbackButton from '@/Components/FeedbackButton';
-import AppLogo from '@/Components/Icons/AppLogo';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -28,7 +25,6 @@ import {
   ClipboardDocumentListIcon,
   PlusCircleIcon,
 } from '@heroicons/react/24/outline';
-import { subtract } from 'lodash';
 import { formatModelName } from '@/utils/stringUtils';
 import CookieConsent from '@/Components/CookieConsent';
 
@@ -154,7 +150,8 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, renderHeader, children }) {
   const { auth, jetstream } = useTypedPage().props;
-  const { inst_id } = usePage().props;
+  const { institution } = usePage().props;
+  const hasInstId = institution?.inst_id;
   const user = auth.user;
   const userIsDatakinder =
     auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
@@ -206,7 +203,7 @@ export default function AppLayout({ title, renderHeader, children }) {
     setNavAboveLine(navigationAboveLine);
 
     const updateNavigation = async () => {
-      if (!inst_id) {
+      if (!hasInstId) {
         setNavAboveLine(
           navigationAboveLine.filter(item => item.name !== 'Model Results'),
         );
@@ -234,14 +231,19 @@ export default function AppLayout({ title, renderHeader, children }) {
     };
 
     updateNavigation();
-  }, [inst_id, user]);
+  }, [hasInstId, user]);
 
   const renderNav = navMap =>
-    navMap.map(item =>
-      (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
-      (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-      (!userIsDatakinder &&
-        item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
+    navMap.map(item => {
+      const navDisclosureActive =
+        item.children &&
+        (item.children.some(e => e.name === title) ||
+          (item.name === 'Model Results' && title === 'Dashboard'));
+
+      return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
+        (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
+        (!userIsDatakinder &&
+          item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
         <></>
       ) : (
         <li key={item.name}>
@@ -249,97 +251,31 @@ export default function AppLayout({ title, renderHeader, children }) {
             // Logout gets treated as a button as it requires a post request
             // TODO: does this have auto-protection against csrf via the Laravel middleware stack?
             item.name == 'Logout' ? (
-              <Link
-                href={item.href}
-                method="post"
-                as="button"
-                className="text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold text-[#637381] hover:text-black"
-              >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log
-                out
+              <Link href={item.href} method="post" className="app-nav-item">
+                <item.icon aria-hidden="true" className="app-nav-icon" />
+                Log out
               </Link>
             ) : (
-              <div className="relative">
-                <a
-                  href={item.href}
-                  className={classNames(
-                    item.name == title
-                      ? 'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black'
-                      : 'text-[#637381] hover:text-black',
-                    'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
-                  )}
-                >
-                  <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
-                  {item.name}
-                </a>
-              </div>
+              <a
+                href={item.href}
+                className="app-nav-item"
+                {...(item.name == title ? { 'data-current': '' } : {})}
+              >
+                <item.icon aria-hidden="true" className="app-nav-icon" />
+                {item.name}
+              </a>
             )
-          ) : item.children.some(e => e.name === title) ||
-            (item.name === 'Model Results' && title === 'Dashboard') ? (
-            <Disclosure defaultOpen as="div">
-              <DisclosureButton
-                className={classNames(
-                  'border-r-2 border-[#f79222] bg-[#EEF2F6] text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
-                )}
-              >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" />
-                {item.name}
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-gray-500"
-                />
-              </DisclosureButton>
-              <DisclosurePanel as="ul" className="mt-1">
-                {item.children
-                  .filter(
-                    subItem =>
-                      !subItem.visibility_type ||
-                      (subItem.visibility_type ===
-                        VisibilityType.DATAKIND_ONLY &&
-                        userIsDatakinder) ||
-                      (subItem.visibility_type ===
-                        VisibilityType.PRIVATE_ONLY &&
-                        user) ||
-                      subItem.visibility_type === VisibilityType.BOTH,
-                  )
-                  .map(subItem => (
-                    <li key={subItem.name}>
-                      <DisclosureButton
-                        as="a"
-                        href={subItem.href}
-                        className={classNames(
-                          subItem.name == title
-                            ? 'text-black'
-                            : 'text-[#637381] hover:text-black',
-                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
-                        )}
-                      >
-                        {subItem.name == title && (
-                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
-                        )}
-                        {item.name === 'Model Results'
-                          ? formatModelName(subItem.name)
-                          : subItem.name}
-                      </DisclosureButton>
-                    </li>
-                  ))}
-              </DisclosurePanel>
-            </Disclosure>
           ) : (
-            <Disclosure as="div">
+            <Disclosure defaultOpen={navDisclosureActive} as="div">
               <DisclosureButton
-                className={classNames(
-                  'text-[#637381] hover:text-black',
-                  'text-sm/12 group -mx-6 flex w-[calc(100%+2rem)] items-center gap-x-3 px-6 py-2 text-left font-semibold',
-                )}
+                className="app-nav-item"
+                {...(navDisclosureActive ? { 'data-current': '' } : {})}
               >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" />
-                {item.name}
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-black"
-                />
+                <span className="flex min-w-0 flex-1 items-center gap-3">
+                  <item.icon aria-hidden="true" className="app-nav-icon" />
+                  <span className="truncate">{item.name}</span>
+                </span>
+                <ChevronRightIcon aria-hidden />
               </DisclosureButton>
               <DisclosurePanel as="ul" className="mt-1">
                 {item.children
@@ -359,16 +295,12 @@ export default function AppLayout({ title, renderHeader, children }) {
                       <DisclosureButton
                         as="a"
                         href={subItem.href}
-                        className={classNames(
-                          subItem.name == title
-                            ? 'text-black'
-                            : 'text-[#637381] hover:text-black',
-                          'text-sm/12 relative block rounded-md py-2 pl-9 pr-2 font-semibold',
-                        )}
+                        className="app-nav-item"
+                        data-nested=""
+                        {...(subItem.name == title
+                          ? { 'data-current': '' }
+                          : {})}
                       >
-                        {subItem.name == title && (
-                          <span className="absolute left-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#f79222]"></span>
-                        )}
                         {item.name === 'Model Results'
                           ? formatModelName(subItem.name)
                           : subItem.name}
@@ -379,13 +311,13 @@ export default function AppLayout({ title, renderHeader, children }) {
             </Disclosure>
           )}
         </li>
-      ),
-    );
+      );
+    });
 
   if (isMobile) {
     return (
       <div className="flex min-h-screen flex-col">
-        <header className="flex items-center justify-between p-4 text-secondary-dark">
+        <header className="text-secondary-dark flex items-center justify-between p-4">
           <img
             className="w-full pb-12"
             src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
@@ -404,27 +336,32 @@ export default function AppLayout({ title, renderHeader, children }) {
 
   return (
     <div className="flex flex-row bg-[#EEF2F6]">
-      <header>
-        <nav className="auto w-1/8 bg-blue flex min-h-full flex-1 basis-2/12 flex-row gap-y-6 overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-md">
+      <header className="shrink-0">
+        <nav className="app-nav flex min-h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
           <div className="flex flex-col justify-between">
-            <ul role="list" className="flex flex-1 flex-col gap-y-12">
+            <ul role="list" className="flex flex-1 flex-col gap-y-6">
               <li
-                className="flex h-16 shrink-0 flex-col items-center pt-12"
+                className="flex w-full shrink-0 flex-col items-start pt-8"
                 key="logo"
               >
-                <a href={route('home')}>
+                <a href={route('app-home')} className="block w-full">
                   <img
-                    className="w-full pb-12"
+                    className="max-w-full pb-2"
                     src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
+                  {institution?.name && (
+                    <p className="text-sm font-medium text-[#637381]">
+                      {institution.name}
+                    </p>
+                  )}
                 </a>
               </li>
               <li key="navigation">
                 <ul>
                   {renderNav(navAboveLine)}
                   <li key="divider" aria-hidden="true">
-                    <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
+                    <hr className="my-6 border-0 border-t border-[#dfe4ea]" />
                   </li>
                   {renderNav(navigationBelowLine)}
                   {user ? (
@@ -509,21 +446,21 @@ export default function AppLayout({ title, renderHeader, children }) {
               <div></div>
             ) : (
               <div
-                className="flex items-center justify-between pb-6 pl-6 pr-6 pt-6"
+                className="flex items-center justify-between pt-6 pr-6 pb-6 pl-6"
                 id="login-register"
               >
                 <a
                   href={route('login')}
-                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
+                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
                 >
                   Login
                 </a>
-                <div className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline">
+                <div className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline">
                   &middot;
                 </div>
                 <a
                   href={route('register')}
-                  className="text-sm/12 flex rounded-md font-semibold text-[#637381] hover:underline"
+                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
                 >
                   Register
                 </a>
@@ -532,7 +469,7 @@ export default function AppLayout({ title, renderHeader, children }) {
           </div>
         </nav>
       </header>
-      <div className="flex min-h-screen basis-full flex-col justify-between">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col justify-between">
         <main className="flex w-full flex-1 pt-12">{children}</main>
         <Footer />
         <FeedbackButton />

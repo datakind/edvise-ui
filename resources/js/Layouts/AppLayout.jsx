@@ -351,7 +351,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                     alt="Edvise Logo"
                   />
                   {institution?.name && (
-                    <p className="text-center text-sm font-medium text-[#637381]">
+                    <p className="text-sm font-medium text-[#637381]">
                       {institution.name}
                     </p>
                   )}

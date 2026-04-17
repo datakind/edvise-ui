@@ -376,7 +376,7 @@ function ModelResultsOverview({
                     demonstrate the performance of the model. You can also{' '}
                     <a
                       href={modelCardDownloadUrl(
-                        inst_id,
+                        institution?.inst_id,
                         model_run_id,
                         modelName,
                       )}

@@ -259,16 +259,14 @@ export default function AppLayout({ title, renderHeader, children }) {
                 Log out
               </Link>
             ) : (
-              <div className="relative">
-                <a
-                  href={item.href}
-                  className="app-nav-item"
-                  {...(item.name == title ? { 'data-current': '' } : {})}
-                >
-                  <item.icon aria-hidden="true" className="app-nav-icon" />
-                  {item.name}
-                </a>
-              </div>
+              <a
+                href={item.href}
+                className="app-nav-item"
+                {...(item.name == title ? { 'data-current': '' } : {})}
+              >
+                <item.icon aria-hidden="true" className="app-nav-icon" />
+                {item.name}
+              </a>
             )
           ) : (
             <Disclosure defaultOpen={navDisclosureActive} as="div">

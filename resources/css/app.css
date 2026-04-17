@@ -89,19 +89,19 @@ a {
 }
 
 .app-nav .app-nav-item {
-  @apply flex w-full items-center gap-3 py-2 text-left text-sm font-medium text-tabs-default hover:text-black;
-}
-
-.app-nav .app-nav-item[data-current]:not([data-nested]) {
-  @apply border-r-2 border-primary bg-landing-light-blue font-bold text-black hover:text-black;
+  @apply flex w-full items-center gap-3 py-2 text-left font-bold text-tabs-default hover:text-black;
 }
 
 .app-nav .app-nav-item[data-nested] {
-  @apply relative block rounded-md border-0 py-2 pr-2 pl-8 text-left text-sm font-normal text-tabs-default hover:text-black;
+  @apply relative block rounded-md border-0 pr-2 pl-8 font-normal;
 }
 
-.app-nav .app-nav-item[data-nested][data-current] {
-  @apply font-bold text-black;
+.app-nav .app-nav-item[data-current] {
+  @apply font-bold text-black hover:text-black;
+}
+
+.app-nav .app-nav-item[data-current]:not([data-nested]) {
+  @apply border-r-2 border-primary bg-landing-light-blue;
 }
 
 .app-nav .app-nav-item[data-nested][data-current]::before {
@@ -111,7 +111,6 @@ a {
 
 .app-nav button.app-nav-item {
   @apply w-full cursor-pointer appearance-none border-0 bg-transparent font-sans;
-  font: inherit;
 }
 
 .app-nav .app-nav-item[aria-expanded] > svg {

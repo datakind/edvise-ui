@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InstitutionHelper;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -54,18 +55,16 @@ class LoginController extends Controller
                                    ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
                 }
 
-                // If the user exists but doesn't have a Google ID, update it
                 if (! $existingUser->google_id) {
                     $existingUser->google_id = $user->id;
                     $existingUser->save();
                 }
 
-                // Log the existing user in
                 Auth::login($existingUser);
+                InstitutionHelper::syncUserFromBackend($request);
 
                 return redirect('/dashboard');
             } else {
-                // Check if there's a valid invite for this email
                 $invite = \App\Models\Invite::where('email', $user->email)
                                            ->where('is_used', false)
                                            ->where('expires_at', '>', now())
@@ -140,12 +139,11 @@ class LoginController extends Controller
                     $existingUser->save();
                 }
 
-                // Log the existing user in
                 Auth::login($existingUser);
+                InstitutionHelper::syncUserFromBackend($request);
 
                 return redirect('/dashboard');
             } else {
-                // Check if there's a valid invite for this email
                 $invite = \App\Models\Invite::where('email', $user->email)
                                            ->where('is_used', false)
                                            ->where('expires_at', '>', now())
@@ -156,7 +154,6 @@ class LoginController extends Controller
                                    ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
                 }
 
-                // Store invite in session and redirect to registration
                 session(['valid_invite' => $invite]);
                 session(['sso_user' => true]);
                 session(['sso_user_data' => [

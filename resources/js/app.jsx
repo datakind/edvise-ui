@@ -18,7 +18,7 @@ createInertiaApp({
       import.meta.glob('./Pages/**/*.jsx'),
     ),
   setup({ el, App, props }) {
-    ReactGA.initialize('G-5K6031PFQT');
+    (ReactGA.default ?? ReactGA).initialize('G-5K6031PFQT');
 
     const root = createRoot(el);
 

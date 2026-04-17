@@ -7,14 +7,20 @@ import ErrorAlert from '@/Components/ErrorAlert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
 export default function SetInstitution() {
-  const { inst_id, message } = usePage().props;
+  const { institution, message } = usePage().props;
 
   const [resultList, setResultList] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentInstId, setCurrentInstId] = useState(inst_id || '');
-  const [selectedInstId, setSelectedInstId] = useState(inst_id || '');
+  const [instId, setInstId] = useState(institution?.inst_id ?? '');
+  const [selectedInstId, setSelectedInstId] = useState(institution?.inst_id ?? '');
   const [hideSetInstError, setHideSetInstError] = useState(false);
+
+  useEffect(() => {
+    const next = institution?.inst_id ?? '';
+    setInstId(next);
+    setSelectedInstId(next);
+  }, [institution?.inst_id]);
 
   useEffect(() => {
     // Fetch all institutions
@@ -52,7 +58,7 @@ export default function SetInstitution() {
         const institutionName =
           Object.entries(resultList).find(([name, id]) => id === inst)?.[0] ||
           'Unknown';
-        setCurrentInstId(inst); // Update current institution after successful change
+        setInstId(inst); // Update current institution after successful change
         resultArea.innerHTML = `<span class="text-green-600 font-semibold">✓ Successfully set institution to: ${institutionName}</span>`;
         setHideSetInstError(true);
         router.visit(route('set-inst'));

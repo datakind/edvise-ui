@@ -11,9 +11,8 @@ import axios from 'axios';
 import { usePage } from '@inertiajs/react';
 
 export default function ManageUploads() {
-  // Get inst_id from Inertia shared props (no API call needed!)
-  const { inst_id } = usePage().props;
-  console.log('ManageUploads - Institution ID from shared props:', inst_id);
+  const { institution } = usePage().props;
+  const inst_id = institution?.inst_id;
 
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);

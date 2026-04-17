@@ -11,121 +11,99 @@ class InstitutionHelper
 {
     public const SET_INST_REQUIRED_MESSAGE = 'Datakinder must set an institution to proceed.';
 
-    // This calls the API endpoint that checks if the current self user has been allowlisted in any institution's email lists.
-    // Returns the institution id, access_type of the current user if set anywhere.
-    public static function checkSelfInst(Request $request)
+    /**
+     * Sync the authenticated user's inst_id and access_type from the backend (check-self).
+     * Call once after login. Updates the user row and, for non-DATAKINDER, sets session institution.
+     */
+    public static function syncUserFromBackend(Request $request): void
     {
-        // Skip backend API when running locally or in tests (no real backend available).
-        if (in_array(strtoupper(env('APP_ENV', '')), ['LOCAL', 'TESTING'], true)) {
-            return ['', '', 'User does not have an institution nor access type.'];
+        if (! $request->user()) {
+            return;
         }
-        [$tok, $tokErr] = TokenHelper::GetToken($request);
-        if ($tok == '') {
-            return ['', '', $tokErr];
+        [$tok, ] = TokenHelper::GetToken($request);
+        if ($tok === '') {
+            return;
         }
+        $resp = Http::withHeaders([
+            'Authorization' => 'Bearer '.$tok,
+            'accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ])->get(env('BACKEND_URL').'/check-self');
+        if ($resp->getStatusCode() !== 200 || (($resp['inst_id'] ?? '') === '' && ($resp['access_type'] ?? '') === '')) {
+            return;
+        }
+        $accessType = $resp['access_type'] ?? '';
+        DB::table('users')
+            ->where('email', $request->user()->email)
+            ->update(['access_type' => $accessType, 'inst_id' => $resp['inst_id']]);
+        $request->user()->access_type = $accessType;
+        $request->user()->inst_id = $resp['inst_id'];
 
+        if ($accessType !== 'DATAKINDER' && ($resp['inst_id'] ?? '') !== '') {
+            $full = self::fetchInstitutionById($request, $resp['inst_id']);
+            session(['institution' => $full ?? ['inst_id' => $resp['inst_id']]]);
+        }
+    }
+
+    // Returns [inst_id, error]. Session is source of truth; non-DATAKINDER fallback is user row (synced at login).
+    public static function GetInstitution(Request $request)
+    {
+        $institution = session('institution');
+        if (is_array($institution) && ($institution['inst_id'] ?? '') !== '') {
+            return [$institution['inst_id'], ''];
+        }
+        if ($request->user()->access_type === 'DATAKINDER') {
+            return ['', self::SET_INST_REQUIRED_MESSAGE];
+        }
+        $inst = $request->user()->inst_id ?? '';
+        if ($inst !== '') {
+            $full = self::fetchInstitutionById($request, $inst);
+            session(['institution' => $full ?? ['inst_id' => $inst]]);
+            return [$inst, ''];
+        }
+        return ['', ''];
+    }
+
+    // Fetch full institution by inst_id from backend. Returns array or null.
+    public static function fetchInstitutionById(Request $request, string $inst_id): ?array
+    {
+        [$tok, ] = TokenHelper::GetToken($request);
+        if ($tok === '') {
+            return null;
+        }
         $headers = [
             'Authorization' => 'Bearer '.$tok,
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-
-        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/check-self');
-        if ($resp->getStatusCode() != 200) {
-            $errMsg = json_decode($resp->getBody());
-            if ($errMsg == null) {
-                return ['', '', $resp->getStatusCode()];
-            }
-
-            return ['', '', $resp->getStatusCode().': '.$errMsg->detail];
-        }
-
-        if ($resp['inst_id'] == null && $resp['access_type'] == null) {
-            // For the webapp if both these fields are empty, this is a random user.
-            return ['', '', 'User does not have an institution nor access type.'];
-        }
-
-        $acces_type_str = '';
-        if ($resp['access_type'] != null) {
-            $acces_type_str = $resp['access_type'];
-        }
-        $affected = DB::table('users')
-            ->where('email', $request->user()->email)
-            ->update(['access_type' => $acces_type_str, 'inst_id' => $resp['inst_id']]);
-        if ($affected != 1) {
-            return ['', '', 'Error: User table update affected '.$affected.' rows. 1 affected row expected.'];
-        }
-
-        return [$resp['inst_id'], $resp['access_type'], ''];
-    }
-
-    // Returns the institution id and an error if any, as a tuple.
-    public static function GetInstitutionId(Request $request)
-    {
-        if ($request->user()->inst_id != null) {
-            return [$request->user()->inst_id, ''];
-        }
-        if ($request->user()->access_type == 'DATAKINDER') {
-            if (session()->has('datakinder_inst_id') && session('datakinder_inst_id') != '') {
-                return [session()->get('datakinder_inst_id'), ''];
-            }
-
-            return ['', self::SET_INST_REQUIRED_MESSAGE];
-        }
-
-        // Call check self in case the user is set as an allowed user for any institution.
-        [$inst, $access, $err] = InstitutionHelper::checkSelfInst($request);
-        if ($err != '') {
-            return ['', $err];
-        }
-
-        return [$inst, ''];
-    }
-
-    /** @return array<string, mixed>|null */
-    public static function GetInstitution(Request $request): ?array
-    {
-        if (! $request->user()) {
-            return null;
-        }
-        $instId = $request->attributes->get('inst_id');
-        if ($instId === null || $instId === '') {
-            $instId = self::GetInstitutionId($request)[0];
-        }
-        if ($instId === null || $instId === '') {
-            return null;
-        }
-        [$tok] = TokenHelper::GetToken($request);
-        if ($tok === '') {
-            return null;
-        }
-        $base = rtrim((string) env('BACKEND_URL'), '/');
-        $resp = Http::withHeaders([
-            'Authorization' => 'Bearer '.$tok,
-            'accept' => 'application/json',
-            'Cache-Control' => 'no-cache',
-        ])->get($base.'/institutions/'.$instId);
+        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions');
         if ($resp->getStatusCode() !== 200) {
             return null;
         }
-        $data = $resp->json();
-        if (! is_array($data)) {
+        $list = $resp->json();
+        if (! is_array($list)) {
             return null;
         }
+        foreach ($list as $inst) {
+            if (is_array($inst) && ($inst['inst_id'] ?? '') === $inst_id) {
+                return $inst;
+            }
+        }
 
-        return $data;
+        return null;
     }
 
-    // Set the institution id for Datakinders, return an error if any.
-    public static function setDatakinderInst(string $access_type, string $inst)
+    // Set the institution (full attributes). Only DataKinders may set it (they choose via Set Institution page).
+    public static function setInst(Request $request, string $access_type, string $inst_id): string
     {
-        if ($access_type != 'DATAKINDER') {
+        if ($access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution.';
         }
-        if ($inst == '') {
+        if ($inst_id === '') {
             return 'No institution id specified.';
         }
-        session(['datakinder_inst_id' => $inst]);
+        $institution = self::fetchInstitutionById($request, $inst_id);
+        session(['institution' => $institution ?? ['inst_id' => $inst_id]]);
 
         return '';
     }

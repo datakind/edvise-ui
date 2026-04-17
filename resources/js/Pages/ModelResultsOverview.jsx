@@ -285,7 +285,7 @@ function ModelResultsOverview({
                             key={feature.feature_readable_name}
                             className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
                           >
-                            <td className="w-1/3 border-b border-r border-t border-[#e5e7eb] border-r-[#CDCDCD] py-3 pl-4 pr-4">
+                            <td className="w-1/3 border-t border-r border-b border-[#e5e7eb] border-r-[#CDCDCD] py-3 pr-4 pl-4">
                               <div
                                 className="cursor-pointer text-2xl font-light text-[#007C8C] hover:underline"
                                 onClick={() => handleFeatureClick(feature)}
@@ -298,7 +298,7 @@ function ModelResultsOverview({
                                 {feature.feature_short_desc}
                               </div>
                             </td>
-                            <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
+                            <td className="w-2/3 border-t border-b border-[#e5e7eb] py-3">
                               <Shap
                                 rawFeatures={rawFeatures}
                                 currentFeature={feature}
@@ -390,7 +390,10 @@ function ModelResultsOverview({
                 </div>
                 <div className="mb-8">
                   {/* Feature Value Table */}
-                  <FeatureValue model_run_id={model_run_id} inst_id={institution?.inst_id} />
+                  <FeatureValue
+                    model_run_id={model_run_id}
+                    inst_id={institution?.inst_id}
+                  />
                 </div>
                 {/* Confusion Matrix */}
                 <div className="mb-8">
@@ -427,13 +430,13 @@ function ModelResultsOverview({
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="fixed inset-0 bg-black bg-opacity-80"
+            className="bg-opacity-80 fixed inset-0 bg-black"
             onClick={closeModal}
           ></div>
           <div className="relative mx-4 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-2 border-[#F79122] bg-white shadow-xl">
             <button
               onClick={closeModal}
-              className="absolute right-4 top-4 text-black hover:opacity-80"
+              className="absolute top-4 right-4 text-black hover:opacity-80"
               aria-label="Close modal"
             >
               <svg

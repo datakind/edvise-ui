@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config '../../tailwind.config.js';
 
 @layer base {
     @font-face {
@@ -82,7 +81,44 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
 }
 
 a {
-  @apply text-blue-700;
+  @apply text-[#637381] hover:text-black;
+}
+
+.app-nav .app-nav-icon {
+  @apply size-6 shrink-0;
+}
+
+.app-nav .app-nav-item {
+  @apply flex w-full items-center gap-3 py-2 text-left font-bold text-tabs-default hover:text-black;
+}
+
+.app-nav .app-nav-item[data-nested] {
+  @apply relative block rounded-md border-0 pr-2 pl-8 font-normal;
+}
+
+.app-nav .app-nav-item[data-current] {
+  @apply font-bold text-black hover:text-black;
+}
+
+.app-nav .app-nav-item[data-current]:not([data-nested]) {
+  @apply border-r-2 border-primary bg-landing-light-blue;
+}
+
+.app-nav .app-nav-item[data-nested][data-current]::before {
+  content: '';
+  @apply absolute top-1/2 left-4 h-2 w-2 -translate-y-1/2 rounded-full bg-primary;
+}
+
+.app-nav button.app-nav-item {
+  @apply w-full cursor-pointer appearance-none border-0 bg-transparent font-sans;
+}
+
+.app-nav .app-nav-item[aria-expanded] > svg {
+  @apply size-5 shrink-0 text-gray-400 transition-transform duration-200 ease-out;
+}
+
+.app-nav .app-nav-item[aria-expanded='true'] > svg {
+  @apply rotate-90 text-gray-500;
 }
 
 /* Rounded corners for Plotly tooltips */
@@ -98,7 +134,7 @@ a {
 }
 
 .waiting > .waiting-overlay {
-  @apply absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50;
+  @apply absolute inset-0 flex items-center justify-center bg-white/75 z-50;
 }
 
 .waiting > .waiting-overlay > .waiting-spinner {

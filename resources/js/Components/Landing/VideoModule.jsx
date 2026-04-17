@@ -1,7 +1,9 @@
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useState, useEffect } from 'react';
 import { useLenis } from './LenisProvider';
-import ReactPlayer from 'react-player';
+import ReactPlayerImport from 'react-player';
+
+const ReactPlayer = ReactPlayerImport.default ?? ReactPlayerImport;
 
 export default function VideoModule({ videoUrl }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

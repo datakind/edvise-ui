@@ -27,7 +27,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->name('home');
+})->name('welcome');
 
 Route::get('/data-dictionary', [App\Http\Controllers\DataDictionaryController::class, 'show'])->name('data-dictionary');
 

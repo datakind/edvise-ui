@@ -81,44 +81,45 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
 }
 
 a {
-  @apply text-blue-700;
+  @apply text-[#637381] hover:text-black;
 }
 
-/* App sidebar — full-bleed row (matches DS: tabs default, primary accent, landing bg).
-   Add Tailwind `group` in JSX next to these classes (not in @apply — v4 limitation). */
-.app-nav-link {
-  @apply -mx-6 flex w-[calc(100%+3rem)] items-center gap-x-3 px-6 py-2 text-left text-sm/12 font-semibold text-tabs-default hover:text-black;
+.app-nav .app-nav-icon {
+  @apply size-6 shrink-0;
 }
 
-.app-nav-link--active {
-  @apply border-r-2 border-primary bg-landing-light-blue text-black;
+.app-nav .app-nav-item {
+  @apply flex w-full items-center gap-3 py-2 text-left text-sm font-medium text-tabs-default hover:text-black;
 }
 
-button.app-nav-link {
+.app-nav .app-nav-item[data-current]:not([data-nested]) {
+  @apply border-r-2 border-primary bg-landing-light-blue font-bold text-black hover:text-black;
+}
+
+.app-nav .app-nav-item[data-nested] {
+  @apply relative block rounded-md border-0 py-2 pr-2 pl-8 text-left text-sm font-normal text-tabs-default hover:text-black;
+}
+
+.app-nav .app-nav-item[data-nested][data-current] {
+  @apply font-bold text-black;
+}
+
+.app-nav .app-nav-item[data-nested][data-current]::before {
+  content: '';
+  @apply absolute top-1/2 left-4 h-2 w-2 -translate-y-1/2 rounded-full bg-primary;
+}
+
+.app-nav button.app-nav-item {
   @apply w-full cursor-pointer appearance-none border-0 bg-transparent font-sans;
   font: inherit;
 }
 
-/* Section headers with children (Headless Disclosure); pair with `group` in JSX */
-.app-nav-disclosure-trigger {
-  @apply -mx-6 flex w-[calc(100%+3rem)] cursor-pointer items-center gap-x-3 border-0 bg-transparent px-6 py-2 text-left text-sm/12 font-semibold text-tabs-default hover:text-black;
+.app-nav .app-nav-item[aria-expanded] > svg {
+  @apply size-5 shrink-0 text-gray-400 transition-transform duration-200 ease-out;
 }
 
-.app-nav-disclosure-trigger--active {
-  @apply border-r-2 border-primary bg-landing-light-blue text-black;
-}
-
-/* Nested items under a section */
-.app-nav-sublink {
-  @apply relative block rounded-md py-2 pr-2 pl-9 text-sm/12 font-semibold text-tabs-default hover:text-black;
-}
-
-.app-nav-sublink--active {
-  @apply text-black;
-}
-
-.app-nav-sublink-dot {
-  @apply absolute top-1/2 left-4 h-2 w-2 -translate-y-1/2 rounded-full bg-primary;
+.app-nav .app-nav-item[aria-expanded='true'] > svg {
+  @apply rotate-90 text-gray-500;
 }
 
 /* Rounded corners for Plotly tooltips */

@@ -1,6 +1,5 @@
 import { router } from '@inertiajs/core';
 import { Link, Head, usePage } from '@inertiajs/react';
-import classNames from 'classnames';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
@@ -238,11 +237,16 @@ export default function AppLayout({ title, renderHeader, children }) {
   }, [hasInstId, user]);
 
   const renderNav = navMap =>
-    navMap.map(item =>
-      (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
-      (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-      (!userIsDatakinder &&
-        item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
+    navMap.map(item => {
+      const navDisclosureActive =
+        item.children &&
+        (item.children.some(e => e.name === title) ||
+          (item.name === 'Model Results' && title === 'Dashboard'));
+
+      return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
+        (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
+        (!userIsDatakinder &&
+          item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
         <></>
       ) : (
         <li key={item.name}>
@@ -250,91 +254,33 @@ export default function AppLayout({ title, renderHeader, children }) {
             // Logout gets treated as a button as it requires a post request
             // TODO: does this have auto-protection against csrf via the Laravel middleware stack?
             item.name == 'Logout' ? (
-              <Link
-                href={item.href}
-                method="post"
-                as="button"
-                className="app-nav-link group"
-              >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" /> Log
-                out
+              <Link href={item.href} method="post" className="app-nav-item">
+                <item.icon aria-hidden="true" className="app-nav-icon" />
+                Log out
               </Link>
             ) : (
               <div className="relative">
                 <a
                   href={item.href}
-                  className={classNames(
-                    'app-nav-link group',
-                    item.name == title && 'app-nav-link--active',
-                  )}
+                  className="app-nav-item"
+                  {...(item.name == title ? { 'data-current': '' } : {})}
                 >
-                  <item.icon aria-hidden="true" className="size-6 shrink-0" />{' '}
+                  <item.icon aria-hidden="true" className="app-nav-icon" />
                   {item.name}
                 </a>
               </div>
             )
-          ) : item.children.some(e => e.name === title) ||
-            (item.name === 'Model Results' && title === 'Dashboard') ? (
-            <Disclosure defaultOpen as="div">
-              <DisclosureButton
-                className={classNames(
-                  'app-nav-disclosure-trigger group',
-                  'app-nav-disclosure-trigger--active',
-                )}
-              >
-                <item.icon aria-hidden="true" className="size-6 shrink-0" />
-                {item.name}
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-gray-500"
-                />
-              </DisclosureButton>
-              <DisclosurePanel as="ul" className="mt-1">
-                {item.children
-                  .filter(
-                    subItem =>
-                      !subItem.visibility_type ||
-                      (subItem.visibility_type ===
-                        VisibilityType.DATAKIND_ONLY &&
-                        userIsDatakinder) ||
-                      (subItem.visibility_type ===
-                        VisibilityType.PRIVATE_ONLY &&
-                        user) ||
-                      subItem.visibility_type === VisibilityType.BOTH,
-                  )
-                  .map(subItem => (
-                    <li key={subItem.name}>
-                      <DisclosureButton
-                        as="a"
-                        href={subItem.href}
-                        className={classNames(
-                          'app-nav-sublink',
-                          subItem.name == title && 'app-nav-sublink--active',
-                        )}
-                      >
-                        {subItem.name == title && (
-                          <span
-                            className="app-nav-sublink-dot"
-                            aria-hidden
-                          />
-                        )}
-                        {item.name === 'Model Results'
-                          ? formatModelName(subItem.name)
-                          : subItem.name}
-                      </DisclosureButton>
-                    </li>
-                  ))}
-              </DisclosurePanel>
-            </Disclosure>
           ) : (
-            <Disclosure as="div">
-              <DisclosureButton className="app-nav-disclosure-trigger group">
-                <item.icon aria-hidden="true" className="size-6 shrink-0" />
-                {item.name}
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-gray-400 group-data-[open]:rotate-90 group-data-[open]:text-black"
-                />
+            <Disclosure defaultOpen={navDisclosureActive} as="div">
+              <DisclosureButton
+                className="app-nav-item"
+                {...(navDisclosureActive ? { 'data-current': '' } : {})}
+              >
+                <span className="flex min-w-0 flex-1 items-center gap-3">
+                  <item.icon aria-hidden="true" className="app-nav-icon" />
+                  <span className="truncate">{item.name}</span>
+                </span>
+                <ChevronRightIcon aria-hidden />
               </DisclosureButton>
               <DisclosurePanel as="ul" className="mt-1">
                 {item.children
@@ -354,17 +300,12 @@ export default function AppLayout({ title, renderHeader, children }) {
                       <DisclosureButton
                         as="a"
                         href={subItem.href}
-                        className={classNames(
-                          'app-nav-sublink',
-                          subItem.name == title && 'app-nav-sublink--active',
-                        )}
+                        className="app-nav-item"
+                        data-nested=""
+                        {...(subItem.name == title
+                          ? { 'data-current': '' }
+                          : {})}
                       >
-                        {subItem.name == title && (
-                          <span
-                            className="app-nav-sublink-dot"
-                            aria-hidden
-                          />
-                        )}
                         {item.name === 'Model Results'
                           ? formatModelName(subItem.name)
                           : subItem.name}
@@ -375,8 +316,8 @@ export default function AppLayout({ title, renderHeader, children }) {
             </Disclosure>
           )}
         </li>
-      ),
-    );
+      );
+    });
 
   if (isMobile) {
     return (
@@ -401,16 +342,16 @@ export default function AppLayout({ title, renderHeader, children }) {
   return (
     <div className="flex flex-row bg-[#EEF2F6]">
       <header className="shrink-0">
-        <nav className="flex min-h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
+        <nav className="app-nav flex min-h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
           <div className="flex flex-col justify-between">
-            <ul role="list" className="flex flex-1 flex-col gap-y-12">
+            <ul role="list" className="flex flex-1 flex-col gap-y-6">
               <li
-                className="flex h-16 shrink-0 flex-col items-center pt-12"
+                className="flex w-full shrink-0 flex-col items-start pt-8"
                 key="logo"
               >
-                <a href={route('app-home')}>
+                <a href={route('app-home')} className="block w-full">
                   <img
-                    className="w-full pb-2"
+                    className="max-w-full pb-2"
                     src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
                     alt="Edvise Logo"
                   />
@@ -425,7 +366,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                 <ul>
                   {renderNav(navAboveLine)}
                   <li key="divider" aria-hidden="true">
-                    <hr className="my-8 h-1 border-0 bg-[#dfe4ea]"></hr>
+                    <hr className="my-6 border-0 border-t border-[#dfe4ea]" />
                   </li>
                   {renderNav(navigationBelowLine)}
                   {user ? (

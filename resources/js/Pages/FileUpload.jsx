@@ -772,7 +772,7 @@ export default function FileUpload() {
         className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"
         id="main_area"
       >
-        <div className="text-center text-5xl font-light">Upload Data</div>
+        <h1 className="text-center text-5xl font-light">Upload Data</h1>
         <Steppers
           currentStep={currentStep}
           stepsDict={steps}

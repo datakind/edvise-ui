@@ -17,6 +17,10 @@
         url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
         font-weight: 400;
     }
+
+    h1 {
+        @apply text-5xl font-light text-black;
+    }
 }
 
 [x-cloak] {

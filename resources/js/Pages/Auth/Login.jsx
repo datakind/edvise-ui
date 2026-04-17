@@ -34,7 +34,7 @@ export default function Login({ canResetPassword, status }) {
             alt="Edvise Logo"
           />
 
-          <div className="pb-8 text-2xl">Welcome! Log in to get started:</div>
+          <h1 className="mb-6 text-2xl">Welcome! Log in to get started:</h1>
 
           <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
             <p className="text-sm text-blue-800">

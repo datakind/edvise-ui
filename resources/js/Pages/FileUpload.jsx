@@ -6,19 +6,14 @@ import {
   DocumentDuplicateIcon,
   TrashIcon,
   DocumentIcon,
-  CheckIcon,
   XMarkIcon,
-  PlusCircleIcon,
 } from '@heroicons/react/24/outline';
 import DangerAlert from '@/Components/DangerAlert';
-import SuccessAlert from '@/Components/SuccessAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import ErrorAlert from '@/Components/ErrorAlert';
-import HeaderLabel from '@/Components/HeaderLabel';
 import Spinner from '@/Components/Spinner';
-import { set } from 'lodash';
 
 /** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
 const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;

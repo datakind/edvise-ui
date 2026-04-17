@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
-import Plot from 'react-plotly.js';
+import Plot from '@/utils/reactPlotly';
 import axios from 'axios';
 import H2 from '@/Components/H2';
 

@@ -174,6 +174,31 @@ class ApiController extends Controller
     }
 
     /**
+     * GET /institutions/{current inst_id} — details for the institution in session (edit form).
+     */
+    public function getCurrentInstitutionDetails(Request $request)
+    {
+        if (ApiController::isLocalRequest()) {
+            return response()->json([
+                'inst_id' => (string) ($request->attributes->get('inst_id') ?? ''),
+                'name' => 'Mock University',
+                'state' => 'NY',
+                'pdp_id' => '12345',
+                'edvise_id' => null,
+                'legacy_id' => null,
+                'retention_days' => null,
+            ], 200);
+        }
+
+        $resp = ApiController::constructInstRequest($request, '', 'GET', null);
+        if ($resp instanceof \Illuminate\Http\JsonResponse) {
+            return $resp;
+        }
+
+        return response()->json($resp->json(), $resp->status());
+    }
+
+    /**
      * HTTP client timeout (seconds) when proxying institution requests to BACKEND_URL.
      * Validate-upload needs a long wait for large CSV processing; other paths stay short.
      */

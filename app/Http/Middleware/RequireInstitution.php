@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RequireInstitution
 {
     private const SKIP_ACTIONS = [
-        'createInstApi', 'addDatakinderApi', 'viewAllInstitutions', 'EditInstApi',
+        'createInstApi', 'addDatakinderApi', 'viewAllInstitutions',
     ];
 
     /** Route names (and patterns) that do not require an institution. */

@@ -156,6 +156,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
+    Route::get('/current-institution-api', [ApiController::class, 'getCurrentInstitutionDetails']);
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');

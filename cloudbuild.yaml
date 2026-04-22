@@ -1,7 +1,7 @@
 substitutions:
   _REGION: us-east4
   _STATIC_BUCKET: dev-sst-02-dev-static
-  _MIGRATE_JOB: dev-migrate
+  _MIGRATE_JOB: 'false'
   _SERVICE: dev-frontend
 
 steps:
@@ -51,17 +51,20 @@ steps:
       - push
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    args:
-      - run
-      - jobs
-      - deploy
-      - ${_MIGRATE_JOB}
-      - >-
-        --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
-      - '--region=${_REGION}'
-      - '--execute-now'
     id: DEPLOY and RUN migration job
-    entrypoint: gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        if [ -z "${_MIGRATE_JOB}" ] || [ "${_MIGRATE_JOB}" = "false" ]; then
+          echo "Skipping migration job (_MIGRATE_JOB not set or false)"
+          exit 0
+        fi
+        gcloud run jobs deploy "${_MIGRATE_JOB}" \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA \
+          --region=${_REGION} \
+          --execute-now
   - name: gcr.io/cloud-builders/gcloud
     args:
       - run

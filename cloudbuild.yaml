@@ -1,4 +1,5 @@
 substitutions:
+  _REGION: us-east4
   _STATIC_BUCKET: dev-sst-02-dev-static
   _MIGRATE_JOB: dev-migrate
   _SERVICE: dev-frontend
@@ -26,30 +27,29 @@ steps:
   - name: gcr.io/k8s-skaffold/pack
     args:
       - build
-      - '--trust-builder'
       - '--builder=gcr.io/buildpacks/builder'
       - '--publish'
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
     id: BUILD and PUSH with cloudpacks
     entrypoint: pack
   - name: gcr.io/cloud-builders/docker
     args:
       - pull
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
     id: PULL and TAG latest
   - name: gcr.io/cloud-builders/docker
     args:
       - tag
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     args:
       - run
@@ -57,8 +57,8 @@ steps:
       - deploy
       - ${_MIGRATE_JOB}
       - >-
-        --image=${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
-      - '--region=$LOCATION'
+        --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - '--region=${_REGION}'
       - '--execute-now'
     id: DEPLOY and RUN migration job
     entrypoint: gcloud
@@ -68,8 +68,8 @@ steps:
       - deploy
       - ${_SERVICE}
       - '--image'
-      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
-      - '--region=$LOCATION'
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - '--region=${_REGION}'
     id: DEPLOY to cloud run
     entrypoint: gcloud
   - name: curlimages/curl

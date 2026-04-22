@@ -1,3 +1,8 @@
+substitutions:
+  _STATIC_BUCKET: dev-sst-02-dev-static
+  _MIGRATE_JOB: dev-migrate
+  _SERVICE: dev-frontend
+
 steps:
   - name: node
     args:
@@ -15,7 +20,7 @@ steps:
   - name: gcr.io/cloud-builders/gsutil
     args:
       - '-c'
-      - gsutil -m cp -r public/* gs://dev-sst-02-dev-static
+      - gsutil -m cp -r public/* gs://${_STATIC_BUCKET}
     id: COPY to gcs bucket
     entrypoint: bash
   - name: gcr.io/k8s-skaffold/pack
@@ -23,36 +28,36 @@ steps:
       - build
       - '--builder=gcr.io/buildpacks/builder'
       - '--publish'
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
     id: BUILD and PUSH with cloudpacks
     entrypoint: pack
   - name: gcr.io/cloud-builders/docker
     args:
       - pull
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
     id: PULL and TAG latest
   - name: gcr.io/cloud-builders/docker
     args:
       - tag
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     args:
       - run
       - jobs
       - deploy
-      - dev-migrate
+      - ${_MIGRATE_JOB}
       - >-
-        --image=us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - '--region=us-east4'
+        --image=${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - '--region=$LOCATION'
       - '--execute-now'
     id: DEPLOY and RUN migration job
     entrypoint: gcloud
@@ -60,11 +65,10 @@ steps:
     args:
       - run
       - deploy
-      - dev-frontend
+      - ${_SERVICE}
       - '--image'
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - '--region'
-      - us-east4
+      - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - '--region=$LOCATION'
     id: DEPLOY to cloud run
     entrypoint: gcloud
   - name: curlimages/curl
@@ -77,8 +81,7 @@ steps:
       - '-d'
       - >-
         {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME · $BUILD_ID"}
-      - >-
-        https://hooks.slack.com/triggers/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
+      - 'https://hooks.slack.com/triggers/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'
     id: notify-slack
 timeout: 600s
 options:

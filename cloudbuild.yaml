@@ -26,6 +26,7 @@ steps:
   - name: gcr.io/k8s-skaffold/pack
     args:
       - build
+      - '--trust-builder'
       - '--builder=gcr.io/buildpacks/builder'
       - '--publish'
       - ${LOCATION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA

@@ -3,7 +3,7 @@ substitutions:
   _STATIC_BUCKET: dev-sst-02-dev-static
   _MIGRATE_JOB: 'false'
   _SERVICE: dev-frontend
-
+  _IMAGE: ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web
 steps:
   - name: node
     args:
@@ -29,27 +29,27 @@ steps:
       - build
       - '--builder=gcr.io/buildpacks/builder'
       - '--publish'
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_IMAGE}:$COMMIT_SHA
     id: BUILD and PUSH with cloudpacks
     entrypoint: pack
   - name: gcr.io/cloud-builders/docker
     args:
       - pull
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_IMAGE}:$COMMIT_SHA
     id: PULL and TAG latest
   - name: gcr.io/cloud-builders/docker
     args:
       - tag
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
+      - ${_IMAGE}:$COMMIT_SHA
+      - ${_IMAGE}:latest
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_IMAGE}:$COMMIT_SHA
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest
+      - ${_IMAGE}:latest
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     id: DEPLOY and RUN migration job
     entrypoint: bash
@@ -62,7 +62,7 @@ steps:
           exit 0
         fi
         gcloud run jobs deploy "${_MIGRATE_JOB}" \
-          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA \
+          --image=${_IMAGE}:$COMMIT_SHA \
           --region=${_REGION} \
           --execute-now
   - name: gcr.io/cloud-builders/gcloud
@@ -71,7 +71,7 @@ steps:
       - deploy
       - ${_SERVICE}
       - '--image'
-      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:$COMMIT_SHA
+      - ${_IMAGE}:$COMMIT_SHA
       - '--region=${_REGION}'
     id: DEPLOY to cloud run
     entrypoint: gcloud
@@ -84,7 +84,7 @@ steps:
       - '-f'
       - '-d'
       - >-
-        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME · $BUILD_ID"}
+        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME"}
       - 'https://hooks.slack.com/triggers/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'
     id: notify-slack
 timeout: 600s

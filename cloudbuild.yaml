@@ -1,7 +1,7 @@
 substitutions:
   _REGION: us-east4
   _STATIC_BUCKET: dev-sst-02-dev-static
-  _MIGRATE_JOB: 'false'
+  _MIGRATE_DB: 'false'
   _SERVICE: dev-frontend
 steps:
   - name: node
@@ -56,14 +56,14 @@ steps:
       - -c
       - |
         set -euo pipefail
-        if [ -z "${_MIGRATE_JOB}" ] || [ "${_MIGRATE_JOB}" = "false" ]; then
-          echo "Skipping migration job (_MIGRATE_JOB not set or false)"
+        if [ -z "${_MIGRATE_DB}" ] || [ "${_MIGRATE_DB}" = "false" ]; then
+          echo "Skipping migration job (_MIGRATE_DB not set or false)"
           exit 0
         fi
-        gcloud run jobs deploy "${_MIGRATE_JOB}" \
+        gcloud run jobs deploy dev-migrate \
           --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA \
           --region=${_REGION} \
-          --update-env-vars=DB_DATABASE=edvise-qa \
+          --update-env-vars=DB_DATABASE=${_MIGRATE_DB} \
           --execute-now
   - name: gcr.io/cloud-builders/gcloud
     args:

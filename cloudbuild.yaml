@@ -3,7 +3,6 @@ substitutions:
   _STATIC_BUCKET: dev-sst-02-dev-static
   _MIGRATE_JOB: 'false'
   _SERVICE: dev-frontend
-  _IMAGE: ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web
 steps:
   - name: node
     args:
@@ -29,27 +28,27 @@ steps:
       - build
       - '--builder=gcr.io/buildpacks/builder'
       - '--publish'
-      - ${_IMAGE}:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
     id: BUILD and PUSH with cloudpacks
     entrypoint: pack
   - name: gcr.io/cloud-builders/docker
     args:
       - pull
-      - ${_IMAGE}:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
     id: PULL and TAG latest
   - name: gcr.io/cloud-builders/docker
     args:
       - tag
-      - ${_IMAGE}:$COMMIT_SHA
-      - ${_IMAGE}:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:latest
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_IMAGE}:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_IMAGE}:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:latest
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     id: DEPLOY and RUN migration job
     entrypoint: bash
@@ -62,7 +61,7 @@ steps:
           exit 0
         fi
         gcloud run jobs deploy "${_MIGRATE_JOB}" \
-          --image=${_IMAGE}:$COMMIT_SHA \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA \
           --region=${_REGION} \
           --update-env-vars=DB_DATABASE=edvise-qa \
           --execute-now
@@ -72,7 +71,7 @@ steps:
       - deploy
       - ${_SERVICE}
       - '--image'
-      - ${_IMAGE}:$COMMIT_SHA
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
       - '--region=${_REGION}'
     id: DEPLOY to cloud run
     entrypoint: gcloud

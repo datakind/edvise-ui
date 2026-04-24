@@ -33,15 +33,22 @@ class InstitutionHelper
             return;
         }
         $accessType = $resp['access_type'] ?? '';
+        $instIdFromApi = (string) ($resp['inst_id'] ?? '');
+        $update = ['access_type' => $accessType];
+        if ($instIdFromApi !== '') {
+            $update['inst_id'] = $instIdFromApi;
+        }
         DB::table('users')
             ->where('email', $request->user()->email)
-            ->update(['access_type' => $accessType, 'inst_id' => $resp['inst_id']]);
+            ->update($update);
         $request->user()->access_type = $accessType;
-        $request->user()->inst_id = $resp['inst_id'];
+        if ($instIdFromApi !== '') {
+            $request->user()->inst_id = $instIdFromApi;
+        }
 
-        if ($accessType !== 'DATAKINDER' && ($resp['inst_id'] ?? '') !== '') {
-            $full = self::fetchInstitutionById($request, $resp['inst_id']);
-            session(['institution' => $full ?? ['inst_id' => $resp['inst_id']]]);
+        if ($accessType !== 'DATAKINDER' && $instIdFromApi !== '') {
+            $full = self::fetchInstitutionById($request, $instIdFromApi);
+            session(['institution' => $full ?? ['inst_id' => $instIdFromApi]]);
         }
     }
 

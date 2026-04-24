@@ -1,6 +1,5 @@
 substitutions:
   _REGION: us-east4
-  _STATIC_BUCKET: dev-sst-02-dev-static
   _MIGRATE_DB: 'false'
   _SERVICE: dev-frontend
 steps:

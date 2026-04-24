@@ -64,6 +64,7 @@ steps:
         gcloud run jobs deploy "${_MIGRATE_JOB}" \
           --image=${_IMAGE}:$COMMIT_SHA \
           --region=${_REGION} \
+          --update-env-vars=DB_DATABASE=edvise-qa \
           --execute-now
   - name: gcr.io/cloud-builders/gcloud
     args:

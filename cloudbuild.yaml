@@ -18,8 +18,9 @@ steps:
           -t "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/web:${COMMIT_SHA}" \
           .
 
+  # Docker image has no gsutil; copy public/ out, then upload in a Cloud SDK step.
   - name: gcr.io/cloud-builders/docker
-    id: upload-static-gcs
+    id: upload-static-gcs-extract
     entrypoint: bash
     args:
       - -c
@@ -34,14 +35,27 @@ steps:
         mkdir -p /workspace/public-gcs
         docker cp "$$cid:/app/public/." /workspace/public-gcs/
         docker rm -f "$$cid"
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: upload-static-gcs-gsutil
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -eux
+        if [ -z "${_STATIC_BUCKET}" ] || [ "${_STATIC_BUCKET}" = "" ]; then
+          echo "Skipping GCS static upload."
+          exit 0
+        fi
         gsutil -m cp -r /workspace/public-gcs/* "gs://${_STATIC_BUCKET}/"
+    waitFor: [upload-static-gcs-extract]
 
   - name: gcr.io/cloud-builders/docker
     id: push-digest
     args:
       - push
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA'
-    waitFor: [build-image, upload-static-gcs]
+    waitFor: [build-image, upload-static-gcs-gsutil]
 
   - name: gcr.io/cloud-builders/docker
     id: tag-latest

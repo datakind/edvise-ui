@@ -12,7 +12,7 @@ import DangerAlert from '@/Components/DangerAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
-import ErrorAlert from '@/Components/ErrorAlert';
+import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
 
 /** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
@@ -100,7 +100,7 @@ export default function FileUpload() {
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <ErrorAlert mainMsg={msg}></ErrorAlert>
+          <Alert variant="danger" mainMsg={msg} />
         </div>
       );
     }
@@ -125,7 +125,7 @@ export default function FileUpload() {
       let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <ErrorAlert mainMsg={msg}></ErrorAlert>
+          <Alert variant="danger" mainMsg={msg} />
           <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}
@@ -170,11 +170,12 @@ export default function FileUpload() {
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
         <div className="flex flex-col pl-24 pr-24">
-          <ErrorAlert
+          <Alert
+            variant="danger"
             mainMsg="[ERROR] The following files must be re-uploaded"
             msgDict={validationResults}
             excludeValue="ok"
-          ></ErrorAlert>
+          />
           <div className="flex w-full flex-row items-end justify-between pt-48">
             <Link
               href={route('file-upload')}

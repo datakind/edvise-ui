@@ -62,7 +62,7 @@ class RequireInstitution
             }
         }
 
-        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        [$inst] = InstitutionHelper::GetInstitution($request);
         if ($inst !== null && $inst !== '') {
             $institution = session('institution');
             if (is_array($institution) && ! empty($institution['inst_id'] ?? '')) {
@@ -74,11 +74,10 @@ class RequireInstitution
             return $next($request);
         }
 
-        $message = InstitutionHelper::SET_INST_REQUIRED_MESSAGE;
         if ($request->expectsJson()) {
-            return response()->json(['error' => $message], 401);
+            return response()->json(['error' => 'Institution required.'], 401);
         }
 
-        return redirect()->route('set-inst', ['message' => $message]);
+        return redirect()->route('set-inst');
     }
 }

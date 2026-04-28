@@ -1,12 +1,10 @@
-import { router } from '@inertiajs/core';
-import { Link, Head, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import Footer from '@/Components/Footer';
 import FeedbackButton from '@/Components/FeedbackButton';
-import AppLogo from '@/Components/Icons/AppLogo';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -27,7 +25,6 @@ import {
   ClipboardDocumentListIcon,
   PlusCircleIcon,
 } from '@heroicons/react/24/outline';
-import { subtract } from 'lodash';
 import { formatModelName } from '@/utils/stringUtils';
 import CookieConsent from '@/Components/CookieConsent';
 
@@ -354,7 +351,7 @@ export default function AppLayout({ title, renderHeader, children }) {
                     alt="Edvise Logo"
                   />
                   {institution?.name && (
-                    <p className="text-center text-sm font-medium text-[#637381]">
+                    <p className="text-sm font-medium text-[#637381]">
                       {institution.name}
                     </p>
                   )}

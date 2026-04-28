@@ -18,8 +18,23 @@
         font-weight: 400;
     }
 
-    h1 {
-        @apply text-5xl font-light text-black;
+    a {
+        color: theme('colors.link.DEFAULT');
+        text-decoration: none;
+        text-underline-offset: 2px;
+        transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    a:hover {
+        color: theme('colors.secondary.DEFAULT');
+    }
+    a:focus-visible {
+        border-radius: 0.125rem;
+        outline: 2px solid theme('colors.input.focus');
+        outline-offset: 2px;
+    }
+    /* Avoid a line under image-only links (e.g. logo) */
+    a:has(> img:only-child) {
+        text-decoration-line: none;
     }
 }
 
@@ -82,10 +97,6 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
 
 .text-merriweather-italic {
   @apply font-merriweather italic;
-}
-
-a {
-  @apply text-[#637381] hover:text-black;
 }
 
 .app-nav .app-nav-icon {

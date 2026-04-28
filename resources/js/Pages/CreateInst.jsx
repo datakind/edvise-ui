@@ -1,33 +1,21 @@
 import React, { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 
+const SCHOOL_TYPES = [
+  { value: 'pdp', label: 'PDP' },
+  { value: 'edvise', label: 'Edvise' },
+  { value: 'legacy', label: 'Legacy' },
+];
+
 export default function CreateInst() {
-  // TODO: switch to error instead of setting result_area
-  const [error, setError] = useState(null);
-
-  // Any update to this schemas list needs to be reflected in the handleSubmit() function call as a checkbox.
-  const schemas = [
-    { name: 'Custom', selected: false },
-    { name: 'PDP', selected: false },
-    { name: 'Edvise', selected: false },
-    { name: 'Legacy', selected: false },
-  ];
-
+  const [schoolType, setSchoolType] = useState('');
   const [addUserCounter, setAddUserCounter] = useState(0);
 
-  // TODO implement remove additional email fields
-  const removeItem = itemId => {
-    const emailItem = document.getElementById(itemId);
-    emailItem.remove;
-  };
-
   const incrementCounter = () => {
-    const newId = addUserCounter + 1;
-    setAddUserCounter(newId);
+    setAddUserCounter(c => c + 1);
   };
 
   const renderFullEmailList = () => {
@@ -75,7 +63,6 @@ export default function CreateInst() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    let pdp = event.target.elements.PDP.checked;
     if (
       event.target.elements.inst_name.value == null ||
       event.target.elements.inst_name.value == ''
@@ -84,30 +71,19 @@ export default function CreateInst() {
         'Error: Institution name is required.';
       return;
     }
-    // Enforce the selection of at least one schema type.
-    const edvise = event.target.elements.Edvise?.checked ?? false;
-    const legacy = event.target.elements.Legacy?.checked ?? false;
-    if (
-      !event.target.elements.Custom.checked &&
-      !event.target.elements.PDP.checked &&
-      !edvise &&
-      !legacy
-    ) {
+    if (!schoolType) {
       document.getElementById('result_area').innerHTML =
-        'Error: Schema type must contain at least one selection.';
+        'Error: Select exactly one of PDP, Edvise, or Legacy.';
       return;
     }
-    // At most one of PDP, Edvise, or Legacy (API allows only one school type).
-    const schoolTypeCount = [event.target.elements.PDP.checked, edvise, legacy].filter(Boolean).length;
-    if (schoolTypeCount > 1) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Select at most one of PDP, Edvise, or Legacy.';
-      return;
+    if (schoolType === 'pdp') {
+      const raw = event.target.elements.pdp_id?.value?.trim() ?? '';
+      if (!raw) {
+        document.getElementById('result_area').innerHTML =
+          'Error: PDP Institution ID is required when PDP is selected.';
+        return;
+      }
     }
-    // We currently only have custom for potential other schemas. Note that the schema passed to the API call must match the corresponding backend schema enum value.
-    let other_schemas = event.target.elements.Custom.checked
-      ? ['UNKNOWN']
-      : null;
     var emailDict = {};
     var accessDict = {};
     Array.from(event.target.elements).forEach(input => {
@@ -127,17 +103,21 @@ export default function CreateInst() {
         constructedEmailDict[value] = accessDict[key];
       }
     }
+    const pdpChecked = schoolType === 'pdp';
     const payload = {
       name: event.target.elements.inst_name.value,
       state: event.target.elements.state.value,
-      allowed_schemas: other_schemas,
       allowed_emails:
-        constructedEmailDict.length == 0 ? null : constructedEmailDict,
-      is_pdp: pdp,
-      pdp_id: event.target.elements.pdp_id?.value || null,
+        Object.keys(constructedEmailDict).length === 0
+          ? null
+          : constructedEmailDict,
+      is_pdp: pdpChecked,
+      pdp_id: pdpChecked
+        ? (event.target.elements.pdp_id?.value || null)
+        : null,
     };
-    if (edvise) payload.is_edvise = true;
-    if (legacy) payload.is_legacy = true;
+    if (schoolType === 'edvise') payload.is_edvise = true;
+    if (schoolType === 'legacy') payload.is_legacy = true;
     return axios({
       method: 'post',
       url: '/create-inst-api',
@@ -159,7 +139,6 @@ export default function CreateInst() {
       });
   };
 
-  // TODO check if the user is a datakinder, otherwise show an error page.
   return (
     <AppLayout
       title="Create Institution"
@@ -181,6 +160,7 @@ export default function CreateInst() {
         <form
           className="w-full max-w-full pl-36 pr-36 pt-24"
           onSubmit={handleSubmit}
+          onReset={() => setSchoolType('')}
         >
           <div id="form_contents" className="flex flex-col gap-y-6">
             <div className="flex flex-row w-full gap-x-6">
@@ -270,71 +250,58 @@ export default function CreateInst() {
               <div className="flex flex-col w-1/2">
                 <fieldset>
                   <legend className="text-base font-semibold text-gray-900">
-                    Schemas accepted by this institution
+                    Institution type
                   </legend>
-                  <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
-                    {schemas.map((schem, idx) => (
-                      <div key={idx} className=" flex gap-3">
-                        <div className="min-w-0 flex-1 text-sm/6 ">
-                          <input
-                            defaultChecked={schem.selected}
-                            id={`${schem.name}`}
-                            name={`${schem.name}`}
-                            type="checkbox"
-                            className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-blue-600 checked:bg-blue-600 indeterminate:border-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                          />
-                          <label
-                            htmlFor={`${schem.name}`}
-                            className="m-2 select-none font-medium text-gray-900"
-                          >
-                            {schem.name}
-                          </label>
-                        </div>
-                        <div className="flex h-6 shrink-0 items-center">
-                          <div className="group grid size-4 grid-cols-1">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 14 14"
-                              className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
-                            >
-                              <path
-                                d="M3 8L6 11L11 3.5"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:checked]:opacity-100"
-                              />
-                              <path
-                                d="M3 7H11"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:indeterminate]:opacity-100"
-                              />
-                            </svg>
-                          </div>
-                        </div>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Choose exactly one. Required before submit.
+                  </p>
+                  <div className="mt-4 space-y-3 border-b border-t border-gray-200 py-3">
+                    {SCHOOL_TYPES.map(({ value, label }) => (
+                      <div key={value} className="flex gap-3 items-center">
+                        <input
+                          id={`school_type_${value}`}
+                          name="school_type"
+                          type="radio"
+                          value={value}
+                          checked={schoolType === value}
+                          onChange={() => setSchoolType(value)}
+                          className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
+                        />
+                        <label
+                          htmlFor={`school_type_${value}`}
+                          className="text-sm font-medium text-gray-900"
+                        >
+                          {label}
+                        </label>
                       </div>
                     ))}
                   </div>
                 </fieldset>
               </div>
               <div className="flex flex-col w-1/2">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  id="pdp_id"
-                >
-                  PDP Institution ID
-                </label>
-                <input
-                  name="pdp_id"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  type="text"
-                ></input>
-                <p className="text-gray-600 text-xs italic">
-                  For PDP schools, please add the PDP_INST id of the
-                  institution. Include any leading zeroes.
-                </p>
+                {schoolType === 'pdp' ? (
+                  <>
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      id="pdp_id"
+                    >
+                      PDP Institution ID
+                    </label>
+                    <input
+                      name="pdp_id"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      type="text"
+                    ></input>
+                    <p className="text-gray-600 text-xs italic">
+                      For PDP schools, please add the PDP_INST id of the
+                      institution. Include any leading zeroes.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-gray-600 text-sm">
+                    PDP Institution ID applies only when PDP is selected.
+                  </p>
+                )}
               </div>
             </div>
             <div id="mult_users" className="flex flex-col">

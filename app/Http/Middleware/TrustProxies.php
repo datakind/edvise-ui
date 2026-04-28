@@ -10,9 +10,12 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * GCLB / Cloud Run terminates TLS; trust forwarded headers (e.g. X-Forwarded-Proto) so
+     * URL generation and sessions use the client-facing HTTPS scheme.
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

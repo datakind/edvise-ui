@@ -1,6 +1,3 @@
 #!include:.gitignore
 .git
-# Vite output is gitignored but must be in the Cloud Build context for pack; you
-# cannot un-ignore a file under an ignored parent without un-ignoring the parent.
-!/public/build/
-!/public/build/**
+!/public/build/manifest.json

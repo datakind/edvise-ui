@@ -1,0 +1,41 @@
+defaultService: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-frontend
+fingerprint: y4B60ro2ayM=
+hostRules:
+- hosts:
+  - '*'
+  pathMatcher: path-matcher-1
+- hosts:
+  - qa.getedvise.com
+  pathMatcher: edvise-ui-qa-matcher
+name: dev-tf-cr-lb-1-url-map
+pathMatchers:
+- defaultService: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-frontend
+  name: path-matcher-1
+  pathRules:
+  - paths:
+    - /api/*
+    - /api
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-webapp
+  - paths:
+    - /worker/*
+    - /worker
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-worker
+  - paths:
+    - /build
+    - /build/*
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendBuckets/dev-tf-cr-static-build-1
+- defaultService: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-edvise-ui-qa
+  name: edvise-ui-qa-matcher
+  pathRules:
+  - paths:
+    - /api
+    - /api/*
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-webapp
+  - paths:
+    - /worker
+    - /worker/*
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendServices/dev-tf-cr-lb-1-backend-dev-worker
+  - paths:
+    - /build
+    - /build/*
+    service: https://www.googleapis.com/compute/v1/projects/dev-sst-02/global/backendBuckets/dev-tf-cr-static-build-1

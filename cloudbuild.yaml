@@ -26,6 +26,7 @@ steps:
     args:
       - build
       - '--builder=gcr.io/buildpacks/builder'
+      - '--env=GOOGLE_CUSTOM_NGINX_CONFIG=nginx-laravel.conf'
       - '--publish'
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA
     id: BUILD and PUSH with cloudpacks

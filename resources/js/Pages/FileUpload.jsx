@@ -105,7 +105,7 @@ export default function FileUpload() {
       );
     }
     return (
-      <div className="flex flex-col gap-y-24 pl-24 pr-24">
+      <div className="flex flex-col gap-y-24 pr-24 pl-24">
         <BigSuccessAlert
           mainMsg="Prediction initiated!"
           msgDetails={
@@ -139,7 +139,7 @@ export default function FileUpload() {
     }
     if (!startPrediction) {
       return (
-        <div className="flex flex-col gap-y-24 pl-24 pr-24">
+        <div className="flex flex-col gap-y-24 pr-24 pl-24">
           <BigSuccessAlert mainMsg="Batch creation successful!"></BigSuccessAlert>
           <div className="flex w-full items-end justify-end">
             <button
@@ -197,7 +197,7 @@ export default function FileUpload() {
       );
     }
     return (
-      <div className="flex flex-col pl-24 pr-24">
+      <div className="flex flex-col pr-24 pl-24">
         <BigSuccessAlert
           mainMsg="Data validation successful!"
           msgDetails="Your data has been successfully validated. You can now proceed to name the folder and confirm the upload."
@@ -259,7 +259,7 @@ export default function FileUpload() {
           Data can be uploaded to train a model or start an inference run for
           new dashboard results.
         </div>
-        <div className="flex w-full items-center justify-center pl-24 pr-24 pt-12">
+        <div className="flex w-full items-center justify-center pt-12 pr-24 pl-24">
           <label
             id="drop-zone"
             className="flex min-h-32 w-full cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed border-[#f79222] bg-gray-50 hover:bg-gray-100"
@@ -267,7 +267,7 @@ export default function FileUpload() {
             onDragLeave={dragLeaveChange}
             onDrop={dropHandle}
           >
-            <div className="flex flex-col items-center justify-center gap-y-2 pb-6 pt-5">
+            <div className="flex flex-col items-center justify-center gap-y-2 pt-5 pb-6">
               <DocumentDuplicateIcon
                 aria-hidden="true"
                 className="size-6 shrink-0 text-gray-500"
@@ -331,7 +331,7 @@ export default function FileUpload() {
                   <button onClick={() => remove(f.name)}>
                     <TrashIcon
                       aria-hidden="true"
-                      className="inline-block flex size-5 shrink-0 align-middle"
+                      className="flex inline-block size-5 shrink-0 align-middle"
                     />
                   </button>
                 </div>
@@ -339,7 +339,7 @@ export default function FileUpload() {
             ))}
           </label>
         </div>
-        <div className="mx-auto flex w-full py-12 pl-24 pr-24">
+        <div className="mx-auto flex w-full py-12 pr-24 pl-24">
           {files == undefined || files.length == 0 ? (
             validationButtonDisable(true)
           ) : (
@@ -603,7 +603,7 @@ export default function FileUpload() {
             type="text"
             name="batchName"
             id="batchName"
-            className="mt-1 w-full rounded-full border border-gray-300 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#f79222]"
+            className="mt-1 w-full rounded-full border border-gray-300 p-2 shadow-sm focus:ring-2 focus:ring-[#f79222] focus:outline-none"
             value={batchName}
             onChange={e => setBatchName(e.target.value)}
             placeholder="Inference Run 2024 Fall Cohort 1"
@@ -616,13 +616,13 @@ export default function FileUpload() {
         <div className="flex w-full flex-row items-end justify-between pt-24">
           <Link
             href={route('file-upload')}
-            className="-ml-24 mb-4 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
+            className="mb-4 -ml-24 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
           >
             Back
           </Link>
           <div className="-mr-24 flex">
             <button
-              className="mb-4 mr-4 rounded-full border border-[#f79222] bg-white px-3 px-6 py-2 font-semibold text-[#f79222]"
+              className="mr-4 mb-4 rounded-full border border-[#f79222] bg-white px-3 px-6 py-2 font-semibold text-[#f79222]"
               onClick={() => {
                 // Also start the prediction so set it to true.
                 createBatch(true);
@@ -759,7 +759,7 @@ export default function FileUpload() {
     <AppLayout
       title="Upload Data"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           FileUpload
         </h2>
       )}
@@ -768,11 +768,11 @@ export default function FileUpload() {
         className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"
         id="main_area"
       >
-        <div className="text-center text-5xl font-light">Upload Data</div>
+        <h1 className="text-center text-5xl font-light">Upload Data</h1>
         <Steppers
           currentStep={currentStep}
           stepsDict={steps}
-          className="pb-12 pt-24"
+          className="pt-24 pb-12"
         />
 
         {currentStep === 1

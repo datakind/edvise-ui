@@ -54,6 +54,7 @@ RUN apk add --no-cache \
     libpq-dev \
     sqlite \
     sqlite-dev \
+    mariadb-client \
     $PHPIZE_DEPS
 
 RUN docker-php-ext-configure intl \
@@ -83,6 +84,7 @@ COPY docker/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+RUN chmod +x /app/scripts/sync-qa-db.sh
 
 EXPOSE 8080
 ENV PORT=8080

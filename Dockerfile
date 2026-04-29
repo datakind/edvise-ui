@@ -44,6 +44,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-scripts
 FROM php:8.4-fpm-alpine AS runtime
 
 RUN apk add --no-cache \
+    bash \
     nginx \
     supervisor \
     gettext \

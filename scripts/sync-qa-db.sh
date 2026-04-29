@@ -18,8 +18,25 @@ SSLARGS=""
 [ -n "${SSL_KEY_PATH:-}" ] && SSLARGS="${SSLARGS} --ssl-key=${SSL_KEY_PATH}"
 
 echo "Checking read access to ${SOURCE_DB}.users..."
-# shellcheck disable=SC2086
 mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1 AS ok FROM ${SOURCE_DB}.users LIMIT 1"
+
+echo "Checking mariadb-dump --no-data (sample output below)..."
+MD=$(mktemp)
+if ! mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \
+  --single-transaction \
+  --no-data \
+  --routines \
+  --triggers \
+  "${SOURCE_DB}" >"$MD" 2>&1
+then
+  echo "mariadb-dump failed:" >&2
+  cat "$MD" >&2
+  rm -f "$MD"
+  exit 1
+fi
+echo "mariadb-dump --no-data size: $(wc -c <"$MD" | tr -d ' ') bytes"
+head -n 20 "$MD"
+rm -f "$MD"
 
 echo "Copying ${SOURCE_DB} -> ${TARGET_DB} (this can take a while)..."
 mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \

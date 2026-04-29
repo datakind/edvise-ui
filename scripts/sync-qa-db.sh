@@ -19,16 +19,16 @@ SSLARGS=""
 
 echo "Checking DB connectivity to ${DB_HOST}:${DB_PORT}..."
 # shellcheck disable=SC2086
-mysql -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1" >/dev/null
+mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1" >/dev/null
 
 echo "Copying ${SOURCE_DB} -> ${TARGET_DB} (this can take a while)..."
 # shellcheck disable=SC2086
-mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \
+mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \
   --single-transaction \
   --routines \
   --triggers \
   "${SOURCE_DB}" \
-  | mysql -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS "${TARGET_DB}"
+  | mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS "${TARGET_DB}"
 
 unset MYSQL_PWD
 echo "Done."

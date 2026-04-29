@@ -12,7 +12,6 @@ U="${DB_USERNAME:-${DB_USER:-app_sync}}"
 
 export MYSQL_PWD="${DB_PASSWORD}"
 
-# Optional TLS: same paths as db-migrate (mount cert secrets the same way)
 SSLARGS=""
 [ -n "${SSL_CA_PATH:-}" ] && SSLARGS="${SSLARGS} --ssl-ca=${SSL_CA_PATH}"
 [ -n "${SSL_CERT_PATH:-}" ] && SSLARGS="${SSLARGS} --ssl-cert=${SSL_CERT_PATH}"
@@ -28,7 +27,6 @@ mysqldump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \
   --single-transaction \
   --routines \
   --triggers \
-  --set-gtid-purged=OFF \
   "${SOURCE_DB}" \
   | mysql -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS "${TARGET_DB}"
 

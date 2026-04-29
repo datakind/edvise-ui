@@ -9,6 +9,8 @@ steps:
   - name: gcr.io/cloud-builders/docker
     id: build-image
     entrypoint: bash
+    env:
+      - DOCKER_BUILDKIT=1
     args:
       - -c
       - |

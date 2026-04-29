@@ -17,12 +17,11 @@ SSLARGS=""
 [ -n "${SSL_CERT_PATH:-}" ] && SSLARGS="${SSLARGS} --ssl-cert=${SSL_CERT_PATH}"
 [ -n "${SSL_KEY_PATH:-}" ] && SSLARGS="${SSLARGS} --ssl-key=${SSL_KEY_PATH}"
 
-echo "Checking DB connectivity to ${DB_HOST}:${DB_PORT}..."
+echo "Checking read access to ${SOURCE_DB}.users..."
 # shellcheck disable=SC2086
-mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1" >/dev/null
+mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1 FROM ${SOURCE_DB}.users LIMIT 1" >/dev/null
 
 echo "Copying ${SOURCE_DB} -> ${TARGET_DB} (this can take a while)..."
-# shellcheck disable=SC2086
 mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \
   --single-transaction \
   --routines \

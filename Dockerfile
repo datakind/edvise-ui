@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY composer.json composer.lock* ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-COPY . .
+COPY --exclude=scripts/ . .
 RUN composer dump-autoload --optimize --classmap-authoritative
 RUN set -eux; \
     cp .env.example .env; \
@@ -34,7 +34,7 @@ FROM composer:2 AS composer
 WORKDIR /app
 COPY composer.json composer.lock* ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-COPY . .
+COPY --exclude=scripts/ . .
 # Avoid loading artisan/config (database.php uses PDO::MYSQL_*) before pdo_mysql exists in this image
 RUN composer dump-autoload --optimize --classmap-authoritative --no-scripts
 
@@ -73,7 +73,8 @@ RUN docker-php-ext-configure intl \
 
 COPY --from=composer /app/vendor /app/vendor
 COPY --from=builder /app/public/build /app/public/build
-COPY . /app
+COPY --exclude=scripts/ . /app
+COPY scripts/ /app/scripts/
 
 RUN set -eux; \
     mkdir -p /app/storage/framework/{sessions,views,cache/data} /app/storage/logs /app/bootstrap/cache; \
@@ -84,8 +85,7 @@ COPY docker/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-RUN chmod +x /app/scripts/sync-qa-db.sh
-RUN chmod +x /app/scripts/run-migrate.sh
+RUN chmod +x /app/scripts/*.sh
 
 EXPOSE 8080
 ENV PORT=8080

@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 # Production image for Laravel (Vite + Inertia) on Cloud Run (nginx + PHP-FPM, same pattern as udts-api)
 
 # -----------------------------------------------------------------------------
@@ -17,7 +16,7 @@ WORKDIR /app
 
 COPY composer.json composer.lock* ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-COPY --exclude=scripts/ . .
+COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
 RUN set -eux; \
     cp .env.example .env; \
@@ -34,7 +33,7 @@ FROM composer:2 AS composer
 WORKDIR /app
 COPY composer.json composer.lock* ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-COPY --exclude=scripts/ . .
+COPY . .
 # Avoid loading artisan/config (database.php uses PDO::MYSQL_*) before pdo_mysql exists in this image
 RUN composer dump-autoload --optimize --classmap-authoritative --no-scripts
 
@@ -73,8 +72,7 @@ RUN docker-php-ext-configure intl \
 
 COPY --from=composer /app/vendor /app/vendor
 COPY --from=builder /app/public/build /app/public/build
-COPY --exclude=scripts/ . /app
-COPY scripts/ /app/scripts/
+COPY . /app
 
 RUN set -eux; \
     mkdir -p /app/storage/framework/{sessions,views,cache/data} /app/storage/logs /app/bootstrap/cache; \

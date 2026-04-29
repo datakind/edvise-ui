@@ -10,6 +10,11 @@ U="${DB_USERNAME:-${DB_USER:-app_sync}}"
 : "${SOURCE_DB:=all_tables}"
 : "${TARGET_DB:=edvise_ui_qa}"
 
+printf '%s' "$TARGET_DB" | grep -qE '_dev|_qa' || {
+  echo "refusing: TARGET_DB must match /_dev|_qa/ (got: $TARGET_DB)" >&2
+  exit 1
+}
+
 export MYSQL_PWD="${DB_PASSWORD}"
 
 SSLARGS=""

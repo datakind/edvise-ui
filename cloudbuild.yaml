@@ -83,7 +83,7 @@ steps:
           echo "Skipping migration job (_MIGRATE_DB not set or false)"
           exit 0
         fi
-        gcloud run jobs deploy dev-migrate \
+        gcloud run jobs deploy db-migrate \
           --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA \
           --region=${_REGION} \
           --command=/bin/sh \

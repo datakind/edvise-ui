@@ -86,6 +86,8 @@ steps:
         gcloud run jobs deploy dev-migrate \
           --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA \
           --region=${_REGION} \
+          --command=/bin/sh \
+          --args=/app/scripts/run-migrate.sh \
           --update-env-vars=DB_DATABASE=${_MIGRATE_DB} \
           --execute-now
     waitFor: [push-latest]

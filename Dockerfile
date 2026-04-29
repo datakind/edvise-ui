@@ -44,7 +44,6 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-scripts
 FROM php:8.4-fpm-alpine AS runtime
 
 RUN apk add --no-cache \
-    bash \
     nginx \
     supervisor \
     gettext \
@@ -86,6 +85,7 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /app/scripts/sync-qa-db.sh
+RUN chmod +x /app/scripts/run-migrate.sh
 
 EXPOSE 8080
 ENV PORT=8080

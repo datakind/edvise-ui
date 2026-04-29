@@ -1,6 +1,8 @@
 #!/bin/bash
 # Refreshes TARGET_DB from SOURCE_DB on the same Cloud SQL instance.
-# Cloud Run must be deployed with --set-cloudsql-instances so /cloudsql/... exists.
+# Same image as the web app; run as a Cloud Run Job with
+#   --set-cloudsql-instances so /cloudsql/... exists, and
+#   --command=/app/scripts/db-copy-same-instance.sh
 set -euo pipefail
 
 : "${CLOUDSQL_CONNECTION_NAME:?Set to project:region:instance, e.g. my-proj:us-east4:dev-db-instance}"

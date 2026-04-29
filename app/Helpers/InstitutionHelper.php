@@ -66,8 +66,10 @@ class InstitutionHelper
         if ($inst !== '') {
             $full = self::fetchInstitutionById($request, $inst);
             session(['institution' => $full ?? ['inst_id' => $inst]]);
+
             return [$inst, ''];
         }
+
         return ['', ''];
     }
 

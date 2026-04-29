@@ -19,7 +19,7 @@ SSLARGS=""
 
 echo "Checking read access to ${SOURCE_DB}.users..."
 # shellcheck disable=SC2086
-mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1 FROM ${SOURCE_DB}.users LIMIT 1" >/dev/null
+mariadb -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS -e "SELECT 1 AS ok FROM ${SOURCE_DB}.users LIMIT 1"
 
 echo "Copying ${SOURCE_DB} -> ${TARGET_DB} (this can take a while)..."
 mariadb-dump -h "$DB_HOST" -P "$DB_PORT" -u "$U" $SSLARGS \

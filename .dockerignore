@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+
+# Dependencies and build output (rebuilt in Docker)
+node_modules
+vendor
+public/build
+public/hot
+bootstrap/ssr
+
+# Local env (runtime uses Cloud Run / secrets)
+.env
+.env.*
+!.env.example
+
+# Test / dev
+tests
+phpunit.xml
+.phpunit.result.cache
+.php-cs-fixer.php
+_ide_helper.php
+storage/*.key
+storage/debugbar
+storage/framework/cache
+storage/framework/sessions
+storage/framework/testing
+storage/logs
+npm-debug.log
+yarn-error.log
+.idea
+.vscode
+.fleet
+*.md
+!README.md
+Homestead.json
+Homestead.yaml

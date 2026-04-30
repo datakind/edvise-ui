@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edvise — one moment</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: #f4f4f5;
+    }
+    .card {
+      max-width: 28rem;
+      padding: 2rem 1.75rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    }
+    h1 { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.75rem; }
+    p { margin: 0 0 1rem; font-size: 0.95rem; color: #3f3f46; }
+    p:last-of-type { margin-bottom: 1.25rem; }
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.65rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      background: #18181b;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover { background: #27272a; }
+    .hint { font-size: 0.8rem; color: #71717a; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Edvise is getting ready</h1>
+    <p>
+      The app may need a moment to start, especially after a period with no
+      activity. The next try is usually much faster.
+    </p>
+    <p>Wait a few seconds, then use the button below to try again.</p>
+    <button type="button" id="retry">Try again</button>
+    <p class="hint">If this keeps happening, contact your team and note when you saw this message.</p>
+  </div>
+  <script>
+    document.getElementById("retry").addEventListener("click", function () {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

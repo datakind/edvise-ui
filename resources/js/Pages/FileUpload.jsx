@@ -534,10 +534,12 @@ export default function FileUpload() {
     //setValidationResults({});
     let localValidationResults = {};
 
+    // Override axios default (120s in bootstrap.ts): slow/large direct-to-GCS uploads need no cap.
     const config = {
       headers: {
         'Content-Type': 'text/csv',
       },
+      timeout: 0,
     };
     Promise.allSettled(
       files.map(file => {

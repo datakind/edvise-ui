@@ -1,7 +1,9 @@
+import { usePage } from '@inertiajs/react';
 import React from 'react';
 
-export default function Footer() {
+export default function AppFooter() {
   const route = window.route;
+  const { appVersion } = usePage().props;
   return (
     <footer className="grid grid-cols-4 items-center pb-4 pr-6 text-black">
       <div className="col-span-2 text-left">
@@ -33,7 +35,12 @@ export default function Footer() {
         </ul>
       </div>
       <div></div>
-      <div className="pr-12 text-right">&copy; 2025 Datakind</div>
+      <div className="pr-12 text-right">
+        &copy; 2025 Datakind
+        {appVersion ? (
+          <span className="text-gray-500"> · {appVersion}</span>
+        ) : null}
+      </div>
     </footer>
   );
 }

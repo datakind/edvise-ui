@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
-import Footer from '@/Components/Footer';
+import AppFooter from '@/Components/AppFooter';
 import FeedbackButton from '@/Components/FeedbackButton';
 import '../../css/landing.css';
 import {
@@ -471,7 +471,7 @@ export default function AppLayout({ title, renderHeader, children }) {
       </header>
       <div className="flex min-h-screen min-w-0 flex-1 flex-col justify-between">
         <main className="flex w-full flex-1 pt-12">{children}</main>
-        <Footer />
+        <AppFooter />
         <FeedbackButton />
         <CookieConsent />
       </div>

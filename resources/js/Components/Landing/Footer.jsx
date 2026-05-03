@@ -102,9 +102,6 @@ export default function Footer() {
       </div>
       <div className="py-4 text-center text-base font-light text-black">
         © 2025 DataKind
-        {appVersion ? (
-          <span className="text-gray-500"> · {appVersion}</span>
-        ) : null}
       </div>
     </footer>
   );

@@ -562,7 +562,7 @@ export default function FileUpload() {
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
-                    { timeout: VALIDATE_UPLOAD_TIMEOUT_MS },
+                    { timeout: 0 },
                   )
                   .then(res2 => {
                     localValidationResults[filenameConstructed] = 'ok';

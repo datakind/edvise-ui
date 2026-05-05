@@ -15,9 +15,6 @@ import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
 
-/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
-const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
-
 /**
  * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
  * @param {unknown} error

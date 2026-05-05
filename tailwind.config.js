@@ -41,7 +41,7 @@ export default {
           light: '#87b7cc',
         },
         link: {
-          DEFAULT: '#637381',
+          DEFAULT: '#1F5FAF',
         },
         gray: {
           DEFAULT: '#303030',

@@ -21,11 +21,10 @@
     a {
         color: theme('colors.link.DEFAULT');
         text-decoration: none;
-        text-underline-offset: 2px;
-        transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
     }
     a:hover {
-        color: theme('colors.secondary.DEFAULT');
+      color: theme('colors.link.DEFAULT');
+      text-decoration: underline;
     }
     a:focus-visible {
         border-radius: 0.125rem;
@@ -36,6 +35,12 @@
     a:has(> img:only-child) {
         text-decoration-line: none;
     }
+    nav a {
+        text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: none;
+  }
 }
 
 [x-cloak] {

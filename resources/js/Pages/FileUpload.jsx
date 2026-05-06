@@ -50,6 +50,41 @@ function formatAxiosErrorMessage(error) {
   return String(responseData);
 }
 
+/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
+const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
+
+/**
+ * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
+ * @param {unknown} error
+ */
+function formatAxiosErrorMessage(error) {
+  if (error == null || !error.response) {
+    return (error && error.message) || 'Network error (no response)';
+  }
+  const responseData = error.response.data;
+  if (responseData == null) {
+    return `HTTP ${error.response.status}`;
+  }
+  if (typeof responseData === 'string') {
+    return responseData;
+  }
+  if (typeof responseData === 'object') {
+    if (responseData.error != null) {
+      return String(responseData.error);
+    }
+    if (responseData.detail != null) {
+      return typeof responseData.detail === 'object'
+        ? JSON.stringify(responseData.detail)
+        : String(responseData.detail);
+    }
+    if (responseData.message != null) {
+      return String(responseData.message);
+    }
+    return JSON.stringify(responseData);
+  }
+  return String(responseData);
+}
+
 export default function FileUpload() {
   // TODO: Change the state structure to handle multiple file status
   // TODO: Use buttons where static onclick changes are happenings and links otherwise.

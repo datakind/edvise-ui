@@ -32,7 +32,6 @@ export default function CreateModel() {
       url: '/create-model',
       data: {
         name: event.target.elements.model_name.value,
-        vers_id: event.target.elements.vers_id.value,
         valid: validBool,
         schema_configs: schemaConfig,
       },
@@ -54,7 +53,7 @@ export default function CreateModel() {
     <AppLayout
       title="Create Model"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Create Model
         </h2>
       )}
@@ -69,14 +68,14 @@ export default function CreateModel() {
           minorTitle="Create Model"
         ></HeaderLabel>
         <form
-          className="w-full max-w-full pl-36 pr-36 pt-24"
+          className="w-full max-w-full pt-24 pr-36 pl-36"
           onSubmit={handleSubmit}
         >
           <div id="form_contents" className="flex flex-col gap-y-6">
             <div className="flex w-full flex-row gap-x-6">
               <div className="flex w-full flex-col">
                 <label
-                  className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
+                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                   id="model_name"
                 >
                   Model Name
@@ -89,25 +88,6 @@ export default function CreateModel() {
                 ></input>
                 <p className="text-xs italic text-red-500">Required field.</p>
               </div>
-            </div>
-            <div className="flex w-1/2 flex-col">
-              <label
-                className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                id="vers_id"
-              >
-                Version ID
-              </label>
-              <input
-                name="vers_id"
-                className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                type="number"
-                min="0"
-                max="10"
-                defaultValue="1"
-              ></input>
-              <p className="text-xs italic text-gray-600">
-                Version ID of the model. Use one (1) for initial version.
-              </p>
             </div>
             <div className="flex w-1/2 flex-row items-center gap-x-3">
               <input
@@ -127,7 +107,7 @@ export default function CreateModel() {
                   <legend className="text-base font-semibold text-gray-900">
                     Batch schema configs accepted by this model
                   </legend>
-                  <div className="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+                  <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
                     {schemas.map((schem, idx) => (
                       <div key={idx} className="flex gap-3">
                         <div className="min-w-0 flex-1 text-sm/6">
@@ -140,7 +120,7 @@ export default function CreateModel() {
                           />
                           <label
                             htmlFor={`${schem.name}`}
-                            className="m-2 select-none font-medium text-gray-900"
+                            className="m-2 font-medium text-gray-900 select-none"
                           >
                             {schem.name}
                           </label>
@@ -191,7 +171,7 @@ export default function CreateModel() {
             </button>
           </div>
         </form>
-        <div id="result_area" className="flex pb-24 pt-12"></div>
+        <div id="result_area" className="flex pt-12 pb-24"></div>
       </div>
     </AppLayout>
   );

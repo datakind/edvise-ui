@@ -36,12 +36,12 @@ export default {
           light: '#f9aa62',
         },
         secondary: {
-          DEFAULT: '#385981',
+          DEFAULT: 'black',
           dark: '#2f3c5b',
           light: '#87b7cc',
         },
         link: {
-          DEFAULT: '#3596cd',
+          DEFAULT: '#1F5FAF',
         },
         gray: {
           DEFAULT: '#303030',

@@ -27,7 +27,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->name('home');
+})->name('welcome');
 
 Route::get('/data-dictionary', [App\Http\Controllers\DataDictionaryController::class, 'show'])->name('data-dictionary');
 
@@ -156,6 +156,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     Route::post('/edit-inst-api', [ApiController::class, 'EditInstApi']);
     Route::post('/add-dk-api', [ApiController::class, 'addDatakinderApi']);
     Route::get('/view-all-institutions-api', [ApiController::class, 'viewAllInstitutions']);
+    Route::get('/current-institution-api', [ApiController::class, 'getCurrentInstitutionDetails']);
 
     Route::get('/create-inst', function () {
         return Inertia::render('CreateInst');
@@ -170,16 +171,16 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('create-model');
 
     Route::get('/set-inst', function () {
-        return Inertia::render('SetInst', ['message' => request('message')]);
+        return Inertia::render('SetInst');
     })->name('set-inst');
 
     Route::get('/add-dk', function () {
         return Inertia::render('AddDatakinders');
     })->name('add-dk');
 
-    Route::post('/set-inst-api/{inst}', function (string $inst) {
+    Route::post('/set-inst-api/{inst}', function (Request $request, string $inst) {
         $access_str = Auth::user()->access_type ?? '';
-        $errStr = InstitutionHelper::SetDatakinderInst($access_str, $inst);
+        $errStr = InstitutionHelper::setInst($request, $access_str, $inst);
 
         if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);

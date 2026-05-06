@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config '../../tailwind.config.js';
 
 @layer base {
     @font-face {
@@ -18,6 +17,30 @@
         url('https://storage.googleapis.com/staging-sst-01-staging-static/HelveticaNeueRoman.woff') format('woff');
         font-weight: 400;
     }
+
+    a {
+        color: theme('colors.link.DEFAULT');
+        text-decoration: none;
+    }
+    a:hover {
+      color: theme('colors.link.DEFAULT');
+      text-decoration: underline;
+    }
+    a:focus-visible {
+        border-radius: 0.125rem;
+        outline: 2px solid theme('colors.input.focus');
+        outline-offset: 2px;
+    }
+    /* Avoid a line under image-only links (e.g. logo) */
+    a:has(> img:only-child) {
+        text-decoration-line: none;
+    }
+    nav a {
+        text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: none;
+  }
 }
 
 [x-cloak] {
@@ -81,8 +104,41 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply font-merriweather italic;
 }
 
-a {
-  @apply text-blue-700;
+.app-nav .app-nav-icon {
+  @apply size-6 shrink-0;
+}
+
+.app-nav .app-nav-item {
+  @apply flex w-full items-center gap-3 py-2 text-left font-bold text-tabs-default hover:text-black;
+}
+
+.app-nav .app-nav-item[data-nested] {
+  @apply relative block rounded-md border-0 pr-2 pl-8 font-normal;
+}
+
+.app-nav .app-nav-item[data-current] {
+  @apply font-bold text-black hover:text-black;
+}
+
+.app-nav .app-nav-item[data-current]:not([data-nested]) {
+  @apply border-r-2 border-primary bg-landing-light-blue;
+}
+
+.app-nav .app-nav-item[data-nested][data-current]::before {
+  content: '';
+  @apply absolute top-1/2 left-4 h-2 w-2 -translate-y-1/2 rounded-full bg-primary;
+}
+
+.app-nav button.app-nav-item {
+  @apply w-full cursor-pointer appearance-none border-0 bg-transparent font-sans;
+}
+
+.app-nav .app-nav-item[aria-expanded] > svg {
+  @apply size-5 shrink-0 text-gray-400 transition-transform duration-200 ease-out;
+}
+
+.app-nav .app-nav-item[aria-expanded='true'] > svg {
+  @apply rotate-90 text-gray-500;
 }
 
 /* Rounded corners for Plotly tooltips */
@@ -98,7 +154,7 @@ a {
 }
 
 .waiting > .waiting-overlay {
-  @apply absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50;
+  @apply absolute inset-0 flex items-center justify-center bg-white/75 z-50;
 }
 
 .waiting > .waiting-overlay > .waiting-spinner {

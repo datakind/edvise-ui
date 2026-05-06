@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Plot from 'react-plotly.js';
+import { usePage } from '@inertiajs/react';
+import Plot from '@/utils/reactPlotly';
 import axios from 'axios';
 import H2 from '@/Components/H2';
 
@@ -70,7 +71,8 @@ const mockInferenceData = [
   },
 ];
 
-export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
+export default function SupportOverview({ tab, setTab, run_id }) {
+  const { institution } = usePage().props;
   // Only use mock data as initial state in local development
   const isLocalDev =
     window.location.hostname === 'localhost' ||
@@ -84,10 +86,7 @@ export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
 
   useEffect(() => {
     const fetchSupportOverview = async () => {
-      console.log('SupportOverview - run_id:', run_id);
-      console.log('SupportOverview - inst_id:', inst_id);
-
-      if (!run_id || !inst_id) {
+      if (!run_id || !institution?.inst_id) {
         console.log(
           'SupportOverview - Missing required parameters, skipping API call',
         );
@@ -98,24 +97,12 @@ export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
       try {
         setLoading(true);
         // Use the same pattern as fetchRunDetails: /institutions/{inst_id}/inference/support-overview/{run_id}
-        const apiUrl = `/institutions/${inst_id}/inference/support-overview/${run_id}`;
-        console.log('SupportOverview - Making API call to:', apiUrl);
-        console.log(
-          'SupportOverview - Full URL:',
-          window.location.origin + apiUrl,
-        );
+        const apiUrl = `/institutions/${institution.inst_id}/inference/support-overview/${run_id}`;
         const response = await axios.get(apiUrl);
-        console.log('SupportOverview - API response:', response.data);
         setInferenceData(response.data);
         setError(null);
       } catch (err) {
-        console.error(
-          'SupportOverview - Error fetching support overview:',
-          err,
-        );
-        console.error('SupportOverview - Error response:', err.response?.data);
         setError('Failed to load support overview data');
-
         // Only use mock data in local development
         if (
           window.location.hostname === 'localhost' ||
@@ -130,7 +117,7 @@ export default function SupportOverview({ tab, setTab, run_id, inst_id }) {
     };
 
     fetchSupportOverview();
-  }, [run_id, inst_id]);
+  }, [run_id, institution?.inst_id]);
 
   const highSupport = inferenceData
     .filter(item => parseFloat(item.support_score) >= 0.5)

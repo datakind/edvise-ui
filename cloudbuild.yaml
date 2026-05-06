@@ -1,73 +1,110 @@
+# Build Laravel image (Docker) and deploy to Cloud Run. Optional: sync public/ to GCS for load-balancer static hosting.
+substitutions:
+  _REGION: us-east4
+  _MIGRATE_DB: 'false'
+  _SERVICE: dev-frontend
+  _STATIC_BUCKET: ''
+
 steps:
-  - name: node
-    args:
-      - install
-    id: INSTALL npm
-    entrypoint: npm
-  - name: node
-    env:
-      - NODE_OPTIONS=--max-old-space-size=4096
-    args:
-      - run
-      - build
-    id: CREATE vite assets
-    entrypoint: npm
-  - name: gcr.io/cloud-builders/gsutil
-    args:
-      - '-c'
-      - gsutil -m cp -r public/* gs://dev-sst-02-dev-static
-    id: COPY to gcs bucket
+  - name: gcr.io/cloud-builders/docker
+    id: build-image
     entrypoint: bash
-  - name: gcr.io/k8s-skaffold/pack
     args:
-      - build
-      - '--builder=gcr.io/buildpacks/builder'
-      - '--publish'
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-    id: BUILD and PUSH with cloudpacks
-    entrypoint: pack
+      - -c
+      - |
+        set -eux
+        docker build \
+          -f Dockerfile \
+          -t "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/web:${COMMIT_SHA}" \
+          .
+
+  # Docker image has no gsutil; copy public/ out, then upload in a Cloud SDK step.
   - name: gcr.io/cloud-builders/docker
+    id: upload-static-gcs-extract
+    entrypoint: bash
     args:
-      - pull
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-    id: PULL and TAG latest
+      - -c
+      - |
+        set -eux
+        if [ -z "${_STATIC_BUCKET}" ] || [ "${_STATIC_BUCKET}" = "" ]; then
+          echo "Skipping GCS static upload (set _STATIC_BUCKET on the trigger to enable)."
+          exit 0
+        fi
+        IMG="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/web:${COMMIT_SHA}"
+        cid=$$(docker create "$$IMG")
+        mkdir -p /workspace/public-gcs
+        docker cp "$$cid:/app/public/." /workspace/public-gcs/
+        docker rm -f "$$cid"
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: upload-static-gcs-gsutil
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -eux
+        if [ -z "${_STATIC_BUCKET}" ] || [ "${_STATIC_BUCKET}" = "" ]; then
+          echo "Skipping GCS static upload."
+          exit 0
+        fi
+        gsutil -m cp -r /workspace/public-gcs/* "gs://${_STATIC_BUCKET}/"
+    waitFor: [upload-static-gcs-extract]
+
   - name: gcr.io/cloud-builders/docker
+    id: push-digest
+    args:
+      - push
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA'
+    waitFor: [build-image, upload-static-gcs-gsutil]
+
+  - name: gcr.io/cloud-builders/docker
+    id: tag-latest
     args:
       - tag
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:latest'
+    waitFor: [push-digest]
+
   - name: gcr.io/cloud-builders/docker
+    id: push-latest
     args:
       - push
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - push
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:latest
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:latest'
+    waitFor: [tag-latest]
+
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: deploy-migration-job
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        if [ -z "${_MIGRATE_DB}" ] || [ "${_MIGRATE_DB}" = "false" ]; then
+          echo "Skipping migration job (_MIGRATE_DB not set or false)"
+          exit 0
+        fi
+        gcloud run jobs deploy db-migrate \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA \
+          --region=${_REGION} \
+          --command=/bin/sh \
+          --args=/app/scripts/run-migrate.sh \
+          --update-env-vars=DB_DATABASE=${_MIGRATE_DB} \
+          --execute-now
+    waitFor: [push-latest]
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: deploy-cloud-run
+    entrypoint: gcloud
     args:
       - run
-      - jobs
       - deploy
-      - dev-migrate
-      - >-
-        --image=us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - '--region=us-east4'
-      - '--execute-now'
-    id: DEPLOY and RUN migration job
-    entrypoint: gcloud
-  - name: gcr.io/cloud-builders/gcloud
-    args:
-      - run
-      - deploy
-      - dev-frontend
-      - '--image'
-      - us-east4-docker.pkg.dev/dev-sst-02/sst-app-ui/frontend:$COMMIT_SHA
-      - '--region'
-      - us-east4
-    id: DEPLOY to cloud run
-    entrypoint: gcloud
+      - ${_SERVICE}
+      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA'
+      - '--region=${_REGION}'
+    waitFor: [push-latest]
+
   - name: curlimages/curl
+    id: notify-slack
     args:
       - '-X'
       - POST
@@ -76,11 +113,12 @@ steps:
       - '-f'
       - '-d'
       - >-
-        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME · $BUILD_ID"}
-      - >-
-        https://hooks.slack.com/triggers/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
-    id: notify-slack
-timeout: 600s
+        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME"}
+      - 'https://hooks.slack.com/triggers/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'
+    waitFor: [deploy-cloud-run]
+timeout: 1200s
 options:
   logging: CLOUD_LOGGING_ONLY
   dynamicSubstitutions: true
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/web:$COMMIT_SHA'

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RequireInstitution
 {
     private const SKIP_ACTIONS = [
-        'createInstApi', 'addDatakinderApi', 'viewAllInstitutions', 'EditInstApi',
+        'createInstApi', 'addDatakinderApi', 'viewAllInstitutions',
     ];
 
     /** Route names (and patterns) that do not require an institution. */
@@ -34,7 +34,12 @@ class RequireInstitution
         if ($request->user()->access_type !== 'DATAKINDER') {
             [$inst, ] = InstitutionHelper::GetInstitution($request);
             if ($inst !== null && $inst !== '') {
-                $request->attributes->set('inst_id', $inst);
+                $institution = session('institution');
+                if (is_array($institution) && ! empty($institution['inst_id'] ?? '')) {
+                    $request->attributes->set('institution', $institution);
+                } else {
+                    $request->attributes->set('institution', ['inst_id' => $inst]);
+                }
             }
 
             return $next($request);
@@ -57,18 +62,22 @@ class RequireInstitution
             }
         }
 
-        [$inst, $instErr] = InstitutionHelper::GetInstitution($request);
+        [$inst] = InstitutionHelper::GetInstitution($request);
         if ($inst !== null && $inst !== '') {
-            $request->attributes->set('inst_id', $inst);
+            $institution = session('institution');
+            if (is_array($institution) && ! empty($institution['inst_id'] ?? '')) {
+                $request->attributes->set('institution', $institution);
+            } else {
+                $request->attributes->set('institution', ['inst_id' => $inst]);
+            }
 
             return $next($request);
         }
 
-        $message = InstitutionHelper::SET_INST_REQUIRED_MESSAGE;
         if ($request->expectsJson()) {
-            return response()->json(['error' => $message], 401);
+            return response()->json(['error' => 'Institution required.'], 401);
         }
 
-        return redirect()->route('set-inst', ['message' => $message]);
+        return redirect()->route('set-inst');
     }
 }

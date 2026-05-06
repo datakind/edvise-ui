@@ -12,7 +12,6 @@ import CaseStudySection from '@/Components/Landing/CaseStudySection';
 import Faq from '@/Components/Landing/Faq';
 import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
-import NewFooter from '@/Components/Landing/NewFooter';
 import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 import CookieConsent from '@/Components/CookieConsent';
@@ -89,7 +88,7 @@ export default function Welcome() {
                 <RequestDemoSection />
               </div>
             </div>
-            <NewFooter />
+            <Footer />
           </div>
         </main>
       </LenisProvider>

@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import Plot from 'react-plotly.js';
+import Plot from '@/utils/reactPlotly';
 import PropTypes from 'prop-types';
 
 export default function Shap({ rawFeatures, currentFeature }) {

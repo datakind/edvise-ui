@@ -7,7 +7,6 @@ import ConfirmsPassword from '@/Components/Modals/ConfirmsPassword';
 import DangerButton from '@/Components/Buttons/DangerButton';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import useTypedPage from '@/Hooks/useTypedPage';
@@ -213,12 +212,15 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
           <div>
             {confirming ? (
               <ConfirmsPassword onConfirm={confirmTwoFactorAuthentication}>
-                <PrimaryButton
-                  className={classNames('mr-3', { 'opacity-25': enabling })}
+                <button
+                  type="button"
+                  className={classNames('btn btn-primary mr-3', {
+                    'opacity-25': enabling,
+                  })}
                   disabled={enabling}
                 >
                   Confirm
-                </PrimaryButton>
+                </button>
               </ConfirmsPassword>
             ) : null}
             {recoveryCodes.length > 0 && !confirming ? (
@@ -259,13 +261,15 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
         ) : (
           <div>
             <ConfirmsPassword onConfirm={enableTwoFactorAuthentication}>
-              <PrimaryButton
+              <button
                 type="button"
-                className={classNames({ 'opacity-25': enabling })}
+                className={classNames('btn btn-primary', {
+                  'opacity-25': enabling,
+                })}
                 disabled={enabling}
               >
                 Enable
-              </PrimaryButton>
+              </button>
             </ConfirmsPassword>
           </div>
         )}

@@ -157,16 +157,10 @@ export default function CreateModel() {
             </div>
           </div>
           <div className="flex w-full justify-center gap-x-6 pt-12">
-            <button
-              type="reset"
-              className="mb-4 flex w-1/3 items-center justify-center rounded-lg border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
-            >
+            <button type="reset" className="btn btn-secondary">
               Reset
             </button>
-            <button
-              type="submit"
-              className="mb-4 flex w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white"
-            >
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </div>

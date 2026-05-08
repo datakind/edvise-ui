@@ -5,7 +5,6 @@ import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import axios from 'axios';
 
@@ -207,12 +206,13 @@ export default function Invites({ invites, filters = {} }) {
                 <h2 className="text-2xl font-semibold text-gray-900">
                   Manage Invites
                 </h2>
-                <PrimaryButton
+                <button
+                  type="button"
                   onClick={() => setShowCreateForm(!showCreateForm)}
-                  className="bg-indigo-600 hover:bg-indigo-700"
+                  className="btn btn-primary"
                 >
                   {showCreateForm ? 'Cancel' : 'Create New Invite'}
-                </PrimaryButton>
+                </button>
               </div>
 
               {showCreateForm && (
@@ -308,9 +308,13 @@ export default function Invites({ invites, filters = {} }) {
                     </div>
 
                     <div className="mt-4">
-                      <PrimaryButton type="submit" disabled={processing}>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={processing}
+                      >
                         Create Invite
-                      </PrimaryButton>
+                      </button>
                     </div>
                   </form>
                 </div>

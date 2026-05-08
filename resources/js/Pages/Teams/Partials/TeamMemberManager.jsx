@@ -5,7 +5,6 @@ import DangerButton from '@/Components/Buttons/DangerButton';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import SectionBorder from '@/Components/Fields/SectionBorder';
 import TextInput from '@/Components/Fields/TextInput';
@@ -123,7 +122,13 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
         <InputError message={addTeamMemberForm.errors.role} className="mt-2" />
 
         <div className="mt-4 flex justify-end">
-          <PrimaryButton onClick={addTeamMember}>Add</PrimaryButton>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={addTeamMember}
+          >
+            Add
+          </button>
         </div>
       </ActionSection>
 
@@ -167,9 +172,13 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
           <InputError message={updateRoleForm.errors.role} className="mt-2" />
 
           <div className="mt-4 flex justify-end">
-            <PrimaryButton onClick={updateRole} className="ml-3">
+            <button
+              type="button"
+              className="btn btn-primary ml-3"
+              onClick={updateRole}
+            >
               Update
-            </PrimaryButton>
+            </button>
             <SecondaryButton onClick={() => setManagingRoleFor(null)}>
               Cancel
             </SecondaryButton>

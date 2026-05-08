@@ -124,13 +124,10 @@ export default function FileUpload() {
     if (batchCreationResult !== 'ok') {
       let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert variant="danger" mainMsg={msg} />
           <div className="flex w-full flex-row items-end justify-between pt-48">
-            <Link
-              href={route('file-upload')}
-              className="mb-4 rounded-lg bg-[#f79222] px-3 px-6 py-2 font-semibold text-white"
-            >
+            <Link href={route('file-upload')} className="btn btn-primary">
               Upload Data
             </Link>
           </div>
@@ -177,10 +174,7 @@ export default function FileUpload() {
             excludeValue="ok"
           />
           <div className="flex w-full flex-row items-end justify-between pt-48">
-            <Link
-              href={route('file-upload')}
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
-            >
+            <Link href={route('file-upload')} className="btn btn-secondary">
               Back
             </Link>
 
@@ -188,7 +182,7 @@ export default function FileUpload() {
               href={route('file-upload')}
               as="button"
               disabled={true}
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-50"
+              className="btn btn-primary opacity-50"
             >
               Next
             </Link>
@@ -203,16 +197,10 @@ export default function FileUpload() {
           msgDetails="Your data has been successfully validated. You can now proceed to name the folder and confirm the upload."
         ></BigSuccessAlert>
         <div className="flex w-full flex-row items-end justify-between pt-48">
-          <Link
-            href={route('file-upload')}
-            className="mb-4 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
-          >
+          <Link href={route('file-upload')} className="btn btn-secondary">
             Back
           </Link>
-          <button
-            className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-100"
-            onClick={() => setCurrentStep(3)}
-          >
+          <button className="btn btn-primary" onClick={() => setCurrentStep(3)}>
             Next
           </button>
         </div>{' '}
@@ -227,10 +215,7 @@ export default function FileUpload() {
           id="button_content"
           onClick={triggerUpload}
           disabled={disabled}
-          className={classNames(
-            disabled ? 'opacity-50' : 'opacity-100',
-            'mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black',
-          )}
+          className="btn btn-primary"
         >
           Run Validation
         </button>
@@ -614,15 +599,12 @@ export default function FileUpload() {
           </p>
         </div>
         <div className="flex w-full flex-row items-end justify-between pt-24">
-          <Link
-            href={route('file-upload')}
-            className="mb-4 -ml-24 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
-          >
+          <Link href={route('file-upload')} className="btn btn-secondary">
             Back
           </Link>
           <div className="-mr-24 flex">
             <button
-              className="mr-4 mb-4 rounded-full border border-[#f79222] bg-white px-3 px-6 py-2 font-semibold text-[#f79222]"
+              className="btn btn-primary mr-4"
               onClick={() => {
                 // Also start the prediction so set it to true.
                 createBatch(true);
@@ -631,7 +613,7 @@ export default function FileUpload() {
               Save and start prediction
             </button>
             <button
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
+              className="btn btn-primary"
               onClick={() => {
                 // We don't start the prediction so set it to false.
                 createBatch(false);

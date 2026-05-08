@@ -41,6 +41,18 @@
     nav a:hover {
       text-decoration: none;
   }
+  .btn {
+    @apply inline-flex h-10 cursor-pointer items-center justify-center rounded-full px-7 py-1.5 text-center text-base leading-6 font-normal transition-colors hover:no-underline;
+    &.btn-primary {
+      @apply bg-primary text-black hover:bg-primary-dark;
+    }
+    &.btn-secondary {
+      @apply bg-heading text-white;
+    }
+    &:disabled {
+      @apply cursor-not-allowed opacity-50;
+    }
+  }
 }
 
 [x-cloak] {

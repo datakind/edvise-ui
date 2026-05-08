@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
 import DialogModal from '@/Components/DialogModal';
 import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 export default function ConfirmsPassword({
@@ -82,13 +81,16 @@ export default function ConfirmsPassword({
         <DialogModal.Footer>
           <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-          <PrimaryButton
-            className={classNames('ml-2', { 'opacity-25': form.processing })}
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
+              'opacity-25': form.processing,
+            })}
             onClick={confirmPassword}
             disabled={form.processing}
           >
             {button}
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
     </span>

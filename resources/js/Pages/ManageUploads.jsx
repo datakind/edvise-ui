@@ -6,7 +6,6 @@ import DialogModal from '@/Components/Modals/DialogModal';
 import ActionSection from '@/Components/ActionSection';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import axios from 'axios';
 import { usePage } from '@inertiajs/react';
 
@@ -225,7 +224,8 @@ export default function ManageUploads() {
             >
               Cancel
             </SecondaryButton>
-            <PrimaryButton
+            <button
+              type="button"
               style={{
                 background: '#f79222',
                 color: 'white',
@@ -240,7 +240,7 @@ export default function ManageUploads() {
               onClick={changeBatchName}
             >
               Update
-            </PrimaryButton>
+            </button>
           </DialogModal.Footer>
         </DialogModal>
       </ActionSection>
@@ -277,7 +277,8 @@ export default function ManageUploads() {
             >
               Cancel
             </SecondaryButton>
-            <PrimaryButton
+            <button
+              type="button"
               style={{
                 background: '#dc2626',
                 color: 'white',
@@ -292,7 +293,7 @@ export default function ManageUploads() {
               onClick={deleteBatch}
             >
               {isDeleting ? 'Deleting...' : 'Delete Batch'}
-            </PrimaryButton>
+            </button>
           </DialogModal.Footer>
         </DialogModal>
       </ActionSection>

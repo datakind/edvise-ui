@@ -6,9 +6,7 @@ import ActionMessage from '@/Components/Modals/ActionMessage';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
-import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import useTypedPage from '@/Hooks/useTypedPage';
 export default function UpdateProfileInformationForm({ user }) {
   const form = useForm({
@@ -69,12 +67,15 @@ export default function UpdateProfileInformationForm({ user }) {
             Saved.
           </ActionMessage>
 
-          <PrimaryButton
-            className={classNames({ 'opacity-25': form.processing })}
+          <button
+            type="submit"
+            className={classNames('btn btn-primary', {
+              'opacity-25': form.processing,
+            })}
             disabled={form.processing}
           >
             Save
-          </PrimaryButton>
+          </button>
         </>
       )}
     >

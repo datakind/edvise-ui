@@ -4,7 +4,6 @@ import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import AppFooter from '@/Components/AppFooter';
-import FeedbackButton from '@/Components/FeedbackButton';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -472,7 +471,15 @@ export default function AppLayout({ title, renderHeader, children }) {
       <div className="flex min-h-screen min-w-0 flex-1 flex-col justify-between">
         <main className="flex w-full flex-1 pt-12">{children}</main>
         <AppFooter />
-        <FeedbackButton />
+        <a
+          href="https://form.asana.com/?k=tH5GL9JKLM1TasyZUoeGgw&d=6325821815997"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-secondary fixed right-10 bottom-12 z-50"
+          aria-label="Provide feedback"
+        >
+          <span className="text-sm font-medium">Feedback</span>
+        </a>
         <CookieConsent />
       </div>
     </div>

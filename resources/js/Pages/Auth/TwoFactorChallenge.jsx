@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
 import { router } from '@inertiajs/react';
 import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';
 import AppLayout from '@/Layouts/AppLayout';

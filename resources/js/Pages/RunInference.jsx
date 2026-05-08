@@ -188,10 +188,7 @@ export default function RunInference() {
             </select>
           )}
           <div className="flex w-full items-end justify-end pt-12">
-            <button
-              type="submit"
-              className="mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 text-black"
-            >
+            <button type="submit" className="btn btn-primary">
               Generate Predictions
             </button>
           </div>

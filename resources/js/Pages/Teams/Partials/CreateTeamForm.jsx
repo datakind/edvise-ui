@@ -3,7 +3,6 @@ import { useForm } from '@inertiajs/react';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 
 const CreateTeamForm = ({ auth }) => {
@@ -64,12 +63,13 @@ const CreateTeamForm = ({ auth }) => {
       </div>
 
       <div className="actions">
-        <PrimaryButton
-          className={processing ? 'opacity-25' : ''}
+        <button
+          type="submit"
+          className="btn btn-primary"
           disabled={processing}
         >
           Create
-        </PrimaryButton>
+        </button>
       </div>
     </FormSection>
   );

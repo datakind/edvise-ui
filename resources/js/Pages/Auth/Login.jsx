@@ -113,16 +113,13 @@ export default function Login({ canResetPassword, status }) {
                 >
                   Forgot your password?
                 </Link>
-
-                <Button
+                <button
                   type="submit"
-                  className={classNames('ml-4', {
-                    'opacity-25': form.processing,
-                  })}
+                  className="btn btn-primary ml-4"
                   disabled={form.processing}
                 >
                   Log in
-                </Button>
+                </button>
               </div>
             </div>
           </form>

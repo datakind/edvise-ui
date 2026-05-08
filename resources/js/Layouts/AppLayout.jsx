@@ -475,7 +475,7 @@ export default function AppLayout({ title, renderHeader, children }) {
           href="https://form.asana.com/?k=tH5GL9JKLM1TasyZUoeGgw&d=6325821815997"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-12 right-10 z-50 rounded-full bg-[#F79222] px-4 py-2 text-white shadow-lg transition-all hover:bg-[#e67c00] hover:shadow-xl"
+          className="btn btn-secondary fixed right-10 bottom-12 z-50"
           aria-label="Provide feedback"
         >
           <span className="text-sm font-medium">Feedback</span>

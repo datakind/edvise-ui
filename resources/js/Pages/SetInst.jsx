@@ -160,7 +160,7 @@ export default function SetInstitution() {
             <button
               type="submit"
               disabled={loading || settingInst}
-              className="mb-4 w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn btn-primary"
             >
               Set Institution
             </button>

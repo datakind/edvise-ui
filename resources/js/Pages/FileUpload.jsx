@@ -15,9 +15,6 @@ import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
 
-/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
-const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
-
 /**
  * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
  * @param {unknown} error
@@ -99,7 +96,7 @@ export default function FileUpload() {
       let msg =
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert variant="danger" mainMsg={msg} />
         </div>
       );
@@ -166,7 +163,7 @@ export default function FileUpload() {
     }
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert
             variant="danger"
             mainMsg="[ERROR] The following files must be re-uploaded"
@@ -523,6 +520,7 @@ export default function FileUpload() {
       headers: {
         'Content-Type': 'text/csv',
       },
+      timeout: 0,
     };
     Promise.allSettled(
       files.map(file => {
@@ -545,7 +543,7 @@ export default function FileUpload() {
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
-                    { timeout: VALIDATE_UPLOAD_TIMEOUT_MS },
+                    { timeout: 0 },
                   )
                   .then(res2 => {
                     localValidationResults[filenameConstructed] = 'ok';

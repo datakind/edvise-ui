@@ -614,7 +614,7 @@ const raceByPellStatusOptions = data => {
   };
 };
 
-export default function EdaDashboard({ batch_id: propBatchId }) {
+export default function EdaDashboard({ batch_id: propBatchId, clear_cache = false }) {
   const { institution } = usePage().props;
   const inst_id = institution?.inst_id;
   const [batchInfo, setBatchInfo] = useState(null);
@@ -692,6 +692,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         setError(null);
         const response = await axios.get(
           `/institutions/${inst_id}/batch/${batchInfo.batch_id}/eda`,
+          clear_cache ? { params: { 'clear-cache': 1 } } : undefined,
         );
 
         if (!response.data) {
@@ -727,7 +728,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     };
 
     fetchEdaData();
-  }, [inst_id, batchInfo]);
+  }, [inst_id, batchInfo, clear_cache]);
 
   // Create chart options from API data
   const enrollmentIntensityOption = edaData?.gpa_by_enrollment_intensity

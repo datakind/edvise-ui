@@ -471,7 +471,8 @@ export default function DataDictionary({ features = [] }) {
                                   className="accordion__trigger-icon"
                                   aria-hidden
                                 >
-                                  {open ? '−' : '+'}
+                                  <span className="accordion__trigger-icon-bar accordion__trigger-icon-bar--h" />
+                                  <span className="accordion__trigger-icon-bar accordion__trigger-icon-bar--v" />
                                 </span>
                               </DisclosureButton>
                               <DisclosurePanel className="accordion__panel">

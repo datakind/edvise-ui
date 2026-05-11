@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
@@ -14,10 +14,6 @@ import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
-import ProgressBar from '@/Components/ProgressBar';
-
-/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
-const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
 
 /**
  * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
@@ -64,12 +60,6 @@ export default function FileUpload() {
   const [batchName, setBatchName] = useState('');
   const [modelsList, setModelsList] = useState([]);
   const [predictionResults, setPredictionResults] = useState(null);
-  /** Sum of loaded bytes per server-side file key during parallel PUTs to GCS. */
-  const uploadLoadedByKeyRef = useRef({});
-  const [uploadAggregatePct, setUploadAggregatePct] = useState(0);
-  /** How many PUTs have finished (success or fail); used to switch UI to “validating”. */
-  const [uploadPutsFinished, setUploadPutsFinished] = useState(0);
-  const [uploadBatchFileCount, setUploadBatchFileCount] = useState(0);
 
   useEffect(() => {
     axios
@@ -91,23 +81,9 @@ export default function FileUpload() {
   ];
 
   const renderProcessing = () => {
-    const allPutsDone =
-      uploadBatchFileCount > 0 && uploadPutsFinished >= uploadBatchFileCount;
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-10 px-4">
-        <ProgressBar
-          className="w-full max-w-2xl"
-          progressMsg={
-            allPutsDone
-              ? 'Validating your files on the server…'
-              : 'Uploading your files…'
-          }
-          percent={allPutsDone ? null : uploadAggregatePct}
-          indeterminate={allPutsDone}
-        />
-        {allPutsDone ? (
-          <Spinner mainMsg="Validation in progress" />
-        ) : null}
+      <div className="flex w-full justify-center">
+        <Spinner mainMsg="Validation in progress"></Spinner>
       </div>
     );
   };
@@ -120,7 +96,7 @@ export default function FileUpload() {
       let msg =
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert variant="danger" mainMsg={msg} />
         </div>
       );
@@ -187,7 +163,7 @@ export default function FileUpload() {
     }
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert
             variant="danger"
             mainMsg="[ERROR] The following files must be re-uploaded"
@@ -540,32 +516,15 @@ export default function FileUpload() {
     //setValidationResults({});
     let localValidationResults = {};
 
-    let seq = Date.now();
-    const fileMetas = files.map(file => ({
-      file,
-      filenameConstructed: `${seq++}_${file.name}`,
-    }));
-    const totalBytes = fileMetas.reduce((s, { file: f }) => s + f.size, 0);
-    uploadLoadedByKeyRef.current = Object.fromEntries(
-      fileMetas.map(({ filenameConstructed }) => [filenameConstructed, 0]),
-    );
-    setUploadAggregatePct(0);
-    setUploadPutsFinished(0);
-    setUploadBatchFileCount(fileMetas.length);
-
-    const recomputeAggregatePct = () => {
-      const sum = fileMetas.reduce(
-        (acc, { filenameConstructed }) =>
-          acc + (uploadLoadedByKeyRef.current[filenameConstructed] || 0),
-        0,
-      );
-      setUploadAggregatePct(
-        totalBytes ? Math.min(100, Math.round((100 * sum) / totalBytes)) : 0,
-      );
+    const config = {
+      headers: {
+        'Content-Type': 'text/csv',
+      },
+      timeout: 0,
     };
-
     Promise.allSettled(
-      fileMetas.map(({ file, filenameConstructed }) => {
+      files.map(file => {
+        var filenameConstructed = Date.now() + '_' + file.name;
         return axios
           .post('/file-upload-api/' + filenameConstructed)
           .then(res => {
@@ -574,37 +533,19 @@ export default function FileUpload() {
 
             if (res.data == 'local-url-fake-signed') {
               // This is the local test case, simply validate as true as we're mocking out this data.
-              uploadLoadedByKeyRef.current[filenameConstructed] = file.size;
-              recomputeAggregatePct();
               localValidationResults[filenameConstructed] = 'ok';
-              setUploadPutsFinished(c => c + 1);
               return;
             }
-            const putConfig = {
-              headers: {
-                'Content-Type': 'text/csv',
-              },
-              timeout: 0,
-              onUploadProgress: ev => {
-                uploadLoadedByKeyRef.current[filenameConstructed] = ev.loaded;
-                recomputeAggregatePct();
-              },
-            };
-            const putPromise = axios.put(res.data, file, putConfig);
-            putPromise.finally(() => {
-              setUploadPutsFinished(c => c + 1);
-            });
-            return putPromise
-              .then(() => {
-                uploadLoadedByKeyRef.current[filenameConstructed] = file.size;
-                recomputeAggregatePct();
+            return axios
+              .put(res.data, file, config)
+              .then(res1 => {
                 return axios
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
-                    { timeout: VALIDATE_UPLOAD_TIMEOUT_MS },
+                    { timeout: 0 },
                   )
-                  .then(() => {
+                  .then(res2 => {
                     localValidationResults[filenameConstructed] = 'ok';
                     return;
                   })
@@ -621,15 +562,11 @@ export default function FileUpload() {
           .catch(e => {
             localValidationResults[filenameConstructed] =
               '[Upload URL retrieval] ' + formatAxiosErrorMessage(e);
-            setUploadPutsFinished(c => c + 1);
           });
       }),
     ).then(() => {
       setValidationResults(localValidationResults);
       setProcessing(false);
-      setUploadBatchFileCount(0);
-      setUploadAggregatePct(0);
-      setUploadPutsFinished(0);
       return;
     });
   };

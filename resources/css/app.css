@@ -234,11 +234,21 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply mt-1 text-[#4F4F4F];
 }
 
-/* Edvise theme: text inputs – style by element, no class needed */
-input[type="text"]:not(.mapboxgl-ctrl-geocoder--input) {
-  @apply w-full rounded-full border px-4 py-2 pr-10 focus:outline-none;
-  border-color: theme('colors.input.border');
-}
-input[type="text"]:not(.mapboxgl-ctrl-geocoder--input):focus {
-  border-color: theme('colors.input.focus');
+input[type='text'],
+input[type='search'],
+input[type='email'],
+input[type='password'],
+input[type='url'],
+input[type='tel'],
+input[type='number'] {
+  @apply box-border h-12 w-full rounded-full border-2 border-solid px-5 text-base transition-all placeholder:text-gray-500;
+  border-color: #d1d5dc;
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+
+  &:focus {
+    @apply border-primary outline-none ring-2 ring-primary ring-offset-0;
+  }
 }

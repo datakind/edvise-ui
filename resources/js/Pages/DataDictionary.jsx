@@ -203,13 +203,13 @@ export default function DataDictionary({ features = [] }) {
   return (
     <AppLayout title="Data Dictionary">
       <Head title="Data Dictionary" />
-      <div className="font-[Helvetica Neue] min-w-full bg-background py-8">
+      <div className="font-[Helvetica Neue] bg-background min-w-full py-8">
         <PageHeading>Data Dictionary</PageHeading>
 
-        <div className="mx-auto max-w-5xl rounded-[40px] bg-white px-10 py-10 shadow-card sm:px-12">
+        <div className="shadow-card mx-auto max-w-5xl rounded-[40px] bg-white px-10 py-10 sm:px-12">
           {/* Submission Data Requirements */}
           <div className="mb-10">
-            <h2 className="mb-4 text-3xl font-light text-heading">
+            <h2 className="text-heading mb-4 text-3xl font-light">
               Submission Data Requirements
             </h2>
             <p className="mb-4 text-xl font-light text-[#171717]">
@@ -221,13 +221,13 @@ export default function DataDictionary({ features = [] }) {
                 href="https://www.studentclearinghouse.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-link underline"
+                className="text-link font-medium underline"
               >
                 AR file templates provided by NSC
               </a>
               .
             </p>
-            <div className="border-l-4 border-secondary bg-landing-light-blue py-3 pl-4 pr-4 text-xl font-light text-[#171717]">
+            <div className="border-secondary bg-landing-light-blue border-l-4 py-3 pr-4 pl-4 text-xl font-light text-[#171717]">
               <span className="font-semibold">Important:</span> If uploading a
               StudyID file, the &ldquo;Student ID&rdquo; column must be deleted.
               Only &ldquo;Study ID&rdquo; or &ldquo;Student GUID&rdquo; (both in
@@ -280,7 +280,7 @@ export default function DataDictionary({ features = [] }) {
                       </thead>
                       <tbody>
                         <tr className="border-b border-[#e5e7eb]">
-                          <td className="whitespace-nowrap border border-[#e5e7eb] p-3 text-base font-medium">
+                          <td className="border border-[#e5e7eb] p-3 text-base font-medium whitespace-nowrap">
                             Support Score
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
@@ -301,7 +301,7 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
-                          <td className="whitespace-nowrap border border-[#e5e7eb] p-3 text-base font-medium">
+                          <td className="border border-[#e5e7eb] p-3 text-base font-medium whitespace-nowrap">
                             Support Needed
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
@@ -317,7 +317,7 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
-                          <td className="whitespace-nowrap border border-[#e5e7eb] p-3 text-base font-medium">
+                          <td className="border border-[#e5e7eb] p-3 text-base font-medium whitespace-nowrap">
                             Feature Name (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
@@ -333,7 +333,7 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
-                          <td className="whitespace-nowrap border border-[#e5e7eb] p-3 text-base font-medium">
+                          <td className="border border-[#e5e7eb] p-3 text-base font-medium whitespace-nowrap">
                             Feature Value (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
@@ -346,7 +346,7 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
-                          <td className="whitespace-nowrap border border-[#e5e7eb] p-3 text-base font-medium">
+                          <td className="border border-[#e5e7eb] p-3 text-base font-medium whitespace-nowrap">
                             Feature Importance (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
@@ -445,12 +445,12 @@ export default function DataDictionary({ features = [] }) {
                             key={feature.readable_feature_name}
                             className="border-b border-[#E5E7EB] align-top last:border-b-0"
                           >
-                            <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
+                            <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
                               <div className="text-base font-medium text-black">
                                 {toTitleCase(feature.readable_feature_name)}
                               </div>
                             </td>
-                            <td className="border border-[#e5e7eb] py-3 pl-4 pr-4">
+                            <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
                               <div className="text-base font-light text-[#696969]">
                                 {feature.short_feature_desc}
                               </div>
@@ -464,7 +464,7 @@ export default function DataDictionary({ features = [] }) {
                 <TabPanel>
                   {/* Model Card Dictionary */}
                   <div>
-                    <h2 className="mb-4 text-3xl font-light text-heading">
+                    <h2 className="text-heading mb-4 text-3xl font-light">
                       Model Card Dictionary
                     </h2>
                     <div className="accordion">

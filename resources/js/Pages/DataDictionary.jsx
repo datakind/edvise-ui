@@ -258,13 +258,22 @@ export default function DataDictionary({ features = [] }) {
                     <table className="w-full border-collapse border border-[#E5E7EB]">
                       <thead>
                         <tr className="bg-[#F9FAFB]">
-                          <th className="whitespace-nowrap border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
+                          <th
+                            scope="col"
+                            className="border border-[#e5e7eb] p-3 text-left text-xs font-medium whitespace-nowrap text-[#6B7280]"
+                          >
                             COLUMN NAME
                           </th>
-                          <th className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
+                          <th
+                            scope="col"
+                            className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                          >
                             INTERPRETATION
                           </th>
-                          <th className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
+                          <th
+                            scope="col"
+                            className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                          >
                             VALUE POSSIBILITIES
                           </th>
                         </tr>
@@ -401,6 +410,7 @@ export default function DataDictionary({ features = [] }) {
                       <thead>
                         <tr className="bg-[#f9fafb]">
                           <th
+                            scope="col"
                             className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
                             onClick={() => handleSort('readable_feature_name')}
                           >
@@ -421,7 +431,10 @@ export default function DataDictionary({ features = [] }) {
                               </svg>
                             </div>
                           </th>
-                          <th className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]">
+                          <th
+                            scope="col"
+                            className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                          >
                             DESCRIPTION
                           </th>
                         </tr>

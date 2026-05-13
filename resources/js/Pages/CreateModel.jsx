@@ -101,60 +101,6 @@ export default function CreateModel() {
                 Model is "valid" (i.e. ready for use).
               </label>
             </div>
-            <div className="flex w-full flex-row gap-x-6">
-              <div className="flex w-1/2 flex-col">
-                <fieldset>
-                  <legend className="text-base font-semibold text-gray-900">
-                    Batch schema configs accepted by this model
-                  </legend>
-                  <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
-                    {schemas.map((schem, idx) => (
-                      <div key={idx} className="flex gap-3">
-                        <div className="min-w-0 flex-1 text-sm/6">
-                          <input
-                            defaultChecked={schem.selected}
-                            id={`${schem.name}`}
-                            name={`${schem.name}`}
-                            type="checkbox"
-                            className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-blue-600 checked:bg-blue-600 indeterminate:border-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                          />
-                          <label
-                            htmlFor={`${schem.name}`}
-                            className="m-2 font-medium text-gray-900 select-none"
-                          >
-                            {schem.name}
-                          </label>
-                        </div>
-                        <div className="flex h-6 shrink-0 items-center">
-                          <div className="group grid size-4 grid-cols-1">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 14 14"
-                              className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
-                            >
-                              <path
-                                d="M3 8L6 11L11 3.5"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:checked]:opacity-100"
-                              />
-                              <path
-                                d="M3 7H11"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:indeterminate]:opacity-100"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </fieldset>
-              </div>
-            </div>
           </div>
           <div className="flex w-full justify-center gap-x-6 pt-12">
             <button type="reset" className="btn btn-secondary">

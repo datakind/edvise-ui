@@ -86,7 +86,7 @@ export default function CreateModel() {
                   type="text"
                   placeholder="Model Name (corresponding to the Databricks model name)"
                 ></input>
-                <p className="text-xs italic text-red-500">Required field.</p>
+                <p className="text-xs text-red-500 italic">Required field.</p>
               </div>
             </div>
             <div className="flex w-1/2 flex-row items-center gap-x-3">

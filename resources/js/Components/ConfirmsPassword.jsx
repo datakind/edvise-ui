@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
 import DialogModal from '@/Components/DialogModal';
 import InputError from '@/Components/InputError';
-import TextInput from '@/Components/TextInput';
+import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/SecondaryButton';
 export default function ConfirmsPassword({
   title = 'Confirm Password',

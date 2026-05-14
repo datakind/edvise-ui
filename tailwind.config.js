@@ -65,6 +65,10 @@ export default {
         heading: {
           DEFAULT: '#1E343F',
         },
+        accordion: {
+          'header-open': '#dde5eb',
+          body: '#364153',
+        },
         tabs: {
           default: '#637381',
           selectedBg: '#EEF2F6',

@@ -47,6 +47,10 @@ const MODEL_CARD_SECTIONS = [
         term: 'Sample weights',
         def: 'A way of giving more or less importance to certain examples during model training.',
       },
+      {
+        term: 'Standard Deviation',
+        def: 'A measure of how much variability there is in the data in relation to its mean (average). A low standard deviation means the data is tightly clustered around the mean, a high standard deviation means the data is more spread out.',
+      },
     ],
   },
   {
@@ -484,7 +488,8 @@ export default function DataDictionary({ features = [] }) {
                                   className="accordion__trigger-icon"
                                   aria-hidden
                                 >
-                                  {open ? '−' : '+'}
+                                  <span className="accordion__trigger-icon-bar accordion__trigger-icon-bar--h" />
+                                  <span className="accordion__trigger-icon-bar accordion__trigger-icon-bar--v" />
                                 </span>
                               </DisclosureButton>
                               <DisclosurePanel className="accordion__panel">

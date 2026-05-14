@@ -50,7 +50,7 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
             id="model-history-table"
           >
             <thead>
-              <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
+              <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
                 <th scope="col" className="p-4 px-6">
                   DATE
                 </th>
@@ -72,7 +72,7 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
             <tbody>
               {err != null ? (
                 <tr
-                  className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
+                  className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
                   key="error"
                 >
                   {err.response.data}
@@ -80,7 +80,7 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
               ) : (
                 dataToDisplay.map(run => (
                   <tr
-                    className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
+                    className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
                     key={run.date}
                   >
                     <td className="p-4 px-6">{run.date}</td>

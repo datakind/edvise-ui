@@ -95,6 +95,7 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
                             run.run_id,
                             modelName,
                           ])}
+                          aria-label={`View model results for run on ${run.date}`}
                         >
                           View
                         </a>
@@ -108,6 +109,7 @@ const ModelRunHistory = ({ runInfos, modelName }) => {
                           href={run.outputLink}
                           target="_blank"
                           rel="noreferrer"
+                          aria-label={`Download model results for run on ${run.date}`}
                         >
                           Download
                         </a>

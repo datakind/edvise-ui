@@ -227,5 +227,6 @@ Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function ()
 Route::middleware('auth.app')->get('/eda', function (Request $request) {
     return Inertia::render('EdaDashboard', [
         'batch_id' => $request->query('batch_id'),
+        'clear_cache' => $request->query('clear-cache') === '1',
     ]);
 })->name('eda');

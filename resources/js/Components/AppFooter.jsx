@@ -5,7 +5,7 @@ export default function AppFooter() {
   const route = window.route;
   const { appVersion } = usePage().props;
   return (
-    <footer className="grid grid-cols-4 items-center pb-4 pr-6 text-black">
+    <footer className="grid grid-cols-4 items-center pr-6 pb-4 text-black">
       <div className="col-span-2 text-left">
         <ul className="items-left justify-left flex flex-wrap pl-12 text-gray-900 dark:text-white">
           <li>
@@ -35,12 +35,7 @@ export default function AppFooter() {
         </ul>
       </div>
       <div></div>
-      <div className="pr-12 text-right">
-        &copy; 2025 Datakind
-        {appVersion ? (
-          <span className="text-gray-500"> · {appVersion}</span>
-        ) : null}
-      </div>
+      <div className="pr-12 text-right">&copy; 2025 Datakind v{appVersion}</div>
     </footer>
   );
 }

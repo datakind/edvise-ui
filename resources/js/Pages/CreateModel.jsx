@@ -99,7 +99,7 @@ export default function CreateModel() {
               <p
                 id="model_name-error"
                 role="alert"
-                className="text-red mt-2 text-sm"
+                className="text-danger mt-2 text-sm"
               >
                 {nameError}
               </p>

@@ -271,6 +271,11 @@ input[type='number'] {
     @apply border-primary outline-none ring-2 ring-primary ring-offset-0;
   }
   &.error {
-    @apply border-red-500;
+    @apply border-danger outline-none;
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      @apply border-danger ring-0;
+    }
   }
 }

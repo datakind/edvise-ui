@@ -40,6 +40,9 @@ export default {
           dark: '#2f3c5b',
           light: '#87b7cc',
         },
+        danger: {
+          DEFAULT: '#FB2C36',
+        },
         link: {
           DEFAULT: '#1F5FAF',
         },

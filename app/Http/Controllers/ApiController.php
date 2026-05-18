@@ -347,24 +347,6 @@ class ApiController extends Controller
         $post_request_body = [
             'name' => $request->input('name'),
         ];
-
-        // Optional fields.
-        if ($request->input('vers_id') != null && $request->input('vers_id') != '') {
-            $post_request_body['vers_id'] = $request->input('vers_id');
-        }
-        if ($request->input('valid') != null) {
-            $post_request_body['valid'] = $request->input('valid');
-        }
-
-        if ($request->input('schema_configs') != null) {
-            $post_request_body['schema_configs'] = $request->input('schema_configs');
-        }
-
-        if (ApiController::isLocalRequest()) {
-
-            return response()->json(['inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'name' => $request->input('name'), 'm_id' => 'e4862c62829440d8ab4c9c298f02f619', 'created_by' => $request->user()->id, 'valid' => true, 'deleted' => false], 200);
-        }
-
         return ApiController::constructInstRequest($request, '/models/', 'POST', $post_request_body);
     }
 

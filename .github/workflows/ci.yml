@@ -1,10 +1,15 @@
-# precommit actions for develop branch.
-name: test
+name: ci
 
 on:
   push:
     branches:
-      - 'develop'
+      - develop
+      - 'release/*'
+  pull_request:
+    branches:
+      - develop
+      - 'release/*'
+      - main
 
 jobs:
   laravel-test:

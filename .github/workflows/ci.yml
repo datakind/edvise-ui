@@ -12,4 +12,4 @@ on:
 
 jobs:
   laravel-test:
-    uses: ./.github/workflows/laravel-test.yml
+    uses: ./.github/workflows/tests.yml

@@ -16,15 +16,12 @@ jobs:
           BASE="${{ github.base_ref }}"
           HEAD="${{ github.head_ref }}"
 
-          if [[ "$BASE" == "develop" && "$HEAD" == "main" ]]; then
-            echo "Pull requests into develop cannot use main as the source branch."
-            exit 1
-          fi
-
           if [[ "$BASE" == "main" ]]; then
-            if [[ "$HEAD" == release/* || "$HEAD" == hotfix/* ]]; then
-              exit 0
-            fi
-            echo "Pull requests into main must come from release/* or hotfix/* branches (got: ${HEAD})."
-            exit 1
+            case "$HEAD" in
+              release/*|hotfix/*) exit 0 ;;
+              *)
+                echo "Pull requests into main must come from release/* or hotfix/* branches (got: ${HEAD})."
+                exit 1
+                ;;
+            esac
           fi

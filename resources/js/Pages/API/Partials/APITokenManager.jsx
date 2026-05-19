@@ -11,7 +11,6 @@ import DialogModal from '@/Components/Modals/DialogModal';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import SectionBorder from '@/Components/Fields/SectionBorder';
@@ -93,14 +92,15 @@ export default function APITokenManager({
               Created.
             </ActionMessage>
 
-            <PrimaryButton
-              className={classNames({
+            <button
+              type="submit"
+              className={classNames('btn btn-primary', {
                 'opacity-25': createApiTokenForm.processing,
               })}
               disabled={createApiTokenForm.processing}
             >
               Create
-            </PrimaryButton>
+            </button>
           </>
         )}
       >
@@ -197,20 +197,22 @@ export default function APITokenManager({
                       )}
 
                       {availablePermissions.length > 0 ? (
-                        <PrimaryButton
-                          className="cursor-pointer ml-6 text-sm text-gray-400 underline"
+                        <button
+                          type="button"
+                          className="ml-6 cursor-pointer border-0 bg-transparent p-0 text-sm text-gray-400 underline"
                           onClick={() => manageApiTokenPermissions(token)}
                         >
                           Permissions
-                        </PrimaryButton>
+                        </button>
                       ) : null}
 
-                      <PrimaryButton
-                        className="cursor-pointer ml-6 text-sm text-red-500"
+                      <button
+                        type="button"
+                        className="ml-6 cursor-pointer border-0 bg-transparent p-0 text-sm text-red-500"
                         onClick={() => confirmApiTokenDeletion(token)}
                       >
                         Delete
-                      </PrimaryButton>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -290,15 +292,16 @@ export default function APITokenManager({
             Cancel
           </SecondaryButton>
 
-          <PrimaryButton
-            onClick={updateApiToken}
-            className={classNames('ml-2', {
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
               'opacity-25': updateApiTokenForm.processing,
             })}
+            onClick={updateApiToken}
             disabled={updateApiTokenForm.processing}
           >
             Save
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
 

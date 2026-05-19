@@ -3,7 +3,6 @@ import axios from 'axios';
 import ActionSection from '@/Components/Sections/ActionSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 
@@ -68,13 +67,14 @@ const UpdateTeamNameForm = ({ team, permissions }) => {
           <ActionMessage on={recentlySuccessful} className="mr-3">
             Saved.
           </ActionMessage>
-          <PrimaryButton
-            className={processing ? 'opacity-25' : ''}
+          <button
+            type="button"
+            className="btn btn-primary"
             disabled={processing}
             onClick={updateTeamName}
           >
             Save
-          </PrimaryButton>
+          </button>
         </div>
       )}
     </ActionSection>

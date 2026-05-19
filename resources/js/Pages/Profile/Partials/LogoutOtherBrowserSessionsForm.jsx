@@ -6,7 +6,6 @@ import ActionMessage from '@/Components/Modals/ActionMessage';
 import ActionSection from '@/Components/Sections/ActionSection';
 import DialogModal from '@/Components/Modals/DialogModal';
 import InputError from '@/Components/Modals/InputError';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 export default function LogoutOtherBrowserSessions({ sessions }) {
@@ -105,9 +104,13 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
       ) : null}
 
       <div className="flex items-center mt-5">
-        <PrimaryButton onClick={confirmLogout}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={confirmLogout}
+        >
           Log Out Other Browser Sessions
-        </PrimaryButton>
+        </button>
 
         <ActionMessage on={form.recentlySuccessful} className="ml-3">
           Done.
@@ -136,13 +139,16 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
         <DialogModal.Footer>
           <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-          <PrimaryButton
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
+              'opacity-25': form.processing,
+            })}
             onClick={logoutOtherBrowserSessions}
-            className={classNames('ml-2', { 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Log Out Other Browser Sessions
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
     </ActionSection>

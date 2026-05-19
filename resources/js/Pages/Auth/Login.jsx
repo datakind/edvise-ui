@@ -1,11 +1,8 @@
 import { Link, useForm, Head } from '@inertiajs/react';
-import classNames from 'classnames';
 import React from 'react';
 import { router } from '@inertiajs/react';
 import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import Checkbox from '@/Components/Fields/Checkbox';
-import InputLabel from '@/Components/Fields/InputLabel';
-import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';
 import AuthLayout from '@/Layouts/AuthLayout';
 import AuthFooter from '@/Components/AuthFooter';
@@ -56,25 +53,36 @@ export default function Login({ canResetPassword, status }) {
 
           <form onSubmit={onSubmit}>
             <div>
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <TextInput
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <input
                 id="email"
                 type="email"
-                className="mt-1 block w-full"
+                className="mt-1"
                 value={form.data.email}
                 onChange={e => form.setData('email', e.currentTarget.value)}
                 required
                 autoFocus
+                autoComplete="email"
               />
               <InputError className="mt-2" message={form.errors.email} />
             </div>
 
             <div className="mt-4">
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <TextInput
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <input
                 id="password"
                 type="password"
-                className="mt-1 block w-full"
+                className="mt-1"
                 value={form.data.password}
                 onChange={e => form.setData('password', e.currentTarget.value)}
                 required
@@ -113,16 +121,13 @@ export default function Login({ canResetPassword, status }) {
                 >
                   Forgot your password?
                 </Link>
-
-                <Button
+                <button
                   type="submit"
-                  className={classNames('ml-4', {
-                    'opacity-25': form.processing,
-                  })}
+                  className="btn btn-primary ml-4"
                   disabled={form.processing}
                 >
                   Log in
-                </Button>
+                </button>
               </div>
             </div>
           </form>

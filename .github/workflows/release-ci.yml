@@ -1,0 +1,14 @@
+name: release-branch-ci
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+concurrency:
+  group: release-branch-ci-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  laravel-test:
+    uses: ./.github/workflows/laravel-test.yml

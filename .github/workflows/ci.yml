@@ -1,0 +1,15 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+      - 'release/*'
+      - main
+
+jobs:
+  laravel-test:
+    uses: ./.github/workflows/laravel-test.yml

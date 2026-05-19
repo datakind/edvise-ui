@@ -1,14 +1,13 @@
-name: ci
+name: release-branch-ci
 
 on:
   push:
     branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
       - 'release/*'
-      - main
+
+concurrency:
+  group: release-branch-ci-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   laravel-test:

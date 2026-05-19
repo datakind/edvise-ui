@@ -10,5 +10,5 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  laravel-test:
+  tests:
     uses: ./.github/workflows/tests.yml

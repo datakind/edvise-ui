@@ -2,6 +2,14 @@ name: tests
 
 on:
   workflow_call:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+      - 'release/*'
+      - main
 
 jobs:
   tests:

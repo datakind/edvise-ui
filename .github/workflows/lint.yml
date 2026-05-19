@@ -1,0 +1,40 @@
+name: lint
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+      - 'release/*'
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Install Composer dependencies
+        run: composer install -n --prefer-dist
+      - name: PHP style (Pint)
+        run: ./vendor/bin/pint --test
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install npm dependencies
+        run: npm install
+      - name: JavaScript lint (ESLint)
+        run: npx eslint resources/js
+      - name: Format check (Prettier)
+        run: npx prettier --check "resources/**/*.{js,jsx,css,json,md}"

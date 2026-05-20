@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -70,7 +71,7 @@ class Invite extends Model
     /**
      * Get the user who sent this invite
      */
-    public function invitedBy()
+    public function invitedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'invited_by');
     }

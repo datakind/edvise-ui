@@ -57,7 +57,7 @@ class ApiController extends Controller
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $url = env('BACKEND_URL').$url_piece;
+        $url = config('services.backend.url').$url_piece;
         $resp = null;
         if ($method == 'GET') {
             $resp = Http::withHeaders($headers)->get($url);
@@ -206,17 +206,11 @@ class ApiController extends Controller
     {
         $isValidateUpload = str_starts_with($urlPiece, '/input/validate-upload');
         if ($isValidateUpload) {
-            $seconds = (int) env(
-                'BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS',
-                self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS
-            );
+            $seconds = config('services.backend.http_validate_timeout_seconds');
 
             return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
         }
-        $seconds = (int) env(
-            'BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS',
-            self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS
-        );
+        $seconds = config('services.backend.http_default_timeout_seconds');
 
         return $seconds >= 1 ? $seconds : self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS;
     }
@@ -242,7 +236,7 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        $url = env('BACKEND_URL').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$url_piece;
+        $url = config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
         $http = Http::withHeaders($headers)->timeout(self::institutionBackendTimeoutSeconds($url_piece));
@@ -712,7 +706,7 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        return Http::withHeaders($headers)->get(env('DK_API_SUITE_URL').'/'.env('DK_API_SUITE_VERSION').'/'.$endpoint.'?'.$query);
+        return Http::withHeaders($headers)->get(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').'/'.$endpoint.'?'.$query);
     }
 
     // Gets support overview data for a given run
@@ -797,7 +791,7 @@ class ApiController extends Controller
 
         $externalUrl = '/inference/support-overview/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -862,7 +856,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         $response = ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
 
@@ -961,7 +955,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/inference/top-features/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1140,7 +1134,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1164,7 +1158,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/batch/'.$batch_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'DELETE', null);
     }
@@ -1197,7 +1191,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1221,7 +1215,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/confusion_matrix/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1266,7 +1260,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/roc_curve/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1329,7 +1323,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/support-overview/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.env('BACKEND_URL').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.($request->attributes->get('institution') ?? [])['inst_id'] ?? null.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }

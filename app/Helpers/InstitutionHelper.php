@@ -28,7 +28,7 @@ class InstitutionHelper
             'Authorization' => 'Bearer '.$tok,
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
-        ])->get(env('BACKEND_URL').'/check-self');
+        ])->get(config('services.backend.url').'/check-self');
         if ($resp->getStatusCode() !== 200 || (($resp['inst_id'] ?? '') === '' && ($resp['access_type'] ?? '') === '')) {
             return;
         }
@@ -85,7 +85,7 @@ class InstitutionHelper
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $resp = Http::withHeaders($headers)->get(env('BACKEND_URL').'/institutions');
+        $resp = Http::withHeaders($headers)->get(config('services.backend.url').'/institutions');
         if ($resp->getStatusCode() !== 200) {
             return null;
         }

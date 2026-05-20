@@ -32,7 +32,7 @@ class ModelRunIdController extends Controller
     public function getByInst(string $inst_id, Request $request): JsonResponse
     {
         $envKey = $request->query('env_key', 'ALT_'.strtoupper($inst_id));
-        $modelRunId = env($envKey);
+        $modelRunId = config('model_run_ids.'.$envKey);
 
         if (! $modelRunId) {
             return response()->json(['error' => 'Model run ID not found for institution'], 404);

@@ -25,7 +25,7 @@ class TokenHelper
         $time_difference_in_minutes = $carbon_now->diffInMinutes($start);
 
         // If the delta between the old creation timestamp and now is greater than the expiration less 5 min, recalculate the jwt.
-        if ($time_difference_in_minutes > env('BACKEND_TIMEOUT_LESS_FIVE')) {
+        if ($time_difference_in_minutes > config('services.backend.timeout_less_five')) {
             return TokenHelper::makeTokenAPICall($request, $current_timestamp);
         }
         return [$backend_tok, ""];
@@ -34,12 +34,12 @@ class TokenHelper
     public static function makeTokenAPICall(Request $request, int $current_timestamp)
     {
         $headers = [
-            'X-API-KEY' => env('BACKEND_API_KEY'),
+            'X-API-KEY' => config('services.backend.api_key'),
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
             'ENDUSER' => $request->user()->email,
         ];
-        $url = env('BACKEND_URL').'/token-from-api-key';
+        $url = config('services.backend.url').'/token-from-api-key';
         $token_response = Http::withHeaders($headers)->post($url);
 
         if (! $token_response->ok()) {

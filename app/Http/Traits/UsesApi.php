@@ -11,8 +11,8 @@ trait UsesApi
     {
         $response = Http::withHeaders([
             'Cache-Control' => 'no-cache',
-            'subscription-key' => env('DK_API_SUITE_SUBSCRIPTION_KEY'),
-        ])->get(env('DK_API_SUITE_URL').'authenticate/get_jwt?api='.env('DK_API_SUITE_PRODUCT'));
+            'subscription-key' => config('services.dk_api_suite.subscription_key'),
+        ])->get(config('services.dk_api_suite.url').'authenticate/get_jwt?api='.config('services.dk_api_suite.product'));
 
         $body = json_decode($response->body());
         $token = ! empty($token_id) ? DkApiToken::where('id', $token_id)->first() : new DkApiToken();
@@ -26,9 +26,9 @@ trait UsesApi
     protected function makesDkApiRequest(string $token, string $endpoint, string $type = 'get')
     {
         if ($type == 'post') {
-            $response = Http::withToken($token)->post(env('DK_API_SUITE_URL').'/'.env('DK_API_SUITE_VERSION').$endpoint);
+            $response = Http::withToken($token)->post(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').$endpoint);
         } else {
-            $response = Http::withToken($token)->get(env('DK_API_SUITE_URL').'/'.env('DK_API_SUITE_VERSION').$endpoint);
+            $response = Http::withToken($token)->get(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').$endpoint);
         }
 
         return json_decode($response->body());
@@ -39,13 +39,13 @@ trait UsesApi
         // Authenticate to get a fresh token
         $response = Http::withHeaders([
             'Cache-Control' => 'no-cache',
-            'subscription-key' => env('DK_API_SUITE_SUBSCRIPTION_KEY'),
-        ])->get(env('DK_API_SUITE_URL').'authenticate/get_jwt?api='.env('DK_API_SUITE_PRODUCT'));
+            'subscription-key' => config('services.dk_api_suite.subscription_key'),
+        ])->get(config('services.dk_api_suite.url').'authenticate/get_jwt?api='.config('services.dk_api_suite.product'));
 
         $token = json_decode($response->body());
         // Fetch insights using the fresh token
         $raw = Http::withToken($token->access_token)
-            ->get(env('DK_API_SUITE_URL').'/sst/students_insight?support_level=all&institution_id=jjc_transfer&summary_insights=false');
+            ->get(config('services.dk_api_suite.url').'/sst/students_insight?support_level=all&institution_id=jjc_transfer&summary_insights=false');
 
         dd($raw);
     }

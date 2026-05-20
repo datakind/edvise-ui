@@ -12,4 +12,4 @@ parameters:
         - scripts/
         - storage/
         - tests/
-    level: 5
+    level: 1

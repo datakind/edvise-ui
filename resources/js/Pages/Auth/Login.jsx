@@ -160,7 +160,7 @@ export default function Login({ canResetPassword, status }) {
               className="flex w-full items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-100"
             >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png"
+                src="/microsoft-logo.svg"
                 alt="Microsoft Logo"
                 className="mr-2 h-5 w-5"
               />

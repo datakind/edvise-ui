@@ -25,6 +25,8 @@ jobs:
           coverage: none
       - name: Install Composer dependencies
         run: composer install -n --prefer-dist
+      - name: PHP static analysis (Larastan)
+        run: ./vendor/bin/phpstan analyse --no-progress --memory-limit=2G
       - name: PHP style (Pint)
         run: ./vendor/bin/pint --test
       - name: Setup Node.js

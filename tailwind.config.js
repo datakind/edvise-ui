@@ -76,7 +76,7 @@ export default {
           selectedText: '#000000',
         },
         input: {
-          border: '#E5E7EB',
+          border: '#6B7280',
           focus: '#007C8C',
         },
       },

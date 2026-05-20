@@ -25,6 +25,10 @@ jobs:
           coverage: none
       - name: Install Composer dependencies
         run: composer install -n --prefer-dist
+      - name: Prepare Laravel environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force --ansi
       - name: PHP static analysis (Larastan)
         run: ./vendor/bin/phpstan analyse --no-progress --memory-limit=2G
       - name: PHP style (Pint)

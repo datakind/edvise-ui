@@ -4,10 +4,6 @@ on:
   pull_request:
     types: [opened, edited, synchronize]
 
-permissions:
-  contents: read
-  pull-requests: read
-
 jobs:
   main:
     name: Validate PR title
@@ -32,5 +28,3 @@ jobs:
             revert
             style
             test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

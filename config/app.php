@@ -1,7 +1,18 @@
 <?php
 
+use App\Helpers\InstitutionHelper;
+use App\Helpers\TokenHelper;
+use App\Helpers\UserHelper;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\FortifyServiceProvider;
+use App\Providers\JetstreamServiceProvider;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\SocialiteServiceProvider;
 
 return [
 
@@ -164,15 +175,15 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\FortifyServiceProvider::class,
-        App\Providers\JetstreamServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
-        \SocialiteProviders\Manager\ServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        FortifyServiceProvider::class,
+        JetstreamServiceProvider::class,
+        SocialiteServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -187,10 +198,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'TokenHelper' => App\Helpers\TokenHelper::class,
-        'InstitutionHelper' => App\Helpers\InstitutionHelper::class,
-        'UserHelper' => App\Helpers\UserHelper::class,
+        'Socialite' => Socialite::class,
+        'TokenHelper' => TokenHelper::class,
+        'InstitutionHelper' => InstitutionHelper::class,
+        'UserHelper' => UserHelper::class,
     ])->toArray(),
 
 ];

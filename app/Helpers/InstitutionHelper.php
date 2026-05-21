@@ -20,7 +20,7 @@ class InstitutionHelper
         if (! $request->user()) {
             return;
         }
-        [$tok, ] = TokenHelper::GetToken($request);
+        [$tok] = TokenHelper::GetToken($request);
         if ($tok === '') {
             return;
         }
@@ -76,7 +76,7 @@ class InstitutionHelper
     // Fetch full institution by inst_id from backend. Returns array or null.
     public static function fetchInstitutionById(Request $request, string $inst_id): ?array
     {
-        [$tok, ] = TokenHelper::GetToken($request);
+        [$tok] = TokenHelper::GetToken($request);
         if ($tok === '') {
             return null;
         }

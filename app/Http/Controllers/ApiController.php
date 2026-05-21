@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DataDictionary;
 use App\Traits\UsesApi;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use TokenHelper;
@@ -191,7 +192,7 @@ class ApiController extends Controller
         }
 
         $resp = ApiController::constructInstRequest($request, '', 'GET', null);
-        if ($resp instanceof \Illuminate\Http\JsonResponse) {
+        if ($resp instanceof JsonResponse) {
             return $resp;
         }
 
@@ -318,9 +319,9 @@ class ApiController extends Controller
         if (ApiController::isLocalRequest()) {
             return response()->json([
                 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
-                'name'    => $request->input('name'),
-                'state'   => $request->input('state'),
-                'pdp_id'  => $request->input('pdp_id'),
+                'name' => $request->input('name'),
+                'state' => $request->input('state'),
+                'pdp_id' => $request->input('pdp_id'),
             ], 200);
         }
 
@@ -1130,7 +1131,6 @@ class ApiController extends Controller
             ], 200);
         }
 
-
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
@@ -1153,7 +1153,6 @@ class ApiController extends Controller
                 'institution_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
             ], 200);
         }
-
 
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/batch/'.$batch_id;
@@ -1187,7 +1186,6 @@ class ApiController extends Controller
             ], 200);
         }
 
-
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/feature_importance/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
@@ -1210,7 +1208,6 @@ class ApiController extends Controller
                 ],
             ], 200);
         }
-
 
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/confusion_matrix/'.$model_run_id;
@@ -1255,7 +1252,6 @@ class ApiController extends Controller
                 ],
             ], 200);
         }
-
 
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/roc_curve/'.$model_run_id;
@@ -1319,7 +1315,6 @@ class ApiController extends Controller
             ], 200);
         }
 
-
         \Log::info('Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
         $externalUrl = '/training/support-overview/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
@@ -1345,7 +1340,7 @@ class ApiController extends Controller
 
             // Handle local development
             if (ApiController::isLocalRequest()) {
-    
+
                 \Log::info('updateBatch - Local development mode, returning mock response');
 
                 return response()->json([
@@ -1390,7 +1385,6 @@ class ApiController extends Controller
             }
 
             \Log::info('getEdaData called with inst_id: '.$inst_id.', batch_id: '.$batch_id);
-
 
             \Log::info('getEdaData - Production request - Institution ID: '.($request->attributes->get('institution') ?? [])['inst_id'] ?? null);
             $externalUrl = '/batch/'.$batch_id.'/eda';

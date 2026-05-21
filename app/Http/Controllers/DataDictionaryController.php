@@ -43,6 +43,7 @@ class DataDictionaryController extends Controller
         $validModel = collect($models)->first(fn ($m) => ($m['valid'] ?? false) === true || ($m['valid'] ?? 0) === 1);
         if (! $validModel) {
             Log::info('DataDictionary: no valid model');
+
             return Inertia::render('DataDictionary', [
                 'selectedModel' => null,
                 'mostRecentRun' => null,
@@ -105,7 +106,6 @@ class DataDictionaryController extends Controller
 
     /**
      * @param  Response|JsonResponse|null  $response
-     * @return array|null
      */
     private function responseData($response): ?array
     {

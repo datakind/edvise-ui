@@ -18,7 +18,7 @@ trait UsesApi
             'subscription-key' => config('services.dk_api_suite.subscription_key'),
         ])->get(config('services.dk_api_suite.url').'authenticate/get_jwt?api='.config('services.dk_api_suite.product'));
         $body = json_decode($response->body());
-        $token = ! empty($token_id) ? DkApiToken::where('id', $token_id)->first() : new DkApiToken();
+        $token = ! empty($token_id) ? DkApiToken::where('id', $token_id)->first() : new DkApiToken;
         $token->access = $body->access_token;
         $token->type = 'access';
         $token->save();

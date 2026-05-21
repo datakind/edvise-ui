@@ -146,7 +146,7 @@ export default function DemoForm({ className, formId, onSuccess }) {
           <a
             className="text-[#4F4F4F] underline hover:font-semibold"
             href="https://www.datakind.org/newsletter/"
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             sign up for our newsletter
           </a>

@@ -23,7 +23,7 @@ export default function License() {
             <a
               href="https://www.datakind.org"
               target="_blank"
-              className="font-bold hover:underline"
+              className="font-bold hover:underline" rel="noreferrer"
             >
               www.datakind.org
             </a>
@@ -36,7 +36,7 @@ export default function License() {
             <a
               href="https://creativecommons.org/licenses/by/4.0/"
               target="_blank"
-              className="font-bold hover:underline"
+              className="font-bold hover:underline" rel="noreferrer"
             >
               here
             </a>

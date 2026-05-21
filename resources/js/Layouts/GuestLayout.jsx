@@ -24,7 +24,7 @@ export default function GuestLayout({ children }) {
           content="Edvise is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
           rel="stylesheet"

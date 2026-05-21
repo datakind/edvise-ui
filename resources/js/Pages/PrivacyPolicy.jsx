@@ -529,7 +529,7 @@ const PrivacyPolicy = () => {
                   <a
                     href="https://www.edpb.europa.eu/about-edpb/about-edpb/members_en"
                     className="font-bold hover:underline"
-                    target="_blank"
+                    target="_blank" rel="noreferrer"
                   >
                     here
                   </a>

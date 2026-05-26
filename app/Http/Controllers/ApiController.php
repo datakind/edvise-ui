@@ -342,6 +342,7 @@ class ApiController extends Controller
         $post_request_body = [
             'name' => $request->input('name'),
         ];
+
         return ApiController::constructInstRequest($request, '/models/', 'POST', $post_request_body);
     }
 

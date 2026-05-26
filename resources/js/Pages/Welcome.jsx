@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import AppLayout from '@/Layouts/AppLayout';
-import LoadingDots from '@/Components/LoadingDots';
+import React from 'react';
 import '../../css/landing.css';
 import Header from '@/Components/Landing/Header';
 import { LenisProvider } from '@/Components/Landing/LenisProvider';
@@ -12,7 +10,6 @@ import CaseStudySection from '@/Components/Landing/CaseStudySection';
 import Faq from '@/Components/Landing/Faq';
 import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
-import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 import CookieConsent from '@/Components/CookieConsent';
 

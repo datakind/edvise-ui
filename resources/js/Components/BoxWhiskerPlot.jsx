@@ -80,7 +80,6 @@ export default function BoxWhiskerPlot({
     const median = parseFloat(boxplotData.median);
     const q3 = parseFloat(boxplotData.q_3);
     const max = parseFloat(boxplotData.max);
-    const count = parseInt(boxplotData.count);
 
     // Calculate dynamic range based on actual data
     const dataRange = max - min;

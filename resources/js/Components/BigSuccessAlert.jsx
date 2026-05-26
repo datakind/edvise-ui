@@ -1,5 +1,4 @@
 import React from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 
 export default function SuccessAlert({ mainMsg, msgDetails, className }) {

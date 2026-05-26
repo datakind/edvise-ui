@@ -1,5 +1,4 @@
 import React from 'react';
-import { XCircleIcon } from '@heroicons/react/24/solid';
 
 export default function DangerAlert({ mainMsg, errDict, className }) {
   if (errDict == undefined || Object.keys(errDict).length == 0) {

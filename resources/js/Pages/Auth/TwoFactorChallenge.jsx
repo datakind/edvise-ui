@@ -37,7 +37,7 @@ export default function TwoFactorChallenge() {
   return (
     <AuthLayout>
       <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
-        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
+        <div className="mx-auto mt-12 -mb-12 w-full max-w-2xl p-4">
           <Head title="Two-Factor Confirmation" />
           <img
             className="w-1/3 pb-12"

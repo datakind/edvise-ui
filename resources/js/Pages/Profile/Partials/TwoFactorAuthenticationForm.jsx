@@ -168,7 +168,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                     id="code"
                     type="text"
                     name="code"
-                    className="block mt-1 w-1/2"
+                    className="mt-1 block w-1/2"
                     inputMode="numeric"
                     autoFocus={true}
                     autoComplete="one-time-code"
@@ -197,7 +197,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                 </p>
               </div>
 
-              <div className="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
+              <div className="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm">
                 {recoveryCodes.map(code => (
                   <div key={code}>{code}</div>
                 ))}

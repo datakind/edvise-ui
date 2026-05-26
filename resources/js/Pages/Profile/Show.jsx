@@ -13,12 +13,12 @@ export default function Show({ sessions, confirmsTwoFactorAuthentication }) {
     <AppLayout
       title="Profile"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Profile
         </h2>
       )}
     >
-      <div className="flex flex-col w-full p-4">
+      <div className="flex w-full flex-col p-4">
         {page.props.jetstream.canUpdateProfileInformation ? (
           <div className="flex border-solid border-gray-900 p-6">
             <UpdateProfileInformationForm user={page.props.auth.user} />

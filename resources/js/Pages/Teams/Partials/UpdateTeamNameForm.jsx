@@ -35,15 +35,15 @@ const UpdateTeamNameForm = ({ team, permissions }) => {
       <div className="">
         <div className="mb-6">
           <InputLabel value="Team Owner" />
-          <div className="flex items-center mt-2">
+          <div className="mt-2 flex items-center">
             <img
-              className="w-12 h-12 rounded-full object-cover"
+              className="h-12 w-12 rounded-full object-cover"
               src={team.owner.profile_photo_url}
               alt={team.owner.name}
             />
             <div className="ml-4">
               <div className="text-gray-900">{team.owner.name}</div>
-              <div className="text-gray-700 text-sm">{team.owner.email}</div>
+              <div className="text-sm text-gray-700">{team.owner.email}</div>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@ const UpdateTeamNameForm = ({ team, permissions }) => {
             value={name}
             onChange={e => setName(e.target.value)}
             type="text"
-            className="mt-1 block w-full w-2/3"
+            className="mt-1 block w-2/3 w-full"
             disabled={!permissions.canUpdateTeam}
           />
           <InputError message={errors.name} className="mt-2" />
@@ -64,7 +64,7 @@ const UpdateTeamNameForm = ({ team, permissions }) => {
       </div>
 
       {permissions.canUpdateTeam && (
-        <div className="flex justify-items-end justify-end space-x-4 mt-6">
+        <div className="mt-6 flex justify-end justify-items-end space-x-4">
           <ActionMessage on={recentlySuccessful} className="mr-3">
             Saved.
           </ActionMessage>

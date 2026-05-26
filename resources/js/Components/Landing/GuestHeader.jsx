@@ -60,7 +60,7 @@ export default function Header() {
   return (
     <>
       <DemoFormModal open={isFormModalOpen} setOpen={setFormModalOpen} />
-      <header className="fixed left-0 right-0 top-0 z-50 bg-[#EEF2F6]">
+      <header className="fixed top-0 right-0 left-0 z-50 bg-[#EEF2F6]">
         {isMenuOpen && (
           <div className="fixed inset-0 z-30 bg-white pb-16">
             <div className="layout:max-width flex h-full flex-col justify-between">
@@ -164,7 +164,7 @@ export default function Header() {
                           link.href === window.location.pathname
                             ? 'gap-3 before:h-2.5 before:w-2.5 before:rounded-full before:bg-[#F79122] before:content-[""]'
                             : 'hover:underline',
-                          'relative flex items-center gap-2 text-[16px] font-normal leading-[100%] text-[#000]',
+                          'relative flex items-center gap-2 text-[16px] leading-[100%] font-normal text-[#000]',
                         )}
                         href={link.href}
                       >
@@ -194,7 +194,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-start-14 col-span-4 flex justify-end gap-1 tb:col-span-6 md:col-span-8 md:gap-8">
+            <div className="tb:col-span-6 col-span-4 col-start-14 flex justify-end gap-1 md:col-span-8 md:gap-8">
               <Button
                 onClick={() => setFormModalOpen(true)}
                 className="shrink-0"

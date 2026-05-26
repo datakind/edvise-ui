@@ -42,12 +42,12 @@ export default function AddDatakinders() {
     <AppLayout
       title="Add Datakinders"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           AddDk
         </h2>
       )}
     >
-      <div className="w-full flex flex-col items-center" id="main_area">
+      <div className="flex w-full flex-col items-center" id="main_area">
         <HeaderLabel
           className="pl-12"
           iconObj={
@@ -57,25 +57,25 @@ export default function AddDatakinders() {
           minorTitle="Add Datakinders"
         ></HeaderLabel>
         <form
-          className="w-full max-w-full pl-36 pr-36 pt-24"
+          className="w-full max-w-full pt-24 pr-36 pl-36"
           onSubmit={handleSubmit}
         >
           <div id="form_contents" className="flex flex-col">
-            <div id="add_one_user" className="flex -mx-3 mb-2">
+            <div id="add_one_user" className="-mx-3 mb-2 flex">
               <div className="w-full">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                   id="0-email"
                 >
                   Account Email
                 </label>
                 <input
                   name="user"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                   type="email"
                   placeholder="j.smith@datakind.org"
                 ></input>
-                <p className="text-gray-600 text-xs italic">
+                <p className="text-xs text-gray-600 italic">
                   Add an email of an existing account which you want to grant
                   Datakinder access.
                 </p>

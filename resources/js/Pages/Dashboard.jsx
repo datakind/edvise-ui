@@ -102,7 +102,7 @@ export default function Dashboard({ modelname }) {
     <AppLayout
       title="Dashboard"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Dashboard
         </h2>
       )}
@@ -121,7 +121,7 @@ export default function Dashboard({ modelname }) {
             <Alert
               variant="danger"
               mainMsg={'Error: ' + error.message}
-              className="ml-24 mr-24 flex h-fit"
+              className="mr-24 ml-24 flex h-fit"
             />
           ) : (
             <div
@@ -138,13 +138,13 @@ export default function Dashboard({ modelname }) {
               {error != null &&
               (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
                 <>
-                  <div className="flex w-full flex-row justify-between pl-12 pr-12 pt-12">
+                  <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
                     <div className="flex flex-row items-center justify-center gap-x-2">
                       Run Time: <i>No run available yet.</i>
                     </div>
                   </div>
                   {error.message == 'NO_MODELS' ? (
-                    <div className="ml-24 mr-24 mt-12 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
+                    <div className="mt-12 mr-24 ml-24 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         Your institution does not have a model yet.
                       </div>
@@ -157,7 +157,7 @@ export default function Dashboard({ modelname }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="my-12 ml-24 mr-24 flex h-32 w-3/4 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500">
+                    <div className="my-12 mr-24 ml-24 flex h-32 w-3/4 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
                         This model does not have any predictions available yet.
                       </div>
@@ -179,7 +179,7 @@ export default function Dashboard({ modelname }) {
                 </>
               ) : (
                 <>
-                  <div className="flex w-full flex-row justify-between pl-12 pr-12 pt-12">
+                  <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
                     <form
                       onSubmit={applyDate}
                       className="flex flex-row items-center justify-center gap-x-2"
@@ -189,7 +189,7 @@ export default function Dashboard({ modelname }) {
                         {runDatesToJobDict == undefined ||
                         Object.keys(runDatesToJobDict).length == 0 ? (
                           <select
-                            className="px-30 flex items-center justify-center rounded-lg border border-gray-200 bg-white py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                            className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                             id="run_time"
                           >
                             <option disabled value="">
@@ -198,7 +198,7 @@ export default function Dashboard({ modelname }) {
                           </select>
                         ) : (
                           <select
-                            className="px-30 flex items-center justify-center rounded-lg border border-gray-200 bg-white py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                            className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                             id="run_time"
                           >
                             {Object.keys(runDatesToJobDict).map(r => (

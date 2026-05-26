@@ -31,9 +31,9 @@ const CreateTeamForm = ({ auth }) => {
         <div className="col-span-6">
           <InputLabel value="Team Owner" />
 
-          <div className="flex items-center mt-2">
+          <div className="mt-2 flex items-center">
             <img
-              className="object-cover w-12 h-12 rounded-full"
+              className="h-12 w-12 rounded-full object-cover"
               src={auth.user.profile_photo_url}
               alt={auth.user.name}
             />
@@ -56,7 +56,7 @@ const CreateTeamForm = ({ auth }) => {
             value={data.name}
             onChange={e => setData('name', e.target.value)}
             type="text"
-            className="block w-full mt-1"
+            className="mt-1 block w-full"
             autoFocus
           />
           <InputError message={errors.name} className="mt-2" />
@@ -64,11 +64,7 @@ const CreateTeamForm = ({ auth }) => {
       </div>
 
       <div className="actions">
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={processing}
-        >
+        <button type="submit" className="btn btn-primary" disabled={processing}>
           Create
         </button>
       </div>

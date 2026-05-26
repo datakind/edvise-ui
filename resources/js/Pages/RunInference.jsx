@@ -116,8 +116,8 @@ export default function RunInference() {
       <div className="flex w-full flex-col items-center justify-center p-12">
         <h1 className="mb-12 text-5xl font-light">Start Prediction</h1>
         <div className="flex text-gray-700">
-          For the most up-to-date Edvise predictions we recommend
-          starting a new prediction for each semester.
+          For the most up-to-date Edvise predictions we recommend starting a new
+          prediction for each semester.
         </div>
         <div className="flex pb-6 text-gray-700">
           Select the model and batch that you would like to run a prediction on.
@@ -198,7 +198,7 @@ export default function RunInference() {
     <AppLayout
       title="Start Prediction"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Run Inference
         </h2>
       )}

@@ -1,4 +1,3 @@
- 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
@@ -330,7 +329,7 @@ export default function Invites({ invites, filters = {} }) {
                     <select
                       value={perPage}
                       onChange={handlePerPageChange}
-                      className="rounded-md border border-gray-300 bg-white pl-2 pr-8 py-1 text-sm leading-normal focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="rounded-md border border-gray-300 bg-white py-1 pr-8 pl-2 text-sm leading-normal focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                     >
                       <option value="20">20</option>
                       <option value="50">50</option>
@@ -343,25 +342,25 @@ export default function Invites({ invites, filters = {} }) {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Email
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Invite Code
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Role
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Expires
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Created
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                         Actions
                       </th>
                     </tr>
@@ -381,7 +380,7 @@ export default function Invites({ invites, filters = {} }) {
                             )}
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                           <div className="relative inline-block">
                             <button
                               onClick={() =>
@@ -433,19 +432,19 @@ export default function Invites({ invites, filters = {} }) {
                             </button>
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                           <span className="capitalize">{invite.role}</span>
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(invite)}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                           {formatDate(invite.expires_at)}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                           {formatDate(invite.created_at)}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                        <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                           <div className="flex space-x-2">
                             {/* Hidden until email functionality is implemented */}
                             {/* {!invite.is_used &&

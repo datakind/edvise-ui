@@ -608,7 +608,10 @@ const raceByPellStatusOptions = data => {
   };
 };
 
-export default function EdaDashboard({ batch_id: propBatchId, clear_cache = false }) {
+export default function EdaDashboard({
+  batch_id: propBatchId,
+  clear_cache = false,
+}) {
   const { institution } = usePage().props;
   const inst_id = institution?.inst_id;
   const [batchInfo, setBatchInfo] = useState(null);
@@ -796,7 +799,7 @@ export default function EdaDashboard({ batch_id: propBatchId, clear_cache = fals
         <div className="min-w-full bg-[#FAFAFA] p-6">
           <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <H2>At a Glance</H2>
-            <div className="flex flex-row items-center gap-6 text-right text-sm font-light text-heading/80">
+            <div className="text-heading/80 flex flex-row items-center gap-6 text-right text-sm font-light">
               {batchInfo && (
                 <>
                   <span>Showing analysis for: Batch {batchInfo.batch_id}</span>

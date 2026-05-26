@@ -16,12 +16,15 @@ export default function Shap({ rawFeatures, currentFeature }) {
       return { min: -1, max: 1 };
     }
 
-    const allShapValues = rawFeatures.map(item => {
-      if ('shap_value' in item) return parseFloat(item.shap_value) || 0;
-      if ('feature_importance' in item) return parseFloat(item.feature_importance) || 0;
-      if ('importance' in item) return parseFloat(item.importance) || 0;
-      return 0;
-    }).filter(val => typeof val === 'number' && !isNaN(val));
+    const allShapValues = rawFeatures
+      .map(item => {
+        if ('shap_value' in item) return parseFloat(item.shap_value) || 0;
+        if ('feature_importance' in item)
+          return parseFloat(item.feature_importance) || 0;
+        if ('importance' in item) return parseFloat(item.importance) || 0;
+        return 0;
+      })
+      .filter(val => typeof val === 'number' && !isNaN(val));
 
     const min = Math.min(...allShapValues);
     const max = Math.max(...allShapValues);
@@ -58,9 +61,11 @@ export default function Shap({ rawFeatures, currentFeature }) {
     Object.values(featureGroups).forEach(featureData => {
       // Create array with SHAP values
       const points = featureData.map((item, idx) => ({
-        x: parseFloat(item.shap_value || item.feature_importance || item.importance || 0),
+        x: parseFloat(
+          item.shap_value || item.feature_importance || item.importance || 0,
+        ),
         originalIdx: idx,
-        y: 0
+        y: 0,
       }));
 
       // Sort by x position (SHAP value)
@@ -73,7 +78,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       // Place each dot with collision detection
       const placedPoints = [];
 
-      points.forEach((point) => {
+      points.forEach(point => {
         let yPosition = 0;
         let placed = false;
         let attempts = 0;
@@ -95,9 +100,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
             placed = true;
           } else {
             attempts++;
-            yPosition = attempts % 2 === 0
-              ? (attempts / 2) * stackIncrement
-              : -(Math.ceil(attempts / 2)) * stackIncrement;
+            yPosition =
+              attempts % 2 === 0
+                ? (attempts / 2) * stackIncrement
+                : -Math.ceil(attempts / 2) * stackIncrement;
           }
         }
 
@@ -186,7 +192,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       const points = featureData.map((item, idx) => ({
         x: x[idx],
         originalIdx: idx,
-        y: 0 // Start all at center (y=0)
+        y: 0, // Start all at center (y=0)
       }));
 
       // Sort by x position (SHAP value) for proper stacking
@@ -199,7 +205,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       // Place each dot, checking for collisions
       const placedPoints = [];
 
-      points.forEach((point) => {
+      points.forEach(point => {
         let yPosition = 0; // Always start at center (y=0)
         let placed = false;
         let attempts = 0;
@@ -226,9 +232,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
             // Collision detected, try next position
             attempts++;
             // Alternate between positive and negative offsets: 0, +0.08, -0.08, +0.16, -0.16...
-            yPosition = attempts % 2 === 0
-              ? (attempts / 2) * stackIncrement
-              : -(Math.ceil(attempts / 2)) * stackIncrement;
+            yPosition =
+              attempts % 2 === 0
+                ? (attempts / 2) * stackIncrement
+                : -Math.ceil(attempts / 2) * stackIncrement;
           }
         }
 
@@ -291,7 +298,7 @@ export default function Shap({ rawFeatures, currentFeature }) {
       y,
       featureValues,
       studentSupportScores,
-      dataType
+      dataType,
     };
   }, [currentFeature, rawFeatures]);
 
@@ -302,9 +309,10 @@ export default function Shap({ rawFeatures, currentFeature }) {
     const maxVal = Math.max(...allValues.filter(v => typeof v === 'number'));
 
     // Normalize to 0-1 based on actual data range
-    const normalized = maxVal === minVal
-      ? 0.5
-      : Math.max(0, Math.min(1, (featureValue - minVal) / (maxVal - minVal)));
+    const normalized =
+      maxVal === minVal
+        ? 0.5
+        : Math.max(0, Math.min(1, (featureValue - minVal) / (maxVal - minVal)));
 
     // Convert hex colors to RGB for interpolation
     const color1 = { r: 178, g: 241, b: 249 }; // #B2F1F9 (light blue) for low values
@@ -336,15 +344,18 @@ export default function Shap({ rawFeatures, currentFeature }) {
               type: 'scatter',
               marker: {
                 size: 12,
-                color: plotData.dataType === 'Categorical'
-                  ? '#808080'  // Gray for categorical features or all the same values
-                  : plotData.featureValues.map(val =>
-                    typeof val === 'number' ? getColor(val, plotData.featureValues) : '#ccc',
-                  ),
+                color:
+                  plotData.dataType === 'Categorical'
+                    ? '#808080' // Gray for categorical features or all the same values
+                    : plotData.featureValues.map(val =>
+                        typeof val === 'number'
+                          ? getColor(val, plotData.featureValues)
+                          : '#ccc',
+                      ),
                 opacity: 1.0,
                 line: {
                   width: 0.5,
-                  color: 'rgba(255, 255, 255, 0.3)'
+                  color: 'rgba(255, 255, 255, 0.3)',
                 },
               },
               text: plotData.x.map((val, idx) => {

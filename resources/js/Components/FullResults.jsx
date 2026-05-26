@@ -136,13 +136,13 @@ export default function FullResults() {
             <tbody>
               {features.slice(0, 10).map(feature => (
                 <tr key={feature.name} className="align-top">
-                  <td className="w-1/3 border-b border-t border-[#e5e7eb] py-3 pr-4">
+                  <td className="w-1/3 border-t border-b border-[#e5e7eb] py-3 pr-4">
                     <div className="cursor-pointer font-semibold text-[#1a4b5c] hover:underline">
                       {feature.name}
                     </div>
                     <div className="text-xs text-[#637381]">{feature.desc}</div>
                   </td>
-                  <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
+                  <td className="w-2/3 border-t border-b border-[#e5e7eb] py-3">
                     <Shap />
                   </td>
                 </tr>

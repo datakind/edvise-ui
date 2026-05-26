@@ -53,14 +53,14 @@ export default function Faq({ className }) {
                 <h3 className="type:section-title mb-7 sm:mb-10">
                   {section.title}
                 </h3>
-                <p className="relative mb-8 text-base font-light leading-[120%] sm:mb-16">
+                <p className="relative mb-8 text-base leading-[120%] font-light sm:mb-16">
                   {section.description}
                 </p>
                 <div className="space-y-5">
                   {section.faqs.map((faq, index) => (
                     <div key={faq.question + `-${index}`}>
                       <Accordion title={faq.question}>
-                        <p className="font-light tb:text-[20px]">
+                        <p className="tb:text-[20px] font-light">
                           {faq.answer}
                         </p>
                       </Accordion>

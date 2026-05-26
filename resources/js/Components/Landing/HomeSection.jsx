@@ -74,7 +74,7 @@ export default function AdvisorsSection(props) {
           {testimonies.map(testimony => (
             <div
               key={testimony.name}
-              className="col-span-full items-stretch tb:col-span-6 tb:col-start-2 md:col-span-6"
+              className="tb:col-span-6 tb:col-start-2 col-span-full items-stretch md:col-span-6"
             >
               <div className="relative flex h-full flex-col">
                 <div className="landing-rounded-md relative z-10 aspect-[396/360] max-h-[400px] w-full overflow-hidden !rounded-b-none">
@@ -86,7 +86,7 @@ export default function AdvisorsSection(props) {
                     />
                   )}
                 </div>
-                <div className="landing-rounded-md relative z-40 mt-[-40px] flex-1 bg-[#EEF2F6] p-6 md:pb-12 md:pl-7 md:pr-14 md:pt-7">
+                <div className="landing-rounded-md relative z-40 mt-[-40px] flex-1 bg-[#EEF2F6] p-6 md:pt-7 md:pr-14 md:pb-12 md:pl-7">
                   <div className="mb-6 flex gap-5">
                     <div className="bg-landing-orange flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full">
                       <span className="font-landing-secondary relative top-[4px] text-[28px] leading-none">
@@ -94,10 +94,10 @@ export default function AdvisorsSection(props) {
                       </span>
                     </div>
                     <div className="mt-[8px]">
-                      <h3 className="mb-1.5 text-[22px] font-light leading-none">
+                      <h3 className="mb-1.5 text-[22px] leading-none font-light">
                         {testimony.name}
                       </h3>
-                      <p className="text-base font-light leading-none">
+                      <p className="text-base leading-none font-light">
                         {testimony.role}
                       </p>
                     </div>
@@ -106,7 +106,7 @@ export default function AdvisorsSection(props) {
                     {testimony.quotes.map(quote => (
                       <p
                         key={quote.substring(0, 20)}
-                        className="text-[18px] font-light leading-tight text-[#4F4F4F]"
+                        className="text-[18px] leading-tight font-light text-[#4F4F4F]"
                       >
                         {quote}
                       </p>

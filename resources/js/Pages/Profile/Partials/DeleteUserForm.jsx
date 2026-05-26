@@ -45,7 +45,7 @@ export default function DeleteUserForm() {
         data or information that you wish to retain.
       </div>
 
-      <div className="flex items-center mt-5">
+      <div className="mt-5 flex items-center">
         <DangerButton onClick={confirmUserDeletion}>
           Delete Account
         </DangerButton>

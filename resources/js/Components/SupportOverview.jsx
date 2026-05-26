@@ -314,7 +314,9 @@ export default function SupportOverview({ setTab, run_id }) {
                   y:
                     (Math.max(
                       ...inferenceData.map(item => item.count_of_students),
-                    ) + 10) * 1.05,
+                    ) +
+                      10) *
+                    1.05,
                   xref: 'x',
                   yref: 'y',
                   text: 'Students in greater<br>need of support',

@@ -19,10 +19,10 @@ export default function Accordion({ children, title }) {
       >
         <span className="relative top-[0.125em] text-left">{title}</span>
         <div className="plus-icon relative h-[18px] w-[18px]">
-          <div className="plus-icon-line absolute left-1/2 top-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 bg-black" />
+          <div className="plus-icon-line absolute top-1/2 left-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 bg-black" />
           <div
             className={clx(
-              'plus-icon-line absolute left-1/2 top-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 rotate-90 bg-black transition-all duration-300',
+              'plus-icon-line absolute top-1/2 left-1/2 h-[2px] w-full -translate-x-1/2 -translate-y-1/2 rotate-90 bg-black transition-all duration-300',
               {
                 'scale-x-0': open,
               },

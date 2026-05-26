@@ -105,7 +105,7 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
           id="role"
           value={addTeamMemberForm.data.role}
           onChange={e => addTeamMemberForm.setData('role', e.target.value)}
-          className="w-2/3 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          className="focus:ring-opacity-50 mt-1 block w-2/3 w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500"
         >
           <option value="" disabled>
             Select a role
@@ -155,7 +155,7 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
             id="role"
             value={updateRoleForm.data.role}
             onChange={e => updateRoleForm.setData('role', e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500"
           >
             <option value="" disabled>
               Select a role

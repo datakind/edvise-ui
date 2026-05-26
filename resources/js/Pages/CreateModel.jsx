@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
@@ -6,45 +6,52 @@ import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 
 // Can be used to create new models or enable webapp access to existing models only created in databricks.
 export default function CreateModel() {
-  const schemas = [
-    { name: 'Custom', selected: false },
-    { name: 'PDP', selected: false },
-  ];
+  const [nameError, setNameError] = useState('');
+
   const handleSubmit = event => {
     event.preventDefault();
-    let schemaConfig = [];
-    if (event.target.elements.PDP.checked) {
-      schemaConfig.push([
-        { schema_type: 'STUDENT', optional: false, multiple_allowed: false },
-        { schema_type: 'SEMESTER', optional: true, multiple_allowed: false },
-        { schema_type: 'COURSE', optional: false, multiple_allowed: false },
-      ]);
+    setNameError('');
+    const form = event.currentTarget;
+    const input = form.elements.model_name;
+    if (!input.checkValidity()) {
+      setNameError(input.validationMessage);
+      input.focus();
+      return;
     }
-    if (event.target.elements.Custom.checked) {
-      schemaConfig.push([
-        { schema_type: 'UNKNOWN', optional: false, multiple_allowed: true },
-      ]);
-    }
-    let validBool = event.target.elements.valid.value == 'Valid';
     return axios({
       method: 'post',
       url: '/create-model',
       data: {
-        name: event.target.elements.model_name.value,
-        valid: validBool,
-        schema_configs: schemaConfig,
+        name: input.value,
       },
     })
       .then(() => {
+        setNameError('');
         document.getElementById('result_area').innerHTML = 'Done';
       })
       .catch(e => {
-        if (e.response) {
-          document.getElementById('result_area').innerHTML =
-            'Error ' + JSON.stringify(e.response.data.error);
-        } else {
-          document.getElementById('result_area').innerHTML = JSON.stringify(e);
+        // Laravel puts FastAPI `detail` in `error`; it is usually a string but can be an array (e.g. validation).
+        const raw = e.response?.data?.error;
+        const msg =
+          typeof raw === 'string'
+            ? raw
+            : Array.isArray(raw)
+              ? raw
+                  .map(item =>
+                    typeof item === 'string'
+                      ? item
+                      : (item?.msg ?? JSON.stringify(item)),
+                  )
+                  .join(' ')
+              : raw != null
+                ? String(raw)
+                : '';
+        if (msg) {
+          setNameError(msg);
         }
+        document.getElementById('result_area').innerHTML = e.response
+          ? `Error ${JSON.stringify(e.response.data)}`
+          : JSON.stringify(e);
       });
   };
 
@@ -68,92 +75,35 @@ export default function CreateModel() {
         ></HeaderLabel>
         <form
           className="w-full max-w-full pt-24 pr-36 pl-36"
+          noValidate
+          onReset={() => setNameError('')}
           onSubmit={handleSubmit}
         >
-          <div id="form_contents" className="flex flex-col gap-y-6">
-            <div className="flex w-full flex-row gap-x-6">
-              <div className="flex w-full flex-col">
-                <label
-                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                  id="model_name"
-                >
-                  Model Name
-                </label>
-                <input
-                  name="model_name"
-                  className="mb-3 block w-full appearance-none rounded border border-red-500 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
-                  type="text"
-                  placeholder="Model Name (corresponding to the Databricks model name)"
-                ></input>
-                <p className="text-xs text-red-500 italic">Required field.</p>
-              </div>
-            </div>
-            <div className="flex w-1/2 flex-row items-center gap-x-3">
-              <input
-                type="radio"
-                id="valid"
-                name="model_valid"
-                defaultValue="Valid"
-                defaultChecked={true}
-              ></input>
-              <label htmlFor="valid">
-                Model is &quot;valid&quot; (i.e. ready for use).
-              </label>
-            </div>
-            <div className="flex w-full flex-row gap-x-6">
-              <div className="flex w-1/2 flex-col">
-                <fieldset>
-                  <legend className="text-base font-semibold text-gray-900">
-                    Batch schema configs accepted by this model
-                  </legend>
-                  <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
-                    {schemas.map((schem, idx) => (
-                      <div key={idx} className="flex gap-3">
-                        <div className="min-w-0 flex-1 text-sm/6">
-                          <input
-                            defaultChecked={schem.selected}
-                            id={`${schem.name}`}
-                            name={`${schem.name}`}
-                            type="checkbox"
-                            className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-blue-600 checked:bg-blue-600 indeterminate:border-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                          />
-                          <label
-                            htmlFor={`${schem.name}`}
-                            className="m-2 font-medium text-gray-900 select-none"
-                          >
-                            {schem.name}
-                          </label>
-                        </div>
-                        <div className="flex h-6 shrink-0 items-center">
-                          <div className="group grid size-4 grid-cols-1">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 14 14"
-                              className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
-                            >
-                              <path
-                                d="M3 8L6 11L11 3.5"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:checked]:opacity-100"
-                              />
-                              <path
-                                d="M3 7H11"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="opacity-0 group-has-[:indeterminate]:opacity-100"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </fieldset>
-              </div>
-            </div>
+          <div className="flex w-full flex-col">
+            <label htmlFor="model_name">Model Name</label>
+            <input
+              id="model_name"
+              name="model_name"
+              type="text"
+              className={nameError ? 'error' : ''}
+              placeholder="Model Name (corresponding to the Databricks model name)"
+              required
+              autoComplete="off"
+              pattern="[A-Za-z0-9_ -]*"
+              title="Letters, numbers, spaces, hyphens, and underscores only"
+              aria-invalid={nameError ? true : undefined}
+              aria-describedby={nameError ? 'model_name-error' : undefined}
+              onInput={() => setNameError('')}
+            />
+            {nameError ? (
+              <p
+                id="model_name-error"
+                role="alert"
+                className="text-danger mt-2 text-sm"
+              >
+                {nameError}
+              </p>
+            ) : null}
           </div>
           <div className="flex w-full justify-center gap-x-6 pt-12">
             <button type="reset" className="btn btn-secondary">

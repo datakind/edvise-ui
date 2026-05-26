@@ -147,7 +147,7 @@ const navigationBelowLine = [
 ];
 
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
-export default function AppLayout({ title, renderHeader, children }) {
+export default function AppLayout({ title, children }) {
   const { auth, jetstream } = useTypedPage().props;
   const { institution } = usePage().props;
   const hasInstId = institution?.inst_id;
@@ -162,8 +162,6 @@ export default function AppLayout({ title, renderHeader, children }) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const pathname = window.location.pathname;
 
   function dashboardNavHelper(item, modelData) {
     if (
@@ -222,7 +220,7 @@ export default function AppLayout({ title, renderHeader, children }) {
               (!item.children || item.children.length === 0)
             ),
         );
-      } catch (err) {
+      } catch {
         console.log('error during fetchModels');
       }
 

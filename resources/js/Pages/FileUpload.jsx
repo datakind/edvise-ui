@@ -67,7 +67,7 @@ export default function FileUpload() {
       .then(res => {
         setModelsList(res.data);
       })
-      .catch(err => {
+      .catch(() => {
         // TODO bubble out these errors
         console.log('error with model fetch');
       });
@@ -347,11 +347,6 @@ export default function FileUpload() {
 
   const MAX_FILE_BYTES = 1000 * 1024 * 1024; // limit 1 GB
 
-  const resetUploader = () => {
-    setFileStatus({});
-    setFiles([]);
-  };
-
   const fileSelectedHandler = event => {
     fileHandler(event.target.files);
   };
@@ -469,7 +464,7 @@ export default function FileUpload() {
         file_names: batchFileNames,
       },
     })
-      .then(res => {
+      .then(() => {
         setBatchName(batchConstructed);
         setBatchCreationResult('ok');
         setStartPrediction(startPred);
@@ -483,24 +478,6 @@ export default function FileUpload() {
         }
         setBatchCreationResult('Error: ' + err);
         setStartPrediction(startPred);
-      });
-  };
-
-  // Show file info (for the + Add File feature)
-  // TODO delete?
-  const viewData = () => {
-    return axios
-      .get('/view-uploaded-data')
-      .then(res => {
-        // TODO populate
-      })
-      .catch(e => {
-        let err = '';
-        if (e.response) {
-          err = e.response.data.error;
-        } else {
-          err = JSON.stringify(e);
-        }
       });
   };
 
@@ -538,14 +515,14 @@ export default function FileUpload() {
             }
             return axios
               .put(res.data, file, config)
-              .then(res1 => {
+              .then(() => {
                 return axios
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
                     { timeout: 0 },
                   )
-                  .then(res2 => {
+                  .then(() => {
                     localValidationResults[filenameConstructed] = 'ok';
                     return;
                   })

@@ -1,18 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import AppLayout from '@/Layouts/AppLayout';
-import LoadingDots from '@/Components/LoadingDots';
+import React from 'react';
 import '../../css/landing.css';
 import GuestHeader from '@/Components/Landing/GuestHeader';
 import { LenisProvider } from '@/Components/Landing/LenisProvider';
-import Hero from '@/Components/Landing/Hero';
-import AdvisorsSection from '@/Components/Landing/AdvisorsSection';
-import ProductSection from '@/Components/Landing/ProductSection';
-import ImpactSection from '@/Components/Landing/ImpactSection';
-import CaseStudySection from '@/Components/Landing/CaseStudySection';
-import Faq from '@/Components/Landing/Faq';
-import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
-import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 
 export default function GuestLayout({ children }) {

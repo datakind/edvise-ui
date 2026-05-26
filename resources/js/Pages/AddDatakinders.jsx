@@ -1,5 +1,4 @@
-import React, { useState, ChangeEvent, useRef, useEffect } from 'react';
-import { Link } from '@inertiajs/react';
+import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
@@ -26,7 +25,7 @@ export default function AddDatakinders() {
         emails: usrs,
       },
     })
-      .then(res => {
+      .then(() => {
         document.getElementById('result_area').innerHTML = 'Done';
       })
       .catch(e => {

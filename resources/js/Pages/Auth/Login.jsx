@@ -1,12 +1,9 @@
 import { Link, useForm, Head } from '@inertiajs/react';
 import React from 'react';
-import { router } from '@inertiajs/react';
-import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import Checkbox from '@/Components/Fields/Checkbox';
 import InputError from '@/Components/Modals/InputError';
 import AuthLayout from '@/Layouts/AuthLayout';
 import AuthFooter from '@/Components/AuthFooter';
-import Button from '@/Components/Landing/Button';
 
 export default function Login({ canResetPassword, status }) {
   const form = useForm({

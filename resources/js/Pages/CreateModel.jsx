@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
@@ -36,7 +35,7 @@ export default function CreateModel() {
         schema_configs: schemaConfig,
       },
     })
-      .then(res => {
+      .then(() => {
         document.getElementById('result_area').innerHTML = 'Done';
       })
       .catch(e => {

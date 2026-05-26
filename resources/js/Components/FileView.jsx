@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { XCircleIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import {
   TrashIcon,
@@ -9,7 +8,6 @@ import {
 export default function FileView({ className }) {
   const [fileList, setFileList] = useState([]);
   const [batchList, setBatchList] = useState([]);
-  const [error, setError] = useState(null);
   useEffect(() => {
     axios
       .get('/view-uploaded-data')
@@ -17,9 +15,7 @@ export default function FileView({ className }) {
         setFileList(res.data.files);
         setBatchList(res.data.batches);
       })
-      .catch(err => {
-        setError(JSON.stringify(err));
-      });
+      .catch(() => {});
   }, []);
 
   return (

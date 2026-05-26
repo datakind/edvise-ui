@@ -1,7 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import ActionSection from '@/Components/Sections/ActionSection';
 import Checkbox from '@/Components/Fields/Checkbox';

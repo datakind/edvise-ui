@@ -1,7 +1,6 @@
 import { Link, useForm, Head } from '@inertiajs/react';
 import classNames from 'classnames';
 import React from 'react';
-import { router } from '@inertiajs/react';
 import AuthLayout from '@/Layouts/AuthLayout';
 import AuthFooter from '@/Components/AuthFooter';
 import Button from '@/Components/Landing/Button';

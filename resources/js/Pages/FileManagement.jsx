@@ -1,13 +1,10 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import FileView from '@/Components/FileView';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 // Skeleton for the download inf data page.
 export default function FileManagement() {
-  const [files, setFiles] = useState({});
-  const [batches, setBatches] = useState({});
   // csv as 2d matrix
   const tableCreate = parsedValues => {
     const tbl = document.createElement('table');
@@ -26,20 +23,6 @@ export default function FileManagement() {
     return tbl;
   };
 
-  // TODO: delete or use
-  const getOutputFilesAndBatchesToView = () => {
-    return axios
-      .get('/view-output-data')
-      .then(res => {
-        let constructFileDict = {};
-        setFiles(res.data.files);
-        setBatches(res.data.batches);
-      })
-      .catch(err => {
-        console.log('errors');
-      });
-  };
-
   const triggerDownload = () => {
     document.getElementById('result_area').innerHTML = '';
 
@@ -50,7 +33,7 @@ export default function FileManagement() {
       return;
     }
 
-    const output = axios
+    axios
       .get('/download-inf-data/' + filename)
       .then(res => {
         window.open(res.data, '_self');
@@ -71,7 +54,7 @@ export default function FileManagement() {
         'Please add a valid filename';
       return;
     }
-    const output = axios
+    axios
       .get('/download-inf-data/' + filename)
       .then(res => {
         fetch(res.data)

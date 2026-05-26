@@ -71,7 +71,7 @@ const mockInferenceData = [
   },
 ];
 
-export default function SupportOverview({ tab, setTab, run_id }) {
+export default function SupportOverview({ setTab, run_id }) {
   const { institution } = usePage().props;
   // Only use mock data as initial state in local development
   const isLocalDev =
@@ -101,7 +101,7 @@ export default function SupportOverview({ tab, setTab, run_id }) {
         const response = await axios.get(apiUrl);
         setInferenceData(response.data);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Failed to load support overview data');
         // Only use mock data in local development
         if (

@@ -1,5 +1,4 @@
 import VideoModule from '@/Components/Landing/VideoModule';
-import { useState } from 'react';
 export default function CaseStudySection({ className }) {
   return (
     <>

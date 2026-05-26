@@ -1,4 +1,4 @@
-export default function UploadSymbol(props) {
+export default function UploadSymbol() {
   return (
     <div className="flex h-[2rem] text-primary">
       <svg

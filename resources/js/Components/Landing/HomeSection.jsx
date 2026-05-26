@@ -71,7 +71,7 @@ export default function AdvisorsSection(props) {
           </div>
         </div>
         <div className="layout:grid advisor-section-grid gap-y-7 md:gap-y-0">
-          {testimonies.map((testimony, index) => (
+          {testimonies.map(testimony => (
             <div
               key={testimony.name}
               className="col-span-full items-stretch tb:col-span-6 tb:col-start-2 md:col-span-6"

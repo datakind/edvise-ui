@@ -70,10 +70,6 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
     );
   };
 
-  const confirmTeamMemberRemoval = member => {
-    setTeamMemberBeingRemoved(member);
-  };
-
   const removeTeamMember = () => {
     if (!teamMemberBeingRemoved) return;
 

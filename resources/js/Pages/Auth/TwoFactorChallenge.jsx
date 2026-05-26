@@ -1,14 +1,10 @@
 import { useForm, Head } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
-import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import InputLabel from '@/Components/Fields/InputLabel';
 import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';
-import AppLayout from '@/Layouts/AppLayout';
 import AuthLayout from '@/Layouts/AuthLayout';
-import AuthFooter from '@/Components/AuthFooter';
 import Button from '@/Components/Landing/Button';
 
 export default function TwoFactorChallenge() {

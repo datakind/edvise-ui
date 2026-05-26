@@ -1,8 +1,6 @@
 import { useForm, Head } from '@inertiajs/react';
 import classNames from 'classnames';
 import React from 'react';
-import { router } from '@inertiajs/react';
-import AuthenticationCard from '@/Components/Modals/AuthenticationCard';
 import InputLabel from '@/Components/Fields/InputLabel';
 import TextInput from '@/Components/Fields/TextInput';
 import InputError from '@/Components/Modals/InputError';

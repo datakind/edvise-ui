@@ -1,8 +1,6 @@
-import { usePage } from '@inertiajs/react';
 import React from 'react';
 
 export default function Footer() {
-  const { appVersion } = usePage().props;
   return (
     <footer className="bg-[#EEF2F6] py-12 pb-2">
       <div className="flex flex-col border-b border-gray-300 pb-2 md:flex-row md:items-center md:justify-between md:px-12">

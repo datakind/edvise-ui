@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import InputError from '@/Components/Modals/InputError';

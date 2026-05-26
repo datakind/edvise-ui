@@ -8,7 +8,7 @@ import { usePage } from '@inertiajs/react';
 
 export default function DemoForm({ className, formId, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { flash = {}, ziggy = {} } = usePage().props;
+  const { flash = {} } = usePage().props;
 
   const form = useForm({
     name: '',

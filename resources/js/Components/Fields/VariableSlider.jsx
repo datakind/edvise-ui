@@ -9,7 +9,6 @@ const VariableSlider = ({
   sliderValues,
   setSliderValues,
   availableVariables,
-  hasOutliers,
 }) => {
   const getUnit = variable => {
     const variableInfo = availableVariables.find(

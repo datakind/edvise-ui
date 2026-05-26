@@ -1,6 +1,6 @@
 import clx from 'classnames';
 import { useState } from 'react';
-export default function Accordion({ className, children, title }) {
+export default function Accordion({ children, title }) {
   const [open, setOpen] = useState(false);
   return (
     <div

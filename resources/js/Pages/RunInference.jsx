@@ -1,18 +1,14 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import Steppers from '@/Components/Steppers';
-import HeaderLabel from '@/Components/HeaderLabel';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from '@inertiajs/react';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 
 export default function RunInference() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep] = useState(1);
   const [triggeredRun, setTriggeredRun] = useState(false);
   const [result, setResult] = useState('');
-  const steps = [{ label: 'Start Prediction', step: 1 }];
 
   const [batchList, setBatchList] = useState([]);
   const [modelsList, setModelsList] = useState([]);
@@ -114,7 +110,7 @@ export default function RunInference() {
     );
   };
 
-  const renderPredictionParamInputs = currentStep => {
+  const renderPredictionParamInputs = () => {
     return (
       <div className="flex w-full flex-col items-center justify-center p-12">
         <h1 className="mb-12 text-5xl font-light">Start Prediction</h1>

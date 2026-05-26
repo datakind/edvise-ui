@@ -1,7 +1,6 @@
 import { Link, useForm } from '@inertiajs/react';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
+import React, { useState } from 'react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
@@ -15,8 +14,6 @@ export default function UpdateProfileInformationForm({ user }) {
     email: user.email,
     photo: null,
   });
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const photoRef = useRef(null);
   const page = useTypedPage();
   const [verificationLinkSent, setVerificationLinkSent] = useState(false);
   function updateProfileInformation() {
@@ -26,35 +23,8 @@ export default function UpdateProfileInformationForm({ user }) {
       onSuccess: () => clearPhotoFileInput(),
     });
   }
-  function selectNewPhoto() {
-    photoRef.current?.click();
-  }
-  function updatePhotoPreview() {
-    const photo = photoRef.current?.files?.[0];
-    if (!photo) {
-      return;
-    }
-    form.setData('photo', photo);
-    const reader = new FileReader();
-    reader.onload = e => {
-      setPhotoPreview(e.target?.result);
-    };
-    reader.readAsDataURL(photo);
-  }
-  function deletePhoto() {
-    router.delete(route('current-user-photo.destroy'), {
-      preserveScroll: true,
-      onSuccess: () => {
-        setPhotoPreview(null);
-        clearPhotoFileInput();
-      },
-    });
-  }
   function clearPhotoFileInput() {
-    if (photoRef.current?.value) {
-      photoRef.current.value = '';
-      form.setData('photo', null);
-    }
+    form.setData('photo', null);
   }
   return (
     <FormSection

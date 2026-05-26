@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Head, usePage } from '@inertiajs/react';
+import React from 'react';
+import { Head } from '@inertiajs/react';
 import { LenisProvider } from '@/Components/Landing/LenisProvider';
-import Header from '@/Components/Landing/Header';
 import '../../css/landing.css';
 
 export default function AuthLayout({ children }) {

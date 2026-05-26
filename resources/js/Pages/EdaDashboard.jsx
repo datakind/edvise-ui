@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Head, usePage, router } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout';
@@ -7,7 +7,6 @@ import PageHeading from '@/Components/PageHeading';
 import H2 from '@/Components/H2';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
-import Spinner from '@/Components/Spinner';
 import wrap from 'word-wrap';
 import { getBatchInfo } from '@/utils/batchUtils';
 
@@ -202,11 +201,7 @@ const enrollmentIntensityOptions = gpaData => {
   return GpaChartOptions({ gpaData });
 };
 
-const createHorizontalStackedBarOption = ({
-  xAxisName,
-  termChartData,
-  yAxisName = 'Cohort Year',
-}) => {
+const createHorizontalStackedBarOption = ({ xAxisName, termChartData }) => {
   const y_axis_labels =
     termChartData?.years || termChartData?.y_axis_labels || [];
   const by_year = termChartData?.by_year || [];
@@ -435,7 +430,6 @@ const createVerticalStackedBarOption = ({
   xAxisName,
   categories,
   data,
-  maxValue,
   legendData,
 }) => ({
   ...baseEChartsConfig,
@@ -898,7 +892,6 @@ export default function EdaDashboard({ batch_id: propBatchId, clear_cache = fals
                         option={createHorizontalStackedBarOption({
                           xAxisName: 'Number of Students',
                           termChartData: edaData.students_by_cohort_term,
-                          yAxisName: 'Cohort Year',
                         })}
                       />
                     )}

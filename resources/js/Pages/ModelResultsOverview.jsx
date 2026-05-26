@@ -20,8 +20,6 @@ import '../../css/landing.css';
 import { formatModelName } from '../utils/stringUtils';
 import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
 
-const route = window.route;
-
 // Helper function to convert to title case
 const capitalizeFirstWord = str => {
   if (!str) return str;

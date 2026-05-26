@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities -- legal terms; quotes and apostrophes are intentional */
 import React from 'react';
 
 export default function TermsText() {

@@ -8,7 +8,7 @@ export default function SuccessAlert({ errDict, mainMsg, className }) {
     <div className={className}>
       <div className="inline-flex rounded-lg bg-[#DAF8E6] px-[18px] py-4 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)]">
         <div className="flex items-center text-sm font-medium text-[#004434]">
-          <span className="mr-3 flex h-5 w-5 items-center justify-center rounded-full bg-green">
+          <span className="bg-green mr-3 flex h-5 w-5 items-center justify-center rounded-full">
             <svg
               width="12"
               height="12"

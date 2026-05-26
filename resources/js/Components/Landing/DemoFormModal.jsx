@@ -15,7 +15,7 @@ export default function DemoFormModal({ open, setOpen }) {
         <DialogPanel className="layout:max-width landing-rounded-md relative w-full !overflow-y-auto bg-white py-8 sm:py-12">
           <button
             onClick={() => setOpen(false)}
-            className="absolute right-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black p-2 transition-colors duration-200 hover:bg-[#1E343F] focus:outline-[var(--landing-color-orange)]"
+            className="absolute top-5 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black p-2 transition-colors duration-200 hover:bg-[#1E343F] focus:outline-[var(--landing-color-orange)]"
             type="button"
           >
             <svg

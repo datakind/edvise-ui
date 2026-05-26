@@ -5,10 +5,11 @@ import { useState } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 
 export default function DemoForm({ className, formId, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { flash = {}, ziggy = {} } = usePage().props;
+  const { flash = {} } = usePage().props;
 
   const form = useForm({
     name: '',
@@ -68,12 +69,12 @@ export default function DemoForm({ className, formId, onSuccess }) {
           name={name}
           value={form.data[name]}
           onChange={e => form.setData(name, e.target.value)}
-          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pl-5 pt-[calc(8px_+_0.125em)] focus:border-[#F79122] focus:ring-[#F79122]"
+          className="invalid-d:border-[#F52020] peer block h-12 w-full rounded-full border-[#949494] pt-[calc(8px_+_0.125em)] pl-5 focus:border-[#F79122] focus:ring-[#F79122]"
           required={required}
           placeholder={placeholder}
         />
         {form.errors[name] && (
-          <p className="absolute left-4 top-[calc(100%_-_4px)] text-[#F52020]">
+          <p className="absolute top-[calc(100%_-_4px)] left-4 text-[#F52020]">
             {form.errors[name]}
           </p>
         )}
@@ -139,14 +140,15 @@ export default function DemoForm({ className, formId, onSuccess }) {
       </div>
 
       <div>
-        <p className="mb-3 mt-4 text-base">
+        <p className="mt-4 mb-3 text-base">
           Edvise currently serves U.S.-based colleges and universities. We’ll
-          respond to those inquiries within two business days. If you're outside
-          the U.S. and want to learn more about our work, please{' '}
+          respond to those inquiries within two business days. If you&apos;re
+          outside the U.S. and want to learn more about our work, please{' '}
           <a
             className="text-[#4F4F4F] underline hover:font-semibold"
             href="https://www.datakind.org/newsletter/"
             target="_blank"
+            rel="noreferrer"
           >
             sign up for our newsletter
           </a>

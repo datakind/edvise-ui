@@ -87,9 +87,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Left column: heading and description */}
         <div className="mb-4 w-full md:mb-0 md:w-1/4">
-          <H2 className="mb-2">
-            Original Feature Value Table
-          </H2>
+          <H2 className="mb-2">Original Feature Value Table</H2>
           <div className="mb-4 text-base text-black">
             The following chart shows how all features are weighted in the
             model.
@@ -103,19 +101,19 @@ export default function FeatureValue({ model_run_id, inst_id }) {
                 <tr className="rounded-t-3xl border-b border-b-black bg-[#F9FAFB]">
                   <th
                     scope="col"
-                    className="pb-2 pl-6 pt-6 text-xs font-medium text-[#6B7280]"
+                    className="pt-6 pb-2 pl-6 text-xs font-medium text-[#6B7280]"
                   >
                     FEATURE NAME
                   </th>
                   <th
                     scope="col"
-                    className="pb-2 pr-6 pt-6 text-center text-xs font-medium text-[#6B7280]"
+                    className="pt-6 pr-6 pb-2 text-center text-xs font-medium text-[#6B7280]"
                   >
                     DATA TYPE
                   </th>
                   <th
                     scope="col"
-                    className="pb-2 pr-6 pt-6 text-left text-xs font-medium text-[#6B7280]"
+                    className="pt-6 pr-6 pb-2 text-left text-xs font-medium text-[#6B7280]"
                   >
                     OVERALL FEATURE IMPORTANCE
                   </th>

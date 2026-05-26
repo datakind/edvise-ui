@@ -29,7 +29,7 @@ const DropdownButton = ({
   }, []);
   return (
     <button
-      className={`w-full p-2 px-4 rounded-full flex justify-between text-left gap-2 items-center min-h-[36px] ${selectedVariables ? 'bg-gray-300' : 'bg-gray-100'}`}
+      className={`flex min-h-[36px] w-full items-center justify-between gap-2 rounded-full p-2 px-4 text-left ${selectedVariables ? 'bg-gray-300' : 'bg-gray-100'}`}
       onClick={() => setDropdownOpen(!dropdownOpen)}
     >
       {selectedVariables ? (
@@ -37,7 +37,7 @@ const DropdownButton = ({
       ) : (
         <span className="italic">None selected</span>
       )}
-      <ChevronDownIcon className="w-4 h-4 text-gray shrink-0" />
+      <ChevronDownIcon className="text-gray h-4 w-4 shrink-0" />
     </button>
   );
 };

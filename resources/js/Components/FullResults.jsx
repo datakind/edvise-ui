@@ -84,7 +84,7 @@ export default function FullResults() {
               <ul className="ml-5 list-disc">
                 <li>
                   Charts show the features that have the most influence on this
-                  cohort of students' support scores.
+                  cohort of students&apos; support scores.
                 </li>
                 <li>
                   Features are sorted from top to bottom in order of importance.
@@ -136,13 +136,13 @@ export default function FullResults() {
             <tbody>
               {features.slice(0, 10).map(feature => (
                 <tr key={feature.name} className="align-top">
-                  <td className="w-1/3 border-b border-t border-[#e5e7eb] py-3 pr-4">
+                  <td className="w-1/3 border-t border-b border-[#e5e7eb] py-3 pr-4">
                     <div className="cursor-pointer font-semibold text-[#1a4b5c] hover:underline">
                       {feature.name}
                     </div>
                     <div className="text-xs text-[#637381]">{feature.desc}</div>
                   </td>
-                  <td className="w-2/3 border-b border-t border-[#e5e7eb] py-3">
+                  <td className="w-2/3 border-t border-b border-[#e5e7eb] py-3">
                     <Shap />
                   </td>
                 </tr>
@@ -157,7 +157,7 @@ export default function FullResults() {
       </div>
       <div className="mt-8 text-center text-xs text-[#637381]">
         Questions about how to interpret these results? Contact your account
-        representative, and they'd be happy to help!
+        representative, and they&apos;d be happy to help!
       </div>
       <footer className="mt-8 flex w-full justify-center gap-4 border-t py-4 text-xs text-[#637381]">
         <span>Privacy Policy</span>

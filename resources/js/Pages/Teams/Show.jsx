@@ -10,12 +10,12 @@ const Show = ({ team, availableRoles, permissions }) => {
     <AppLayout
       title="Team Settings"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Team Settings
         </h2>
       )}
     >
-      <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl py-10 sm:px-6 lg:px-8">
         <div>
           <UpdateTeamNameForm team={team} permissions={permissions} />
 

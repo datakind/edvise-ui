@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import AppLayout from '@/Layouts/AppLayout';
-import LoadingDots from '@/Components/LoadingDots';
+import React from 'react';
 import '../../css/landing.css';
 import Header from '@/Components/Landing/Header';
 import { LenisProvider } from '@/Components/Landing/LenisProvider';
@@ -12,7 +10,6 @@ import CaseStudySection from '@/Components/Landing/CaseStudySection';
 import Faq from '@/Components/Landing/Faq';
 import RequestDemoSection from '@/Components/Landing/RequestDemoSection';
 import Footer from '@/Components/Landing/Footer';
-import DotGrid from '@/Components/Landing/DotGrid';
 import { Head } from '@inertiajs/react';
 import CookieConsent from '@/Components/CookieConsent';
 
@@ -25,7 +22,7 @@ export default function Welcome() {
           content="Edvise is a scalable solution that empowers student support teams with data-driven insights to enhance efficiency and better serve students."
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
           rel="stylesheet"
@@ -78,7 +75,7 @@ export default function Welcome() {
               <Hero />
             </div>
             <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 sm:pb-44">
-              <div className="z-1 relative">
+              <div className="relative z-1">
                 <AdvisorsSection className="pt-20 md:pt-32" />
                 <ProductSection className="mb-40 pt-24 sm:pt-40" />
                 <ImpactSection />

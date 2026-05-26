@@ -52,7 +52,7 @@ export default function Dropdown({
         >
           <div
             className={classNames(
-              'rounded-md ring-1 ring-black ring-opacity-5',
+              'ring-opacity-5 rounded-md ring-1 ring-black',
               contentClasses,
             )}
           >

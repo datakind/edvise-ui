@@ -31,7 +31,7 @@ export default function ProductSection(props) {
       id="product"
     >
       <div className="layout:grid mb-14 md:mb-28">
-        <div className="col-span-8 tb:col-span-4 md:col-span-8">
+        <div className="tb:col-span-4 col-span-8 md:col-span-8">
           <p className="type:section-label mb-9 md:mb-12">The product</p>
           <h2 className="type:section-title mb-7">
             Get relevant,{' '}
@@ -41,20 +41,20 @@ export default function ProductSection(props) {
         </div>
       </div>
       <div className="product-list layout:grid">
-        <div className="products-wrapper relative col-start-1 col-end-[-1] space-y-8 tb:col-span-6 tb:col-start-2 md:col-span-full md:space-y-20">
+        <div className="products-wrapper tb:col-span-6 tb:col-start-2 relative col-start-1 col-end-[-1] space-y-8 md:col-span-full md:space-y-20">
           {products.map((product, index) => (
             <div
               className="product landing-rounded-md flex w-full flex-col items-stretch overflow-hidden md:h-[625px] md:flex-row"
               key={product.name}
             >
-              <div className="product-copy bg-[#1E343F] p-6 text-white md:min-w-[380px] md:max-w-[580px] md:basis-[42%] md:p-12">
+              <div className="product-copy bg-[#1E343F] p-6 text-white md:max-w-[580px] md:min-w-[380px] md:basis-[42%] md:p-12">
                 <h3 className="product-title mb-4 text-[22px] font-light md:mb-10">
                   {product.name}
                 </h3>
                 <p className="product-number font-landing-secondary mb-8 ml-[-14px] text-[150px] leading-none tracking-[-0.05em] md:mb-10 md:text-[240px]">
                   0{index + 1}
                 </p>
-                <p className="product-description max-w-[300px] text-base font-light leading-[120%] md:text-[22px]">
+                <p className="product-description max-w-[300px] text-base leading-[120%] font-light md:text-[22px]">
                   {product.description}
                 </p>
               </div>

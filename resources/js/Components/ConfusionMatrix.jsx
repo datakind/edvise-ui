@@ -163,19 +163,19 @@ export default function ConfusionMatrix({ model_run_id, modelName, inst_id }) {
       </div>
       <div className="relative flex items-center">
         {/* Y-axis label */}
-        <div className="absolute -left-8 top-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap text-lg font-light text-black">
+        <div className="absolute top-1/2 -left-8 -translate-y-1/2 -rotate-90 text-lg font-light whitespace-nowrap text-black">
           True Label
         </div>
         {/* False label (top) */}
-        <div className="absolute left-0 top-[22%] -translate-y-1/2 -rotate-90 whitespace-nowrap text-base font-light text-[#767676]">
+        <div className="absolute top-[22%] left-0 -translate-y-1/2 -rotate-90 text-base font-light whitespace-nowrap text-[#767676]">
           False
         </div>
         {/* True label (bottom) */}
-        <div className="absolute bottom-[22%] left-0 translate-y-1/2 -rotate-90 whitespace-nowrap text-base font-light text-[#767676]">
+        <div className="absolute bottom-[22%] left-0 translate-y-1/2 -rotate-90 text-base font-light whitespace-nowrap text-[#767676]">
           True
         </div>
         {/* Confusion matrix grid */}
-        <div className="flex-2 ml-12 flex min-w-0 flex-col items-center justify-center">
+        <div className="ml-12 flex min-w-0 flex-2 flex-col items-center justify-center">
           <div className="mb-2 text-lg font-semibold text-[#222]">
             Normalized Confusion Matrix
           </div>

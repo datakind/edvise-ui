@@ -302,20 +302,17 @@ export default function ManageUploads() {
 
   return (
     <AppLayout title="Manage Uploads">
-      <div
-        className="mx-12 mb-12 rounded-3xl bg-white pb-6"
-        id="main_area"
-      >
+      <div className="mx-12 mb-12 rounded-3xl bg-white pb-6" id="main_area">
         <h1 className="py-12 text-center text-5xl font-light">
           Manage Uploads
         </h1>
-        <div className="overflow-x-auto px-6" style={{ paddingBottom: '150px' }}>
-            <table
-              className="w-full table-auto text-left"
-              id="uploads-table"
-            >
+        <div
+          className="overflow-x-auto px-6"
+          style={{ paddingBottom: '150px' }}
+        >
+          <table className="w-full table-auto text-left" id="uploads-table">
             <thead>
-              <tr className="border-b border-gray-300 bg-gray-50 text-xs font-medium uppercase leading-normal tracking-[0.6px] text-gray-500">
+              <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
                 <th scope="col" className="p-4 px-6">
                   <button onClick={() => handleSort('batch')}>
                     <span className="inline-flex pr-2 align-middle">BATCH</span>
@@ -356,7 +353,7 @@ export default function ManageUploads() {
                   <></>
                 ) : (
                   <tr
-                    className="border-b border-gray-300 text-sm font-normal leading-5 text-gray-700"
+                    className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
                     key={upload.batch_id}
                   >
                     <td className="p-4 px-6">{upload.name}</td>
@@ -373,7 +370,7 @@ export default function ManageUploads() {
                     <td className="p-4 px-6 font-medium">
                       {upload.updated_at}
                     </td>
-                    <td className="relative p-4 px-6 font-medium overflow-visible">
+                    <td className="relative overflow-visible p-4 px-6 font-medium">
                       <OverflowMenu
                         items={actions.map(action => ({
                           ...action,

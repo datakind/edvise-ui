@@ -28,7 +28,7 @@ class DemoRequest extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Demo Request from ' . $this->formData['name'],
+            subject: 'New Demo Request from '.$this->formData['name'],
             to: 'education@datakind.org'
         );
     }

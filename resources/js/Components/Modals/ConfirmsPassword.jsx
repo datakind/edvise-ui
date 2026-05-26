@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
 import DialogModal from '@/Components/Modals/DialogModal';
 import InputError from '@/Components/Modals/InputError';
 import TextInput from '@/Components/Fields/TextInput';

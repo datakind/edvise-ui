@@ -154,17 +154,17 @@ return [
             'confirmPassword' => true,
             // 'window' => 0,
         ])] : [
-        Features::registration(),
-        Features::resetPasswords(),
-        // Enable email verification for non Local/Dev environments
-        Features::emailVerification(),
-        Features::updateProfileInformation(),
-        Features::updatePasswords(),
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => true,
-            // 'window' => 0,
-        ]),
-    ],
+            Features::registration(),
+            Features::resetPasswords(),
+            // Enable email verification for non Local/Dev environments
+            Features::emailVerification(),
+            Features::updateProfileInformation(),
+            Features::updatePasswords(),
+            Features::twoFactorAuthentication([
+                'confirm' => true,
+                'confirmPassword' => true,
+                // 'window' => 0,
+            ]),
+        ],
 
 ];

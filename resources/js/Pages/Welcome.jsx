@@ -75,7 +75,7 @@ export default function Welcome() {
               <Hero />
             </div>
             <div className="layout:box-container landing-rounded-lg relative bg-white pb-20 sm:pb-44">
-              <div className="z-1 relative">
+              <div className="relative z-1">
                 <AdvisorsSection className="pt-20 md:pt-32" />
                 <ProductSection className="mb-40 pt-24 sm:pt-40" />
                 <ImpactSection />

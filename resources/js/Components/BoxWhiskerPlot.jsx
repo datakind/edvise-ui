@@ -109,7 +109,7 @@ export default function BoxWhiskerPlot({
         max: xMax,
         splitNumber: 5,
         axisLabel: {
-          formatter: (value) => value.toFixed(2),
+          formatter: value => value.toFixed(2),
           color: '#222',
           fontFamily: 'Helvetica Neue',
           fontSize: 12,
@@ -206,7 +206,7 @@ export default function BoxWhiskerPlot({
   const xMax = max + padding;
 
   // Determine which label to show based on hover position
-  const getHoveredLabel = (xValue) => {
+  const getHoveredLabel = xValue => {
     if (!xValue) return null;
 
     // Calculate distances to each point and find the closest
@@ -231,7 +231,7 @@ export default function BoxWhiskerPlot({
 
   // Calculate label positions accounting for grid padding
   // Grid has left: 3%, right: 4%, so chart area is 93% of width
-  const getLabelLeft = (value) => {
+  const getLabelLeft = value => {
     // Calculate percentage within data range
     const dataPercent = ((value - xMin) / (xMax - xMin)) * 100;
     // Map to chart area: 3% offset + (dataPercent * 93%)
@@ -241,7 +241,7 @@ export default function BoxWhiskerPlot({
   return (
     <div
       className="relative"
-      onMouseMove={(e) => {
+      onMouseMove={e => {
         // Get mouse position relative to chart container
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -276,7 +276,7 @@ export default function BoxWhiskerPlot({
         opts={{ renderer: 'svg' }}
         notMerge={true}
         lazyUpdate={false}
-        onChartReady={(chart) => {
+        onChartReady={chart => {
           // Function to calculate and set overlay position
           const calculateOverlay = () => {
             if (!boxplotData) return;
@@ -288,7 +288,12 @@ export default function BoxWhiskerPlot({
                 const medianVal = parseFloat(boxplotData.median);
                 const q3Val = parseFloat(boxplotData.q_3);
 
-                if (isFinite(minVal) && isFinite(maxVal) && isFinite(medianVal) && isFinite(q3Val)) {
+                if (
+                  isFinite(minVal) &&
+                  isFinite(maxVal) &&
+                  isFinite(medianVal) &&
+                  isFinite(q3Val)
+                ) {
                   const medianPixel = chart.convertToPixel('xAxis', medianVal);
                   const q3Pixel = chart.convertToPixel('xAxis', q3Val);
                   const categoryPixel = chart.convertToPixel('yAxis', '');
@@ -300,7 +305,7 @@ export default function BoxWhiskerPlot({
                   // Start overlay at median (no offset needed if alignment is good)
                   const overlayLeft = medianPixel;
                   // Extend overlay to Q3 with slight extension for coverage
-                  const overlayWidth = (q3Pixel - medianPixel) + 1.5;
+                  const overlayWidth = q3Pixel - medianPixel + 1.5;
 
                   setOverlayStyle({
                     position: 'absolute',
@@ -334,12 +339,10 @@ export default function BoxWhiskerPlot({
       />
 
       {/* Light cyan overlay for right half (Median to Q3) */}
-      {overlayStyle && (
-        <div style={overlayStyle} />
-      )}
+      {overlayStyle && <div style={overlayStyle} />}
 
       {/* Dynamic hover labels - only show when hovering */}
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-full">
+      <div className="pointer-events-none absolute top-0 left-0 h-full w-full">
         {/* Minimum Label */}
         {hoveredLabel === 'min' && (
           <div
@@ -349,10 +352,10 @@ export default function BoxWhiskerPlot({
               top: '-2px',
             }}
           >
-            <div className="whitespace-nowrap rounded bg-[#333] px-2 py-1 text-xs font-bold text-white">
+            <div className="rounded bg-[#333] px-2 py-1 text-xs font-bold whitespace-nowrap text-white">
               {min.toFixed(2)} Min
             </div>
-            <div className="mx-auto h-0 w-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#333]"></div>
+            <div className="mx-auto h-0 w-0 border-t-4 border-r-4 border-l-4 border-transparent border-t-[#333]"></div>
           </div>
         )}
 
@@ -365,10 +368,10 @@ export default function BoxWhiskerPlot({
               top: '-2px',
             }}
           >
-            <div className="whitespace-nowrap rounded bg-[#333] px-2 py-1 text-xs font-bold text-white">
+            <div className="rounded bg-[#333] px-2 py-1 text-xs font-bold whitespace-nowrap text-white">
               {q1.toFixed(2)} Q1
             </div>
-            <div className="mx-auto h-0 w-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#333]"></div>
+            <div className="mx-auto h-0 w-0 border-t-4 border-r-4 border-l-4 border-transparent border-t-[#333]"></div>
           </div>
         )}
 
@@ -381,10 +384,10 @@ export default function BoxWhiskerPlot({
               top: '-2px',
             }}
           >
-            <div className="whitespace-nowrap rounded bg-[#333] px-2 py-1 text-xs font-bold text-white">
+            <div className="rounded bg-[#333] px-2 py-1 text-xs font-bold whitespace-nowrap text-white">
               {median.toFixed(2)} Median
             </div>
-            <div className="mx-auto h-0 w-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#333]"></div>
+            <div className="mx-auto h-0 w-0 border-t-4 border-r-4 border-l-4 border-transparent border-t-[#333]"></div>
           </div>
         )}
 
@@ -397,10 +400,10 @@ export default function BoxWhiskerPlot({
               top: '-2px',
             }}
           >
-            <div className="whitespace-nowrap rounded bg-[#333] px-2 py-1 text-xs font-bold text-white">
+            <div className="rounded bg-[#333] px-2 py-1 text-xs font-bold whitespace-nowrap text-white">
               {q3.toFixed(2)} Q3
             </div>
-            <div className="mx-auto h-0 w-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#333]"></div>
+            <div className="mx-auto h-0 w-0 border-t-4 border-r-4 border-l-4 border-transparent border-t-[#333]"></div>
           </div>
         )}
 
@@ -413,10 +416,10 @@ export default function BoxWhiskerPlot({
               top: '-2px',
             }}
           >
-            <div className="whitespace-nowrap rounded bg-[#333] px-2 py-1 text-xs font-bold text-white">
+            <div className="rounded bg-[#333] px-2 py-1 text-xs font-bold whitespace-nowrap text-white">
               {max.toFixed(2)} Max
             </div>
-            <div className="mx-auto h-0 w-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#333]"></div>
+            <div className="mx-auto h-0 w-0 border-t-4 border-r-4 border-l-4 border-transparent border-t-[#333]"></div>
           </div>
         )}
       </div>

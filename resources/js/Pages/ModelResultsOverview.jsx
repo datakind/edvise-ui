@@ -6,7 +6,6 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
-import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
@@ -410,17 +409,6 @@ function ModelResultsOverview({
                     inst_id={institution?.inst_id}
                   />
                 </div>
-                {/* Support Scores Histogram */}
-                {false && institution?.inst_id && model_run_id && (
-                  <div className="mb-8">
-                    <SupportScores
-                      tab={tab}
-                      setTab={setTab}
-                      model_run_id={model_run_id}
-                      inst_id={institution?.inst_id}
-                    />
-                  </div>
-                )}
               </TabPanel>
             </TabPanels>
           </TabGroup>

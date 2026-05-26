@@ -61,7 +61,9 @@ export default function SetInstitution() {
         setSetInstSuccess(
           `Successfully set institution to: ${institutionName}`,
         );
-        router.reload({ only: ['institution', 'user', 'set_inst_required_message'] });
+        router.reload({
+          only: ['institution', 'user', 'set_inst_required_message'],
+        });
       })
       .catch(e => {
         setSettingInst(false);
@@ -73,7 +75,7 @@ export default function SetInstitution() {
     <AppLayout
       title="Set Institution"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           SetInst
         </h2>
       )}
@@ -105,13 +107,13 @@ export default function SetInstitution() {
         )}
 
         <form
-          className="w-full max-w-full pl-36 pr-36 pt-24"
+          className="w-full max-w-full pt-24 pr-36 pl-36"
           onSubmit={handleSubmit}
         >
           <div id="form_contents" className="flex flex-col">
             <div className="-mx-3 mb-6 flex justify-center">
               <div className="mb-6 w-full px-3">
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700">
+                <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
                   Select Institution
                 </label>
                 <div className="relative">
@@ -150,7 +152,7 @@ export default function SetInstitution() {
                     </svg>
                   </div>
                 </div>
-                <p className="mt-2 text-xs italic text-gray-600">
+                <p className="mt-2 text-xs text-gray-600 italic">
                   Select the institution for the current Datakinder to use.
                 </p>
               </div>

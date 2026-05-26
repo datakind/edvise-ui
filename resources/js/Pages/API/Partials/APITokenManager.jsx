@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import ActionSection from '@/Components/Sections/ActionSection';
 import Checkbox from '@/Components/Fields/Checkbox';
@@ -128,7 +128,7 @@ export default function APITokenManager({
           <div className="col-span-6">
             <InputLabel htmlFor="permissions">Permissions</InputLabel>
 
-            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
               {availablePermissions.map(permission => (
                 <div key={permission}>
                   <label className="flex items-center">
@@ -229,11 +229,11 @@ export default function APITokenManager({
       >
         <DialogModal.Content title={'API Token'}>
           <div>
-            Please copy your new API token. For your security, it won't be shown
-            again.
+            Please copy your new API token. For your security, it won&apos;t be
+            shown again.
           </div>
 
-          <div className="mt-4 bg-gray-100 px-4 py-2 rounded font-mono text-sm text-gray-500">
+          <div className="mt-4 rounded bg-gray-100 px-4 py-2 font-mono text-sm text-gray-500">
             {page.props?.jetstream?.flash?.token}
           </div>
         </DialogModal.Content>
@@ -250,7 +250,7 @@ export default function APITokenManager({
         onClose={() => setManagingPermissionsFor(null)}
       >
         <DialogModal.Content title={'API Token Permissions'}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {availablePermissions.map(permission => (
               <div key={permission}>
                 <label className="flex items-center">

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\InstitutionHelper;
-use App\Models\Team;
+use App\Models\Invite;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,14 +18,14 @@ class LoginController extends Controller
     /**
      * Redirect the user to the Google authentication page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function redirectToGoogle(Request $request)
     {
         // Build redirect URL dynamically from current request base URL
         $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
-        $redirectUrl = $request->root() . $redirectPath;
-        
+        $redirectUrl = $request->root().$redirectPath;
+
         return Socialite::driver('google')
             ->redirectUrl($redirectUrl)
             ->redirect();
@@ -31,15 +34,15 @@ class LoginController extends Controller
     /**
      * Obtain the user information from Google.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function handleGoogleCallback(Request $request)
     {
         try {
             // Build redirect URL dynamically from current request base URL
             $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
-            $redirectUrl = $request->root() . $redirectPath;
-            
+            $redirectUrl = $request->root().$redirectPath;
+
             // Retrieve the user from Google
             $user = Socialite::driver('google')
                 ->redirectUrl($redirectUrl)
@@ -50,9 +53,9 @@ class LoginController extends Controller
 
             if ($existingUser) {
                 // Check if user is invite-validated
-                if (!$existingUser->invite_validated) {
+                if (! $existingUser->invite_validated) {
                     return redirect()->route('invite.validation')
-                                   ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
+                        ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
                 }
 
                 if (! $existingUser->google_id) {
@@ -65,14 +68,14 @@ class LoginController extends Controller
 
                 return redirect('/dashboard');
             } else {
-                $invite = \App\Models\Invite::where('email', $user->email)
-                                           ->where('is_used', false)
-                                           ->where('expires_at', '>', now())
-                                           ->first();
+                $invite = Invite::where('email', $user->email)
+                    ->where('is_used', false)
+                    ->where('expires_at', '>', now())
+                    ->first();
 
-                if (!$invite) {
+                if (! $invite) {
                     return redirect()->route('invite.validation')
-                                   ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
+                        ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
                 }
 
                 // Store invite in session and redirect to registration
@@ -93,14 +96,14 @@ class LoginController extends Controller
     /**
      * Redirect the user to the Azure authentication page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function redirectToAzure(Request $request)
     {
         // Build redirect URL dynamically from current request base URL
         $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
-        $redirectUrl = $request->root() . $redirectPath;
-        
+        $redirectUrl = $request->root().$redirectPath;
+
         return Socialite::driver('azure')
             ->redirectUrl($redirectUrl)
             ->redirect();
@@ -109,15 +112,15 @@ class LoginController extends Controller
     /**
      * Obtain the user information from Azure.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function handleAzureCallback(Request $request)
     {
         try {
             // Build redirect URL dynamically from current request base URL
             $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
-            $redirectUrl = $request->root() . $redirectPath;
-            
+            $redirectUrl = $request->root().$redirectPath;
+
             // Retrieve the user from Azure
             $user = Socialite::driver('azure')
                 ->redirectUrl($redirectUrl)
@@ -128,9 +131,9 @@ class LoginController extends Controller
 
             if ($existingUser) {
                 // Check if user is invite-validated
-                if (!$existingUser->invite_validated) {
+                if (! $existingUser->invite_validated) {
                     return redirect()->route('invite.validation')
-                                   ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
+                        ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
                 }
 
                 // If the user exists but doesn't have an Azure ID, update it
@@ -144,14 +147,14 @@ class LoginController extends Controller
 
                 return redirect('/dashboard');
             } else {
-                $invite = \App\Models\Invite::where('email', $user->email)
-                                           ->where('is_used', false)
-                                           ->where('expires_at', '>', now())
-                                           ->first();
+                $invite = Invite::where('email', $user->email)
+                    ->where('is_used', false)
+                    ->where('expires_at', '>', now())
+                    ->first();
 
-                if (!$invite) {
+                if (! $invite) {
                     return redirect()->route('invite.validation')
-                                   ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
+                        ->withErrors(['message' => 'You need an invite to register. Please contact an administrator.']);
                 }
 
                 session(['valid_invite' => $invite]);

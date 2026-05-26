@@ -6,6 +6,7 @@ use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class RequireInstitution
@@ -32,7 +33,7 @@ class RequireInstitution
         }
 
         if ($request->user()->access_type !== 'DATAKINDER') {
-            [$inst, ] = InstitutionHelper::GetInstitution($request);
+            [$inst] = InstitutionHelper::GetInstitution($request);
             if ($inst !== null && $inst !== '') {
                 $institution = session('institution');
                 if (is_array($institution) && ! empty($institution['inst_id'] ?? '')) {
@@ -56,7 +57,7 @@ class RequireInstitution
 
         $action = $request->route()?->getActionName();
         if ($action && str_contains($action, ApiController::class.'@')) {
-            $method = \Illuminate\Support\Str::after($action, '@');
+            $method = Str::after($action, '@');
             if (in_array($method, self::SKIP_ACTIONS, true)) {
                 return $next($request);
             }

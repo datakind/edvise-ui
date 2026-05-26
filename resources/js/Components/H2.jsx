@@ -8,15 +8,14 @@ import PropTypes from 'prop-types';
  * @param {string} className - Optional additional classes
  */
 export default function H2({ children, className = '' }) {
-    return (
-        <h2 className={`text-2xl font-light text-heading ${className}`}>
-            {children}
-        </h2>
-    );
+  return (
+    <h2 className={`text-heading text-2xl font-light ${className}`}>
+      {children}
+    </h2>
+  );
 }
 
 H2.propTypes = {
-    children: PropTypes.node.isRequired,
-    className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
-

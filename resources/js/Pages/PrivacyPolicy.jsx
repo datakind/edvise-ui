@@ -6,7 +6,7 @@ const PrivacyPolicy = () => {
     <GuestLayout title="Privacy Policy">
       <Head title="Privacy Policy" />
       <div className="mx-auto my-12 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="prose text-[#4F4F4F] lg:prose-xl">
+        <div className="prose lg:prose-xl text-[#4F4F4F]">
           <h1 className="text-5xl font-light text-black">Privacy Policy</h1>
           <section className="mb-6 text-base font-light">
             <p className="mb-4">
@@ -530,6 +530,7 @@ const PrivacyPolicy = () => {
                     href="https://www.edpb.europa.eu/about-edpb/about-edpb/members_en"
                     className="font-bold hover:underline"
                     target="_blank"
+                    rel="noreferrer"
                   >
                     here
                   </a>

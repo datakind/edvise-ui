@@ -9,7 +9,6 @@ const VariableSlider = ({
   sliderValues,
   setSliderValues,
   availableVariables,
-  hasOutliers,
 }) => {
   const getUnit = variable => {
     const variableInfo = availableVariables.find(
@@ -19,7 +18,7 @@ const VariableSlider = ({
   };
 
   return (
-    <div className="mb-4 bg-gray-100 p-4 rounded-lg">
+    <div className="mb-4 rounded-lg bg-gray-100 p-4">
       <div className="mb-4 text-sm">
         {availableVariables.find(v => v.id === parseInt(variable))?.name ||
           variable}
@@ -34,7 +33,7 @@ const VariableSlider = ({
           }
           value={sliderValues[variable]}
         />
-        <div className="w-full flex justify-between text-sm mt-4">
+        <div className="mt-4 flex w-full justify-between text-sm">
           <div>
             {sliderValues[variable]?.[0] !== undefined
               ? formatValue(sliderValues[variable][0], getUnit(variable))

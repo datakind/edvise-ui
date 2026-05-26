@@ -1,5 +1,4 @@
 import React from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 
 export default function SuccessAlert({ mainMsg, msgDetails, className }) {
@@ -10,7 +9,7 @@ export default function SuccessAlert({ mainMsg, msgDetails, className }) {
     <div
       className={classNames(
         className,
-        'border-green bg-[#DAF8E6] w-full flex rounded-lg border-l-[6px] px-7 py-8 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)] md:p-9',
+        'border-green flex w-full rounded-lg border-l-[6px] bg-[#DAF8E6] px-7 py-8 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)] md:p-9',
       )}
     >
       <div className="bg-green mr-5 flex h-[34px] w-full max-w-[34px] items-center justify-center rounded-lg">
@@ -38,7 +37,7 @@ export default function SuccessAlert({ mainMsg, msgDetails, className }) {
           </defs>
         </svg>
       </div>
-      <div className="flex flex-col h-fit">
+      <div className="flex h-fit flex-col">
         <h5 className="flex text-lg font-semibold text-[#004434]">{mainMsg}</h5>
         <p className="flex text-base leading-relaxed text-gray-800">
           {msgDetails}

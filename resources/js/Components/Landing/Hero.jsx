@@ -5,7 +5,7 @@ export default function Hero() {
     <div className="hero">
       <div className="layout:grid">
         <div className="hero-title col-span-6 mb-[32px] md:col-span-10 md:col-start-7">
-          <h1 className="mb-14 text-[42px] font-light leading-[103%] sm:text-[48px] md:mb-[72px]">
+          <h1 className="mb-14 text-[42px] leading-[103%] font-light sm:text-[48px] md:mb-[72px]">
             Empowering advisors, supporting students
           </h1>
         </div>
@@ -32,7 +32,7 @@ export default function Hero() {
             src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
             alt="Edvise Logo"
           />
-          <p className="text-[18px] font-light leading-[120%] text-[#6A6A73]">
+          <p className="text-[18px] leading-[120%] font-light text-[#6A6A73]">
             Built with and for advisors to identify students in need and take
             timely, data-informed action—no technical overhaul required
           </p>
@@ -47,20 +47,20 @@ export default function Hero() {
           />
         </div>
 
-        <div className="hero-image-overlay landing-rounded-lg absolute left-0 right-0 top-[calc(100%)] flex -translate-y-full flex-col bg-[#D5E5EE] px-4 py-4 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
-          <div className="mb-3 mr-8 sm:mb-0">
+        <div className="hero-image-overlay landing-rounded-lg absolute top-[calc(100%)] right-0 left-0 flex -translate-y-full flex-col bg-[#D5E5EE] px-4 py-4 md:h-[100px] md:-translate-y-full md:flex-row md:items-center md:px-10 md:py-0">
+          <div className="mr-8 mb-3 sm:mb-0">
             <img
               src="https://storage.googleapis.com/staging-sst-01-staging-static/NYT-logo.svg"
               alt="NYT Logo"
             />
           </div>
-          <p className="text-[18px] font-light leading-tight">
+          <p className="text-[18px] leading-tight font-light">
             “How A.I. Increased the Graduation Rate at John Jay College by 32
             Points”
           </p>
           <a
             href="https://www.nytimes.com/2023/09/20/nyregion/ai-john-jay-college.html?unlocked_article_code=1.aU8._im9.KWn_cNMGVn96&smid=url-share"
-            className="absolute right-[6px] top-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white tb:right-[26px] tb:top-[26px] md:hidden"
+            className="tb:right-[26px] tb:top-[26px] absolute top-[6px] right-[6px] flex h-[40px] w-[40px] items-center justify-center rounded-full bg-white md:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import PropTypes from 'prop-types';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import AppLayout from '../Layouts/AppLayout';
 import SupportOverview from '../Components/SupportOverview';
 import Shap from '../Components/Shap';
-import SupportScores from '../Components/SupportScores';
 import RocCurve from '../Components/RocCurve';
 import ConfusionMatrix from '../Components/ConfusionMatrix';
 import InterpretChart from '../Components/InterpretChart';
@@ -18,8 +18,6 @@ import '../../css/landing.css';
 
 import { formatModelName } from '../utils/stringUtils';
 import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
-
-const route = window.route;
 
 // Helper function to convert to title case
 const capitalizeFirstWord = str => {
@@ -411,17 +409,6 @@ function ModelResultsOverview({
                     inst_id={institution?.inst_id}
                   />
                 </div>
-                {/* Support Scores Histogram */}
-                {false && institution?.inst_id && model_run_id && (
-                  <div className="mb-8">
-                    <SupportScores
-                      tab={tab}
-                      setTab={setTab}
-                      model_run_id={model_run_id}
-                      inst_id={institution?.inst_id}
-                    />
-                  </div>
-                )}
               </TabPanel>
             </TabPanels>
           </TabGroup>

@@ -124,7 +124,7 @@ export default function ImpactSection(props) {
       <div className="absolute top-0 z-0 grid aspect-video w-full translate-y-[-60px] place-items-center opacity-0 md:opacity-100">
         <DotCanvas animation={activeCardIndex} />
       </div>
-      <div className="z-1 relative">
+      <div className="relative z-1">
         <div className="layout:grid mb-3 md:mb-16">
           <div className="col-span-8">
             <p className="type:section-label mb-12">The broader impact</p>
@@ -139,7 +139,7 @@ export default function ImpactSection(props) {
           {cards.map((card, index) => (
             <div
               key={card.label}
-              className={`impact-card-wrapper group relative col-span-full grid font-light leading-[normal] tb:col-span-6 tb:col-start-2 md:col-span-4 md:row-span-full md:grid-rows-subgrid ${
+              className={`impact-card-wrapper group tb:col-span-6 tb:col-start-2 relative col-span-full grid leading-[normal] font-light md:col-span-4 md:row-span-full md:grid-rows-subgrid ${
                 activeCardIndex === index ? 'active' : ''
               } `}
             >
@@ -152,7 +152,7 @@ export default function ImpactSection(props) {
                 />
               </div>
               <div
-                className={`bg-[#D5E5EE] ${activeCardIndex === index ? 'active md:bg-[#D5E5EE] md:bg-[#EEF2F6]' : 'md:bg-[#EEF2F6] md:hover:bg-[#D5E5EE]'} impact-card relative z-[1] grid cursor-pointer rounded-[40px] px-5 pb-5 pt-8 transition-colors duration-100 ease-out`}
+                className={`bg-[#D5E5EE] ${activeCardIndex === index ? 'active md:bg-[#D5E5EE] md:bg-[#EEF2F6]' : 'md:bg-[#EEF2F6] md:hover:bg-[#D5E5EE]'} impact-card relative z-[1] grid cursor-pointer rounded-[40px] px-5 pt-8 pb-5 transition-colors duration-100 ease-out`}
                 onClick={() => onCardClick(index)}
               >
                 <div className="mb-4">{card.label}</div>

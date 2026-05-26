@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helpers\InstitutionHelper;
 use App\Models\Invite;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class InviteController extends Controller
 {
@@ -33,11 +33,11 @@ class InviteController extends Controller
         ]);
 
         $invite = Invite::where('invite_code', $request->invite_code)
-                       ->where('is_used', false)
-                       ->where('expires_at', '>', now())
-                       ->first();
+            ->where('is_used', false)
+            ->where('expires_at', '>', now())
+            ->first();
 
-        if (!$invite) {
+        if (! $invite) {
             return back()->withErrors([
                 'invite_code' => 'Invalid or expired invite code.',
             ]);
@@ -70,7 +70,7 @@ class InviteController extends Controller
      */
     public function showRegistrationForm()
     {
-        if (!session('valid_invite')) {
+        if (! session('valid_invite')) {
             return redirect()->route('invite.validation');
         }
 
@@ -80,15 +80,13 @@ class InviteController extends Controller
         $existingUser = User::where('email', $invite->email)->first();
         $isSsoUser = $existingUser && ($existingUser->google_id || $existingUser->azure_id);
 
-
-
         return Inertia::render('Auth/Register', [
             'invite' => [
                 'email' => $invite->email,
                 'role' => $invite->role,
                 'institution_id' => $invite->institution_id,
             ],
-            'isSsoUser' => $isSsoUser
+            'isSsoUser' => $isSsoUser,
         ]);
     }
 
@@ -98,8 +96,7 @@ class InviteController extends Controller
     public function register(Request $request)
     {
 
-
-        if (!session('valid_invite')) {
+        if (! session('valid_invite')) {
             return redirect()->route('invite.validation');
         }
 
@@ -108,8 +105,6 @@ class InviteController extends Controller
         // Check if this is an SSO user by looking at existing user record or session
         $existingUser = User::where('email', $invite->email)->first();
         $isSsoUser = session('sso_user', false) || ($existingUser && ($existingUser->google_id || $existingUser->azure_id));
-
-
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -121,7 +116,7 @@ class InviteController extends Controller
 
         if ($existingUser) {
             // If user exists but isn't invite-validated, update them
-            if (!$existingUser->invite_validated) {
+            if (! $existingUser->invite_validated) {
                 $updateData = [
                     'name' => $request->name,
                     'invite_validated' => true,
@@ -131,7 +126,7 @@ class InviteController extends Controller
                 ];
 
                 // Only update password if not an SSO user
-                if (!$isSsoUser) {
+                if (! $isSsoUser) {
                     $updateData['password'] = Hash::make($request->password);
                 }
 
@@ -152,6 +147,7 @@ class InviteController extends Controller
             } else {
                 // User already validated, redirect to login
                 session()->forget('valid_invite');
+
                 return redirect()->route('login')
                     ->withErrors(['email' => 'This email is already registered and validated. Please log in instead.']);
             }
@@ -168,7 +164,7 @@ class InviteController extends Controller
         ];
 
         // Set password: required for non-SSO; use random placeholder for SSO (column is NOT NULL)
-        if (!$isSsoUser) {
+        if (! $isSsoUser) {
             $userData['password'] = Hash::make($request->password);
         } else {
             $userData['password'] = Hash::make(Str::random(64));
@@ -189,7 +185,7 @@ class InviteController extends Controller
 
         // Create personal team for SSO users (required by Jetstream)
         if ($isSsoUser) {
-            $team = \App\Models\Team::forceCreate([
+            $team = Team::forceCreate([
                 'user_id' => $user->id,
                 'name' => explode(' ', $user->name, 2)[0]."'s Team",
                 'personal_team' => true,
@@ -268,9 +264,9 @@ class InviteController extends Controller
         }
 
         $invites = Invite::with('invitedBy')
-                        ->orderBy('created_at', 'desc')
-                        ->paginate($perPage)
-                        ->withQueryString();
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render('Admin/Invites', [
             'invites' => $invites,

@@ -24,7 +24,7 @@
     "livewire/livewire": "^4.2",
     "socialiteproviders/manager": "^4.6",
     "socialiteproviders/microsoft-azure": "^5.2",
-    "tightenco/ziggy": "^2.4",
+    "tightenco/ziggy": "^2.6",
     "vlucas/phpdotenv": "^5.6"
   },
   "require-dev": {

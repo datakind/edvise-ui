@@ -36,7 +36,7 @@ const FAQ = () => {
 
   return (
     <AppLayout title="FAQ">
-      <div className="flex w-full mx-auto my-12 p-24">
+      <div className="mx-auto my-12 flex w-full p-24">
         <div className="prose-xl">
           <h2 className="text-header">FAQ</h2>
           {faqs.map((section, sectionIndex) => (
@@ -50,17 +50,17 @@ const FAQ = () => {
                       onClick={() =>
                         toggleExpand(`${sectionIndex}-${itemIndex}`)
                       }
-                      className="flex items-center gap-2 cursor-pointer text-xl font-semibold text-subheader"
+                      className="text-subheader flex cursor-pointer items-center gap-2 text-xl font-semibold"
                     >
                       {isExpanded ? (
-                        <MinusIcon className="w-5 h-5" />
+                        <MinusIcon className="h-5 w-5" />
                       ) : (
-                        <PlusIcon className="w-5 h-5" />
+                        <PlusIcon className="h-5 w-5" />
                       )}
                       <span>{item.question}</span>
                     </div>
                     {isExpanded && (
-                      <p className="mt-2 text-lg text-gray-700 ml-8">
+                      <p className="mt-2 ml-8 text-lg text-gray-700">
                         {item.answer}
                       </p>
                     )}

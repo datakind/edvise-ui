@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
@@ -36,7 +35,7 @@ export default function CreateModel() {
         schema_configs: schemaConfig,
       },
     })
-      .then(res => {
+      .then(() => {
         document.getElementById('result_area').innerHTML = 'Done';
       })
       .catch(e => {
@@ -86,7 +85,7 @@ export default function CreateModel() {
                   type="text"
                   placeholder="Model Name (corresponding to the Databricks model name)"
                 ></input>
-                <p className="text-xs italic text-red-500">Required field.</p>
+                <p className="text-xs text-red-500 italic">Required field.</p>
               </div>
             </div>
             <div className="flex w-1/2 flex-row items-center gap-x-3">
@@ -98,7 +97,7 @@ export default function CreateModel() {
                 defaultChecked={true}
               ></input>
               <label htmlFor="valid">
-                Model is "valid" (i.e. ready for use).
+                Model is &quot;valid&quot; (i.e. ready for use).
               </label>
             </div>
             <div className="flex w-full flex-row gap-x-6">

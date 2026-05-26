@@ -1,5 +1,4 @@
 import React from 'react';
-import { XCircleIcon } from '@heroicons/react/24/solid';
 
 export default function DangerAlert({ mainMsg, errDict, className }) {
   if (errDict == undefined || Object.keys(errDict).length == 0) {
@@ -8,9 +7,9 @@ export default function DangerAlert({ mainMsg, errDict, className }) {
 
   return (
     <div className={className}>
-      <div className="inline-flex rounded-lg bg-red-50 px-[18px] py-4 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)] flex-col">
+      <div className="inline-flex flex-col rounded-lg bg-red-50 px-[18px] py-4 shadow-[0px_2px_10px_0px_rgba(0,0,0,0.08)]">
         <div className="flex items-center text-sm font-medium text-[#BC1C21]">
-          <span className="mr-3 flex h-5 w-5 items-center justify-center rounded-full bg-red">
+          <span className="bg-red mr-3 flex h-5 w-5 items-center justify-center rounded-full">
             <svg
               width="12"
               height="12"
@@ -39,7 +38,7 @@ export default function DangerAlert({ mainMsg, errDict, className }) {
         </div>
         <ul
           role="list"
-          className="list-disc space-y-1 pl-10 mt-2 ml-3 text-sm text-red-800"
+          className="mt-2 ml-3 list-disc space-y-1 pl-10 text-sm text-red-800"
         >
           {Object.entries(errDict).map(([k, v]) => (
             <li key={k}>

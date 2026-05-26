@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class Invite extends Model
 {
@@ -53,7 +53,7 @@ class Invite extends Model
      */
     public function isValid(): bool
     {
-        return !$this->is_used && !$this->isExpired();
+        return ! $this->is_used && ! $this->isExpired();
     }
 
     /**
@@ -70,7 +70,7 @@ class Invite extends Model
     /**
      * Get the user who sent this invite
      */
-    public function invitedBy()
+    public function invitedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'invited_by');
     }
@@ -81,7 +81,7 @@ class Invite extends Model
     public function scopeValid($query)
     {
         return $query->where('is_used', false)
-                    ->where('expires_at', '>', now());
+            ->where('expires_at', '>', now());
     }
 
     /**

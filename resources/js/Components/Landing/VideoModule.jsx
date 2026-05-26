@@ -27,7 +27,7 @@ export default function VideoModule({ videoUrl }) {
         <div className="fixed inset-0 flex w-screen items-center justify-center bg-black/90 p-4">
           <button
             onClick={() => setIsModalOpen(false)}
-            className="absolute right-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2 focus:outline-[var(--landing-color-orange)]"
+            className="absolute top-5 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white p-2 focus:outline-[var(--landing-color-orange)]"
             type="button"
           >
             <svg
@@ -79,7 +79,7 @@ export default function VideoModule({ videoUrl }) {
             alt="John Jay College"
           />
         </div>
-        <div className="video-cta-bar landing-rounded-md absolute bottom-0 left-0 right-0 flex translate-y-[1px] items-center gap-4 bg-[#F5CA9E] p-3 sm:gap-6 sm:py-7 sm:pl-7 sm:pr-10">
+        <div className="video-cta-bar landing-rounded-md absolute right-0 bottom-0 left-0 flex translate-y-[1px] items-center gap-4 bg-[#F5CA9E] p-3 sm:gap-6 sm:py-7 sm:pr-10 sm:pl-7">
           <div className="video-cta-icon bg-landing-orange flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@ export default function VideoModule({ videoUrl }) {
               />
             </svg>
           </div>
-          <p className="video-title max-w-[130px] text-left text-base font-light leading-[100%] sm:max-w-full">
+          <p className="video-title max-w-[130px] text-left text-base leading-[100%] font-light sm:max-w-full">
             In partnership with Google.org
           </p>
           <p className="video-duration ml-auto text-base font-light">01:23</p>

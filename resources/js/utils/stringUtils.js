@@ -41,8 +41,27 @@ export const toTitleCase = str => {
 
   // List of small words that should not be capitalized (unless first or last word)
   const smallWords = new Set([
-    'a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'from', 'in',
-    'into', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'up', 'via', 'with'
+    'a',
+    'an',
+    'and',
+    'as',
+    'at',
+    'but',
+    'by',
+    'for',
+    'from',
+    'in',
+    'into',
+    'nor',
+    'of',
+    'on',
+    'or',
+    'per',
+    'the',
+    'to',
+    'up',
+    'via',
+    'with',
   ]);
 
   const words = str.trim().split(/\s+/);

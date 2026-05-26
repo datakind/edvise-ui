@@ -1,13 +1,10 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import FileView from '@/Components/FileView';
 import HeaderLabel from '@/Components/HeaderLabel';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 // Skeleton for the download inf data page.
 export default function FileManagement() {
-  const [files, setFiles] = useState({});
-  const [batches, setBatches] = useState({});
   // csv as 2d matrix
   const tableCreate = parsedValues => {
     const tbl = document.createElement('table');
@@ -26,20 +23,6 @@ export default function FileManagement() {
     return tbl;
   };
 
-  // TODO: delete or use
-  const getOutputFilesAndBatchesToView = () => {
-    return axios
-      .get('/view-output-data')
-      .then(res => {
-        let constructFileDict = {};
-        setFiles(res.data.files);
-        setBatches(res.data.batches);
-      })
-      .catch(err => {
-        console.log('errors');
-      });
-  };
-
   const triggerDownload = () => {
     document.getElementById('result_area').innerHTML = '';
 
@@ -50,7 +33,7 @@ export default function FileManagement() {
       return;
     }
 
-    const output = axios
+    axios
       .get('/download-inf-data/' + filename)
       .then(res => {
         window.open(res.data, '_self');
@@ -71,7 +54,7 @@ export default function FileManagement() {
         'Please add a valid filename';
       return;
     }
-    const output = axios
+    axios
       .get('/download-inf-data/' + filename)
       .then(res => {
         fetch(res.data)
@@ -108,7 +91,7 @@ export default function FileManagement() {
     <AppLayout
       title="Download Data"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           File Management
         </h2>
       )}
@@ -125,20 +108,20 @@ export default function FileManagement() {
           majorTitle="Actions"
           minorTitle="File Management"
         ></HeaderLabel>
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <p id="info">Type in the filename you want to download below.</p>
           <input type="text" id="filename" name="filename" />
           <button
             id="button_content"
             onClick={triggerDownload}
-            className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4"
+            className="mb-4 rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
           >
             Download
           </button>{' '}
           <button
             id="button_content"
             onClick={loadView}
-            className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4"
+            className="mb-4 rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
           >
             Show Data
           </button>

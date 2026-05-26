@@ -9,11 +9,13 @@ import axios from 'axios';
  * @param {string} dateStr - Date string in format "MM/DD/YYYY HH:MM:SS"
  * @returns {Date|null} Parsed Date object or null if invalid
  */
-const parseDateString = (dateStr) => {
+const parseDateString = dateStr => {
   if (!dateStr) return null;
-  
+
   // Handle MM/DD/YYYY HH:MM:SS format
-  const match = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/);
+  const match = dateStr.match(
+    /^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/,
+  );
   if (match) {
     const [, month, day, year, hour, minute, second] = match;
     return new Date(
@@ -22,10 +24,10 @@ const parseDateString = (dateStr) => {
       parseInt(day, 10),
       parseInt(hour, 10),
       parseInt(minute, 10),
-      parseInt(second, 10)
+      parseInt(second, 10),
     );
   }
-  
+
   // Fallback to standard Date parsing for ISO format or other formats
   const date = new Date(dateStr);
   return isNaN(date.getTime()) ? null : date;
@@ -38,7 +40,7 @@ const parseDateString = (dateStr) => {
  */
 export const fetchValidBatches = async () => {
   const response = await axios.get('/view-uploaded-data');
-  
+
   if (!response.data || !response.data.batches) {
     throw new Error('No batches data received from API');
   }
@@ -46,9 +48,7 @@ export const fetchValidBatches = async () => {
   const batches = response.data.batches;
 
   // Filter batches: exclude deleted, only include completed
-  const validBatches = batches.filter(batch => 
-    batch.deleted === false
-  );
+  const validBatches = batches.filter(batch => batch.deleted === false);
 
   return validBatches;
 };
@@ -119,9 +119,9 @@ export const getMostRecentBatch = async () => {
  * @returns {Promise<Object|null>} Batch information object, or null if not found
  * @throws {Error} If API call fails
  */
-export const getBatchInfo = async (batch_id) => {
+export const getBatchInfo = async batch_id => {
   const validBatches = await fetchValidBatches();
-  
+
   // If no batch_id provided, return the most recent batch
   if (!batch_id) {
     if (validBatches.length === 0) {
@@ -138,10 +138,9 @@ export const getBatchInfo = async (batch_id) => {
 
     return sortedBatches[0];
   }
-  
+
   // Otherwise, find the specific batch
   const batch = validBatches.find(b => b.batch_id === batch_id);
-  
+
   return batch || null;
 };
-

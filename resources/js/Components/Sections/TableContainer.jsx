@@ -71,12 +71,12 @@ export default function TableContainer({
   };
 
   return (
-    <div className="relative mx-auto px-12 z-0">
+    <div className="relative z-0 mx-auto px-12">
       <div
         ref={tableContainerRef}
         className="overflow-x-auto rounded-lg border-2 border-gray-300 bg-white"
       >
-        <table className="min-w-full bg-white table-fixed">
+        <table className="min-w-full table-fixed bg-white">
           <thead>
             <tr>
               {originalColumnOrder.map(
@@ -84,7 +84,7 @@ export default function TableContainer({
                   selectedColumns.includes(key) && (
                     <th
                       key={key}
-                      className="p-4 border-b border-gray-200 text-left text-sm cursor-pointer relative"
+                      className="relative cursor-pointer border-b border-gray-200 p-4 text-left text-sm"
                       onClick={() => {
                         setSortColumn(key);
                         setSortDirection(prev =>
@@ -94,7 +94,7 @@ export default function TableContainer({
                     >
                       {formatColumnHeader(key)}
                       <ChevronDownIcon
-                        className={`h-4 w-4 inline absolute right-2 top-1/2 transform -translate-y-1/2 ${sortColumn === key ? 'block' : 'hidden'} ${sortDirection === 'desc' ? 'rotate-180' : ''}`}
+                        className={`absolute top-1/2 right-2 inline h-4 w-4 -translate-y-1/2 transform ${sortColumn === key ? 'block' : 'hidden'} ${sortDirection === 'desc' ? 'rotate-180' : ''}`}
                       />
                     </th>
                   ),
@@ -112,7 +112,7 @@ export default function TableContainer({
                     selectedColumns.includes(col) && (
                       <td
                         key={col}
-                        className={`px-4 py-1 border-b border-gray-200 text-sm overflow-x-scroll ${col === 'description' ? 'min-w-[30rem]' : 'w-[15rem] min-w-[15rem] max-w-[15rem]'} ${col === 'visibility' ? 'w-[5rem] min-w-[5rem] max-w-[5rem] text-center' : ''}`}
+                        className={`overflow-x-scroll border-b border-gray-200 px-4 py-1 text-sm ${col === 'description' ? 'min-w-[30rem]' : 'w-[15rem] max-w-[15rem] min-w-[15rem]'} ${col === 'visibility' ? 'w-[5rem] max-w-[5rem] min-w-[5rem] text-center' : ''}`}
                       >
                         {handleContentRendering(row[col])}
                       </td>
@@ -126,18 +126,18 @@ export default function TableContainer({
 
       {shouldShowScrollArrows && (
         <>
-          <div className="fixed top-1/2 mt-12 left-2">
+          <div className="fixed top-1/2 left-2 mt-12">
             <button
               onClick={handleScrollLeft}
-              className="bg-gray-200 p-2 rounded-full"
+              className="rounded-full bg-gray-200 p-2"
             >
               <ChevronLeftIcon className="h-4 w-4" />
             </button>
           </div>
-          <div className="fixed top-1/2 mt-12 right-2">
+          <div className="fixed top-1/2 right-2 mt-12">
             <button
               onClick={handleScrollRight}
-              className="bg-gray-200 p-2 rounded-full"
+              className="rounded-full bg-gray-200 p-2"
             >
               <ChevronRightIcon className="h-4 w-4" />
             </button>

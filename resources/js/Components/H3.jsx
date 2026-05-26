@@ -8,15 +8,14 @@ import PropTypes from 'prop-types';
  * @param {string} className - Optional additional classes
  */
 export default function H3({ children, className = '' }) {
-    return (
-        <h3 className={`text-lg font-medium text-heading ${className}`}>
-            {children}
-        </h3>
-    );
+  return (
+    <h3 className={`text-heading text-lg font-medium ${className}`}>
+      {children}
+    </h3>
+  );
 }
 
 H3.propTypes = {
-    children: PropTypes.node.isRequired,
-    className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
-

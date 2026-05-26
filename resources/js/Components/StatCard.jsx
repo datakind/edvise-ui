@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export default function StatCard({ value, label, className = '' }) {
   // Format the value based on its type
-  const formatValue = (val) => {
+  const formatValue = val => {
     if (typeof val === 'number') {
       // Check if it's a float (has decimal part) - format GPA to 2 decimals
       if (val % 1 !== 0) {
@@ -19,10 +19,10 @@ export default function StatCard({ value, label, className = '' }) {
     <div
       className={`rounded-3xl bg-[#E6EEF5] px-6 py-8 text-center shadow-sm ${className}`}
     >
-      <div className="font-merriweather font-semibold text-4xl text-[#1E343F] md:text-5xl">
+      <div className="font-merriweather text-4xl font-semibold text-[#1E343F] md:text-5xl">
         {formatValue(value)}
       </div>
-      <div className="mt-2 text-base font-semibold uppercase tracking-wide text-[#1E343F]/80">
+      <div className="mt-2 text-base font-semibold tracking-wide text-[#1E343F]/80 uppercase">
         {label}
       </div>
     </div>

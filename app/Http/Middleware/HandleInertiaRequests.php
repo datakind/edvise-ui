@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\InstitutionHelper;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,7 +42,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'user' => fn () => $request->user(),
             'institution' => fn () => $request->user() ? ($request->attributes->get('institution') ?? $request->session()->get('institution')) : null,
-            'set_inst_required_message' => \App\Helpers\InstitutionHelper::SET_INST_REQUIRED_MESSAGE,
+            'set_inst_required_message' => InstitutionHelper::SET_INST_REQUIRED_MESSAGE,
         ]);
     }
 }

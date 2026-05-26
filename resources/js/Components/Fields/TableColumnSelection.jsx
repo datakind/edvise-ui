@@ -51,17 +51,17 @@ export default function TableColumnSelection({
 
   return (
     <div className="flex">
-      <div className="relative mb-4 z-12" ref={columnsDropdownRef}>
+      <div className="relative z-12 mb-4" ref={columnsDropdownRef}>
         <button
           onClick={() => setDropdownVisible(!dropdownVisible)}
-          className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg"
+          className="rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
         >
           Select Columns
-          <ChevronDownIcon className="h-5 w-5 inline ml-1" />
+          <ChevronDownIcon className="ml-1 inline h-5 w-5" />
         </button>
 
         {dropdownVisible && (
-          <div className="absolute left-0 z-30 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+          <div className="absolute left-0 z-30 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
             {Object.keys(dictionary[0] || {})
               .filter(key => !['id', 'created_at', 'updated_at'].includes(key)) // Exclude specific columns
               .map(key => {
@@ -69,7 +69,7 @@ export default function TableColumnSelection({
                   .replace(/_/g, ' ')
                   .replace(/\b\w/g, char => char.toUpperCase()); // Replace underscores and capitalize
                 return (
-                  <label key={key} className="block py-2 px-4 text-sm">
+                  <label key={key} className="block px-4 py-2 text-sm">
                     <input
                       type="checkbox"
                       value={key}
@@ -85,22 +85,22 @@ export default function TableColumnSelection({
         )}
       </div>
 
-      <div className="relative mb-4 ml-4 z-12" ref={rowsDropdownRef}>
+      <div className="relative z-12 mb-4 ml-4" ref={rowsDropdownRef}>
         <button
           onClick={() => setRowsDropdownVisible(!rowsDropdownVisible)}
-          className="bg-gray-200 text-gray-700 py-2 px-3 rounded-lg"
+          className="rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
         >
           Rows: {rowsPerPage === 9999 ? 'All' : rowsPerPage}
-          <ChevronDownIcon className="h-5 w-5 inline ml-1" />
+          <ChevronDownIcon className="ml-1 inline h-5 w-5" />
         </button>
 
         {rowsDropdownVisible && (
-          <div className="absolute left-0 z-30 mt-2 w-24 bg-white border border-gray-200 rounded-lg shadow-lg">
+          <div className="absolute left-0 z-30 mt-2 w-24 rounded-lg border border-gray-200 bg-white shadow-lg">
             {[10, 25, 50, 100, 9999].map(value => (
               <button
                 key={value}
                 onClick={() => handleRowsPerPageChange(value)}
-                className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-200"
+                className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-200"
               >
                 {value === 9999 ? 'All' : value}
               </button>

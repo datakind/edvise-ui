@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
@@ -56,7 +57,7 @@ export default function Register({ invite, isSsoUser = false }) {
   return (
     <AuthLayout>
       <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
-        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
+        <div className="mx-auto mt-12 -mb-12 w-full max-w-2xl p-4">
           <Head title="Register" />
           <img
             className="w-1/3 pb-12"
@@ -68,16 +69,16 @@ export default function Register({ invite, isSsoUser = false }) {
 
           <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
             <p className="text-sm text-blue-800">
-              <strong>Welcome!</strong> You've been invited to join with email:{' '}
-              <strong>{invite?.email}</strong>
+              <strong>Welcome!</strong> You&apos;ve been invited to join with
+              email: <strong>{invite?.email}</strong>
             </p>
           </div>
 
           {isSsoUser && (
             <div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
               <p className="text-sm text-green-800">
-                <strong>SSO User:</strong> Since you're using Single Sign-On,
-                you won't need to create a password.
+                <strong>SSO User:</strong> Since you&apos;re using Single
+                Sign-On, you won&apos;t need to create a password.
               </p>
             </div>
           )}
@@ -175,7 +176,7 @@ export default function Register({ invite, isSsoUser = false }) {
             <div className="mt-4 flex items-center justify-end">
               <Link
                 href={route('login')}
-                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
               >
                 Already registered?
               </Link>

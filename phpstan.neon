@@ -10,6 +10,5 @@ parameters:
         - database/
         - routes/
         - scripts/
-        - storage/
         - tests/
     level: 1

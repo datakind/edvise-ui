@@ -9,7 +9,7 @@ class VerifyDatakinder
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user() && $request->user()->access_type === "DATAKINDER") {
+        if ($request->user() && $request->user()->access_type === 'DATAKINDER') {
             return $next($request);
         }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import ActionSection from '@/Components/Sections/ActionSection';
 import ConfirmationModal from '@/Components/Modals/ConfirmationModal';
 import DangerButton from '@/Components/Buttons/DangerButton';

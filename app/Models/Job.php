@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,7 +68,7 @@ class Job extends Model
      * Get all valid jobs for a model
      *
      * @param  string  $modelId  The model UUID
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public static function getValidJobsForModel(string $modelId)
     {
@@ -79,9 +80,3 @@ class Job extends Model
             ->get();
     }
 }
-
-
-
-
-
-

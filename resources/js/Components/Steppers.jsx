@@ -22,7 +22,7 @@ const Steppers = ({ currentStep, stepsDict, className }) => {
             {step.label}
           </span>
           {index < stepsDict.length - 1 && (
-            <div className="absolute left-[calc(50%+6rem)] top-1/2 h-[2px] w-20 -translate-x-1/2 -translate-y-1/2 bg-gray-300"></div>
+            <div className="absolute top-1/2 left-[calc(50%+6rem)] h-[2px] w-20 -translate-x-1/2 -translate-y-1/2 bg-gray-300"></div>
           )}
         </div>
       ))}

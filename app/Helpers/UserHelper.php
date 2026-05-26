@@ -11,14 +11,15 @@ class UserHelper
     {
 
         $users = DB::table('users')->where('email', $email)
-                ->get();
-        if (sizeof($users) == 0) {
-            return "User not found";
+            ->get();
+        if (count($users) == 0) {
+            return 'User not found';
         }
-        if (sizeof($users) > 1) {
-            return "Unexpected. Multiple users with same email found.";
+        if (count($users) > 1) {
+            return 'Unexpected. Multiple users with same email found.';
         }
-        return "";
+
+        return '';
     }
 
     // Returns a mapping of the names of a set of users given their user id.
@@ -26,14 +27,15 @@ class UserHelper
     public static function getNames(array $user_uuids)
     {
         $users = DB::table('users')->whereIn('id', $user_uuids)
-                ->get();
-        if (sizeof($users) == 0) {
+            ->get();
+        if (count($users) == 0) {
             return false;
         }
         $result = [];
         foreach ($users as $u) {
             $result[$u->id] = $u->name;
         }
+
         return $result;
     }
 }

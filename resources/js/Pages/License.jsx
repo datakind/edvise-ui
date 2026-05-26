@@ -5,15 +5,15 @@ export default function License() {
   return (
     <GuestLayout title="License">
       <div className="mx-auto my-12 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="prose text-[#4F4F4F] lg:prose-xl">
+        <div className="prose lg:prose-xl text-[#4F4F4F]">
           <h1 className="text-5xl font-light text-black">Copyright</h1>
 
           <p className="mb-6 text-base font-light">
             This site carries a Creative Commons (CC BY 4.0) license, which
             permits re-use of DataKind content when proper attribution is
             provided. This means you are free to copy, display and distribute
-            DataKind's work, or include our content in derivative works, under
-            the following conditions:
+            DataKind&apos;s work, or include our content in derivative works,
+            under the following conditions:
           </p>
 
           <h2 className="text-4xl font-light text-black">Attribution</h2>
@@ -24,6 +24,7 @@ export default function License() {
               href="https://www.datakind.org"
               target="_blank"
               className="font-bold hover:underline"
+              rel="noreferrer"
             >
               www.datakind.org
             </a>
@@ -37,6 +38,7 @@ export default function License() {
               href="https://creativecommons.org/licenses/by/4.0/"
               target="_blank"
               className="font-bold hover:underline"
+              rel="noreferrer"
             >
               here
             </a>

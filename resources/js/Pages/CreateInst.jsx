@@ -23,7 +23,7 @@ export default function CreateInst() {
     return (
       <div>
         {arrOfAllAddedEmailSlots.map(id => (
-          <div id="one_user" className="flex">
+          <div key={id} id="one_user" className="flex">
             <div className="w-1/2">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"

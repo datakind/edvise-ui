@@ -668,7 +668,7 @@ export default function FileUpload() {
               id="model_name"
             >
               {modelsList.map(m => (
-                <option>{m.name}</option>
+                <option key={m.name}>{m.name}</option>
               ))}
             </select>
           )}

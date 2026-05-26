@@ -146,7 +146,7 @@ export default function RunInference() {
                   id="batch_name"
                 >
                   {batchList.map(b => (
-                    <option>{b.name}</option>
+                    <option key={b.batch_id ?? b.name}>{b.name}</option>
                   ))}
                 </select>
               </div>
@@ -180,7 +180,7 @@ export default function RunInference() {
               id="model_name"
             >
               {modelsList.map(m => (
-                <option>{m.name}</option>
+                <option key={m.name}>{m.name}</option>
               ))}
             </select>
           )}

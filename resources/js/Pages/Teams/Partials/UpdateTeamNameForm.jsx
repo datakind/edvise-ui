@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { route } from 'ziggy-js';
 import ActionSection from '@/Components/Sections/ActionSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';

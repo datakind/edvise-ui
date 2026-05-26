@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import PropTypes from 'prop-types';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import AppLayout from '../Layouts/AppLayout';

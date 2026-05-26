@@ -1,4 +1,5 @@
 import { Link, useForm, Head } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import React from 'react';
 import Checkbox from '@/Components/Fields/Checkbox';
 import InputError from '@/Components/Modals/InputError';

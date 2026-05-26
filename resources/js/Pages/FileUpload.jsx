@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import {

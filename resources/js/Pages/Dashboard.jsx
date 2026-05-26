@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { route } from 'ziggy-js';
 import React, { useEffect, useState } from 'react';
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';

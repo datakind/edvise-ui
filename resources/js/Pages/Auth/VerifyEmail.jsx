@@ -1,4 +1,5 @@
 import { Link, useForm, Head } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React from 'react';
 import AuthLayout from '@/Layouts/AuthLayout';

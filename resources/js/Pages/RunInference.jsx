@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { Link } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 

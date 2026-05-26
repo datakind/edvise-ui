@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';

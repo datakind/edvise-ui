@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Head, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import AuthLayout from '@/Layouts/AuthLayout';
 import Button from '@/Components/Landing/Button';
 import AuthFooter from '@/Components/AuthFooter';

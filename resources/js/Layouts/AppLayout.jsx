@@ -1,4 +1,5 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
@@ -400,7 +401,10 @@ export default function AppLayout({ title, children }) {
                                         key={team.id}
                                         onSubmit={e => {
                                           e.preventDefault();
-                                          switchToTeam(team);
+                                          router.put(
+                                            route('current-team.update'),
+                                            { team_id: team.id },
+                                          );
                                         }}
                                       >
                                         <Dropdown.Link as="button">

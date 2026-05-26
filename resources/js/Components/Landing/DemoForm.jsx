@@ -5,6 +5,7 @@ import { useState } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 
 export default function DemoForm({ className, formId, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -252,9 +252,6 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply mt-1 text-accordion-body;
 }
 
-label {
-  @apply text-sm font-medium text-gray-900;
-}
 input[type='text'],
 input[type='search'],
 input[type='email'],
@@ -263,19 +260,8 @@ input[type='url'],
 input[type='tel'],
 input[type='number'] {
   @apply box-border h-12 w-full rounded-full border-2 border-solid px-5 text-base transition-all placeholder:text-gray-500;
-  border-color: #d1d5dc;
-  &:hover {
-    border-color: #9ca3af;
-  }
+  border-color: theme('colors.input.border');
   &:focus {
-    @apply border-primary outline-none ring-2 ring-primary ring-offset-0;
-  }
-  &.error {
-    @apply border-danger outline-none;
-    &:hover,
-    &:focus,
-    &:focus-visible {
-      @apply border-danger ring-0;
-    }
+    border-color: theme('colors.input.focus');
   }
 }

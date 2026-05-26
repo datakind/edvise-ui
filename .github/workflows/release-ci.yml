@@ -1,0 +1,14 @@
+name: release-branch-ci
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+concurrency:
+  group: release-branch-ci-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml

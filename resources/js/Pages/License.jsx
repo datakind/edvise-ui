@@ -12,7 +12,7 @@ export default function License() {
             This site carries a Creative Commons (CC BY 4.0) license, which
             permits re-use of DataKind content when proper attribution is
             provided. This means you are free to copy, display and distribute
-            DataKind's work, or include our content in derivative works, under
+            DataKind&apos;s work, or include our content in derivative works, under
             the following conditions:
           </p>
 

@@ -80,7 +80,7 @@ export default function InviteValidation() {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-500">
-              Don't have an invite code? Please contact your administrator.
+              Don&apos;t have an invite code? Please contact your administrator.
             </p>
           </div>
           <div className="text-center">

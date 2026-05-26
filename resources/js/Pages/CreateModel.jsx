@@ -97,7 +97,7 @@ export default function CreateModel() {
                 defaultChecked={true}
               ></input>
               <label htmlFor="valid">
-                Model is "valid" (i.e. ready for use).
+                Model is &quot;valid&quot; (i.e. ready for use).
               </label>
             </div>
             <div className="flex w-full flex-row gap-x-6">

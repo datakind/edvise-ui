@@ -229,7 +229,7 @@ export default function APITokenManager({
       >
         <DialogModal.Content title={'API Token'}>
           <div>
-            Please copy your new API token. For your security, it won't be shown
+            Please copy your new API token. For your security, it won&apos;t be shown
             again.
           </div>
 

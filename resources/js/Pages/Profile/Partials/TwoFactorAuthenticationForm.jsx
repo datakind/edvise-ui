@@ -119,7 +119,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
         <p>
           When two factor authentication is enabled, you will be prompted for a
           secure, random token during authentication. You may retrieve this
-          token from your phone's Google Authenticator application.
+          token from your phone&apos;s Google Authenticator application.
         </p>
       </div>
 
@@ -131,14 +131,14 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                 {confirming ? (
                   <p className="font-semibold">
                     To finish enabling two factor authentication, scan the
-                    following QR code using your phone's authenticator
+                    following QR code using your phone&apos;s authenticator
                     application or enter the setup key and provide the generated
                     OTP code.
                   </p>
                 ) : (
                   <p>
                     Two factor authentication is now enabled. Scan the following
-                    QR code using your phone's authenticator application or
+                    QR code using your phone&apos;s authenticator application or
                     enter the setup key.
                   </p>
                 )}

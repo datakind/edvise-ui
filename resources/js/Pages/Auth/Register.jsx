@@ -69,7 +69,7 @@ export default function Register({ invite, isSsoUser = false }) {
 
           <div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
             <p className="text-sm text-blue-800">
-              <strong>Welcome!</strong> You've been invited to join with email:{' '}
+              <strong>Welcome!</strong> You&apos;ve been invited to join with email:{' '}
               <strong>{invite?.email}</strong>
             </p>
           </div>
@@ -77,8 +77,8 @@ export default function Register({ invite, isSsoUser = false }) {
           {isSsoUser && (
             <div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
               <p className="text-sm text-green-800">
-                <strong>SSO User:</strong> Since you're using Single Sign-On,
-                you won't need to create a password.
+                <strong>SSO User:</strong> Since you&apos;re using Single Sign-On,
+                you won&apos;t need to create a password.
               </p>
             </div>
           )}

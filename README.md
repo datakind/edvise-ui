@@ -1,4 +1,4 @@
-# SST Frontend
+# Edvise UI (Frontend)
 
 ## Databases
 

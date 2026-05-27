@@ -35,7 +35,9 @@ export default function AppFooter() {
         </ul>
       </div>
       <div></div>
-      <div className="pr-12 text-right">&copy; 2025 Datakind v{appVersion}</div>
+      <div className="pr-12 text-right">
+        &copy; 2025 Datakind &mdash; Edvise v{appVersion}
+      </div>
     </footer>
   );
 }

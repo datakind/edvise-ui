@@ -2,6 +2,8 @@
 
 ## [1.1.0] - 2026-05-27
 
+Released on Caroline's last week with DataKind. Thank you, Caroline.
+
 ### Added
 - Standard deviation column in the Data Dictionary
 - Upload progress bar on file upload

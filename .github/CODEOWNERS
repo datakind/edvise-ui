@@ -1,0 +1,3 @@
+# Concept test: request review from @datakind/frontend on every PR.
+# See Engineering Playbook — reviewer assignment via CODEOWNERS + team auto-assignment.
+* @datakind/reviewers-frontend

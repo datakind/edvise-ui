@@ -36,10 +36,7 @@ export default function AppFooter() {
       </div>
       <div></div>
       <div className="pr-12 text-right">
-        &copy; 2025 Datakind
-        {appVersion ? (
-          <span className="text-gray-500"> · {appVersion}</span>
-        ) : null}
+        &copy; 2025 Datakind &mdash; Edvise v{appVersion}
       </div>
     </footer>
   );

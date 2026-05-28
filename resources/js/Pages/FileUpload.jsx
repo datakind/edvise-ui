@@ -103,9 +103,7 @@ export default function FileUpload() {
           percent={allPutsDone ? null : uploadAggregatePct}
           indeterminate={allPutsDone}
         />
-        {allPutsDone ? (
-          <Spinner mainMsg="Validation in progress" />
-        ) : null}
+        {allPutsDone ? <Spinner mainMsg="Validation in progress" /> : null}
       </div>
     );
   };

@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0] - 2026-05-27
+
+Released on Caroline's last week with DataKind. Thank you, Caroline.
+
+### Added
+- Standard deviation column in the Data Dictionary
+- Upload progress bar on file upload
+- Optional `clear-cache=1` query parameter on the EDA route to refresh cached results
+
+### Changed
+- Simplified Create Model to a single name field
+- Aligned buttons, accordions, and input borders with the Edvise Design System
+- Removed client-side upload timeout so large files can complete validation
+
+### Fixed
+- Served Microsoft login icon from the app instead of a remote URL
+- Improved accessibility: default link styles, login email autocomplete, Data Dictionary table header scope, input labels, accessible names for model run View and Download links, higher-contrast input borders
+
 ## [1.0.0] - 2026-05-06
 
 Initial production release of Edvise.

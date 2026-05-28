@@ -12,15 +12,16 @@ class CheckInviteValidated
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && !Auth::user()->invite_validated) {
+        if (Auth::check() && ! Auth::user()->invite_validated) {
             // User is logged in but not invite-validated
             Auth::logout();
+
             return redirect()->route('invite.validation')
-                           ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
+                ->withErrors(['message' => 'Your account requires invite validation. Please enter your invite code.']);
         }
 
         return $next($request);

@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import axios from 'axios';
 import classNames from 'classnames';
 import React, { useState } from 'react';
@@ -7,7 +7,6 @@ import ConfirmsPassword from '@/Components/Modals/ConfirmsPassword';
 import DangerButton from '@/Components/Buttons/DangerButton';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import useTypedPage from '@/Hooks/useTypedPage';
@@ -120,7 +119,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
         <p>
           When two factor authentication is enabled, you will be prompted for a
           secure, random token during authentication. You may retrieve this
-          token from your phone's Google Authenticator application.
+          token from your phone&apos;s Google Authenticator application.
         </p>
       </div>
 
@@ -132,14 +131,14 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                 {confirming ? (
                   <p className="font-semibold">
                     To finish enabling two factor authentication, scan the
-                    following QR code using your phone's authenticator
+                    following QR code using your phone&apos;s authenticator
                     application or enter the setup key and provide the generated
                     OTP code.
                   </p>
                 ) : (
                   <p>
                     Two factor authentication is now enabled. Scan the following
-                    QR code using your phone's authenticator application or
+                    QR code using your phone&apos;s authenticator application or
                     enter the setup key.
                   </p>
                 )}
@@ -169,7 +168,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                     id="code"
                     type="text"
                     name="code"
-                    className="block mt-1 w-1/2"
+                    className="mt-1 block w-1/2"
                     inputMode="numeric"
                     autoFocus={true}
                     autoComplete="one-time-code"
@@ -198,7 +197,7 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
                 </p>
               </div>
 
-              <div className="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
+              <div className="mt-4 grid max-w-xl gap-1 rounded-lg bg-gray-100 px-4 py-4 font-mono text-sm">
                 {recoveryCodes.map(code => (
                   <div key={code}>{code}</div>
                 ))}
@@ -213,12 +212,15 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
           <div>
             {confirming ? (
               <ConfirmsPassword onConfirm={confirmTwoFactorAuthentication}>
-                <PrimaryButton
-                  className={classNames('mr-3', { 'opacity-25': enabling })}
+                <button
+                  type="button"
+                  className={classNames('btn btn-primary mr-3', {
+                    'opacity-25': enabling,
+                  })}
                   disabled={enabling}
                 >
                   Confirm
-                </PrimaryButton>
+                </button>
               </ConfirmsPassword>
             ) : null}
             {recoveryCodes.length > 0 && !confirming ? (
@@ -259,13 +261,15 @@ export default function TwoFactorAuthenticationForm({ requiresConfirmation }) {
         ) : (
           <div>
             <ConfirmsPassword onConfirm={enableTwoFactorAuthentication}>
-              <PrimaryButton
+              <button
                 type="button"
-                className={classNames({ 'opacity-25': enabling })}
+                className={classNames('btn btn-primary', {
+                  'opacity-25': enabling,
+                })}
                 disabled={enabling}
               >
                 Enable
-              </PrimaryButton>
+              </button>
             </ConfirmsPassword>
           </div>
         )}

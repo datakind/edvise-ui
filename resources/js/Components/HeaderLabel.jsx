@@ -12,7 +12,7 @@ export default function HeaderLabel({
     <div
       className={classNames(
         className,
-        'flex flex-row w-full items-begin gap-x-2 text-left text-lg font-bold text-[#637381]',
+        'items-begin flex w-full flex-row gap-x-2 text-left text-lg font-bold text-[#637381]',
       )}
     >
       {iconObj} {majorTitle}{' '}

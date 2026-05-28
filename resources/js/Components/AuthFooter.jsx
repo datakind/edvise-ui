@@ -1,6 +1,6 @@
 export default function AuthFooter() {
   return (
-    <div className="mx-auto -mb-24 mt-12 grid w-full grid-cols-4 gap-4 text-sm text-[#4F4F4F]">
+    <div className="mx-auto mt-12 -mb-24 grid w-full grid-cols-4 gap-4 text-sm text-[#4F4F4F]">
       <div>
         <a
           href="/privacy-policy"

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import {
@@ -14,9 +15,7 @@ import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
-
-/** Keep in sync with BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS (seconds) on the Laravel proxy. */
-const VALIDATE_UPLOAD_TIMEOUT_MS = 300_000;
+import ProgressBar from '@/Components/ProgressBar';
 
 /**
  * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
@@ -63,6 +62,12 @@ export default function FileUpload() {
   const [batchName, setBatchName] = useState('');
   const [modelsList, setModelsList] = useState([]);
   const [predictionResults, setPredictionResults] = useState(null);
+  /** Sum of loaded bytes per server-side file key during parallel PUTs to GCS. */
+  const uploadLoadedByKeyRef = useRef({});
+  const [uploadAggregatePct, setUploadAggregatePct] = useState(0);
+  /** How many PUTs have finished (success or fail); used to switch UI to “validating”. */
+  const [uploadPutsFinished, setUploadPutsFinished] = useState(0);
+  const [uploadBatchFileCount, setUploadBatchFileCount] = useState(0);
 
   useEffect(() => {
     axios
@@ -70,7 +75,7 @@ export default function FileUpload() {
       .then(res => {
         setModelsList(res.data);
       })
-      .catch(err => {
+      .catch(() => {
         // TODO bubble out these errors
         console.log('error with model fetch');
       });
@@ -84,9 +89,21 @@ export default function FileUpload() {
   ];
 
   const renderProcessing = () => {
+    const allPutsDone =
+      uploadBatchFileCount > 0 && uploadPutsFinished >= uploadBatchFileCount;
     return (
-      <div className="flex w-full justify-center">
-        <Spinner mainMsg="Validation in progress"></Spinner>
+      <div className="flex w-full flex-col items-center justify-center gap-10 px-4">
+        <ProgressBar
+          className="w-full max-w-2xl"
+          progressMsg={
+            allPutsDone
+              ? 'Validating your files on the server…'
+              : 'Uploading your files…'
+          }
+          percent={allPutsDone ? null : uploadAggregatePct}
+          indeterminate={allPutsDone}
+        />
+        {allPutsDone ? <Spinner mainMsg="Validation in progress" /> : null}
       </div>
     );
   };
@@ -99,7 +116,7 @@ export default function FileUpload() {
       let msg =
         '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert variant="danger" mainMsg={msg} />
         </div>
       );
@@ -124,13 +141,10 @@ export default function FileUpload() {
     if (batchCreationResult !== 'ok') {
       let msg = '[ERROR] Batch creation failed: ' + batchCreationResult;
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert variant="danger" mainMsg={msg} />
           <div className="flex w-full flex-row items-end justify-between pt-48">
-            <Link
-              href={route('file-upload')}
-              className="mb-4 rounded-lg bg-[#f79222] px-3 px-6 py-2 font-semibold text-white"
-            >
+            <Link href={route('file-upload')} className="btn btn-primary">
               Upload Data
             </Link>
           </div>
@@ -169,7 +183,7 @@ export default function FileUpload() {
     }
     if (Object.values(validationResults).find(element => element !== 'ok')) {
       return (
-        <div className="flex flex-col pl-24 pr-24">
+        <div className="flex flex-col pr-24 pl-24">
           <Alert
             variant="danger"
             mainMsg="[ERROR] The following files must be re-uploaded"
@@ -177,10 +191,7 @@ export default function FileUpload() {
             excludeValue="ok"
           />
           <div className="flex w-full flex-row items-end justify-between pt-48">
-            <Link
-              href={route('file-upload')}
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
-            >
+            <Link href={route('file-upload')} className="btn btn-secondary">
               Back
             </Link>
 
@@ -188,7 +199,7 @@ export default function FileUpload() {
               href={route('file-upload')}
               as="button"
               disabled={true}
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-50"
+              className="btn btn-primary opacity-50"
             >
               Next
             </Link>
@@ -203,16 +214,10 @@ export default function FileUpload() {
           msgDetails="Your data has been successfully validated. You can now proceed to name the folder and confirm the upload."
         ></BigSuccessAlert>
         <div className="flex w-full flex-row items-end justify-between pt-48">
-          <Link
-            href={route('file-upload')}
-            className="mb-4 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
-          >
+          <Link href={route('file-upload')} className="btn btn-secondary">
             Back
           </Link>
-          <button
-            className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black opacity-100"
-            onClick={() => setCurrentStep(3)}
-          >
+          <button className="btn btn-primary" onClick={() => setCurrentStep(3)}>
             Next
           </button>
         </div>{' '}
@@ -227,10 +232,7 @@ export default function FileUpload() {
           id="button_content"
           onClick={triggerUpload}
           disabled={disabled}
-          className={classNames(
-            disabled ? 'opacity-50' : 'opacity-100',
-            'mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black',
-          )}
+          className="btn btn-primary"
         >
           Run Validation
         </button>
@@ -365,11 +367,6 @@ export default function FileUpload() {
 
   const MAX_FILE_BYTES = 1000 * 1024 * 1024; // limit 1 GB
 
-  const resetUploader = () => {
-    setFileStatus({});
-    setFiles([]);
-  };
-
   const fileSelectedHandler = event => {
     fileHandler(event.target.files);
   };
@@ -487,7 +484,7 @@ export default function FileUpload() {
         file_names: batchFileNames,
       },
     })
-      .then(res => {
+      .then(() => {
         setBatchName(batchConstructed);
         setBatchCreationResult('ok');
         setStartPrediction(startPred);
@@ -504,24 +501,6 @@ export default function FileUpload() {
       });
   };
 
-  // Show file info (for the + Add File feature)
-  // TODO delete?
-  const viewData = () => {
-    return axios
-      .get('/view-uploaded-data')
-      .then(res => {
-        // TODO populate
-      })
-      .catch(e => {
-        let err = '';
-        if (e.response) {
-          err = e.response.data.error;
-        } else {
-          err = JSON.stringify(e);
-        }
-      });
-  };
-
   // Frontend prepends timestamp, manually uploaded files on the backend won't include that.
   const triggerUpload = () => {
     if (Object.keys(fileStatus).length != 0 || files.length == 0) {
@@ -534,14 +513,32 @@ export default function FileUpload() {
     //setValidationResults({});
     let localValidationResults = {};
 
-    const config = {
-      headers: {
-        'Content-Type': 'text/csv',
-      },
+    let seq = Date.now();
+    const fileMetas = files.map(file => ({
+      file,
+      filenameConstructed: `${seq++}_${file.name}`,
+    }));
+    const totalBytes = fileMetas.reduce((s, { file: f }) => s + f.size, 0);
+    uploadLoadedByKeyRef.current = Object.fromEntries(
+      fileMetas.map(({ filenameConstructed }) => [filenameConstructed, 0]),
+    );
+    setUploadAggregatePct(0);
+    setUploadPutsFinished(0);
+    setUploadBatchFileCount(fileMetas.length);
+
+    const recomputeAggregatePct = () => {
+      const sum = fileMetas.reduce(
+        (acc, { filenameConstructed }) =>
+          acc + (uploadLoadedByKeyRef.current[filenameConstructed] || 0),
+        0,
+      );
+      setUploadAggregatePct(
+        totalBytes ? Math.min(100, Math.round((100 * sum) / totalBytes)) : 0,
+      );
     };
+
     Promise.allSettled(
-      files.map(file => {
-        var filenameConstructed = Date.now() + '_' + file.name;
+      fileMetas.map(({ file, filenameConstructed }) => {
         return axios
           .post('/file-upload-api/' + filenameConstructed)
           .then(res => {
@@ -550,19 +547,37 @@ export default function FileUpload() {
 
             if (res.data == 'local-url-fake-signed') {
               // This is the local test case, simply validate as true as we're mocking out this data.
+              uploadLoadedByKeyRef.current[filenameConstructed] = file.size;
+              recomputeAggregatePct();
               localValidationResults[filenameConstructed] = 'ok';
+              setUploadPutsFinished(c => c + 1);
               return;
             }
-            return axios
-              .put(res.data, file, config)
-              .then(res1 => {
+            const putConfig = {
+              headers: {
+                'Content-Type': 'text/csv',
+              },
+              timeout: 0,
+              onUploadProgress: ev => {
+                uploadLoadedByKeyRef.current[filenameConstructed] = ev.loaded;
+                recomputeAggregatePct();
+              },
+            };
+            const putPromise = axios.put(res.data, file, putConfig);
+            putPromise.finally(() => {
+              setUploadPutsFinished(c => c + 1);
+            });
+            return putPromise
+              .then(() => {
+                uploadLoadedByKeyRef.current[filenameConstructed] = file.size;
+                recomputeAggregatePct();
                 return axios
                   .post(
                     '/file-validate-api/' + filenameConstructed,
                     {},
-                    { timeout: VALIDATE_UPLOAD_TIMEOUT_MS },
+                    { timeout: 0 },
                   )
-                  .then(res2 => {
+                  .then(() => {
                     localValidationResults[filenameConstructed] = 'ok';
                     return;
                   })
@@ -579,11 +594,15 @@ export default function FileUpload() {
           .catch(e => {
             localValidationResults[filenameConstructed] =
               '[Upload URL retrieval] ' + formatAxiosErrorMessage(e);
+            setUploadPutsFinished(c => c + 1);
           });
       }),
     ).then(() => {
       setValidationResults(localValidationResults);
       setProcessing(false);
+      setUploadBatchFileCount(0);
+      setUploadAggregatePct(0);
+      setUploadPutsFinished(0);
       return;
     });
   };
@@ -614,15 +633,12 @@ export default function FileUpload() {
           </p>
         </div>
         <div className="flex w-full flex-row items-end justify-between pt-24">
-          <Link
-            href={route('file-upload')}
-            className="mb-4 -ml-24 rounded-full bg-gray-300 px-3 px-6 py-2 text-black"
-          >
+          <Link href={route('file-upload')} className="btn btn-secondary">
             Back
           </Link>
           <div className="-mr-24 flex">
             <button
-              className="mr-4 mb-4 rounded-full border border-[#f79222] bg-white px-3 px-6 py-2 font-semibold text-[#f79222]"
+              className="btn btn-primary mr-4"
               onClick={() => {
                 // Also start the prediction so set it to true.
                 createBatch(true);
@@ -631,7 +647,7 @@ export default function FileUpload() {
               Save and start prediction
             </button>
             <button
-              className="mb-4 rounded-full bg-[#f79222] px-3 px-6 py-2 text-black"
+              className="btn btn-primary"
               onClick={() => {
                 // We don't start the prediction so set it to false.
                 createBatch(false);
@@ -710,7 +726,7 @@ export default function FileUpload() {
               id="model_name"
             >
               {modelsList.map(m => (
-                <option>{m.name}</option>
+                <option key={m.name}>{m.name}</option>
               ))}
             </select>
           )}

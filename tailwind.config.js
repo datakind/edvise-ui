@@ -40,6 +40,9 @@ export default {
           dark: '#2f3c5b',
           light: '#87b7cc',
         },
+        danger: {
+          DEFAULT: '#FB2C36',
+        },
         link: {
           DEFAULT: '#1F5FAF',
         },
@@ -65,6 +68,10 @@ export default {
         heading: {
           DEFAULT: '#1E343F',
         },
+        accordion: {
+          'header-open': '#dde5eb',
+          body: '#364153',
+        },
         tabs: {
           default: '#637381',
           selectedBg: '#EEF2F6',
@@ -72,7 +79,7 @@ export default {
           selectedText: '#000000',
         },
         input: {
-          border: '#E5E7EB',
+          border: '#6B7280',
           focus: '#007C8C',
         },
       },

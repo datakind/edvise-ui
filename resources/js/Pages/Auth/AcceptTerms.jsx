@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Head, router } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import AuthLayout from '@/Layouts/AuthLayout';
 import Button from '@/Components/Landing/Button';
 import AuthFooter from '@/Components/AuthFooter';
@@ -35,7 +36,7 @@ export default function AcceptTerms() {
   return (
     <AuthLayout>
       <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
-        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
+        <div className="mx-auto mt-12 -mb-12 w-full max-w-2xl p-4">
           <Head title="Accept Terms" />
 
           <img

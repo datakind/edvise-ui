@@ -1,14 +1,12 @@
 import { Link, useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
+import React, { useState } from 'react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
-import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import useTypedPage from '@/Hooks/useTypedPage';
 export default function UpdateProfileInformationForm({ user }) {
   const form = useForm({
@@ -17,8 +15,6 @@ export default function UpdateProfileInformationForm({ user }) {
     email: user.email,
     photo: null,
   });
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const photoRef = useRef(null);
   const page = useTypedPage();
   const [verificationLinkSent, setVerificationLinkSent] = useState(false);
   function updateProfileInformation() {
@@ -28,35 +24,8 @@ export default function UpdateProfileInformationForm({ user }) {
       onSuccess: () => clearPhotoFileInput(),
     });
   }
-  function selectNewPhoto() {
-    photoRef.current?.click();
-  }
-  function updatePhotoPreview() {
-    const photo = photoRef.current?.files?.[0];
-    if (!photo) {
-      return;
-    }
-    form.setData('photo', photo);
-    const reader = new FileReader();
-    reader.onload = e => {
-      setPhotoPreview(e.target?.result);
-    };
-    reader.readAsDataURL(photo);
-  }
-  function deletePhoto() {
-    router.delete(route('current-user-photo.destroy'), {
-      preserveScroll: true,
-      onSuccess: () => {
-        setPhotoPreview(null);
-        clearPhotoFileInput();
-      },
-    });
-  }
   function clearPhotoFileInput() {
-    if (photoRef.current?.value) {
-      photoRef.current.value = '';
-      form.setData('photo', null);
-    }
+    form.setData('photo', null);
   }
   return (
     <FormSection
@@ -69,12 +38,15 @@ export default function UpdateProfileInformationForm({ user }) {
             Saved.
           </ActionMessage>
 
-          <PrimaryButton
-            className={classNames({ 'opacity-25': form.processing })}
+          <button
+            type="submit"
+            className={classNames('btn btn-primary', {
+              'opacity-25': form.processing,
+            })}
             disabled={form.processing}
           >
             Save
-          </PrimaryButton>
+          </button>
         </>
       )}
     >
@@ -107,13 +79,13 @@ export default function UpdateProfileInformationForm({ user }) {
         {page.props.jetstream.hasEmailVerification &&
         user.email_verified_at === null ? (
           <div>
-            <p className="text-sm mt-2">
+            <p className="mt-2 text-sm">
               Your email address is unverified.
               <Link
                 href={route('verification.send')}
                 method="post"
                 as="button"
-                className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                 onClick={e => {
                   e.preventDefault();
                   setVerificationLinkSent(true);
@@ -123,7 +95,7 @@ export default function UpdateProfileInformationForm({ user }) {
               </Link>
             </p>
             {verificationLinkSent && (
-              <div className="mt-2 font-medium text-sm text-green-600">
+              <div className="mt-2 text-sm font-medium text-green-600">
                 A new verification link has been sent to your email address.
               </div>
             )}

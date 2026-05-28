@@ -6,11 +6,56 @@ import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import { Link, usePage } from '@inertiajs/react';
 
 const US_STATES = [
-  'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-  'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD',
-  'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH',
-  'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-  'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY',
+  'AK',
+  'AL',
+  'AR',
+  'AZ',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'FL',
+  'GA',
+  'HI',
+  'IA',
+  'ID',
+  'IL',
+  'IN',
+  'KS',
+  'KY',
+  'LA',
+  'MA',
+  'MD',
+  'ME',
+  'MI',
+  'MN',
+  'MO',
+  'MS',
+  'MT',
+  'NC',
+  'ND',
+  'NE',
+  'NH',
+  'NJ',
+  'NM',
+  'NV',
+  'NY',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VA',
+  'VT',
+  'WA',
+  'WI',
+  'WV',
+  'WY',
 ];
 
 const SCHOOL_TYPES = [
@@ -90,26 +135,26 @@ export default function EditInst() {
       <div>
         <div id="default_user" className="flex">
           <div className="w-1/2">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
               Access Type
             </label>
             <div className="relative">
               <select
                 name="0-access"
-                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
               >
                 <option>MODEL_OWNER</option>
                 <option>VIEWER</option>
               </select>
             </div>
           </div>
-          <div className="w-1/2 px-3 mb-6">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          <div className="mb-6 w-1/2 px-3">
+            <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
               User email
             </label>
             <input
               name="0-email"
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
               type="email"
               placeholder="j.smith@inst1.edu"
             />
@@ -117,28 +162,28 @@ export default function EditInst() {
         </div>
 
         {arrOfAllAddedEmailSlots.map(id => (
-          <div id="one_user" className="flex">
+          <div key={id} id="one_user" className="flex">
             <div className="w-1/2">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+              <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
                 Access Type
               </label>
               <div className="relative">
                 <select
                   name={`${id}-access`}
-                  className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 >
                   <option>MODEL_OWNER</option>
                   <option>VIEWER</option>
                 </select>
               </div>
             </div>
-            <div className="w-1/2 px-3 mb-6">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <div className="mb-6 w-1/2 px-3">
+              <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
                 User email
               </label>
               <input
                 name={`${id}-email`}
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 type="email"
                 placeholder="j.smith@inst1.edu"
               />
@@ -230,7 +275,7 @@ export default function EditInst() {
     <AppLayout
       title="Edit Institution"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Edit Institution
         </h2>
       )}
@@ -244,9 +289,7 @@ export default function EditInst() {
           majorTitle="Admin Actions"
           minorTitle="Edit Institution [Do not use: Work in progress]"
         />
-        {loading && (
-          <p className="mt-8 text-gray-600">Loading institution…</p>
-        )}
+        {loading && <p className="mt-8 text-gray-600">Loading institution…</p>}
         {!loading && loadError && (
           <div className="mt-8 max-w-lg text-center text-red-600">
             <p>{loadError}</p>
@@ -264,14 +307,14 @@ export default function EditInst() {
           <form
             id="edit-institution-form"
             key={`${inst.inst_id}-${formGeneration}`}
-            className="w-full max-w-full pl-36 pr-36 pt-24"
+            className="w-full max-w-full pt-24 pr-36 pl-36"
             onSubmit={handleSubmit}
           >
             <div id="form_contents" className="flex flex-col gap-y-6">
-              <div className="flex flex-row w-full gap-x-6">
-                <div className="flex flex-col w-2/3">
+              <div className="flex w-full flex-row gap-x-6">
+                <div className="flex w-2/3 flex-col">
                   <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                     htmlFor="edit_inst_name"
                   >
                     Institution Name
@@ -279,15 +322,15 @@ export default function EditInst() {
                   <input
                     id="edit_inst_name"
                     name="inst_name"
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white cursor-not-allowed"
+                    className="mb-3 block w-full cursor-not-allowed appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
                     type="text"
                     defaultValue={inst.name}
                     readOnly
                   />
                 </div>
-                <div className="flex flex-col w-1/3">
+                <div className="flex w-1/3 flex-col">
                   <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                     htmlFor="edit_state"
                   >
                     State
@@ -296,7 +339,7 @@ export default function EditInst() {
                     <select
                       id="edit_state"
                       name="state"
-                      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                       defaultValue={inst.state ?? ''}
                     >
                       <option value=""> </option>
@@ -309,8 +352,8 @@ export default function EditInst() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row w-full gap-x-6">
-                <div className="flex flex-col w-1/2">
+              <div className="flex w-full flex-row gap-x-6">
+                <div className="flex w-1/2 flex-col">
                   <fieldset>
                     <legend className="text-base font-semibold text-gray-900">
                       Institution type
@@ -318,9 +361,9 @@ export default function EditInst() {
                     <p className="mt-1 text-sm text-gray-600">
                       Choose exactly one.
                     </p>
-                    <div className="mt-4 space-y-3 border-b border-t border-gray-200 py-3">
+                    <div className="mt-4 space-y-3 border-t border-b border-gray-200 py-3">
                       {SCHOOL_TYPES.map(({ value, label }) => (
-                        <div key={value} className="flex gap-3 items-center">
+                        <div key={value} className="flex items-center gap-3">
                           <input
                             id={`edit_school_type_${value}`}
                             name="school_type"
@@ -341,11 +384,11 @@ export default function EditInst() {
                     </div>
                   </fieldset>
                 </div>
-                <div className="flex flex-col w-1/2 gap-4">
+                <div className="flex w-1/2 flex-col gap-4">
                   {schoolType === 'pdp' && (
                     <div>
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                         htmlFor="edit_pdp_id"
                       >
                         PDP Institution ID
@@ -355,10 +398,10 @@ export default function EditInst() {
                         name="pdp_id"
                         key={`pdp-${formGeneration}`}
                         defaultValue={inst.pdp_id ?? ''}
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                         type="text"
                       />
-                      <p className="text-gray-600 text-xs italic">
+                      <p className="text-xs text-gray-600 italic">
                         For PDP schools, please add the PDP_INST id of the
                         institution. Include any leading zeroes.
                       </p>
@@ -367,7 +410,7 @@ export default function EditInst() {
                   {schoolType === 'edvise' && (
                     <div>
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                         htmlFor="edit_edvise_id"
                       >
                         Edvise ID (optional)
@@ -377,10 +420,10 @@ export default function EditInst() {
                         name="edvise_id"
                         key={`edvise-${formGeneration}`}
                         defaultValue={inst.edvise_id ?? ''}
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                         type="text"
                       />
-                      <p className="text-gray-600 text-xs italic">
+                      <p className="text-xs text-gray-600 italic">
                         Leave blank to keep the current Edvise id, or set when
                         switching to Edvise to choose a specific id.
                       </p>
@@ -389,7 +432,7 @@ export default function EditInst() {
                   {schoolType === 'legacy' && (
                     <div>
                       <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                         htmlFor="edit_legacy_id"
                       >
                         Legacy ID (optional)
@@ -399,17 +442,17 @@ export default function EditInst() {
                         name="legacy_id"
                         key={`legacy-${formGeneration}`}
                         defaultValue={inst.legacy_id ?? ''}
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                         type="text"
                       />
-                      <p className="text-gray-600 text-xs italic">
+                      <p className="text-xs text-gray-600 italic">
                         Leave blank to keep the current Legacy id, or set when
                         switching to Legacy to choose a specific id.
                       </p>
                     </div>
                   )}
                   {schoolType === '' && (
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-sm text-gray-600">
                       Select a type to edit identifiers.
                     </p>
                   )}
@@ -423,23 +466,23 @@ export default function EditInst() {
               <button
                 id="button_add_field"
                 type="button"
-                className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+                className="mb-4 flex w-1/3 items-center justify-center rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
                 onClick={incrementCounter}
               >
                 Add Another Email
               </button>
             </div>
-            <div className="flex w-full justify-center pt-12 gap-x-6">
+            <div className="flex w-full justify-center gap-x-6 pt-12">
               <button
                 type="button"
                 onClick={resetForm}
-                className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+                className="mb-4 flex w-1/3 items-center justify-center rounded-lg border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
               >
                 Reset
               </button>
               <button
                 type="submit"
-                className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+                className="mb-4 flex w-1/3 items-center justify-center rounded-lg bg-[#f79222] px-3 py-2 text-white"
               >
                 Submit
               </button>
@@ -447,11 +490,11 @@ export default function EditInst() {
           </form>
         )}
         {error && (
-          <div className="text-red-500 mt-4 max-w-2xl text-center px-6">
+          <div className="mt-4 max-w-2xl px-6 text-center text-red-500">
             {typeof error === 'string' ? error : JSON.stringify(error)}
           </div>
         )}
-        <div id="result_area" className="flex pb-24 pt-12"></div>
+        <div id="result_area" className="flex pt-12 pb-24"></div>
       </div>
     </AppLayout>
   );

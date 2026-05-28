@@ -1,12 +1,11 @@
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import ActionSection from '@/Components/Sections/ActionSection';
 import DialogModal from '@/Components/Modals/DialogModal';
 import InputError from '@/Components/Modals/InputError';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 export default function LogoutOtherBrowserSessions({ sessions }) {
@@ -59,7 +58,7 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    className="w-8 h-8 text-gray-500"
+                    className="h-8 w-8 text-gray-500"
                   >
                     <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
@@ -72,7 +71,7 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="w-8 h-8 text-gray-500"
+                    className="h-8 w-8 text-gray-500"
                   >
                     <path d="M0 0h24v24H0z" stroke="none"></path>
                     <rect x="7" y="4" width="10" height="16" rx="1"></rect>
@@ -90,7 +89,7 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
                   <div className="text-xs text-gray-500">
                     {session.ip_address},
                     {session.is_current_device ? (
-                      <span className="text-green-500 font-semibold">
+                      <span className="font-semibold text-green-500">
                         This device
                       </span>
                     ) : (
@@ -104,10 +103,14 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
         </div>
       ) : null}
 
-      <div className="flex items-center mt-5">
-        <PrimaryButton onClick={confirmLogout}>
+      <div className="mt-5 flex items-center">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={confirmLogout}
+        >
           Log Out Other Browser Sessions
-        </PrimaryButton>
+        </button>
 
         <ActionMessage on={form.recentlySuccessful} className="ml-3">
           Done.
@@ -136,13 +139,16 @@ export default function LogoutOtherBrowserSessions({ sessions }) {
         <DialogModal.Footer>
           <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-          <PrimaryButton
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
+              'opacity-25': form.processing,
+            })}
             onClick={logoutOtherBrowserSessions}
-            className={classNames('ml-2', { 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Log Out Other Browser Sessions
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
     </ActionSection>

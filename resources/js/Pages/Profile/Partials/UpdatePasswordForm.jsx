@@ -1,12 +1,11 @@
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useRef } from 'react';
-import { router } from '@inertiajs/react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 export default function UpdatePasswordForm() {
   const form = useForm({
@@ -46,12 +45,15 @@ export default function UpdatePasswordForm() {
             Saved.
           </ActionMessage>
 
-          <PrimaryButton
-            className={classNames({ 'opacity-25': form.processing })}
+          <button
+            type="submit"
+            className={classNames('btn btn-primary', {
+              'opacity-25': form.processing,
+            })}
             disabled={form.processing}
           >
             Save
-          </PrimaryButton>
+          </button>
         </>
       )}
     >

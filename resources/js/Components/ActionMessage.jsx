@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import React from 'react';
+import PropTypes from 'prop-types';
 export default function ActionMessage({ on, className, children }) {
   return (
     <div className={className}>
@@ -14,3 +14,8 @@ export default function ActionMessage({ on, className, children }) {
     </div>
   );
 }
+ActionMessage.propTypes = {
+  on: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.node,
+};

@@ -1,10 +1,9 @@
 import axios from 'axios';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
 import DialogModal from '@/Components/Modals/DialogModal';
 import InputError from '@/Components/Modals/InputError';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 export default function ConfirmsPassword({
@@ -81,13 +80,16 @@ export default function ConfirmsPassword({
         <DialogModal.Footer>
           <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-          <PrimaryButton
-            className={classNames('ml-2', { 'opacity-25': form.processing })}
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
+              'opacity-25': form.processing,
+            })}
             onClick={confirmPassword}
             disabled={form.processing}
           >
             {button}
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
     </span>

@@ -23,10 +23,10 @@ export default function CreateInst() {
     return (
       <div>
         {arrOfAllAddedEmailSlots.map(id => (
-          <div id="one_user" className="flex">
+          <div key={id} id="one_user" className="flex">
             <div className="w-1/2">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                 id="access"
               >
                 Access Type
@@ -34,23 +34,23 @@ export default function CreateInst() {
               <div className="relative">
                 <select
                   name={id + '-access'}
-                  className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 >
                   <option>MODEL_OWNER</option>
                   <option>VIEWER</option>
                 </select>
               </div>
             </div>
-            <div className="w-1/2 px-3 mb-6">
+            <div className="mb-6 w-1/2 px-3">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                 id="email"
               >
                 User email
               </label>
               <input
                 name={id + '-email'}
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 type="email"
                 placeholder="j.smith@inst1.edu"
               ></input>
@@ -112,9 +112,7 @@ export default function CreateInst() {
           ? null
           : constructedEmailDict,
       is_pdp: pdpChecked,
-      pdp_id: pdpChecked
-        ? (event.target.elements.pdp_id?.value || null)
-        : null,
+      pdp_id: pdpChecked ? event.target.elements.pdp_id?.value || null : null,
     };
     if (schoolType === 'edvise') payload.is_edvise = true;
     if (schoolType === 'legacy') payload.is_legacy = true;
@@ -143,7 +141,7 @@ export default function CreateInst() {
     <AppLayout
       title="Create Institution"
       renderHeader={() => (
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Create Institution
         </h2>
       )}
@@ -158,30 +156,30 @@ export default function CreateInst() {
           minorTitle="Create New Institution"
         ></HeaderLabel>
         <form
-          className="w-full max-w-full pl-36 pr-36 pt-24"
+          className="w-full max-w-full pt-24 pr-36 pl-36"
           onSubmit={handleSubmit}
           onReset={() => setSchoolType('')}
         >
           <div id="form_contents" className="flex flex-col gap-y-6">
-            <div className="flex flex-row w-full gap-x-6">
-              <div className="flex flex-col w-2/3">
+            <div className="flex w-full flex-row gap-x-6">
+              <div className="flex w-2/3 flex-col">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                   id="inst_name"
                 >
                   Institution Name
                 </label>
                 <input
                   name="inst_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
                   type="text"
                   placeholder="College/University Name"
                 ></input>
-                <p className="text-gray-700 text-xs italic">Required field.</p>
+                <p className="text-xs text-gray-700 italic">Required field.</p>
               </div>
-              <div className="flex flex-col w-1/3">
+              <div className="flex w-1/3 flex-col">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                   id="state"
                 >
                   State
@@ -189,7 +187,7 @@ export default function CreateInst() {
                 <div className="relative">
                   <select
                     name="state"
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                   >
                     <option defaultValue></option>
                     <option>AK</option>
@@ -246,8 +244,8 @@ export default function CreateInst() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-row w-full gap-x-6">
-              <div className="flex flex-col w-1/2">
+            <div className="flex w-full flex-row gap-x-6">
+              <div className="flex w-1/2 flex-col">
                 <fieldset>
                   <legend className="text-base font-semibold text-gray-900">
                     Institution type
@@ -255,9 +253,9 @@ export default function CreateInst() {
                   <p className="mt-1 text-sm text-gray-600">
                     Choose exactly one. Required before submit.
                   </p>
-                  <div className="mt-4 space-y-3 border-b border-t border-gray-200 py-3">
+                  <div className="mt-4 space-y-3 border-t border-b border-gray-200 py-3">
                     {SCHOOL_TYPES.map(({ value, label }) => (
-                      <div key={value} className="flex gap-3 items-center">
+                      <div key={value} className="flex items-center gap-3">
                         <input
                           id={`school_type_${value}`}
                           name="school_type"
@@ -278,27 +276,27 @@ export default function CreateInst() {
                   </div>
                 </fieldset>
               </div>
-              <div className="flex flex-col w-1/2">
+              <div className="flex w-1/2 flex-col">
                 {schoolType === 'pdp' ? (
                   <>
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
                       id="pdp_id"
                     >
                       PDP Institution ID
                     </label>
                     <input
                       name="pdp_id"
-                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                       type="text"
                     ></input>
-                    <p className="text-gray-600 text-xs italic">
+                    <p className="text-xs text-gray-600 italic">
                       For PDP schools, please add the PDP_INST id of the
                       institution. Include any leading zeroes.
                     </p>
                   </>
                 ) : (
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-sm text-gray-600">
                     PDP Institution ID applies only when PDP is selected.
                   </p>
                 )}
@@ -312,28 +310,22 @@ export default function CreateInst() {
             <button
               id="button_add_field"
               type="button"
-              className="flex bg-gray-200 text-gray-700 py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
+              className="mb-4 flex w-1/3 items-center justify-center rounded-lg bg-gray-200 px-3 py-2 text-gray-700"
               onClick={incrementCounter}
             >
               Add Another Email
             </button>
           </div>
-          <div className="flex w-full justify-center pt-12 gap-x-6">
-            <button
-              type="reset"
-              className="flex bg-white text-[#f79222] border border-[#f79222] py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
-            >
+          <div className="flex w-full justify-center gap-x-6 pt-12">
+            <button type="reset" className="btn btn-secondary">
               Reset
             </button>
-            <button
-              type="submit"
-              className="flex bg-[#f79222] text-white py-2 px-3 rounded-lg mb-4 justify-center items-center w-1/3"
-            >
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </div>
         </form>
-        <div id="result_area" className="flex pb-24 pt-12"></div>
+        <div id="result_area" className="flex pt-12 pb-24"></div>
       </div>
     </AppLayout>
   );

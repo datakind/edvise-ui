@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
@@ -21,7 +22,7 @@ export default function InviteValidation() {
   return (
     <AuthLayout>
       <div className="layout:box-container landing-rounded-lg relative mx-auto w-3/4 bg-white pb-20 sm:pb-44">
-        <div className="mx-auto -mb-12 mt-12 w-full max-w-2xl p-4">
+        <div className="mx-auto mt-12 -mb-12 w-full max-w-2xl p-4">
           <Head title="Invite Validation" />
           <img
             className="w-1/3 pb-12"
@@ -60,7 +61,7 @@ export default function InviteValidation() {
             <div className="mt-4 flex items-center justify-end">
               <Link
                 href={route('login')}
-                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
               >
                 Already have an account?
               </Link>
@@ -79,7 +80,7 @@ export default function InviteValidation() {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-500">
-              Don't have an invite code? Please contact your administrator.
+              Don&apos;t have an invite code? Please contact your administrator.
             </p>
           </div>
           <div className="text-center">

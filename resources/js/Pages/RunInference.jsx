@@ -1,18 +1,15 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import Steppers from '@/Components/Steppers';
-import HeaderLabel from '@/Components/HeaderLabel';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Link } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 
 export default function RunInference() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep] = useState(1);
   const [triggeredRun, setTriggeredRun] = useState(false);
   const [result, setResult] = useState('');
-  const steps = [{ label: 'Start Prediction', step: 1 }];
 
   const [batchList, setBatchList] = useState([]);
   const [modelsList, setModelsList] = useState([]);
@@ -114,13 +111,13 @@ export default function RunInference() {
     );
   };
 
-  const renderPredictionParamInputs = currentStep => {
+  const renderPredictionParamInputs = () => {
     return (
       <div className="flex w-full flex-col items-center justify-center p-12">
         <h1 className="mb-12 text-5xl font-light">Start Prediction</h1>
         <div className="flex text-gray-700">
-          For the most up-to-date Edvise predictions we recommend
-          starting a new prediction for each semester.
+          For the most up-to-date Edvise predictions we recommend starting a new
+          prediction for each semester.
         </div>
         <div className="flex pb-6 text-gray-700">
           Select the model and batch that you would like to run a prediction on.
@@ -149,7 +146,7 @@ export default function RunInference() {
                   id="batch_name"
                 >
                   {batchList.map(b => (
-                    <option>{b.name}</option>
+                    <option key={b.batch_id ?? b.name}>{b.name}</option>
                   ))}
                 </select>
               </div>
@@ -183,15 +180,12 @@ export default function RunInference() {
               id="model_name"
             >
               {modelsList.map(m => (
-                <option>{m.name}</option>
+                <option key={m.name}>{m.name}</option>
               ))}
             </select>
           )}
           <div className="flex w-full items-end justify-end pt-12">
-            <button
-              type="submit"
-              className="mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 text-black"
-            >
+            <button type="submit" className="btn btn-primary">
               Generate Predictions
             </button>
           </div>
@@ -204,7 +198,7 @@ export default function RunInference() {
     <AppLayout
       title="Start Prediction"
       renderHeader={() => (
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <h2 className="text-xl leading-tight font-semibold text-gray-800">
           Run Inference
         </h2>
       )}

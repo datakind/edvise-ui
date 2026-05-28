@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import ActionSection from '@/Components/Sections/ActionSection';
 import DangerButton from '@/Components/Buttons/DangerButton';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import SectionBorder from '@/Components/Fields/SectionBorder';
 import TextInput from '@/Components/Fields/TextInput';
@@ -71,10 +71,6 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
     );
   };
 
-  const confirmTeamMemberRemoval = member => {
-    setTeamMemberBeingRemoved(member);
-  };
-
   const removeTeamMember = () => {
     if (!teamMemberBeingRemoved) return;
 
@@ -109,7 +105,7 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
           id="role"
           value={addTeamMemberForm.data.role}
           onChange={e => addTeamMemberForm.setData('role', e.target.value)}
-          className="w-2/3 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          className="focus:ring-opacity-50 mt-1 block w-2/3 w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500"
         >
           <option value="" disabled>
             Select a role
@@ -123,7 +119,13 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
         <InputError message={addTeamMemberForm.errors.role} className="mt-2" />
 
         <div className="mt-4 flex justify-end">
-          <PrimaryButton onClick={addTeamMember}>Add</PrimaryButton>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={addTeamMember}
+          >
+            Add
+          </button>
         </div>
       </ActionSection>
 
@@ -153,7 +155,7 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
             id="role"
             value={updateRoleForm.data.role}
             onChange={e => updateRoleForm.setData('role', e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500"
           >
             <option value="" disabled>
               Select a role
@@ -167,9 +169,13 @@ const TeamManagement = ({ team, availableRoles, userPermissions }) => {
           <InputError message={updateRoleForm.errors.role} className="mt-2" />
 
           <div className="mt-4 flex justify-end">
-            <PrimaryButton onClick={updateRole} className="ml-3">
+            <button
+              type="button"
+              className="btn btn-primary ml-3"
+              onClick={updateRole}
+            >
               Update
-            </PrimaryButton>
+            </button>
             <SecondaryButton onClick={() => setManagingRoleFor(null)}>
               Cancel
             </SecondaryButton>

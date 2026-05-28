@@ -2,7 +2,9 @@
 
 use App\Helpers\InstitutionHelper;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\DataDictionaryController;
 use App\Http\Controllers\DemoRequestController;
+use App\Http\Controllers\InviteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModelResultsOverviewController;
 use App\Http\Controllers\ModelRunIdController;
@@ -29,7 +31,7 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
-Route::get('/data-dictionary', [App\Http\Controllers\DataDictionaryController::class, 'show'])->name('data-dictionary');
+Route::get('/data-dictionary', [DataDictionaryController::class, 'show'])->name('data-dictionary');
 
 Route::get('/faq', function () {
     return Inertia::render('Faq');
@@ -54,10 +56,10 @@ Route::get('/login', function () {
 })->name('login');
 
 // Invite system routes
-Route::get('/invite', [App\Http\Controllers\InviteController::class, 'showInviteForm'])->name('invite.validation');
-Route::post('/invite/validate', [App\Http\Controllers\InviteController::class, 'validateInvite'])->name('invite.validate');
-Route::get('/register', [App\Http\Controllers\InviteController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [App\Http\Controllers\InviteController::class, 'register'])->name('register.post');
+Route::get('/invite', [InviteController::class, 'showInviteForm'])->name('invite.validation');
+Route::post('/invite/validate', [InviteController::class, 'validateInvite'])->name('invite.validate');
+Route::get('/register', [InviteController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [InviteController::class, 'register'])->name('register.post');
 
 // AUTH RELATED ROUTES
 
@@ -218,14 +220,15 @@ Route::get('/get-model-run-id/{inst_id}', [ModelRunIdController::class, 'getByIn
 
 // Admin invite management routes
 Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {
-    Route::get('/admin/invites', [App\Http\Controllers\InviteController::class, 'listInvites'])->name('admin.invites');
-    Route::post('/admin/invites', [App\Http\Controllers\InviteController::class, 'createInvite'])->name('admin.invites.create');
-    Route::post('/admin/invites/{invite}/resend', [App\Http\Controllers\InviteController::class, 'resendInvite'])->name('admin.invites.resend');
-    Route::delete('/admin/invites/{invite}', [App\Http\Controllers\InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
+    Route::get('/admin/invites', [InviteController::class, 'listInvites'])->name('admin.invites');
+    Route::post('/admin/invites', [InviteController::class, 'createInvite'])->name('admin.invites.create');
+    Route::post('/admin/invites/{invite}/resend', [InviteController::class, 'resendInvite'])->name('admin.invites.resend');
+    Route::delete('/admin/invites/{invite}', [InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
 });
 
 Route::middleware('auth.app')->get('/eda', function (Request $request) {
     return Inertia::render('EdaDashboard', [
         'batch_id' => $request->query('batch_id'),
+        'clear_cache' => $request->query('clear-cache') === '1',
     ]);
 })->name('eda');

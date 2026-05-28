@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -62,7 +62,6 @@ class ModelResultsOverviewController extends Controller
 
     /**
      * @param  Response|JsonResponse|null  $response
-     * @return array|null
      */
     private function responseData($response): ?array
     {

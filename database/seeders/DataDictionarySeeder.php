@@ -52,7 +52,7 @@ class DataDictionarySeeder extends Seeder
             'Authorization' => $token->access,
             'Cache-Control' => 'no-cache',
         ];
-        $response = Http::withHeaders($headers)->get(env('DK_API_SUITE_URL').'/'.$endpoint);
+        $response = Http::withHeaders($headers)->get(config('services.dk_api_suite.url').'/'.$endpoint);
 
         if ($response->successful()) {
             $data = $response->json();

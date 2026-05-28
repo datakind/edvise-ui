@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
+import { route } from 'ziggy-js';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
 import ActionMessage from '@/Components/Modals/ActionMessage';
 import ActionSection from '@/Components/Sections/ActionSection';
 import Checkbox from '@/Components/Fields/Checkbox';
@@ -11,7 +11,6 @@ import DialogModal from '@/Components/Modals/DialogModal';
 import FormSection from '@/Components/Sections/FormSection';
 import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton';
 import TextInput from '@/Components/Fields/TextInput';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import SectionBorder from '@/Components/Fields/SectionBorder';
@@ -93,14 +92,15 @@ export default function APITokenManager({
               Created.
             </ActionMessage>
 
-            <PrimaryButton
-              className={classNames({
+            <button
+              type="submit"
+              className={classNames('btn btn-primary', {
                 'opacity-25': createApiTokenForm.processing,
               })}
               disabled={createApiTokenForm.processing}
             >
               Create
-            </PrimaryButton>
+            </button>
           </>
         )}
       >
@@ -128,7 +128,7 @@ export default function APITokenManager({
           <div className="col-span-6">
             <InputLabel htmlFor="permissions">Permissions</InputLabel>
 
-            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
               {availablePermissions.map(permission => (
                 <div key={permission}>
                   <label className="flex items-center">
@@ -197,20 +197,22 @@ export default function APITokenManager({
                       )}
 
                       {availablePermissions.length > 0 ? (
-                        <PrimaryButton
-                          className="cursor-pointer ml-6 text-sm text-gray-400 underline"
+                        <button
+                          type="button"
+                          className="ml-6 cursor-pointer border-0 bg-transparent p-0 text-sm text-gray-400 underline"
                           onClick={() => manageApiTokenPermissions(token)}
                         >
                           Permissions
-                        </PrimaryButton>
+                        </button>
                       ) : null}
 
-                      <PrimaryButton
-                        className="cursor-pointer ml-6 text-sm text-red-500"
+                      <button
+                        type="button"
+                        className="ml-6 cursor-pointer border-0 bg-transparent p-0 text-sm text-red-500"
                         onClick={() => confirmApiTokenDeletion(token)}
                       >
                         Delete
-                      </PrimaryButton>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -227,11 +229,11 @@ export default function APITokenManager({
       >
         <DialogModal.Content title={'API Token'}>
           <div>
-            Please copy your new API token. For your security, it won't be shown
-            again.
+            Please copy your new API token. For your security, it won&apos;t be
+            shown again.
           </div>
 
-          <div className="mt-4 bg-gray-100 px-4 py-2 rounded font-mono text-sm text-gray-500">
+          <div className="mt-4 rounded bg-gray-100 px-4 py-2 font-mono text-sm text-gray-500">
             {page.props?.jetstream?.flash?.token}
           </div>
         </DialogModal.Content>
@@ -248,7 +250,7 @@ export default function APITokenManager({
         onClose={() => setManagingPermissionsFor(null)}
       >
         <DialogModal.Content title={'API Token Permissions'}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {availablePermissions.map(permission => (
               <div key={permission}>
                 <label className="flex items-center">
@@ -290,15 +292,16 @@ export default function APITokenManager({
             Cancel
           </SecondaryButton>
 
-          <PrimaryButton
-            onClick={updateApiToken}
-            className={classNames('ml-2', {
+          <button
+            type="button"
+            className={classNames('btn btn-primary ml-2', {
               'opacity-25': updateApiTokenForm.processing,
             })}
+            onClick={updateApiToken}
             disabled={updateApiTokenForm.processing}
           >
             Save
-          </PrimaryButton>
+          </button>
         </DialogModal.Footer>
       </DialogModal>
 

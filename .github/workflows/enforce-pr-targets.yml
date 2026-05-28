@@ -1,0 +1,27 @@
+name: enforce-pr-targets
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  check-pr-targets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR base and head branches
+        run: |
+          set -euo pipefail
+          BASE="${{ github.base_ref }}"
+          HEAD="${{ github.head_ref }}"
+
+          if [[ "$BASE" == "main" ]]; then
+            case "$HEAD" in
+              release/*|hotfix/*) exit 0 ;;
+              *)
+                echo "Pull requests into main must come from release/* or hotfix/* branches (got: ${HEAD})."
+                exit 1
+                ;;
+            esac
+          fi

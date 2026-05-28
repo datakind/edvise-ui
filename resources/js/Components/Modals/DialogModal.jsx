@@ -10,7 +10,7 @@ DialogModal.Content = function DialogModalContent({ title, children }) {
   );
 };
 DialogModal.Footer = function DialogModalFooter({ children }) {
-  return <div className="px-6 py-4 bg-gray-100 text-right">{children}</div>;
+  return <div className="bg-gray-100 px-6 py-4 text-right">{children}</div>;
 };
 export default function DialogModal({ children, ...modalProps }) {
   return <Modal {...modalProps}>{children}</Modal>;

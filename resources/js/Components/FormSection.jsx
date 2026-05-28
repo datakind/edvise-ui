@@ -13,7 +13,7 @@ export default function FormSection({
     <div className="md:grid md:grid-cols-3 md:gap-6">
       <SectionTitle title={title} description={description} />
 
-      <div className="mt-5 md:mt-0 md:col-span-2">
+      <div className="mt-5 md:col-span-2 md:mt-0">
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -22,7 +22,7 @@ export default function FormSection({
         >
           <div
             className={classNames(
-              'px-4 py-5 bg-white sm:p-6 shadow',
+              'bg-white px-4 py-5 shadow sm:p-6',
               hasActions
                 ? 'sm:rounded-tl-md sm:rounded-tr-md'
                 : 'sm:rounded-md',
@@ -32,7 +32,7 @@ export default function FormSection({
           </div>
 
           {hasActions && (
-            <div className="flex items-center justify-end px-4 py-3 bg-gray-50 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
+            <div className="flex items-center justify-end bg-gray-50 px-4 py-3 text-right shadow sm:rounded-br-md sm:rounded-bl-md sm:px-6">
               {renderActions?.()}
             </div>
           )}

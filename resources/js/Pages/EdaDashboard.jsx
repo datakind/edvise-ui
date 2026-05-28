@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Head, usePage, router } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout';
@@ -7,7 +7,6 @@ import PageHeading from '@/Components/PageHeading';
 import H2 from '@/Components/H2';
 import StatCard from '@/Components/StatCard';
 import Card from '@/Components/Card';
-import Spinner from '@/Components/Spinner';
 import wrap from 'word-wrap';
 import { getBatchInfo } from '@/utils/batchUtils';
 
@@ -202,11 +201,7 @@ const enrollmentIntensityOptions = gpaData => {
   return GpaChartOptions({ gpaData });
 };
 
-const createHorizontalStackedBarOption = ({
-  xAxisName,
-  termChartData,
-  yAxisName = 'Cohort Year',
-}) => {
+const createHorizontalStackedBarOption = ({ xAxisName, termChartData }) => {
   const y_axis_labels =
     termChartData?.years || termChartData?.y_axis_labels || [];
   const by_year = termChartData?.by_year || [];
@@ -435,7 +430,6 @@ const createVerticalStackedBarOption = ({
   xAxisName,
   categories,
   data,
-  maxValue,
   legendData,
 }) => ({
   ...baseEChartsConfig,
@@ -614,7 +608,10 @@ const raceByPellStatusOptions = data => {
   };
 };
 
-export default function EdaDashboard({ batch_id: propBatchId }) {
+export default function EdaDashboard({
+  batch_id: propBatchId,
+  clear_cache = false,
+}) {
   const { institution } = usePage().props;
   const inst_id = institution?.inst_id;
   const [batchInfo, setBatchInfo] = useState(null);
@@ -692,6 +689,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         setError(null);
         const response = await axios.get(
           `/institutions/${inst_id}/batch/${batchInfo.batch_id}/eda`,
+          clear_cache ? { params: { 'clear-cache': 1 } } : undefined,
         );
 
         if (!response.data) {
@@ -727,7 +725,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
     };
 
     fetchEdaData();
-  }, [inst_id, batchInfo]);
+  }, [inst_id, batchInfo, clear_cache]);
 
   // Create chart options from API data
   const enrollmentIntensityOption = edaData?.gpa_by_enrollment_intensity
@@ -801,7 +799,7 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
         <div className="min-w-full bg-[#FAFAFA] p-6">
           <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <H2>At a Glance</H2>
-            <div className="flex flex-row items-center gap-6 text-right text-sm font-light text-heading/80">
+            <div className="text-heading/80 flex flex-row items-center gap-6 text-right text-sm font-light">
               {batchInfo && (
                 <>
                   <span>Showing analysis for: Batch {batchInfo.batch_id}</span>
@@ -897,7 +895,6 @@ export default function EdaDashboard({ batch_id: propBatchId }) {
                         option={createHorizontalStackedBarOption({
                           xAxisName: 'Number of Students',
                           termChartData: edaData.students_by_cohort_term,
-                          yAxisName: 'Cohort Year',
                         })}
                       />
                     )}

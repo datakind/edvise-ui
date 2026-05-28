@@ -37,12 +37,12 @@ class CreateTestInvite extends Command
             'invited_by' => 'console',
         ]);
 
-        $this->info("Test invite created successfully!");
+        $this->info('Test invite created successfully!');
         $this->info("Email: {$invite->email}");
         $this->info("Role: {$invite->role}");
         $this->info("Invite Code: {$invite->invite_code}");
         $this->info("Expires: {$invite->expires_at}");
-        $this->info("URL: " . route('invite.validation'));
+        $this->info('URL: '.route('invite.validation'));
 
         return Command::SUCCESS;
     }

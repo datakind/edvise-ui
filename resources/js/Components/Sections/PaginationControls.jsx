@@ -6,9 +6,9 @@ export default function PaginationControls({
   setCurrentPage,
 }) {
   return (
-    <div className="flex justify-between mt-4">
+    <div className="mt-4 flex justify-between">
       <button
-        className={`px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-gray-200 text-gray-500' : 'bg-primary text-white'}`}
+        className={`rounded-lg px-4 py-2 ${currentPage === 1 ? 'bg-gray-200 text-gray-500' : 'bg-primary text-white'}`}
         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
         disabled={currentPage === 1}
       >
@@ -18,7 +18,7 @@ export default function PaginationControls({
         Page {currentPage} of {totalPages}
       </span>
       <button
-        className={`px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-gray-200 text-gray-500' : 'bg-primary text-white'}`}
+        className={`rounded-lg px-4 py-2 ${currentPage === totalPages ? 'bg-gray-200 text-gray-500' : 'bg-primary text-white'}`}
         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
         disabled={currentPage === totalPages}
       >

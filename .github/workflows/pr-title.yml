@@ -20,11 +20,14 @@ jobs:
             chore
             ci
             docs
+            enhance
             feat
             fix
+            infra
             model
             perf
             refactor
             revert
+            security
             style
             test

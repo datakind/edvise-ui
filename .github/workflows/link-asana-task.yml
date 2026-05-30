@@ -9,6 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Create pull request attachments on Asana tasks
     steps:
+      - name: Require Asana task URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || "";
+            const asanaTaskUrl = /https:\/\/app\.asana\.com\/0\/[0-9]+\/[0-9]+/i;
+
+            if (!asanaTaskUrl.test(body)) {
+              core.setFailed("PR description must include an Asana task URL.");
+            }
       - name: Create pull request attachments
         uses: Asana/create-app-attachment-github-action@latest
         id: postAttachment

@@ -1,0 +1,14 @@
+name: Attach PR to Asana task
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, ready_for_review]
+
+jobs:
+  attach-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Attach PR to Asana task
+        uses: Asana/create-app-attachment-github-action@latest
+        env:
+          ASANA_SECRET: ${{ secrets.ASANA_SECRET }}

@@ -14,7 +14,7 @@ jobs:
         with:
           script: |
             const body = context.payload.pull_request.body || "";
-            const asanaTaskUrl = /https:\/\/app\.asana\.com\/0\/[0-9]+\/[0-9]+/i;
+            const asanaTaskUrl = /https:\/\/app\.asana\.com\/(?:0\/(?:0|[0-9]+)\/(?:task\/)?[0-9]+|1\/[0-9]+\/project\/[0-9]+\/task\/[0-9]+)/i;
 
             if (!asanaTaskUrl.test(body)) {
               core.setFailed("PR description must include an Asana task URL.");

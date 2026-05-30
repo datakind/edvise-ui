@@ -5,10 +5,14 @@ on:
     types: [opened, edited, reopened, ready_for_review]
 
 jobs:
-  attach-pr:
+  create-asana-attachment-job:
     runs-on: ubuntu-latest
+    name: Create pull request attachments on Asana tasks
     steps:
-      - name: Attach PR to Asana task
+      - name: Create pull request attachments
         uses: Asana/create-app-attachment-github-action@latest
-        env:
-          ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
+        id: postAttachment
+        with:
+          asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Log output status
+        run: echo "Status is ${{ steps.postAttachment.outputs.status }}"

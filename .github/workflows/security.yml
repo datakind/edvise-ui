@@ -3,30 +3,18 @@ name: Dependency security
 on:
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - run: npm audit --audit-level=high
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          tools: composer
-      - run: composer audit --locked --ignore-severity=low --ignore-severity=medium
+  npm-audit:
+    uses: ./.github/workflows/npm-audit.yml
+    permissions:
+      contents: read
+
+  composer-audit:
+    uses: ./.github/workflows/composer-audit.yml
+    permissions:
+      contents: read
 
   dependency-review:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/dependency-review-action@v5
-        with:
-          fail-on-severity: high
+    uses: ./.github/workflows/dependency-review.yml
+    permissions:
+      contents: read

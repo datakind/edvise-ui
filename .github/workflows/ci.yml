@@ -18,11 +18,11 @@ jobs:
     uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared_workflows
 
   # Node repos with package-lock.json
-  # npm-audit:
-  #   uses: datakind/.github/.github/workflows/npm-audit.yml@main
-  #   with:
-  #     node-version: '24'
-  #     audit-level: high
+  npm-audit:
+    uses: datakind/.github/.github/workflows/npm-audit.yml@feature/shared_workflows
+    with:
+      node-version: '24'
+      audit-level: high
 
   # PHP repos with composer.lock
   # composer-audit:

@@ -7,7 +7,7 @@ import Alert from '@/Components/Alert';
 import { formatModelName } from '@/utils/stringUtils';
 import PageHeading from '@/Components/PageHeading';
 
-export default function Dashboard({ modelname }) {
+export default function ModelResults({ modelname }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // These only need to be set once
@@ -99,10 +99,10 @@ export default function Dashboard({ modelname }) {
 
   return (
     <AppLayout
-      title="Dashboard"
+      title="Model Results"
       renderHeader={() => (
         <h2 className="text-xl leading-tight font-semibold text-gray-800">
-          Dashboard
+          Model Results
         </h2>
       )}
     >
@@ -127,7 +127,7 @@ export default function Dashboard({ modelname }) {
               className="flex w-full flex-col items-center"
               id="main_content"
             >
-              <PageHeading>Dashboard</PageHeading>
+              <PageHeading>Model Results</PageHeading>
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}
                   ? ''

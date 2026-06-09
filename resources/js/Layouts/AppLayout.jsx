@@ -236,7 +236,7 @@ export default function AppLayout({ title, children }) {
       const navDisclosureActive =
         item.children &&
         (item.children.some(e => e.name === title) ||
-          (item.name === 'Model Results' && title === 'Dashboard'));
+          (item.name === 'Model Results' && title === 'Model Results'));
 
       return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
         (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||

@@ -88,7 +88,7 @@ Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback'
 /*
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('ModelResults');
         // return redirect()->route('home'); // simply returns the homepage
     })->name('dashboard');
 });
@@ -104,8 +104,8 @@ Route::middleware('auth.app.invite')->group(function () {
 // AUTHED ROUTES (invite + terms + verified)
 Route::middleware('auth.app.invite')->group(function () {
     Route::get('/file-upload', fn () => Inertia::render('FileUpload'))->name('file-upload');
-    Route::get('/dashboard/{modelname}', fn ($modelname) => Inertia::render('Dashboard', ['modelname' => $modelname]))->name('dashboard_modelname');
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/dashboard/{modelname}', fn ($modelname) => Inertia::render('ModelResults', ['modelname' => $modelname]))->name('dashboard_modelname');
+    Route::get('/dashboard', fn () => Inertia::render('ModelResults'))->name('dashboard');
 });
 
 // App home and main app routes (auth + terms + verified)

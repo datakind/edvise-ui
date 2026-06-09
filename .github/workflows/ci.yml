@@ -32,15 +32,15 @@ jobs:
       contents: read
 
   # Apps with develop/main branching: PRs into main must come from release/* or hotfix/*
-  # enforce-targets:
-  #   uses: datakind/.github/.github/workflows/enforce-pr-targets.yml@feature/shared-workflows
+  enforce-targets:
+    uses: datakind/.github/.github/workflows/enforce-pr-targets.yml@feature/shared-workflows
 
   # Release repos: require CHANGELOG.md updates on PRs to main
-  # pre-release:
-  #   if: github.base_ref == 'main'
-  #   permissions:
-  #     pull-requests: read
-  #   uses: datakind/.github/.github/workflows/pre-release.yml@feature/shared-workflows
+  pre-release:
+    if: github.base_ref == 'main'
+    permissions:
+      pull-requests: read
+    uses: datakind/.github/.github/workflows/pre-release.yml@feature/shared-workflows
 
   # lint / tests: call from here once pull_request triggers are removed from those workflows
   # lint:

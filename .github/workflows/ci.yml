@@ -11,11 +11,10 @@ jobs:
     permissions:
       pull-requests: read
 
-  # Blocked until link-asana-task.yml is converted to workflow_call in datakind/.github
-  # asana:
-  #   uses: datakind/.github/.github/workflows/link-asana-task.yml@feature/shared-workflows
-  #   secrets:
-  #     ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
+  asana:
+    uses: datakind/.github/.github/workflows/link-asana-task.yml@feature/shared-workflows
+    secrets:
+      ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
 
   dependency-review:
     uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared-workflows

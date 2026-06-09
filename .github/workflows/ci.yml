@@ -1,0 +1,70 @@
+# Copy to your repo as .github/workflows/ci.yml and customize.
+name: CI
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, ready_for_review, synchronize]
+    branches: [main, develop]
+
+jobs:
+  pr-title:
+    uses: datakind/.github/.github/workflows/pr-title.yml@main
+
+  asana:
+    uses: datakind/.github/.github/workflows/link-asana-task.yml@main
+    secrets:
+      ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
+
+  dependency-review:
+    uses: datakind/.github/.github/workflows/dependency-review.yml@main
+
+  # Node repos with package-lock.json
+  # npm-audit:
+  #   uses: datakind/.github/.github/workflows/npm-audit.yml@main
+  #   with:
+  #     node-version: '24'
+  #     audit-level: high
+
+  # PHP repos with composer.lock
+  # composer-audit:
+  #   uses: datakind/.github/.github/workflows/composer-audit.yml@main
+  #   with:
+  #     php-version: '8.4'
+
+  # Apps with develop/main branching: PRs into main must come from release/* or hotfix/*
+  # enforce-targets:
+  #   uses: datakind/.github/.github/workflows/enforce-pr-targets.yml@main
+
+  # Release repos: require CHANGELOG.md updates on PRs to main
+  # pre-release:
+  #   if: github.base_ref == 'main'
+  #   permissions:
+  #     pull-requests: read
+  #   uses: datakind/.github/.github/workflows/pre-release.yml@main
+
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: echo "Add your lint command here"
+
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: echo "Add your test command here"
+
+  # Uncomment after local jobs are added and you want one ruleset check (CI / required).
+  # required:
+  #   needs: [pr-title, asana, dependency-review]
+  #   if: always()
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Require passing checks
+  #       run: |
+  #         for result in \
+  #           "${{ needs.pr-title.result }}" \
+  #           "${{ needs.asana.result }}" \
+  #           "${{ needs.dependency-review.result }}"; do
+  #           case "$result" in success|skipped) ;; *) exit 1 ;; esac
+  #         done

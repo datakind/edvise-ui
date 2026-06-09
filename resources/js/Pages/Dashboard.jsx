@@ -3,7 +3,6 @@ import { route } from 'ziggy-js';
 import React, { useEffect, useState } from 'react';
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
-import ModelRunHistory from '@/Components/ModelRunHistory';
 import Alert from '@/Components/Alert';
 import { formatModelName } from '@/utils/stringUtils';
 import PageHeading from '@/Components/PageHeading';
@@ -170,62 +169,129 @@ export default function Dashboard({ modelname }) {
                       </a>
                     </div>
                   )}
-                  <div className="mx-auto w-full max-w-[1057px]">
-                    <ModelRunHistory
-                      runInfos={[]}
-                      modelName={modelInfo?.name || ''}
-                    />
-                  </div>
                 </>
               ) : (
-                <>
-                  <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
-                    <form
-                      onSubmit={applyDate}
-                      className="flex flex-row items-center justify-center gap-x-2"
-                    >
-                      <div className="flex">Run Time:</div>
-                      <div className="flex">
-                        {runDatesToJobDict == undefined ||
-                        Object.keys(runDatesToJobDict).length == 0 ? (
-                          <select
-                            className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-                            id="run_time"
-                          >
-                            <option disabled value="">
-                              No runs exist
+                <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
+                  <form
+                    onSubmit={applyDate}
+                    className="flex flex-row items-center justify-center gap-x-2"
+                  >
+                    <div className="flex">Run Time:</div>
+                    <div className="flex">
+                      {runDatesToJobDict == undefined ||
+                      Object.keys(runDatesToJobDict).length == 0 ? (
+                        <select
+                          className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                          id="run_time"
+                        >
+                          <option disabled value="">
+                            No runs exist
+                          </option>
+                        </select>
+                      ) : (
+                        <select
+                          className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                          id="run_time"
+                        >
+                          {Object.keys(runDatesToJobDict).map(r => (
+                            <option key={r} value={r}>
+                              {r}
                             </option>
-                          </select>
-                        ) : (
-                          <select
-                            className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-                            id="run_time"
-                          >
-                            {Object.keys(runDatesToJobDict).map(r => (
-                              <option key={r} value={r}>
-                                {r}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                      </div>
+                          ))}
+                        </select>
+                      )}
+                    </div>
 
-                      <button
-                        type="submit"
-                        className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
-                      >
-                        Update View
-                      </button>
-                    </form>
-                  </div>
-                  <div className="mx-auto my-12 w-full max-w-[1057px] rounded-3xl bg-white p-8">
-                    <ModelRunHistory
-                      runInfos={runs}
-                      modelName={modelInfo?.name || ''}
-                    />
-                  </div>
-                </>
+                    <button
+                      type="submit"
+                      className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
+                    >
+                      Update View
+                    </button>
+                  </form>
+                </div>
               )}
+
+              <div className="mx-auto my-12 w-full max-w-[1057px]">
+                <h2 className="text-center text-3xl font-light">
+                  Model Run History
+                </h2>
+                {runs.length === 0 ? (
+                  <div className="flex">
+                    <i>No run available yet.</i>
+                  </div>
+                ) : (
+                  <div className="mt-8 flex w-full justify-center">
+                    <table
+                      className="w-full table-auto rounded-lg bg-white text-left shadow-md"
+                      id="model-history-table"
+                    >
+                      <thead>
+                        <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
+                          <th scope="col" className="p-4 px-6">
+                            DATE
+                          </th>
+                          <th scope="col" className="p-4 px-6">
+                            USER
+                          </th>
+                          <th scope="col" className="p-4 px-6">
+                            BATCH
+                          </th>
+                          <th scope="col" className="p-4 px-6">
+                            RESULTS
+                          </th>
+                          <th scope="col" className="p-4 px-6">
+                            RESULTS .CSV
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {runs.map(run => (
+                          <tr
+                            className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
+                            key={run.run_id}
+                          >
+                            <td className="p-4 px-6">{run.triggered_at}</td>
+                            <td className="p-4 px-6">{run.created_by}</td>
+                            <td className="p-4 px-6 font-medium">
+                              {run.batch_name}
+                            </td>
+                            <td className="p-4 px-6">
+                              {run.completed ? (
+                                <a
+                                  href={route('model-results-overview', [
+                                    run.run_id,
+                                    modelInfo?.name || '',
+                                  ])}
+                                  aria-label={`View model results for run on ${run.triggered_at}`}
+                                >
+                                  View
+                                </a>
+                              ) : (
+                                'Pending'
+                              )}
+                            </td>
+                            <td className="p-4 px-6">
+                              {run.completed ? (
+                                <a
+                                  href={run.output_file_link}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  aria-label={`Download model results for run on ${run.triggered_at}`}
+                                >
+                                  Download
+                                </a>
+                              ) : (
+                                'Pending'
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

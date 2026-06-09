@@ -10,7 +10,7 @@ jobs:
     uses: datakind/.github/.github/workflows/pr-title.yml@main
 
   asana:
-    uses: datakind/.github/.github/workflows/link-asana-task.yml@main
+    uses: datakind/.github/.github/workflows/link-asana-task.yml@feature/shared_workflows
     secrets:
       ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
 

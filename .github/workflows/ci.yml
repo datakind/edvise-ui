@@ -10,16 +10,16 @@ jobs:
     uses: datakind/.github/.github/workflows/pr-title.yml@main
 
   asana:
-    uses: datakind/.github/.github/workflows/link-asana-task.yml@feature/shared_workflows
+    uses: datakind/.github/.github/workflows/link-asana-task.yml@feature/shared-workflows
     secrets:
       ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
 
   dependency-review:
-    uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared_workflows
+    uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared-workflows
 
   # Node repos with package-lock.json
   npm-audit:
-    uses: datakind/.github/.github/workflows/npm-audit.yml@feature/shared_workflows
+    uses: datakind/.github/.github/workflows/npm-audit.yml@feature/shared-workflows
     with:
       node-version: '24'
       audit-level: high

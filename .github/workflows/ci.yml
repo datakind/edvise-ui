@@ -1,4 +1,3 @@
-# Copy to your repo as .github/workflows/ci.yml and customize.
 name: CI
 
 on:
@@ -16,7 +15,7 @@ jobs:
       ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
 
   dependency-review:
-    uses: datakind/.github/.github/workflows/dependency-review.yml@main
+    uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared_workflows
 
   # Node repos with package-lock.json
   # npm-audit:

@@ -120,7 +120,7 @@ export default function ModelRunHistory({ modelname }) {
               className="flex w-full flex-col items-center"
               id="main_content"
             >
-              <PageHeading>Model Results</PageHeading>
+              <h1>Model Run History</h1>
               <div className="mt-4 text-center text-lg font-light">
                 {modelInfo == null || modelInfo == {}
                   ? ''

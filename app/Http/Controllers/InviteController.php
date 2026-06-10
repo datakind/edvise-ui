@@ -143,7 +143,7 @@ class InviteController extends Controller
                 Auth::login($existingUser);
                 InstitutionHelper::syncUserFromBackend($request);
 
-                return redirect()->intended(route('dashboard'));
+                return redirect()->intended(route('model-run-history'));
             } else {
                 // User already validated, redirect to login
                 session()->forget('valid_invite');
@@ -206,7 +206,7 @@ class InviteController extends Controller
         Auth::login($user);
         InstitutionHelper::syncUserFromBackend($request);
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('model-run-history'));
     }
 
     /**

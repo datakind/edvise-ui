@@ -31,8 +31,6 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
-Route::get('/data-dictionary', [DataDictionaryController::class, 'show'])->name('data-dictionary');
-
 Route::get('/faq', function () {
     return Inertia::render('Faq');
 })->name('FAQ');
@@ -111,6 +109,7 @@ Route::middleware('auth.app.invite')->group(function () {
 // App home and main app routes (auth + terms + verified)
 Route::middleware('auth.app')->group(function () {
     Route::get('/app-home', [ApiController::class, 'appHomeRedirect'])->name('app-home');
+    Route::get('/data-dictionary', [DataDictionaryController::class, 'show'])->name('data-dictionary');
     Route::get('/home', fn () => Inertia::render('Home'))->name('home');
     Route::post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
     Route::post('/file-validate-api/{filename}', [ApiController::class, 'fileValidateApi']);

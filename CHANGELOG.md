@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.1] - 2026-06-10
+
+### Fixed
+- EDA dashboard stacked bar charts (e.g. Student Enrollment Type by Intensity) now render when the API returns `{ count, percentage }` data points
+
 ## [1.1.0] - 2026-05-27
 
 Released on Caroline's last week with DataKind. Thank you, Caroline.

@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   pull_request:
@@ -43,7 +43,7 @@ jobs:
     uses: datakind/.github/.github/workflows/pre-release.yml@main
 
   # lint / tests: call from here once pull_request triggers are removed from those workflows
-  # lint:
-  #   uses: ./.github/workflows/lint.yml
-  # tests:
-  #   uses: ./.github/workflows/tests.yml
+  lint:
+    uses: ./.github/workflows/lint.yml
+  tests:
+    uses: ./.github/workflows/tests.yml

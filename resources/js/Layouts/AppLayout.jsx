@@ -46,7 +46,7 @@ var navigationAboveLine = [
   {
     name: 'Model Results',
     icon: ChartBarIcon,
-    href: route('dashboard'),
+    href: route('model-run-history'),
     visibility_type: VisibilityType.PRIVATE_ONLY,
   },
   {
@@ -188,7 +188,7 @@ export default function AppLayout({ title, children }) {
       sortedValidModels.forEach(elem => {
         let transformedElem = {};
         transformedElem.name = elem.name;
-        transformedElem.href = route('dashboard_modelname', elem.name);
+        transformedElem.href = route('model-run-history.modelname', elem.name);
         transformedElem.visibility_type = VisibilityType.PRIVATE_ONLY;
         item.children.push(transformedElem);
       });
@@ -236,7 +236,7 @@ export default function AppLayout({ title, children }) {
       const navDisclosureActive =
         item.children &&
         (item.children.some(e => e.name === title) ||
-          (item.name === 'Model Results' && title === 'Dashboard'));
+          (item.name === 'Model Results' && title === 'Model Results'));
 
       return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
         (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||

@@ -1,0 +1,20 @@
+name: Dependency security
+
+on:
+  pull_request:
+
+jobs:
+  npm-audit:
+    uses: ./.github/workflows/npm-audit.yml
+    permissions:
+      contents: read
+
+  composer-audit:
+    uses: ./.github/workflows/composer-audit.yml
+    permissions:
+      contents: read
+
+  dependency-review:
+    uses: ./.github/workflows/dependency-review.yml
+    permissions:
+      contents: read

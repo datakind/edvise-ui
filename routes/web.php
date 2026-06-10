@@ -83,14 +83,8 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 Route::get('auth/azure', [LoginController::class, 'redirectToAzure']);
 Route::get('auth/azure/callback', [LoginController::class, 'handleAzureCallback']);
 
-/*
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-        // return redirect()->route('home'); // simply returns the homepage
-    })->name('dashboard');
-});
-*/
+Route::redirect('/dashboard', '/model-run-history');
+Route::redirect('/dashboard/{modelname}', '/model-run-history/{modelname}');
 
 // PROFILE RELATED ROUTES
 Route::middleware('auth.app.invite')->group(function () {
@@ -102,8 +96,8 @@ Route::middleware('auth.app.invite')->group(function () {
 // AUTHED ROUTES (invite + terms + verified)
 Route::middleware('auth.app.invite')->group(function () {
     Route::get('/file-upload', fn () => Inertia::render('FileUpload'))->name('file-upload');
-    Route::get('/dashboard/{modelname}', fn ($modelname) => Inertia::render('Dashboard', ['modelname' => $modelname]))->name('dashboard_modelname');
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/model-run-history/{modelname}', fn ($modelname) => Inertia::render('ModelRunHistory', ['modelname' => $modelname]))->name('model-run-history.modelname');
+    Route::get('/model-run-history', fn () => Inertia::render('ModelRunHistory'))->name('model-run-history');
 });
 
 // App home and main app routes (auth + terms + verified)
@@ -148,7 +142,7 @@ Route::middleware(['auth'])->get('/terms/prompt', function () {
 Route::middleware(['auth'])->post('/terms/accept', function () {
     auth()->user()->update(['accepted_terms' => true]);
 
-    return redirect()->route('dashboard');
+    return redirect()->route('model-run-history');
 })->name('terms.accept');
 
 // The below are datakinder only paths.

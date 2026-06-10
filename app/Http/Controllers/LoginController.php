@@ -66,7 +66,7 @@ class LoginController extends Controller
                 Auth::login($existingUser);
                 InstitutionHelper::syncUserFromBackend($request);
 
-                return redirect('/dashboard');
+                return redirect()->route('model-run-history');
             } else {
                 $invite = Invite::where('email', $user->email)
                     ->where('is_used', false)
@@ -145,7 +145,7 @@ class LoginController extends Controller
                 Auth::login($existingUser);
                 InstitutionHelper::syncUserFromBackend($request);
 
-                return redirect('/dashboard');
+                return redirect()->route('model-run-history');
             } else {
                 $invite = Invite::where('email', $user->email)
                     ->where('is_used', false)

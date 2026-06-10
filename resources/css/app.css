@@ -59,6 +59,12 @@
   }
 }
 
+h1 {
+  color: #0a0a0a;
+  font-size: 48px;
+  line-height: 60px;
+}
+
 [x-cloak] {
   display: none;
 }

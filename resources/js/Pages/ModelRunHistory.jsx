@@ -5,7 +5,6 @@ import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import Alert from '@/Components/Alert';
 import { formatModelName } from '@/utils/stringUtils';
-import PageHeading from '@/Components/PageHeading';
 
 export default function ModelRunHistory({ modelname }) {
   const [loading, setLoading] = useState(true);
@@ -13,7 +12,7 @@ export default function ModelRunHistory({ modelname }) {
   // These only need to be set once
   const [modelInfo, setModelInfo] = useState({});
   const [runs, setRuns] = useState([]);
-  const [runDatesToJobDict, setRunDatesToJobDict] = useState({});
+  const [setRunDatesToJobDict] = useState({});
   // These need to be set depending on the current run.
   const [currentRunId, setCurrentRunId] = useState('');
 
@@ -87,15 +86,6 @@ export default function ModelRunHistory({ modelname }) {
 
     fetchModel();
   }, [currentRunId]);
-
-  const applyDate = event => {
-    event.preventDefault();
-    if (event.target.elements.run_time.value == '') {
-      return;
-    }
-    let run_id = runDatesToJobDict[event.target.elements.run_time.value];
-    setCurrentRunId(run_id);
-  };
 
   return (
     <AppLayout title="Model Results">

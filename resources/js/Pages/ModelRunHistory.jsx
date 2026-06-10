@@ -98,14 +98,7 @@ export default function ModelRunHistory({ modelname }) {
   };
 
   return (
-    <AppLayout
-      title="Model Results"
-      renderHeader={() => (
-        <h2 className="text-xl leading-tight font-semibold text-gray-800">
-          Model Results
-        </h2>
-      )}
-    >
+    <AppLayout title="Model Results">
       {
         <div
           className="mx-12 mb-12 flex w-full flex-col rounded-3xl bg-white p-8"

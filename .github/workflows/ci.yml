@@ -17,30 +17,30 @@ jobs:
       ASANA_SECRET: ${{ secrets.ASANA_SECRET }}
 
   dependency-review:
-    uses: datakind/.github/.github/workflows/dependency-review.yml@feature/shared-workflows
+    uses: datakind/.github/.github/workflows/dependency-review.yml@main
     permissions:
       contents: read
 
   npm-audit:
-    uses: datakind/.github/.github/workflows/npm-audit.yml@feature/shared-workflows
+    uses: datakind/.github/.github/workflows/npm-audit.yml@main
     permissions:
       contents: read
 
   composer-audit:
-    uses: datakind/.github/.github/workflows/composer-audit.yml@feature/shared-workflows
+    uses: datakind/.github/.github/workflows/composer-audit.yml@main
     permissions:
       contents: read
 
   # Apps with develop/main branching: PRs into main must come from release/* or hotfix/*
   enforce-targets:
-    uses: datakind/.github/.github/workflows/enforce-pr-targets.yml@feature/shared-workflows
+    uses: datakind/.github/.github/workflows/enforce-pr-targets.yml@main
 
   # Release repos: require CHANGELOG.md updates on PRs to main
   pre-release:
     if: github.base_ref == 'main'
     permissions:
       pull-requests: read
-    uses: datakind/.github/.github/workflows/pre-release.yml@feature/shared-workflows
+    uses: datakind/.github/.github/workflows/pre-release.yml@main
 
   # lint / tests: call from here once pull_request triggers are removed from those workflows
   # lint:

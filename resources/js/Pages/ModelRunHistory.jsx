@@ -7,7 +7,7 @@ import Alert from '@/Components/Alert';
 import { formatModelName } from '@/utils/stringUtils';
 import PageHeading from '@/Components/PageHeading';
 
-export default function ModelResults({ modelname }) {
+export default function ModelRunHistory({ modelname }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // These only need to be set once
@@ -171,45 +171,7 @@ export default function ModelResults({ modelname }) {
                   )}
                 </>
               ) : (
-                <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
-                  <form
-                    onSubmit={applyDate}
-                    className="flex flex-row items-center justify-center gap-x-2"
-                  >
-                    <div className="flex">Run Time:</div>
-                    <div className="flex">
-                      {runDatesToJobDict == undefined ||
-                      Object.keys(runDatesToJobDict).length == 0 ? (
-                        <select
-                          className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-                          id="run_time"
-                        >
-                          <option disabled value="">
-                            No runs exist
-                          </option>
-                        </select>
-                      ) : (
-                        <select
-                          className="flex items-center justify-center rounded-lg border border-gray-200 bg-white px-30 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-                          id="run_time"
-                        >
-                          {Object.keys(runDatesToJobDict).map(r => (
-                            <option key={r} value={r}>
-                              {r}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
-                    >
-                      Update View
-                    </button>
-                  </form>
-                </div>
+                <></>
               )}
 
               <div className="mx-auto my-12 w-full max-w-[1057px]">

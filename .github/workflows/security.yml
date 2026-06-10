@@ -1,14 +1,20 @@
-name: 'Dependency Review'
-on: [pull_request]
+name: Dependency security
 
-permissions:
-  contents: read
+on:
+  pull_request:
 
 jobs:
+  npm-audit:
+    uses: ./.github/workflows/npm-audit.yml
+    permissions:
+      contents: read
+
+  composer-audit:
+    uses: ./.github/workflows/composer-audit.yml
+    permissions:
+      contents: read
+
   dependency-review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v6
-      - name: 'Dependency Review'
-        uses: actions/dependency-review-action@v5
+    uses: ./.github/workflows/dependency-review.yml
+    permissions:
+      contents: read

@@ -130,11 +130,6 @@ export default function ModelRunHistory({ modelname }) {
               {error != null &&
               (error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
                 <>
-                  <div className="flex w-full flex-row justify-between pt-12 pr-12 pl-12">
-                    <div className="flex flex-row items-center justify-center gap-x-2">
-                      Run Time: <i>No run available yet.</i>
-                    </div>
-                  </div>
                   {error.message == 'NO_MODELS' ? (
                     <div className="mt-12 mr-24 ml-24 flex h-32 w-3/4 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500">
                       <div className="flex font-bold">
@@ -167,15 +162,8 @@ export default function ModelRunHistory({ modelname }) {
                 <></>
               )}
 
-              <div className="mx-auto my-12 w-full max-w-[1057px]">
-                <h2 className="text-center text-3xl font-light">
-                  Model Run History
-                </h2>
-                {runs.length === 0 ? (
-                  <div className="flex">
-                    <i>No run available yet.</i>
-                  </div>
-                ) : (
+              <div className="mx-auto w-full max-w-[1057px]">
+                {runs.length > 0 && (
                   <div className="mt-8 flex w-full justify-center">
                     <table
                       className="w-full table-auto rounded-lg bg-white text-left shadow-md"

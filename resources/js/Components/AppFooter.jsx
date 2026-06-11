@@ -6,38 +6,33 @@ export default function AppFooter() {
   const currentYear = new Date().getFullYear();
   const { appVersion } = usePage().props;
   return (
-    <footer className="grid grid-cols-4 items-center pr-6 pb-4 text-black">
-      <div className="col-span-2 text-left">
-        <ul className="items-left justify-left flex flex-wrap pl-12 text-gray-900 dark:text-white">
-          <li>
-            <a
-              href={route('privacy-policy')}
-              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
-            >
-              Privacy Policy
-            </a>
-          </li>
-          <li>
-            <a
-              href={route('terms-of-service')}
-              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
-            >
-              Terms of Service
-            </a>
-          </li>
-          <li>
-            <a
-              href={route('license')}
-              className="me-12 flex text-base font-medium text-black underline hover:font-semibold md:me-6"
-            >
-              License
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div></div>
-      <div className="pr-12 text-right">
-        &copy; 2025 Datakind &mdash; Edvise v{appVersion}
+    <footer className="flex flex-col gap-4 px-6 pb-4 text-black md:flex-row md:items-center md:justify-between">
+      <ul className="flex flex-wrap gap-x-6 gap-y-2 text-gray-900 dark:text-white">
+        <li>
+          <a
+            href={route('privacy-policy')}
+            className="text-base font-medium text-black underline hover:font-semibold"
+          >
+            Privacy Policy
+          </a>
+        </li>
+        <li>
+          <a
+            href={route('terms-of-service')}
+            className="text-base font-medium text-black underline hover:font-semibold"
+          >
+            Terms of Service
+          </a>
+        </li>
+        <li>
+          <a
+            href={route('license')}
+            className="text-base font-medium text-black underline hover:font-semibold"
+          >
+            License
+          </a>
+        </li>
+      </ul>
       <div className="whitespace-nowrap md:text-right">
         &copy; {currentYear} Datakind &mdash; Edvise v{appVersion}
       </div>

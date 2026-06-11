@@ -405,7 +405,11 @@ const createEnrollmentTypeStackedBarOption = ({
 const toStackedBarSeries = (series, stackId) =>
   series.map(s => ({
     name: s.name,
-    data: s.data,
+    data: s.data.map(d =>
+      typeof d === 'object' && d && 'count' in d
+        ? { value: d.count, percentage: d.percentage }
+        : d,
+    ),
     type: 'bar',
     stack: stackId,
   }));

@@ -3,6 +3,7 @@ import React from 'react';
 
 export default function AppFooter() {
   const route = window.route;
+  const currentYear = new Date().getFullYear();
   const { appVersion } = usePage().props;
   return (
     <footer className="grid grid-cols-4 items-center pr-6 pb-4 text-black">
@@ -37,6 +38,8 @@ export default function AppFooter() {
       <div></div>
       <div className="pr-12 text-right">
         &copy; 2025 Datakind &mdash; Edvise v{appVersion}
+      <div className="whitespace-nowrap md:text-right">
+        &copy; {currentYear} Datakind &mdash; Edvise v{appVersion}
       </div>
     </footer>
   );

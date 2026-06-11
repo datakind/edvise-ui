@@ -3,7 +3,7 @@ name: ci
 on:
   pull_request:
     types: [opened, edited, reopened, ready_for_review, synchronize]
-    branches: [main, develop]
+    branches: [main, develop, 'release/*']
 
 jobs:
   pr-title:

@@ -65,7 +65,7 @@ class ModelResultsOverviewController extends Controller
      */
     private function responseData($response): ?array
     {
-        if (! $response || $response->getStatusCode() !== 200) {
+        if (! $response || $response->status() !== 200) {
             return null;
         }
 

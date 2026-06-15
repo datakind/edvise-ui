@@ -29,7 +29,7 @@ class InstitutionHelper
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ])->get(config('services.backend.url').'/check-self');
-        if ($resp->getStatusCode() !== 200 || (($resp['inst_id'] ?? '') === '' && ($resp['access_type'] ?? '') === '')) {
+        if ($resp->status() !== 200 || (($resp['inst_id'] ?? '') === '' && ($resp['access_type'] ?? '') === '')) {
             return;
         }
         $accessType = $resp['access_type'] ?? '';
@@ -86,7 +86,7 @@ class InstitutionHelper
             'Cache-Control' => 'no-cache',
         ];
         $resp = Http::withHeaders($headers)->get(config('services.backend.url').'/institutions');
-        if ($resp->getStatusCode() !== 200) {
+        if ($resp->status() !== 200) {
             return null;
         }
         $list = $resp->json();

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -60,17 +60,22 @@ class ModelResultsOverviewController extends Controller
         ]);
     }
 
-    /**
-     * @param  Response|JsonResponse|null  $response
-     */
-    private function responseData($response): ?array
+    private function responseData(HttpClientResponse|JsonResponse|null $response): ?array
     {
-        if (! $response || $response->status() !== 200) {
+        if ($response === null) {
             return null;
         }
 
         if ($response instanceof JsonResponse) {
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
             return $response->getData(true);
+        }
+
+        if ($response->status() !== 200) {
+            return null;
         }
 
         return $response->json();

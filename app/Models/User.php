@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -12,6 +13,11 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property string $id
+ * @property-read Team|null $currentTeam
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Team> $ownedTeams
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
@@ -69,4 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /** @return HasMany<Team, $this> */
+    public function ownedTeams(): HasMany
+    {
+        return $this->hasMany(Team::class, 'user_id');
+    }
 }

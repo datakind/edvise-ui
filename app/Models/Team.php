@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,8 +19,8 @@ use Laravel\Jetstream\Team as JetstreamTeam;
  * @property bool $personal_team
  * @property string $user_id
  * @property-read User $owner
- * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
- * @property-read \Illuminate\Database\Eloquent\Collection<int, TeamInvitation> $teamInvitations
+ * @property-read Collection<int, User> $users
+ * @property-read Collection<int, TeamInvitation> $teamInvitations
  */
 class Team extends JetstreamTeam
 {

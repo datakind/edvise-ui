@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @property string $id
  * @property-read Team|null $currentTeam
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Team> $ownedTeams
+ * @property-read Collection<int, Team> $ownedTeams
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

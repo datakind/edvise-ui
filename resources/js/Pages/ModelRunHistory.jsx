@@ -12,7 +12,6 @@ export default function ModelRunHistory({ modelname }) {
   // These only need to be set once
   const [modelInfo, setModelInfo] = useState({});
   const [runs, setRuns] = useState([]);
-  const [setRunDatesToJobDict] = useState({});
   // These need to be set depending on the current run.
   const [currentRunId, setCurrentRunId] = useState('');
 
@@ -50,16 +49,6 @@ export default function ModelRunHistory({ modelname }) {
           if (runs_response.data != null && runs_response.data.length != 0) {
             let run_results = runs_response.data;
             setRuns(run_results);
-            var runDatesDict = {};
-
-            for (var i in run_results) {
-              runDatesDict[run_results[i].triggered_at] = run_results[i].run_id;
-            }
-
-            setRunDatesToJobDict(runDatesDict);
-            if (runDatesDict == {}) {
-              throw new Error('Could not find run times for ' + model.name);
-            }
             if (currentRunId == '' && run_results.length >= 1) {
               // Set current run id to the first run (the returned runs are sorted by triggered time from most recent to least recent)
               // The current run id should only be empty on first page load.

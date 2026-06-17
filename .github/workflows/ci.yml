@@ -50,27 +50,19 @@ jobs:
 
   ci:
     needs:
-      - pr-title
-      - asana
-      - dependency-review
-      - npm-audit
-      - composer-audit
-      - enforce-targets
-      - lint
-      - tests
+      [
+        pr-title,
+        asana,
+        dependency-review,
+        npm-audit,
+        composer-audit,
+        enforce-targets,
+        lint,
+        tests,
+      ]
     if: always() && !cancelled()
     runs-on: ubuntu-latest
     steps:
-      - run: exit 1
-        if: >-
-          ${{
-            needs.pr-title.result != 'success' ||
-            needs.asana.result != 'success' ||
-            needs.dependency-review.result != 'success' ||
-            needs.npm-audit.result != 'success' ||
-            needs.composer-audit.result != 'success' ||
-            needs.enforce-targets.result != 'success' ||
-            needs.lint.result != 'success' ||
-            needs.tests.result != 'success'
-          }}
+      - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: exit 1
       - run: echo "ci passed"

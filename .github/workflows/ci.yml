@@ -52,6 +52,7 @@ jobs:
     needs:
       - pr-title
       - asana
+      - dependency-review
       - npm-audit
       - composer-audit
       - enforce-targets

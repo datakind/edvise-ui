@@ -78,13 +78,13 @@ class ApiController extends Controller
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }
 
-        if ($resp->getStatusCode() != 200) {
-            $errMsg = json_decode($resp->getBody());
+        if ($resp->status() != 200) {
+            $errMsg = json_decode($resp->body());
             if ($errMsg == null) {
-                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+                return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());
             }
 
-            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+            return response()->json(['error' => $errMsg->detail], $resp->status());
         }
 
         return $resp;
@@ -262,13 +262,13 @@ class ApiController extends Controller
             return response()->json(['error' => 'Unrecognized HTTP method'], 500);
         }
 
-        if ($resp->getStatusCode() != 200) {
-            $errMsg = json_decode($resp->getBody());
+        if ($resp->status() != 200) {
+            $errMsg = json_decode($resp->body());
             if ($errMsg == null) {
-                return response()->json(['error' => 'Error code: '.$resp->getStatusCode()], $resp->getStatusCode());
+                return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());
             }
 
-            return response()->json(['error' => $errMsg->detail], $resp->getStatusCode());
+            return response()->json(['error' => $errMsg->detail], $resp->status());
         }
 
         return $resp;
@@ -524,7 +524,7 @@ class ApiController extends Controller
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
         // E.g. convert user uuid to name and convert the timestamp to human readable string.
-        if ($result != null && $result->getStatusCode() == 200) {
+        if ($result != null && $result->status() == 200) {
             $output = $result->json();
             if ($output != null) {
                 $collected_user_ids = [];
@@ -543,7 +543,7 @@ class ApiController extends Controller
                     // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                     if ($run['completed'] && $run['output_filename'] != null && $run['output_filename'] != '') {
                         $download_url = ApiController::downloadInfData($request, $run['output_filename']);
-                        if ($download_url->getStatusCode() == 200) {
+                        if ($download_url->status() == 200) {
                             $run['output_file_link'] = $download_url->json();
                         } else {
                             $run['output_file_link'] = '';
@@ -622,7 +622,7 @@ class ApiController extends Controller
         }
         // convert the user ids to names here prior to submission
         $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
-        if ($result != null && $result->getStatusCode() == 200) {
+        if ($result != null && $result->status() == 200) {
             $output = $result->json();
             if ($output != null) {
                 $batches = $output['batches'];
@@ -666,7 +666,7 @@ class ApiController extends Controller
         $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
         if ($request->user() && $inst_id) {
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
-            if ($result !== null && $result->getStatusCode() === 200) {
+            if ($result !== null && $result->status() === 200) {
                 $output = $result->json();
                 $batches = $output['batches'] ?? [];
                 $validCount = collect($batches)->filter(fn ($b) => empty($b['deleted']))->count();
@@ -813,13 +813,13 @@ class ApiController extends Controller
         $result = ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
 
         // Process the response to add output_file_link like modelRuns does
-        if ($result != null && $result->getStatusCode() == 200) {
+        if ($result != null && $result->status() == 200) {
             $output = $result->json();
             if ($output != null) {
                 // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                 if ($output['completed'] && $output['output_filename'] != null && $output['output_filename'] != '') {
                     $download_url = ApiController::downloadInfData($request, $output['output_filename']);
-                    if ($download_url->getStatusCode() == 200) {
+                    if ($download_url->status() == 200) {
                         $output['output_file_link'] = $download_url->json();
                     } else {
                         $output['output_file_link'] = '';
@@ -845,7 +845,7 @@ class ApiController extends Controller
         $response = ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
 
         // If we got a successful response, add download headers
-        if ($response && $response->getStatusCode() == 200) {
+        if ($response && $response->status() == 200) {
             $name = $request->query('name', '');
             $name = is_string($name) ? $name : '';
             $segment = preg_replace('/[^A-Za-z0-9_-]/', '', $name);
@@ -857,7 +857,7 @@ class ApiController extends Controller
             // Add download headers to force file download
             return response()->streamDownload(
                 function () use ($response) {
-                    echo $response->getBody();
+                    echo $response->body();
                 },
                 $filename,
                 [
@@ -954,7 +954,7 @@ class ApiController extends Controller
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
         // E.g. convert user uuid to name and convert the timestamp to human readable string.
-        if ($result != null && $result->getStatusCode() == 200) {
+        if ($result != null && $result->status() == 200) {
             $output = $result->json();
             if ($output != null) {
                 $collected_user_ids = [];
@@ -973,7 +973,7 @@ class ApiController extends Controller
                     // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                     if ($run['completed'] && $run['output_filename'] != null && $run['output_filename'] != '') {
                         $download_url = ApiController::downloadInfData($request, $run['output_filename']);
-                        if ($download_url->getStatusCode() == 200) {
+                        if ($download_url->status() == 200) {
                             $run['output_file_link'] = $download_url->json();
                         } else {
                             $run['output_file_link'] = '';
@@ -1036,7 +1036,7 @@ class ApiController extends Controller
         $externalUrl = '/inference/features-boxplot-stat/'.$run_id;
         $result = ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
 
-        if ($result != null && $result->getStatusCode() == 200) {
+        if ($result != null && $result->status() == 200) {
             $output = $result->json();
             if ($output != null) {
                 return response()->json($output);

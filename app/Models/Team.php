@@ -3,12 +3,25 @@
 namespace App\Models;
 
 use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
+/**
+ * @property string $id
+ * @property string $name
+ * @property bool $personal_team
+ * @property string $user_id
+ * @property-read User $owner
+ * @property-read Collection<int, User> $users
+ * @property-read Collection<int, TeamInvitation> $teamInvitations
+ */
 class Team extends JetstreamTeam
 {
     use HasFactory;
@@ -43,4 +56,22 @@ class Team extends JetstreamTeam
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
+
+    /** @return BelongsTo<User, $this> */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /** @return BelongsToMany<User, $this> */
+    public function users(): BelongsToMany
+    {
+        return parent::users();
+    }
+
+    /** @return HasMany<TeamInvitation, $this> */
+    public function teamInvitations(): HasMany
+    {
+        return parent::teamInvitations();
+    }
 }

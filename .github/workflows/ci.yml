@@ -48,7 +48,7 @@ jobs:
   tests:
     uses: ./.github/workflows/tests.yml
 
-  required:
+  ci:
     needs:
       - pr-title
       - asana

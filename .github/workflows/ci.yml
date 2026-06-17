@@ -47,3 +47,18 @@ jobs:
     uses: ./.github/workflows/lint.yml
   tests:
     uses: ./.github/workflows/tests.yml
+  ci:
+    required:
+      needs:
+        - pr-title
+        - asana
+        - dependency-review
+        - npm-audit
+        - composer-audit
+        - enforce-targets
+        - lint
+        - tests
+    if: always() && !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "ci passed"

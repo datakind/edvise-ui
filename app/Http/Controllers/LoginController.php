@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\AbstractProvider;
 
 class LoginController extends Controller
 {
@@ -26,9 +27,7 @@ class LoginController extends Controller
         $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
         $redirectUrl = $request->root().$redirectPath;
 
-        return Socialite::driver('google')
-            ->redirectUrl($redirectUrl)
-            ->redirect();
+        return $this->socialiteDriver('google', $redirectUrl)->redirect();
     }
 
     /**
@@ -44,12 +43,10 @@ class LoginController extends Controller
             $redirectUrl = $request->root().$redirectPath;
 
             // Retrieve the user from Google
-            $user = Socialite::driver('google')
-                ->redirectUrl($redirectUrl)
-                ->user();
+            $user = $this->socialiteDriver('google', $redirectUrl)->user();
 
             // Check if there's an existing user with the same email
-            $existingUser = User::where('email', $user->email)->first();
+            $existingUser = User::where('email', $user->getEmail())->first();
 
             if ($existingUser) {
                 // Check if user is invite-validated
@@ -59,7 +56,7 @@ class LoginController extends Controller
                 }
 
                 if (! $existingUser->google_id) {
-                    $existingUser->google_id = $user->id;
+                    $existingUser->google_id = $user->getId();
                     $existingUser->save();
                 }
 
@@ -68,7 +65,7 @@ class LoginController extends Controller
 
                 return redirect()->route('model-run-history');
             } else {
-                $invite = Invite::where('email', $user->email)
+                $invite = Invite::where('email', $user->getEmail())
                     ->where('is_used', false)
                     ->where('expires_at', '>', now())
                     ->first();
@@ -82,8 +79,8 @@ class LoginController extends Controller
                 session(['valid_invite' => $invite]);
                 session(['sso_user' => true]);
                 session(['sso_user_data' => [
-                    'name' => $user->name,
-                    'google_id' => $user->id,
+                    'name' => $user->getName(),
+                    'google_id' => $user->getId(),
                 ]]);
 
                 return redirect()->route('register');
@@ -104,9 +101,7 @@ class LoginController extends Controller
         $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
         $redirectUrl = $request->root().$redirectPath;
 
-        return Socialite::driver('azure')
-            ->redirectUrl($redirectUrl)
-            ->redirect();
+        return $this->socialiteDriver('azure', $redirectUrl)->redirect();
     }
 
     /**
@@ -122,12 +117,10 @@ class LoginController extends Controller
             $redirectUrl = $request->root().$redirectPath;
 
             // Retrieve the user from Azure
-            $user = Socialite::driver('azure')
-                ->redirectUrl($redirectUrl)
-                ->user();
+            $user = $this->socialiteDriver('azure', $redirectUrl)->user();
 
             // Check if there's an existing user with the same email
-            $existingUser = User::where('email', $user->email)->first();
+            $existingUser = User::where('email', $user->getEmail())->first();
 
             if ($existingUser) {
                 // Check if user is invite-validated
@@ -138,7 +131,7 @@ class LoginController extends Controller
 
                 // If the user exists but doesn't have an Azure ID, update it
                 if (! $existingUser->azure_id) {
-                    $existingUser->azure_id = $user->id;
+                    $existingUser->azure_id = $user->getId();
                     $existingUser->save();
                 }
 
@@ -147,7 +140,7 @@ class LoginController extends Controller
 
                 return redirect()->route('model-run-history');
             } else {
-                $invite = Invite::where('email', $user->email)
+                $invite = Invite::where('email', $user->getEmail())
                     ->where('is_used', false)
                     ->where('expires_at', '>', now())
                     ->first();
@@ -160,8 +153,8 @@ class LoginController extends Controller
                 session(['valid_invite' => $invite]);
                 session(['sso_user' => true]);
                 session(['sso_user_data' => [
-                    'name' => $user->name,
-                    'azure_id' => $user->id,
+                    'name' => $user->getName(),
+                    'azure_id' => $user->getId(),
                 ]]);
 
                 return redirect()->route('register');
@@ -169,5 +162,16 @@ class LoginController extends Controller
         } catch (Exception $e) {
             dd($e->getMessage());
         }
+    }
+
+    private function socialiteDriver(string $driver, string $redirectUrl): AbstractProvider
+    {
+        $provider = Socialite::driver($driver);
+
+        if (! $provider instanceof AbstractProvider) {
+            throw new Exception("Unexpected Socialite driver: {$driver}");
+        }
+
+        return $provider->redirectUrl($redirectUrl);
     }
 }

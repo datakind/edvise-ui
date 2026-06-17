@@ -62,5 +62,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        if: >-
+          ${{
+            needs.pr-title.result != 'success' ||
+            needs.asana.result != 'success' ||
+            needs.dependency-review.result != 'success' ||
+            needs.npm-audit.result != 'success' ||
+            needs.composer-audit.result != 'success' ||
+            needs.enforce-targets.result != 'success' ||
+            needs.lint.result != 'success' ||
+            needs.tests.result != 'success'
+          }}
       - run: echo "ci passed"

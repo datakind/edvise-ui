@@ -8,7 +8,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -19,7 +18,7 @@ class LoginController extends Controller
     /**
      * Redirect the user to the Google authentication page.
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function redirectToGoogle(Request $request)
     {
@@ -93,7 +92,7 @@ class LoginController extends Controller
     /**
      * Redirect the user to the Azure authentication page.
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function redirectToAzure(Request $request)
     {

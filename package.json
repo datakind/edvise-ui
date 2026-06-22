@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "format:landing": "prettier --write resources/css/landing.css resources/js/Components/Landing/*",
-    "update-static": "vite build && gsutil -o \"GSUtil:parallel_process_count=1\" -m cp -r public/* gs://${ASSET_BUCKET}"
+    "update-static": "vite build && gsutil -o \"GSUtil:parallel_process_count=1\" -m cp -r public/* gs://${ASSET_BUCKET}",
+    "analyze": "./vendor/bin/phpstan analyse --memory-limit=2G"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

@@ -268,9 +268,7 @@ export default function CreateInst() {
                     </p>
                   </>
                 ) : (
-                  <p className="text-sm text-gray-600">
-                    PDP Institution ID applies only when PDP is selected.
-                  </p>
+                  <></>
                 )}
               </div>
             </div>

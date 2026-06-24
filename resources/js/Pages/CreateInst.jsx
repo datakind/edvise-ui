@@ -25,32 +25,20 @@ export default function CreateInst() {
         {arrOfAllAddedEmailSlots.map(id => (
           <div key={id} id="one_user" className="flex">
             <div className="w-1/2">
-              <label
-                className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                id="access"
-              >
+              <label className="form-label" id="access">
                 Access Type
               </label>
-              <div className="relative">
-                <select
-                  name={id + '-access'}
-                  className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                >
-                  <option>MODEL_OWNER</option>
-                  <option>VIEWER</option>
-                </select>
-              </div>
+              <select name={id + '-access'}>
+                <option>MODEL_OWNER</option>
+                <option>VIEWER</option>
+              </select>
             </div>
             <div className="mb-6 w-1/2 px-3">
-              <label
-                className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                id="email"
-              >
+              <label className="form-label" id="email">
                 User email
               </label>
               <input
                 name={id + '-email'}
-                className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 type="email"
                 placeholder="j.smith@inst1.edu"
               ></input>
@@ -163,85 +151,74 @@ export default function CreateInst() {
           <div id="form_contents" className="flex flex-col gap-y-6">
             <div className="flex w-full flex-row gap-x-6">
               <div className="flex w-2/3 flex-col">
-                <label
-                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                  id="inst_name"
-                >
+                <label className="form-label" id="inst_name">
                   Institution Name
                 </label>
                 <input
                   name="inst_name"
-                  className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:bg-white focus:outline-none"
+                  className="mb-3"
                   type="text"
                   placeholder="College/University Name"
                 ></input>
-                <p className="text-xs text-gray-700 italic">Required field.</p>
+                <p className="form-hint">Required field.</p>
               </div>
               <div className="flex w-1/3 flex-col">
-                <label
-                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                  id="state"
-                >
+                <label className="form-label" id="state">
                   State
                 </label>
-                <div className="relative">
-                  <select
-                    name="state"
-                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                  >
-                    <option defaultValue></option>
-                    <option>AK</option>
-                    <option>AL</option>
-                    <option>AR</option>
-                    <option>AZ</option>
-                    <option>CA</option>
-                    <option>CO</option>
-                    <option>CT</option>
-                    <option>DE</option>
-                    <option>FL</option>
-                    <option>GA</option>
-                    <option>HI</option>
-                    <option>IA</option>
-                    <option>ID</option>
-                    <option>IL</option>
-                    <option>IN</option>
-                    <option>KS</option>
-                    <option>KY</option>
-                    <option>LA</option>
-                    <option>MA</option>
-                    <option>MD</option>
-                    <option>ME</option>
-                    <option>MI</option>
-                    <option>MN</option>
-                    <option>MO</option>
-                    <option>MS</option>
-                    <option>MT</option>
-                    <option>NC</option>
-                    <option>ND</option>
-                    <option>NE</option>
-                    <option>NH</option>
-                    <option>NJ</option>
-                    <option>NM</option>
-                    <option>NV</option>
-                    <option>NY</option>
-                    <option>OH</option>
-                    <option>OK</option>
-                    <option>OR</option>
-                    <option>PA</option>
-                    <option>RI</option>
-                    <option>SC</option>
-                    <option>SD</option>
-                    <option>TN</option>
-                    <option>TX</option>
-                    <option>UT</option>
-                    <option>VA</option>
-                    <option>VT</option>
-                    <option>WA</option>
-                    <option>WI</option>
-                    <option>WV</option>
-                    <option>WY</option>
-                  </select>
-                </div>
+                <select name="state">
+                  <option defaultValue></option>
+                  <option>AK</option>
+                  <option>AL</option>
+                  <option>AR</option>
+                  <option>AZ</option>
+                  <option>CA</option>
+                  <option>CO</option>
+                  <option>CT</option>
+                  <option>DE</option>
+                  <option>FL</option>
+                  <option>GA</option>
+                  <option>HI</option>
+                  <option>IA</option>
+                  <option>ID</option>
+                  <option>IL</option>
+                  <option>IN</option>
+                  <option>KS</option>
+                  <option>KY</option>
+                  <option>LA</option>
+                  <option>MA</option>
+                  <option>MD</option>
+                  <option>ME</option>
+                  <option>MI</option>
+                  <option>MN</option>
+                  <option>MO</option>
+                  <option>MS</option>
+                  <option>MT</option>
+                  <option>NC</option>
+                  <option>ND</option>
+                  <option>NE</option>
+                  <option>NH</option>
+                  <option>NJ</option>
+                  <option>NM</option>
+                  <option>NV</option>
+                  <option>NY</option>
+                  <option>OH</option>
+                  <option>OK</option>
+                  <option>OR</option>
+                  <option>PA</option>
+                  <option>RI</option>
+                  <option>SC</option>
+                  <option>SD</option>
+                  <option>TN</option>
+                  <option>TX</option>
+                  <option>UT</option>
+                  <option>VA</option>
+                  <option>VT</option>
+                  <option>WA</option>
+                  <option>WI</option>
+                  <option>WV</option>
+                  <option>WY</option>
+                </select>
               </div>
             </div>
             <div className="flex w-full flex-row gap-x-6">
@@ -263,7 +240,6 @@ export default function CreateInst() {
                           value={value}
                           checked={schoolType === value}
                           onChange={() => setSchoolType(value)}
-                          className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600"
                         />
                         <label
                           htmlFor={`school_type_${value}`}
@@ -279,18 +255,11 @@ export default function CreateInst() {
               <div className="flex w-1/2 flex-col">
                 {schoolType === 'pdp' ? (
                   <>
-                    <label
-                      className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
-                      id="pdp_id"
-                    >
+                    <label className="form-label" id="pdp_id">
                       PDP Institution ID
                     </label>
-                    <input
-                      name="pdp_id"
-                      className="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                      type="text"
-                    ></input>
-                    <p className="text-xs text-gray-600 italic">
+                    <input name="pdp_id" className="mb-3" type="text"></input>
+                    <p className="form-hint">
                       For PDP schools, please add the PDP_INST id of the
                       institution. Include any leading zeroes.
                     </p>

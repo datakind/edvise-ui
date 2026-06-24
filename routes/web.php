@@ -127,6 +127,7 @@ Route::middleware('auth.app')->group(function () {
     Route::get('/output-file-json/{filename}', [ApiController::class, 'fileJson'])->where('filename', '.*');
     Route::get('/output-file-png/{filename}', [ApiController::class, 'filePng'])->where('filename', '.*');
     Route::get('/model/{model_name}', [ApiController::class, 'modelRuns']);
+    Route::delete('/model/{model_name}/run/{run_id}', [ApiController::class, 'deleteModelRun']);
     Route::get('/model-runs/{model_name}', [ApiController::class, 'modelRunsWithContext']);
     Route::get('/top-features/{run_id}', [ApiController::class, 'getTopFeaturesWithContext']);
     Route::delete('/batch/{batch_id}', [ApiController::class, 'deleteBatchWithContext']);

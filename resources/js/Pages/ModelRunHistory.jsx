@@ -5,6 +5,9 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import Alert from '@/Components/Alert';
+import ConfirmationModal from '@/Components/Modals/ConfirmationModal';
+import DangerButton from '@/Components/Buttons/DangerButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import { formatModelName } from '@/utils/stringUtils';
 
 export default function ModelRunHistory({ modelname }) {
@@ -15,6 +18,38 @@ export default function ModelRunHistory({ modelname }) {
   const [runs, setRuns] = useState([]);
   // These need to be set depending on the current run.
   const [currentRunId, setCurrentRunId] = useState('');
+  const [runToDelete, setRunToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteRun = async () => {
+    if (!runToDelete || !modelInfo?.name) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await axios.delete(
+        `/model/${modelInfo.name}/run/${runToDelete.run_id}`,
+      );
+      setRuns(prev => {
+        const next = prev.filter(run => run.run_id !== runToDelete.run_id);
+        if (next.length === 0) {
+          setError(new Error('NO_RUNS'));
+        }
+        return next;
+      });
+      setRunToDelete(null);
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        err.message ||
+        'Failed to delete run results.';
+      setError(Error(message));
+      setRunToDelete(null);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchModel = async () => {
@@ -75,7 +110,7 @@ export default function ModelRunHistory({ modelname }) {
     };
 
     fetchModel();
-  }, [currentRunId]);
+  }, [modelname]);
 
   return (
     <AppLayout title="Model Results">
@@ -198,10 +233,23 @@ export default function ModelRunHistory({ modelname }) {
                             </td>
                             <td>
                               {run.completed && (
-                                <TrashIcon
-                                  aria-hidden="true"
-                                  className="inline-block size-5 shrink-0 align-middle"
-                                />
+                                <button
+                                  type="button"
+                                  className="cursor-pointer border-0 bg-transparent p-0"
+                                  aria-label={`Delete model results for run on ${run.triggered_at}`}
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    window.setTimeout(
+                                      () => setRunToDelete(run),
+                                      0,
+                                    );
+                                  }}
+                                >
+                                  <TrashIcon
+                                    aria-hidden="true"
+                                    className="inline-block size-5 shrink-0 align-middle text-gray-700"
+                                  />
+                                </button>
                               )}
                             </td>
                           </tr>
@@ -215,6 +263,32 @@ export default function ModelRunHistory({ modelname }) {
           )}
         </div>
       }
+
+      <ConfirmationModal
+        isOpen={!!runToDelete}
+        onClose={() => !isDeleting && setRunToDelete(null)}
+      >
+        <ConfirmationModal.Content title="Delete run results">
+          Are you sure you want to delete the results for batch &ldquo;
+          {runToDelete?.batch_name}&rdquo; from {runToDelete?.triggered_at}?
+          This action cannot be undone.
+        </ConfirmationModal.Content>
+        <ConfirmationModal.Footer>
+          <SecondaryButton
+            onClick={() => setRunToDelete(null)}
+            disabled={isDeleting}
+          >
+            Cancel
+          </SecondaryButton>
+          <DangerButton
+            className="ml-2"
+            onClick={deleteRun}
+            disabled={isDeleting}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </DangerButton>
+        </ConfirmationModal.Footer>
+      </ConfirmationModal>
     </AppLayout>
   );
 }

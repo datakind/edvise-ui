@@ -51,12 +51,9 @@ export default function CreateInst() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (
-      event.target.elements.inst_name.value == null ||
-      event.target.elements.inst_name.value == ''
-    ) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Institution name is required.';
+    event.target.classList.add('was-validated');
+    if (!event.target.checkValidity()) {
+      event.target.querySelector(':invalid')?.focus();
       return;
     }
     if (!schoolType) {
@@ -138,22 +135,35 @@ export default function CreateInst() {
         ></HeaderLabel>
         <form
           className="w-full max-w-full pt-24 pr-36 pl-36"
+          noValidate
           onSubmit={handleSubmit}
-          onReset={() => setSchoolType('')}
+          onReset={event => {
+            setSchoolType('');
+            event.target.classList.remove('was-validated');
+          }}
         >
           <div id="form_contents" className="flex flex-col gap-y-6">
             <div className="flex w-full flex-row gap-x-6">
-              <div className="flex w-2/3 flex-col">
-                <label className="form-label" id="inst_name">
+              <div className="form-field flex w-2/3 flex-col">
+                <label className="form-label" htmlFor="inst_name">
                   Institution Name
                 </label>
                 <input
+                  id="inst_name"
                   name="inst_name"
-                  className="mb-3"
                   type="text"
                   placeholder="College/University Name"
+                  required
+                  autoComplete="off"
+                  aria-describedby="inst_name_error"
                 ></input>
-                <p className="form-hint">Required field.</p>
+                <p id="inst_name_error" className="form-field-error">
+                  <ExclamationCircleIcon
+                    className="size-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                  Please enter an institution name.
+                </p>
               </div>
               <div className="flex w-1/3 flex-col">
                 <label className="form-label" id="state">

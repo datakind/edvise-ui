@@ -18,6 +18,7 @@ export default function CreateInst() {
   const [addUserCounter, setAddUserCounter] = useState(0);
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const incrementCounter = () => {
     setAddUserCounter(c => c + 1);
@@ -108,6 +109,7 @@ export default function CreateInst() {
     } else if (schoolType === 'genai') {
       payload.is_genai = true;
     }
+    setSubmitting(true);
     return axios({
       method: 'post',
       url: '/create-inst-api',
@@ -121,7 +123,8 @@ export default function CreateInst() {
       .catch(e => {
         const err = e.response?.data?.error ?? e.message ?? 'Request failed.';
         setSubmitError(typeof err === 'string' ? err : JSON.stringify(err));
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -136,16 +139,26 @@ export default function CreateInst() {
           minorTitle="Create New Institution"
         ></HeaderLabel>
         <form
-          className="w-full max-w-full pt-24 pr-36 pl-36"
+          className={`w-full max-w-full pt-24 pr-36 pl-36${submitting ? ' waiting' : ''}`}
           noValidate
           onSubmit={handleSubmit}
           onReset={event => {
             setSchoolType('');
             setSubmitError(null);
             setSubmitSuccess(null);
+            setSubmitting(false);
             event.target.classList.remove('was-validated');
           }}
         >
+          {submitting && (
+            <div className="waiting-overlay">
+              <div
+                className="waiting-spinner"
+                role="status"
+                aria-label="Creating institution"
+              ></div>
+            </div>
+          )}
           <div id="form_contents" className="flex flex-col gap-y-6">
             <div className="flex w-full flex-row gap-x-6">
               <div className="form-field flex w-2/3 flex-col">

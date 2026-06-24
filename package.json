@@ -53,6 +53,7 @@
     "lodash": "^4.17.21",
     "papaparse": "^5.4.1",
     "plotly.js": "^3.0.1",
+    "posthog-js": "^1.393.4",
     "react-cookie-consent": "^10.0.1",
     "react-drag-drop-files": "^2.3.10",
     "react-ga4": "^2.1.0",

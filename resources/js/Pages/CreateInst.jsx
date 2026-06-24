@@ -126,14 +126,7 @@ export default function CreateInst() {
   };
 
   return (
-    <AppLayout
-      title="Create Institution"
-      renderHeader={() => (
-        <h2 className="text-xl leading-tight font-semibold text-gray-800">
-          Create Institution
-        </h2>
-      )}
-    >
+    <AppLayout title="Create Institution">
       <div className="flex w-full flex-col items-center">
         <HeaderLabel
           className="pl-12"

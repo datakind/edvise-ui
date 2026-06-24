@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
+import Alert from '@/Components/Alert';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 
 const SCHOOL_TYPES = [
@@ -13,6 +14,7 @@ const SCHOOL_TYPES = [
 export default function CreateInst() {
   const [schoolType, setSchoolType] = useState('');
   const [addUserCounter, setAddUserCounter] = useState(0);
+  const [submitError, setSubmitError] = useState(null);
 
   const incrementCounter = () => {
     setAddUserCounter(c => c + 1);
@@ -51,6 +53,7 @@ export default function CreateInst() {
 
   const handleSubmit = event => {
     event.preventDefault();
+    setSubmitError(null);
     event.target.classList.add('was-validated');
     if (!event.target.checkValidity()) {
       event.target.querySelector(':invalid')?.focus();
@@ -112,13 +115,8 @@ export default function CreateInst() {
           JSON.stringify(res.data.inst_id);
       })
       .catch(e => {
-        let err = '';
-        if (e.response) {
-          err = JSON.stringify(e.response.data.error);
-        } else {
-          err = JSON.stringify(e);
-        }
-        document.getElementById('result_area').innerHTML = 'Error: ' + err;
+        const err = e.response?.data?.error ?? e.message ?? 'Request failed.';
+        setSubmitError(typeof err === 'string' ? err : JSON.stringify(err));
       });
   };
 
@@ -139,6 +137,7 @@ export default function CreateInst() {
           onSubmit={handleSubmit}
           onReset={event => {
             setSchoolType('');
+            setSubmitError(null);
             event.target.classList.remove('was-validated');
           }}
         >
@@ -303,6 +302,11 @@ export default function CreateInst() {
             </button>
           </div>
         </form>
+        {submitError && (
+          <div className="flex w-full px-36 pt-12">
+            <Alert variant="danger" mainMsg={submitError} />
+          </div>
+        )}
         <div id="result_area" className="flex pt-12 pb-24"></div>
       </div>
     </AppLayout>

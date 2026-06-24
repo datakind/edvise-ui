@@ -139,7 +139,7 @@ export default function CreateInst() {
           minorTitle="Create New Institution"
         ></HeaderLabel>
         <form
-          className={`w-full max-w-full pt-24 pr-36 pl-36${submitting ? ' waiting' : ''}`}
+          className={`w-full max-w-full pt-24 pr-36 pl-36${submitting ? 'waiting' : ''}`}
           noValidate
           onSubmit={handleSubmit}
           onReset={event => {
@@ -322,10 +322,7 @@ export default function CreateInst() {
         </form>
         {submitSuccess && (
           <div className="flex w-full px-36 pt-12 pb-24">
-            <Alert
-              variant="success"
-              mainMsg={submitSuccess}
-            />
+            <Alert variant="success" mainMsg={submitSuccess} />
           </div>
         )}
         {submitError && (

@@ -316,7 +316,7 @@ select {
 }
 
 input[type='radio'] {
-  @apply size-4 border-gray-300 text-input-focus focus:ring-input-focus;
+  @apply text-input-focus focus:ring-input-focus size-4 border-gray-300;
 }
 
 .form-label {

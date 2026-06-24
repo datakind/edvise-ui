@@ -92,7 +92,6 @@ export default function ModelRunHistory({ modelname }) {
             <Alert
               variant="danger"
               mainMsg={'Error: ' + error.message}
-              className="mr-24 ml-24 flex h-fit"
             />
           ) : (
             <div

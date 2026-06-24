@@ -344,7 +344,8 @@ input[type='radio'] {
   color: theme('colors.input.errorText');
 }
 
-form.was-validated :is(input, select, textarea):invalid ~ .form-field-error {
+form.was-validated :is(input, select, textarea):invalid ~ .form-field-error,
+form.was-validated fieldset:has(:invalid) ~ .form-field-error {
   @apply flex;
 }
 

@@ -225,16 +225,16 @@ export default function CreateInst() {
               </div>
             </div>
             <div className="flex w-full flex-row gap-x-6">
-              <div className="flex w-1/2 flex-col">
-                <fieldset>
+              <div className="form-field flex w-1/2 flex-col">
+                <fieldset aria-describedby="school_type_error">
                   <legend className="text-base font-semibold text-gray-900">
                     Institution type
                   </legend>
-                  <p className="mt-1 text-sm text-gray-600">
+                  <p className="form-hint mt-1">
                     Choose exactly one. Required before submit.
                   </p>
                   <div className="mt-4 space-y-3 border-t border-b border-gray-200 py-3">
-                    {SCHOOL_TYPES.map(({ value, label }) => (
+                    {SCHOOL_TYPES.map(({ value, label }, index) => (
                       <div key={value} className="flex items-center gap-3">
                         <input
                           id={`school_type_${value}`}
@@ -243,6 +243,7 @@ export default function CreateInst() {
                           value={value}
                           checked={schoolType === value}
                           onChange={() => setSchoolType(value)}
+                          required={index === 0}
                         />
                         <label
                           htmlFor={`school_type_${value}`}
@@ -254,6 +255,13 @@ export default function CreateInst() {
                     ))}
                   </div>
                 </fieldset>
+                <p id="school_type_error" className="form-field-error">
+                  <ExclamationCircleIcon
+                    className="size-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                  Please select an institution type.
+                </p>
               </div>
               <div className="flex w-1/2 flex-col">
                 {schoolType === 'pdp' ? (

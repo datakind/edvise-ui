@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { route } from 'ziggy-js';
 import React, { useEffect, useState } from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import Alert from '@/Components/Alert';
@@ -145,40 +146,28 @@ export default function ModelRunHistory({ modelname }) {
                 {runs.length > 0 && (
                   <div className="mt-8 flex w-full justify-center">
                     <table
-                      className="w-full table-auto rounded-lg bg-white text-left shadow-md"
+                      className="edvise-table edvise-table--card"
                       id="model-history-table"
                     >
                       <thead>
-                        <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
-                          <th scope="col" className="p-4 px-6">
-                            DATE
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            USER
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            BATCH
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            RESULTS
-                          </th>
-                          <th scope="col" className="p-4 px-6">
+                        <tr>
+                          <th scope="col">DATE</th>
+                          <th scope="col">USER</th>
+                          <th scope="col">BATCH</th>
+                          <th scope="col">RESULTS</th>
+                          <th scope="col" className="whitespace-nowrap">
                             RESULTS .CSV
                           </th>
+                          <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {runs.map(run => (
-                          <tr
-                            className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
-                            key={run.run_id}
-                          >
-                            <td className="p-4 px-6">{run.triggered_at}</td>
-                            <td className="p-4 px-6">{run.created_by}</td>
-                            <td className="p-4 px-6 font-medium">
-                              {run.batch_name}
-                            </td>
-                            <td className="p-4 px-6">
+                          <tr key={run.run_id}>
+                            <td>{run.triggered_at}</td>
+                            <td>{run.created_by}</td>
+                            <td className="font-medium">{run.batch_name}</td>
+                            <td>
                               {run.completed ? (
                                 <a
                                   href={route('model-results-overview', [
@@ -193,7 +182,7 @@ export default function ModelRunHistory({ modelname }) {
                                 'Pending'
                               )}
                             </td>
-                            <td className="p-4 px-6">
+                            <td>
                               {run.completed ? (
                                 <a
                                   href={run.output_file_link}
@@ -205,6 +194,14 @@ export default function ModelRunHistory({ modelname }) {
                                 </a>
                               ) : (
                                 'Pending'
+                              )}
+                            </td>
+                            <td>
+                              {run.completed && (
+                                <TrashIcon
+                                  aria-hidden="true"
+                                  className="inline-block size-5 shrink-0 align-middle"
+                                />
                               )}
                             </td>
                           </tr>

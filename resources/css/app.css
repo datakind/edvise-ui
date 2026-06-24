@@ -183,6 +183,24 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-e-transparent text-gray-700;
 }
 
+/* Data tables */
+.edvise-table {
+  @apply w-full table-auto text-left;
+}
+.edvise-table--card {
+  @apply rounded-lg bg-white shadow-md;
+}
+.edvise-table thead tr {
+  @apply border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase;
+}
+.edvise-table th,
+.edvise-table td {
+  @apply p-4 px-6;
+}
+.edvise-table tbody tr {
+  @apply border-b border-gray-300 text-sm leading-5 font-normal text-gray-700;
+}
+
 /* Headless UI tabs */
 .app-tabs [role='tablist'] {
   @apply mb-2 flex items-center gap-4;

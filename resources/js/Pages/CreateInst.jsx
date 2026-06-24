@@ -4,17 +4,20 @@ import axios from 'axios';
 import HeaderLabel from '@/Components/HeaderLabel';
 import Alert from '@/Components/Alert';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 
 const SCHOOL_TYPES = [
   { value: 'pdp', label: 'PDP' },
   { value: 'edvise', label: 'Edvise' },
   { value: 'legacy', label: 'Legacy' },
+  { value: 'genai', label: 'GenAI' },
 ];
 
 export default function CreateInst() {
   const [schoolType, setSchoolType] = useState('');
   const [addUserCounter, setAddUserCounter] = useState(0);
   const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(null);
 
   const incrementCounter = () => {
     setAddUserCounter(c => c + 1);
@@ -54,14 +57,10 @@ export default function CreateInst() {
   const handleSubmit = event => {
     event.preventDefault();
     setSubmitError(null);
+    setSubmitSuccess(null);
     event.target.classList.add('was-validated');
     if (!event.target.checkValidity()) {
       event.target.querySelector(':invalid')?.focus();
-      return;
-    }
-    if (!schoolType) {
-      document.getElementById('result_area').innerHTML =
-        'Error: Select exactly one of PDP, Edvise, or Legacy.';
       return;
     }
     if (schoolType === 'pdp') {
@@ -91,7 +90,6 @@ export default function CreateInst() {
         constructedEmailDict[value] = accessDict[key];
       }
     }
-    const pdpChecked = schoolType === 'pdp';
     const payload = {
       name: event.target.elements.inst_name.value,
       state: event.target.elements.state.value,
@@ -99,20 +97,26 @@ export default function CreateInst() {
         Object.keys(constructedEmailDict).length === 0
           ? null
           : constructedEmailDict,
-      is_pdp: pdpChecked,
-      pdp_id: pdpChecked ? event.target.elements.pdp_id?.value || null : null,
     };
-    if (schoolType === 'edvise') payload.is_edvise = true;
-    if (schoolType === 'legacy') payload.is_legacy = true;
+    if (schoolType === 'pdp') {
+      payload.is_pdp = true;
+      payload.pdp_id = event.target.elements.pdp_id?.value?.trim() || null;
+    } else if (schoolType === 'edvise') {
+      payload.is_edvise = true;
+    } else if (schoolType === 'legacy') {
+      payload.is_legacy = true;
+    } else if (schoolType === 'genai') {
+      payload.is_genai = true;
+    }
     return axios({
       method: 'post',
       url: '/create-inst-api',
       data: payload,
     })
       .then(res => {
-        document.getElementById('result_area').innerHTML =
-          'Done. Created new institution with ID: ' +
-          JSON.stringify(res.data.inst_id);
+        setSubmitSuccess(
+          `Created new institution with ID: ${res.data.inst_id}`,
+        );
       })
       .catch(e => {
         const err = e.response?.data?.error ?? e.message ?? 'Request failed.';
@@ -138,6 +142,7 @@ export default function CreateInst() {
           onReset={event => {
             setSchoolType('');
             setSubmitError(null);
+            setSubmitSuccess(null);
             event.target.classList.remove('was-validated');
           }}
         >
@@ -302,12 +307,20 @@ export default function CreateInst() {
             </button>
           </div>
         </form>
+        {submitSuccess && (
+          <div className="flex w-full px-36 pt-12 pb-24">
+            <Alert
+              variant="success"
+              mainMsg={submitSuccess}
+            />
+          </div>
+        )}
         {submitError && (
-          <div className="flex w-full px-36 pt-12">
+          <div className="flex w-full px-36 pt-12 pb-24">
             <Alert variant="danger" mainMsg={submitError} />
           </div>
         )}
-        <div id="result_area" className="flex pt-12 pb-24"></div>
+        <div id="result_area" className="flex"></div>
       </div>
     </AppLayout>
   );

@@ -154,6 +154,12 @@ class ApiController extends Controller
         if ($request->input('legacy_id') != null && $request->input('legacy_id') != '') {
             $post_request_body['legacy_id'] = $request->input('legacy_id');
         }
+        if ($request->input('is_genai') != null) {
+            $post_request_body['is_genai'] = $request->input('is_genai');
+        }
+        if ($request->input('genai_id') != null && $request->input('genai_id') != '') {
+            $post_request_body['genai_id'] = $request->input('genai_id');
+        }
         if ($request->input('retention_days') != null && $request->input('retention_days') != '') {
             $post_request_body['retention_days'] = $request->input('retention_days');
         }

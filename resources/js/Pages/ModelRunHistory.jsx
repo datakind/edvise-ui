@@ -89,11 +89,7 @@ export default function ModelRunHistory({ modelname }) {
             </div>
           ) : error != null &&
             !(error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
-            <Alert
-              variant="danger"
-              mainMsg={'Error: ' + error.message}
-              className="mr-24 ml-24 flex h-fit"
-            />
+            <Alert variant="danger" mainMsg={'Error: ' + error.message} />
           ) : (
             <div
               className="flex w-full flex-col items-center"

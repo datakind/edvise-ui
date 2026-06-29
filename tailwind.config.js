@@ -81,6 +81,16 @@ export default {
         input: {
           border: '#6B7280',
           focus: '#007C8C',
+          focusBg: '#F8FAFB',
+          disabledBg: '#F3F4F6',
+          disabledText: '#99A1AF',
+          label: '#101828',
+          labelMuted: '#6A7282',
+          helper: '#4A5565',
+          success: '#00C950',
+          successText: '#008236',
+          error: '#FB2C36',
+          errorText: '#C10007',
         },
       },
       boxShadow: {

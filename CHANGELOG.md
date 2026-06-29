@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.0] - 2026-06-29
+
+### Added
+- GenAI institution type on Create Institution
+- Edvise Design System form inputs and standard form validation
+- PostHog product analytics
+
+### Fixed
+- Model Run History error alert now stays inside the content container
+- Model Results top features are fetched client-side to avoid a memory limit error
+
 ## [1.2.0] - 2026-06-23
 
 ### Added

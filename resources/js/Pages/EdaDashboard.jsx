@@ -160,7 +160,7 @@ const GpaChartOptions = ({ gpaData }) => {
         color: '#637381',
         fontSize: 14,
       },
-      startValue: Math.round((gpaData.min_gpa - 0.2) / 0.2) * 0.2,
+      min: Math.round((gpaData.min_gpa - 0.2) / 0.2) * 0.2,
       interval: 0.2,
       axisLabel: {
         color: '#637381',

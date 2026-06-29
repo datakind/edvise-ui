@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -30,7 +30,7 @@ class DataDictionaryController extends Controller
 
         $modelsResp = $api->getModels($request);
         $models = $this->responseData($modelsResp);
-        Log::info('DataDictionary: models', ['count' => is_array($models) ? count($models) : 0, 'raw_status' => $modelsResp?->getStatusCode()]);
+        Log::info('DataDictionary: models', ['count' => is_array($models) ? count($models) : 0, 'raw_status' => $modelsResp?->status()]);
 
         if (! is_array($models) || count($models) === 0) {
             return Inertia::render('DataDictionary', [
@@ -64,7 +64,7 @@ class DataDictionaryController extends Controller
 
         $runsResp = $api->modelRunsWithContext($request, $modelName);
         $runs = $this->responseData($runsResp);
-        Log::info('DataDictionary: runs', ['count' => is_array($runs) ? count($runs) : 0, 'raw_status' => $runsResp?->getStatusCode()]);
+        Log::info('DataDictionary: runs', ['count' => is_array($runs) ? count($runs) : 0, 'raw_status' => $runsResp?->status()]);
 
         if (! is_array($runs) || count($runs) === 0) {
             return Inertia::render('DataDictionary', [
@@ -104,17 +104,22 @@ class DataDictionaryController extends Controller
         ]);
     }
 
-    /**
-     * @param  Response|JsonResponse|null  $response
-     */
-    private function responseData($response): ?array
+    private function responseData(HttpClientResponse|JsonResponse|null $response): ?array
     {
-        if (! $response || $response->getStatusCode() !== 200) {
+        if ($response === null) {
             return null;
         }
 
         if ($response instanceof JsonResponse) {
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
             return $response->getData(true);
+        }
+
+        if ($response->status() !== 200) {
+            return null;
         }
 
         return $response->json();

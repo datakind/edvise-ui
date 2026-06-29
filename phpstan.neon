@@ -11,4 +11,4 @@ parameters:
         - routes/
         - scripts/
         - tests/
-    level: 1
+    level: 3

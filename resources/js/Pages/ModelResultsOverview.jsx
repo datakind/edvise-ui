@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import axios from 'axios';
 import { route } from 'ziggy-js';
 import PropTypes from 'prop-types';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
@@ -31,35 +30,17 @@ function ModelResultsOverview({
   modelName,
   model_run_id: modelRunIdProp,
   runDetails: runDetailsProp,
+  rawFeatures: rawFeaturesProp = [],
   featureImportanceData: featureImportanceDataProp = [],
 }) {
   const { institution } = usePage().props;
 
   const runDetails = runDetailsProp ?? null;
-  const [rawFeatures, setRawFeatures] = useState([]);
+  const rawFeatures = Array.isArray(rawFeaturesProp) ? rawFeaturesProp : [];
   const featureImportanceData = Array.isArray(featureImportanceDataProp)
     ? featureImportanceDataProp
     : [];
   const model_run_id = modelRunIdProp ?? null;
-
-  useEffect(() => {
-    const fetchRawFeatures = async () => {
-      if (!job_run_id || !institution?.inst_id) return;
-
-      try {
-        const response = await axios.get(
-          `/institutions/${institution.inst_id}/inference/top-features/${job_run_id}`,
-        );
-        if (Array.isArray(response.data)) {
-          setRawFeatures(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching top features:', error);
-      }
-    };
-
-    fetchRawFeatures();
-  }, [job_run_id, institution?.inst_id]);
 
   const featuresFromRaw = useMemo(() => {
     if (rawFeatures.length === 0) return [];
@@ -583,6 +564,7 @@ ModelResultsOverview.propTypes = {
   modelName: PropTypes.string,
   model_run_id: PropTypes.string,
   runDetails: PropTypes.object,
+  rawFeatures: PropTypes.arrayOf(PropTypes.object),
   featureImportanceData: PropTypes.arrayOf(PropTypes.object),
 };
 

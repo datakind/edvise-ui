@@ -19,6 +19,12 @@ import '../../css/landing.css';
 
 import { formatModelName } from '../utils/stringUtils';
 import { modelCardDownloadUrl } from '@/utils/modelCardUrl';
+import {
+  computeGlobalShapRange,
+  computeGlobalYRange,
+  limitTopFeatureRows,
+  parseShapValue,
+} from '@/utils/shapChartUtils';
 
 // Helper function to convert to title case
 const capitalizeFirstWord = str => {
@@ -37,6 +43,7 @@ function ModelResultsOverview({
 
   const runDetails = runDetailsProp ?? null;
   const [rawFeatures, setRawFeatures] = useState([]);
+  const [visibleChartCount, setVisibleChartCount] = useState(0);
   const featureImportanceData = Array.isArray(featureImportanceDataProp)
     ? featureImportanceDataProp
     : [];
@@ -46,20 +53,34 @@ function ModelResultsOverview({
     const fetchRawFeatures = async () => {
       if (!job_run_id || !institution?.inst_id) return;
 
+      setVisibleChartCount(0);
+
       try {
         const response = await axios.get(
           `/institutions/${institution.inst_id}/inference/top-features/${job_run_id}`,
         );
         if (Array.isArray(response.data)) {
-          setRawFeatures(response.data);
+          setRawFeatures(limitTopFeatureRows(response.data));
+        } else {
+          setRawFeatures([]);
         }
       } catch (error) {
         console.error('Error fetching top features:', error);
+        setRawFeatures([]);
       }
     };
 
     fetchRawFeatures();
   }, [job_run_id, institution?.inst_id]);
+
+  const globalShapRange = useMemo(
+    () => computeGlobalShapRange(rawFeatures),
+    [rawFeatures],
+  );
+  const globalYRange = useMemo(
+    () => computeGlobalYRange(rawFeatures),
+    [rawFeatures],
+  );
 
   const featuresFromRaw = useMemo(() => {
     if (rawFeatures.length === 0) return [];
@@ -69,8 +90,8 @@ function ModelResultsOverview({
       if (!featureGroups[featureName]) {
         featureGroups[featureName] = { feature: item, shapValues: [] };
       }
-      const shapValue = parseFloat(item.shap_value || item.importance || 0);
-      featureGroups[featureName].shapValues.push(Math.abs(shapValue));
+      const shapValue = Math.abs(parseShapValue(item));
+      featureGroups[featureName].shapValues.push(shapValue);
     });
     return Object.keys(featureGroups)
       .map(featureName => {
@@ -100,6 +121,59 @@ function ModelResultsOverview({
       return { ...feature, data_type: dataTypeMap[matchKey] ?? null };
     });
   }, [featuresFromRaw, featureImportanceData]);
+
+  const displayFeatures = useMemo(() => {
+    if (features.length > 0) {
+      return features.slice(0, 10);
+    }
+    if (featureImportanceData.length === 0) {
+      return [];
+    }
+    return [...featureImportanceData]
+      .sort(
+        (a, b) =>
+          parseFloat(b.average_shap_magnitude || 0) -
+          parseFloat(a.average_shap_magnitude || 0),
+      )
+      .slice(0, 10)
+      .map(item => ({
+        feature_readable_name: item.readable_feature_name,
+        feature_short_desc: item.short_feature_desc,
+        data_type: item.data_type ?? null,
+      }));
+  }, [features, featureImportanceData]);
+
+  useEffect(() => {
+    if (rawFeatures.length === 0) {
+      setVisibleChartCount(0);
+      return;
+    }
+
+    const chartCount = Math.min(features.length, 10);
+    if (chartCount === 0) {
+      setVisibleChartCount(0);
+      return;
+    }
+
+    let count = 0;
+    let cancelled = false;
+
+    const showNextChart = () => {
+      if (cancelled) return;
+      count += 1;
+      setVisibleChartCount(count);
+      if (count < chartCount) {
+        requestAnimationFrame(showNextChart);
+      }
+    };
+
+    requestAnimationFrame(showNextChart);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [rawFeatures, features.length]);
+
   const output_link = runDetails ? runDetails.output_file_link : null;
   const output_filename = runDetails ? runDetails.output_filename : null;
 
@@ -297,7 +371,7 @@ function ModelResultsOverview({
                         </tr>
                       </thead>
                       <tbody>
-                        {features.slice(0, 10).map((feature, idx) => (
+                        {displayFeatures.map((feature, idx) => (
                           <tr
                             key={feature.feature_readable_name}
                             className={`border-b border-[#E5E7EB] align-top last:border-b-0 ${idx % 2 === 1 ? 'bg-[#F7F9FB]' : ''}`}
@@ -316,10 +390,19 @@ function ModelResultsOverview({
                               </div>
                             </td>
                             <td className="w-2/3 border-t border-b border-[#e5e7eb] py-3">
-                              <Shap
-                                rawFeatures={rawFeatures}
-                                currentFeature={feature}
-                              />
+                              {rawFeatures.length > 0 &&
+                              idx < visibleChartCount ? (
+                                <Shap
+                                  rawFeatures={rawFeatures}
+                                  currentFeature={feature}
+                                  globalShapRange={globalShapRange}
+                                  globalYRange={globalYRange}
+                                />
+                              ) : (
+                                <div className="flex h-[250px] items-center justify-center text-sm text-[#767676]">
+                                  Chart Loading
+                                </div>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -521,6 +604,8 @@ function ModelResultsOverview({
                   <Shap
                     rawFeatures={rawFeatures}
                     currentFeature={selectedFeature}
+                    globalShapRange={globalShapRange}
+                    globalYRange={globalYRange}
                   />
                 </div>
                 <div className="mt-4 flex justify-center gap-16 px-2 text-sm text-[#4F4F4F]">

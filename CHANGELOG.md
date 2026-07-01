@@ -1,15 +1,20 @@
 # Changelog
 
-## [1.3.0] - 2026-06-29
+## [1.3.0] - 2026-07-01
 
 ### Added
 - GenAI institution type on Create Institution
-- Edvise Design System form inputs and standard form validation
+- Edvise Design System form inputs and standard form validation on Create Institution
 - PostHog product analytics
 
+### Changed
+- Start Prediction nav visible to DataKinders only
+- Model Results top features charts use client-side filtering and progressive loading
+
 ### Fixed
-- Model Run History error alert now stays inside the content container
-- Model Results top features are fetched client-side to avoid a memory limit error
+- Model Run History error alert stays inside the content container
+- Model Results top features fetched client-side to avoid memory limit errors
+- EDA dashboard GPA chart y-axis scale
 
 ## [1.2.0] - 2026-06-23
 

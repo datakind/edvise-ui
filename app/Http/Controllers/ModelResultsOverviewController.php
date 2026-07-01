@@ -21,7 +21,6 @@ class ModelResultsOverviewController extends Controller
                 'modelName' => $modelName,
                 'model_run_id' => null,
                 'runDetails' => null,
-                'rawFeatures' => [],
                 'featureImportanceData' => [],
                 'error' => 'No institution context',
             ]);
@@ -34,12 +33,6 @@ class ModelResultsOverviewController extends Controller
 
         $runDetailsResp = $api->getRunDetails($request, $inst_id, $modelName, $run_id);
         $runDetails = $this->responseData($runDetailsResp);
-
-        $topFeaturesResp = $api->getTopFeatures($request, $inst_id, $run_id);
-        $rawFeatures = $this->responseData($topFeaturesResp);
-        if (! is_array($rawFeatures)) {
-            $rawFeatures = [];
-        }
 
         $featureImportanceData = [];
         if ($model_run_id) {
@@ -55,7 +48,6 @@ class ModelResultsOverviewController extends Controller
             'modelName' => $modelName,
             'model_run_id' => $model_run_id,
             'runDetails' => $runDetails,
-            'rawFeatures' => $rawFeatures,
             'featureImportanceData' => $featureImportanceData,
         ]);
     }

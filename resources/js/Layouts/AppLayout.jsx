@@ -59,7 +59,11 @@ var navigationAboveLine = [
         href: route('file-upload'),
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
-      { name: 'Start Prediction', href: route('run-inference') },
+      {
+        name: 'Start Prediction',
+        href: route('run-inference'),
+        visibility_type: VisibilityType.DATAKIND_ONLY,
+      },
       { name: 'Manage Uploads', href: route('manage-uploads') },
     ],
   },

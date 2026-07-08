@@ -649,9 +649,6 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
             \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
 
             return response()->json([
                 [
@@ -827,9 +824,6 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
             \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
 
             // Mock data for local development
             return response()->json([
@@ -947,9 +941,6 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
             \Log::info('Local request - Institution ID: '.$inst_id);
-            if ($inst_id == null || $inst_id == '') {
-                return response()->json(['error' => 'Institution ID not provided'], 401);
-            }
             // Mock data for local development - generate different data based on feature_name
             $featureName = $request->query('feature_name', 'test_feature');
 

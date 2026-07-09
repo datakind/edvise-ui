@@ -4,6 +4,7 @@ substitutions:
   _MIGRATE_DB: 'false'
   _SERVICE: dev-frontend
   _STATIC_BUCKET: ''
+  _NOTIFY_SLACK: 'false'
 
 steps:
   - name: gcr.io/cloud-builders/docker
@@ -105,16 +106,20 @@ steps:
 
   - name: curlimages/curl
     id: notify-slack
+    entrypoint: sh
     args:
-      - '-X'
-      - POST
-      - '-H'
-      - 'Content-Type: application/json'
-      - '-f'
-      - '-d'
-      - >-
-        {"text":"🚀 *$REPO_NAME* deployed · `$BRANCH_NAME` · $TRIGGER_NAME"}
-      - 'https://hooks.slack.com/triggers/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'
+      - -c
+      - |
+        set -eu
+        if [ "${_NOTIFY_SLACK}" != "true" ]; then
+          echo "Skipping Slack notification."
+          exit 0
+        fi
+        VERSION=$$(grep -m1 '"version"' package.json | sed 's/.*: "\(.*\)".*/\1/')
+        curl -sf -X POST \
+          -H 'Content-Type: application/json' \
+          -d '{"text":"🚀 *$REPO_NAME* v'"$$VERSION"' deployed to production · `$BRANCH_NAME` · $SHORT_SHA"}' \
+          'https://hooks.slack.com/triggers/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'
     waitFor: [deploy-cloud-run]
 timeout: 1200s
 options:

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { route } from 'ziggy-js';
+import { usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/Components/Spinner';
@@ -11,6 +12,8 @@ import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import { formatModelName } from '@/utils/stringUtils';
 
 export default function ModelRunHistory({ modelname }) {
+  const { auth } = usePage().props;
+  const userIsDatakinder = auth.user?.access_type === 'DATAKINDER';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // These only need to be set once
@@ -125,11 +128,7 @@ export default function ModelRunHistory({ modelname }) {
             </div>
           ) : error != null &&
             !(error.message == 'NO_MODELS' || error.message == 'NO_RUNS') ? (
-            <Alert
-              variant="danger"
-              mainMsg={'Error: ' + error.message}
-              className="mr-24 ml-24 flex h-fit"
-            />
+            <Alert variant="danger" mainMsg={'Error: ' + error.message} />
           ) : (
             <div
               className="flex w-full flex-col items-center"
@@ -163,13 +162,17 @@ export default function ModelRunHistory({ modelname }) {
                       <div className="flex font-bold">
                         This model does not have any predictions available yet.
                       </div>
-                      <div className="flex">Click below to begin one.</div>
-                      <a
-                        href={route('run-inference')}
-                        className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
-                      >
-                        Start Prediction
-                      </a>
+                      {userIsDatakinder && (
+                        <>
+                          <div className="flex">Click below to begin one.</div>
+                          <a
+                            href={route('run-inference')}
+                            className="flex items-center justify-center rounded-full border border-[#f79222] bg-white px-3 py-2 text-[#f79222]"
+                          >
+                            Start Prediction
+                          </a>
+                        </>
+                      )}
                     </div>
                   )}
                 </>

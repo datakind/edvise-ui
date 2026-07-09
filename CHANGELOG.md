@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.3.0] - 2026-07-01
+
+### Added
+- GenAI institution type on Create Institution
+- Edvise Design System form inputs and standard form validation on Create Institution
+- PostHog product analytics
+
+### Changed
+- Start Prediction nav visible to DataKinders only
+- Model Results top features charts use client-side filtering and progressive loading
+
+### Fixed
+- Model Run History error alert stays inside the content container
+- Model Results top features fetched client-side to avoid memory limit errors
+- EDA dashboard GPA chart y-axis scale
+
+## [1.2.0] - 2026-06-23
+
+### Added
+- Model Run History page replaces the Dashboard as the primary model results view, aligned with Figma
+
+### Changed
+- Data Dictionary route now requires authentication
+- Introduced `_NOTIFY_SLACK` Cloud Build substitution to control deploy Slack notifications (off by default; enable on the production trigger only)
+- Consolidated CI into a single workflow with org-wide shared checks; Larastan raised to level 3
+
+### Fixed
+- Footer responsive layout and dynamic copyright year
+- Removed unused state from Model Run History
+
 ## [1.1.1] - 2026-06-10
 
 ### Fixed

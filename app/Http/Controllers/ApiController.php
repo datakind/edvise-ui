@@ -566,6 +566,23 @@ class ApiController extends Controller
         return $result;
     }
 
+    public function deleteModelRun(Request $request, string $model_name, string $run_id)
+    {
+        \Log::info('deleteModelRun called with model_name: '.$model_name.', run_id: '.$run_id);
+
+        if (ApiController::isLocalRequest()) {
+            return response()->json([
+                'message' => 'Run deleted successfully',
+                'run_id' => $run_id,
+                'model_name' => $model_name,
+            ], 200);
+        }
+
+        $externalUrl = '/models/'.urlencode($model_name).'/run/'.$run_id;
+
+        return ApiController::constructInstRequest($request, $externalUrl, 'DELETE', null);
+    }
+
     // This returns batch and file info for a given inst.
     public function viewUploadedData(Request $request)
     {

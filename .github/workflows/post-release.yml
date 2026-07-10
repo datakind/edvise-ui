@@ -6,4 +6,4 @@ on:
 
 jobs:
   post-release:
-    uses: datakind/.github/.github/workflows/post-release.yml@feature/post-release
+    uses: datakind/.github/.github/workflows/post-release.yml@main

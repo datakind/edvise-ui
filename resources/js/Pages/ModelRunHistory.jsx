@@ -24,6 +24,12 @@ export default function ModelRunHistory({ modelname }) {
   const [runToDelete, setRunToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const closeDeleteModal = () => {
+    if (!isDeleting) {
+      setRunToDelete(null);
+    }
+  };
+
   const deleteRun = async () => {
     if (!runToDelete || !modelInfo?.name) {
       return;
@@ -31,9 +37,7 @@ export default function ModelRunHistory({ modelname }) {
 
     setIsDeleting(true);
     try {
-      await axios.delete(
-        `/model/${modelInfo.name}/run/${runToDelete.run_id}`,
-      );
+      await axios.delete(`/model/${modelInfo.name}/run/${runToDelete.run_id}`);
       setRuns(prev => {
         const next = prev.filter(run => run.run_id !== runToDelete.run_id);
         if (next.length === 0) {
@@ -115,6 +119,32 @@ export default function ModelRunHistory({ modelname }) {
     fetchModel();
   }, [modelname]);
 
+  if (runToDelete) {
+    return (
+      <AppLayout title="Model Results">
+        <ConfirmationModal isOpen onClose={closeDeleteModal}>
+          <ConfirmationModal.Content title="Delete run results">
+            Are you sure you want to delete the results for batch &ldquo;
+            {runToDelete.batch_name}&rdquo; from {runToDelete.triggered_at}?
+            This action cannot be undone.
+          </ConfirmationModal.Content>
+          <ConfirmationModal.Footer>
+            <SecondaryButton onClick={closeDeleteModal} disabled={isDeleting}>
+              Cancel
+            </SecondaryButton>
+            <DangerButton
+              className="ml-2"
+              onClick={deleteRun}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </DangerButton>
+          </ConfirmationModal.Footer>
+        </ConfirmationModal>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout title="Model Results">
       {
@@ -183,19 +213,14 @@ export default function ModelRunHistory({ modelname }) {
               <div className="mx-auto w-full max-w-[1057px]">
                 {runs.length > 0 && (
                   <div className="mt-8 flex w-full justify-center">
-                    <table
-                      className="edvise-table edvise-table--card"
-                      id="model-history-table"
-                    >
+                    <table className="edvise-table" id="model-history-table">
                       <thead>
                         <tr>
-                          <th scope="col">DATE</th>
-                          <th scope="col">USER</th>
-                          <th scope="col">BATCH</th>
-                          <th scope="col">RESULTS</th>
-                          <th scope="col" className="whitespace-nowrap">
-                            RESULTS .CSV
-                          </th>
+                          <th scope="col">Date</th>
+                          <th scope="col">User</th>
+                          <th scope="col">Batch</th>
+                          <th scope="col">Results</th>
+                          <th scope="col">Download</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -240,13 +265,7 @@ export default function ModelRunHistory({ modelname }) {
                                   type="button"
                                   className="cursor-pointer border-0 bg-transparent p-0"
                                   aria-label={`Delete model results for run on ${run.triggered_at}`}
-                                  onClick={e => {
-                                    e.stopPropagation();
-                                    window.setTimeout(
-                                      () => setRunToDelete(run),
-                                      0,
-                                    );
-                                  }}
+                                  onClick={() => setRunToDelete(run)}
                                 >
                                   <TrashIcon
                                     aria-hidden="true"
@@ -266,32 +285,6 @@ export default function ModelRunHistory({ modelname }) {
           )}
         </div>
       }
-
-      <ConfirmationModal
-        isOpen={!!runToDelete}
-        onClose={() => !isDeleting && setRunToDelete(null)}
-      >
-        <ConfirmationModal.Content title="Delete run results">
-          Are you sure you want to delete the results for batch &ldquo;
-          {runToDelete?.batch_name}&rdquo; from {runToDelete?.triggered_at}?
-          This action cannot be undone.
-        </ConfirmationModal.Content>
-        <ConfirmationModal.Footer>
-          <SecondaryButton
-            onClick={() => setRunToDelete(null)}
-            disabled={isDeleting}
-          >
-            Cancel
-          </SecondaryButton>
-          <DangerButton
-            className="ml-2"
-            onClick={deleteRun}
-            disabled={isDeleting}
-          >
-            {isDeleting ? 'Deleting...' : 'Delete'}
-          </DangerButton>
-        </ConfirmationModal.Footer>
-      </ConfirmationModal>
     </AppLayout>
   );
 }

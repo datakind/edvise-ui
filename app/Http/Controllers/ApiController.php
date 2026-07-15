@@ -570,6 +570,10 @@ class ApiController extends Controller
     {
         \Log::info('deleteModelRun called with model_name: '.$model_name.', run_id: '.$run_id);
 
+        if ($request->user()->access_type != 'DATAKINDER') {
+            return response()->json(['error' => 'Only datakinders can perform this action'], 401);
+        }
+
         if (ApiController::isLocalRequest()) {
             return response()->json([
                 'message' => 'Run deleted successfully',

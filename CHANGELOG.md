@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 2026-07-16
+
+### Fixed
+- App version now reports 1.4.1 (1.4.0 shipped without bumping `package.json`)
+
 ## [1.4.0] - 2026-07-15
 
 ### Added

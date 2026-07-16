@@ -310,22 +310,22 @@ export default function ManageUploads() {
           className="overflow-x-auto px-6"
           style={{ paddingBottom: '150px' }}
         >
-          <table className="w-full table-auto text-left" id="uploads-table">
+          <table className="edvise-table" id="uploads-table">
             <thead>
-              <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
-                <th scope="col" className="p-4 px-6">
+              <tr>
+                <th scope="col">
                   <button onClick={() => handleSort('batch')}>
                     <span className="inline-flex pr-2 align-middle">BATCH</span>
                     <SortIcon />
                   </button>
                 </th>
-                <th scope="col" className="p-4 px-6">
+                <th scope="col">
                   <button onClick={() => handleSort('files')}>
                     <span className="inline-flex pr-2 align-middle">FILES</span>
                     <SortIcon />
                   </button>
                 </th>
-                <th scope="col" className="p-4 px-6">
+                <th scope="col">
                   <button onClick={() => handleSort('modified_by')}>
                     <span className="inline-flex pr-2 align-middle">
                       MODIFIED BY
@@ -333,7 +333,7 @@ export default function ManageUploads() {
                     <SortIcon />
                   </button>
                 </th>
-                <th scope="col" className="p-4 px-6">
+                <th scope="col">
                   <button onClick={() => handleSort('date_modified')}>
                     <span className="inline-flex pr-2 align-middle">
                       DATE MODIFIED
@@ -341,7 +341,7 @@ export default function ManageUploads() {
                     <SortIcon />
                   </button>
                 </th>
-                <th scope="col" className="relative p-4 px-6">
+                <th scope="col" className="relative">
                   <span className="inline-flex pr-2 align-middle">ACTIONS</span>
                 </th>
               </tr>
@@ -352,25 +352,18 @@ export default function ManageUploads() {
                 upload.deleted ? (
                   <></>
                 ) : (
-                  <tr
-                    className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
-                    key={upload.batch_id}
-                  >
-                    <td className="p-4 px-6">{upload.name}</td>
-                    <td className="p-4 px-6">
+                  <tr key={upload.batch_id}>
+                    <td>{upload.name}</td>
+                    <td>
                       <ul>
                         {Object.entries(upload.file_names_to_ids).map(([k]) => (
                           <li key={k}>&#8226;&nbsp;{k}</li>
                         ))}
                       </ul>
                     </td>
-                    <td className="p-4 px-6 font-medium">
-                      {upload.updated_by}
-                    </td>
-                    <td className="p-4 px-6 font-medium">
-                      {upload.updated_at}
-                    </td>
-                    <td className="relative overflow-visible p-4 px-6 font-medium">
+                    <td className="font-medium">{upload.updated_by}</td>
+                    <td className="font-medium">{upload.updated_at}</td>
+                    <td className="relative overflow-visible font-medium">
                       <OverflowMenu
                         items={actions.map(action => ({
                           ...action,

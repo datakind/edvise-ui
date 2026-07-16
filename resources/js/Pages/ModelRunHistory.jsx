@@ -2,9 +2,13 @@ import axios from 'axios';
 import { route } from 'ziggy-js';
 import { usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/Components/Spinner';
 import AppLayout from '@/Layouts/AppLayout';
 import Alert from '@/Components/Alert';
+import ConfirmationModal from '@/Components/Modals/ConfirmationModal';
+import DangerButton from '@/Components/Buttons/DangerButton';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import { formatModelName } from '@/utils/stringUtils';
 
 export default function ModelRunHistory({ modelname }) {
@@ -17,6 +21,42 @@ export default function ModelRunHistory({ modelname }) {
   const [runs, setRuns] = useState([]);
   // These need to be set depending on the current run.
   const [currentRunId, setCurrentRunId] = useState('');
+  const [runToDelete, setRunToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const closeDeleteModal = () => {
+    if (!isDeleting) {
+      setRunToDelete(null);
+    }
+  };
+
+  const deleteRun = async () => {
+    if (!runToDelete || !modelInfo?.name) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/model/${modelInfo.name}/run/${runToDelete.run_id}`);
+      setRuns(prev => {
+        const next = prev.filter(run => run.run_id !== runToDelete.run_id);
+        if (next.length === 0) {
+          setError(new Error('NO_RUNS'));
+        }
+        return next;
+      });
+      setRunToDelete(null);
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        err.message ||
+        'Failed to delete run results.';
+      setError(Error(message));
+      setRunToDelete(null);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchModel = async () => {
@@ -77,7 +117,33 @@ export default function ModelRunHistory({ modelname }) {
     };
 
     fetchModel();
-  }, [currentRunId]);
+  }, [modelname]);
+
+  if (runToDelete) {
+    return (
+      <AppLayout title="Model Results">
+        <ConfirmationModal isOpen onClose={closeDeleteModal}>
+          <ConfirmationModal.Content title="Delete run results">
+            Are you sure you want to delete the results for batch &ldquo;
+            {runToDelete.batch_name}&rdquo; from {runToDelete.triggered_at}?
+            This action cannot be undone.
+          </ConfirmationModal.Content>
+          <ConfirmationModal.Footer>
+            <SecondaryButton onClick={closeDeleteModal} disabled={isDeleting}>
+              Cancel
+            </SecondaryButton>
+            <DangerButton
+              className="ml-2"
+              onClick={deleteRun}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </DangerButton>
+          </ConfirmationModal.Footer>
+        </ConfirmationModal>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout title="Model Results">
@@ -147,41 +213,24 @@ export default function ModelRunHistory({ modelname }) {
               <div className="mx-auto w-full max-w-[1057px]">
                 {runs.length > 0 && (
                   <div className="mt-8 flex w-full justify-center">
-                    <table
-                      className="w-full table-auto rounded-lg bg-white text-left shadow-md"
-                      id="model-history-table"
-                    >
+                    <table className="edvise-table" id="model-history-table">
                       <thead>
-                        <tr className="border-b border-gray-300 bg-gray-50 text-xs leading-normal font-medium tracking-[0.6px] text-gray-500 uppercase">
-                          <th scope="col" className="p-4 px-6">
-                            DATE
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            USER
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            BATCH
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            RESULTS
-                          </th>
-                          <th scope="col" className="p-4 px-6">
-                            RESULTS .CSV
-                          </th>
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">User</th>
+                          <th scope="col">Batch</th>
+                          <th scope="col">Results</th>
+                          <th scope="col">Download</th>
+                          <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {runs.map(run => (
-                          <tr
-                            className="border-b border-gray-300 text-sm leading-5 font-normal text-gray-700"
-                            key={run.run_id}
-                          >
-                            <td className="p-4 px-6">{run.triggered_at}</td>
-                            <td className="p-4 px-6">{run.created_by}</td>
-                            <td className="p-4 px-6 font-medium">
-                              {run.batch_name}
-                            </td>
-                            <td className="p-4 px-6">
+                          <tr key={run.run_id}>
+                            <td>{run.triggered_at}</td>
+                            <td>{run.created_by}</td>
+                            <td className="font-medium">{run.batch_name}</td>
+                            <td>
                               {run.completed ? (
                                 <a
                                   href={route('model-results-overview', [
@@ -196,7 +245,7 @@ export default function ModelRunHistory({ modelname }) {
                                 'Pending'
                               )}
                             </td>
-                            <td className="p-4 px-6">
+                            <td>
                               {run.completed ? (
                                 <a
                                   href={run.output_file_link}
@@ -208,6 +257,21 @@ export default function ModelRunHistory({ modelname }) {
                                 </a>
                               ) : (
                                 'Pending'
+                              )}
+                            </td>
+                            <td>
+                              {userIsDatakinder && (
+                                <button
+                                  type="button"
+                                  className="cursor-pointer border-0 bg-transparent p-0"
+                                  aria-label={`Delete model results for run on ${run.triggered_at}`}
+                                  onClick={() => setRunToDelete(run)}
+                                >
+                                  <TrashIcon
+                                    aria-hidden="true"
+                                    className="inline-block size-5 shrink-0 align-middle text-gray-700"
+                                  />
+                                </button>
                               )}
                             </td>
                           </tr>

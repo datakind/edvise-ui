@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0] - 2026-07-15
+
+### Added
+- DataKinders can delete any model run from Model Run History (with confirmation)
+
+### Changed
+- Larastan raised to level 4
+- Post-release reusable workflow pinned to `main`
+
+### Removed
+- Unused local institutions database table (canonical institution data is the API)
+
 ## [1.3.0] - 2026-07-01
 
 ### Added

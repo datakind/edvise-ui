@@ -1,4 +1,5 @@
 import React from 'react';
+import { DialogTitle } from '@headlessui/react';
 import Modal from '@/Components/Modals/Modal';
 ConfirmationModal.Content = function ConfirmationModalContent({
   title,
@@ -24,7 +25,9 @@ ConfirmationModal.Content = function ConfirmationModalContent({
         </div>
 
         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+          <DialogTitle as="h3" className="text-lg font-medium text-gray-900">
+            {title}
+          </DialogTitle>
 
           <div className="mt-4 text-sm text-gray-600">{children}</div>
         </div>

@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { usePage, router } from '@inertiajs/react';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import Alert from '@/Components/Alert';
 import HeaderLabel from '@/Components/HeaderLabel';
 
+function institutionType(inst) {
+  return (
+    (inst?.pdp_id && 'PDP') ||
+    (inst?.edvise_id && 'Edvise') ||
+    (inst?.legacy_id && 'Legacy') ||
+    (inst?.genai_id && 'GenAI') ||
+    null
+  );
+}
+
 export default function SetInstitution() {
   const { institution, set_inst_required_message } = usePage().props;
 
-  const [resultList, setResultList] = useState({});
+  const [institutions, setInstitutions] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedInstId, setSelectedInstId] = useState(
@@ -28,9 +44,9 @@ export default function SetInstitution() {
     axios
       .get('/view-all-institutions-api')
       .then(res => {
-        let resultingVar = {};
-        res.data.forEach(b => (resultingVar[b.name] = b.inst_id));
-        setResultList(resultingVar);
+        setInstitutions(
+          [...res.data].sort((a, b) => a.name.localeCompare(b.name)),
+        );
         setLoading(false);
       })
       .catch(err => {
@@ -38,6 +54,9 @@ export default function SetInstitution() {
         setLoading(false);
       });
   }, []);
+
+  const selected = institutions.find(i => i.inst_id === selectedInstId);
+  const selectedType = institutionType(selected);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -55,11 +74,8 @@ export default function SetInstitution() {
       .post('/set-inst-api/' + inst)
       .then(() => {
         setSettingInst(false);
-        const institutionName =
-          Object.entries(resultList).find(([, id]) => id === inst)?.[0] ||
-          'Unknown';
         setSetInstSuccess(
-          `Successfully set institution to: ${institutionName}`,
+          `Successfully set institution to: ${selected?.name || 'Unknown'}`,
         );
         router.reload({
           only: ['institution', 'user', 'set_inst_required_message'],
@@ -116,42 +132,65 @@ export default function SetInstitution() {
                 <label className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase">
                   Select Institution
                 </label>
-                <div className="relative">
-                  <select
-                    className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                    style={{ backgroundImage: 'none' }}
-                    name="instid"
-                    value={selectedInstId}
-                    onChange={e => {
-                      setSelectedInstId(e.target.value);
-                      setSetInstSubmitError(null);
-                    }}
-                    required
-                    disabled={loading}
-                  >
-                    <option value="">
-                      {loading
-                        ? 'Loading institutions...'
-                        : 'Choose an institution...'}
-                    </option>
-                    {Object.entries(resultList)
-                      .sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
-                      .map(([name, inst_id]) => (
-                        <option key={inst_id} value={inst_id}>
-                          {name}
-                        </option>
-                      ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg
-                      className="h-4 w-4 fill-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
+                <Listbox
+                  value={selectedInstId}
+                  onChange={id => {
+                    setSelectedInstId(id);
+                    setSetInstSubmitError(null);
+                  }}
+                  disabled={loading}
+                >
+                  <div className="relative">
+                    <ListboxButton className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 text-left leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50">
+                      {selected ? (
+                        <span className="flex items-baseline gap-2 truncate">
+                          <span>{selected.name}</span>
+                          {selectedType && (
+                            <span className="text-xs text-gray-500">
+                              {selectedType}
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-gray-500">
+                          {loading
+                            ? 'Loading institutions...'
+                            : 'Choose an institution...'}
+                        </span>
+                      )}
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg
+                          className="h-4 w-4 fill-current"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                      </span>
+                    </ListboxButton>
+                    <ListboxOptions className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded border border-gray-200 bg-white py-1 shadow-lg focus:outline-none">
+                      {institutions.map(inst => {
+                        const type = institutionType(inst);
+                        return (
+                          <ListboxOption
+                            key={inst.inst_id}
+                            value={inst.inst_id}
+                            className="cursor-pointer px-4 py-2 text-gray-700 data-focus:bg-gray-100 data-selected:bg-gray-100"
+                          >
+                            <span className="flex items-baseline gap-2">
+                              <span>{inst.name}</span>
+                              {type && (
+                                <span className="text-xs text-gray-500">
+                                  {type}
+                                </span>
+                              )}
+                            </span>
+                          </ListboxOption>
+                        );
+                      })}
+                    </ListboxOptions>
                   </div>
-                </div>
+                </Listbox>
                 <p className="mt-2 text-xs text-gray-600 italic">
                   Select the institution for the current Datakinder to use.
                 </p>

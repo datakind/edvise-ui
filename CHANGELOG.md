@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2026-07-22
+
+### Added
+- School type shown in the set-institution dropdown
+- DC and US territories in the Create Institution state selector
+
+### Fixed
+- Archived models no longer appear under Model Results in the navigation
+
 ## [1.4.1] - 2026-07-16
 
 ### Fixed

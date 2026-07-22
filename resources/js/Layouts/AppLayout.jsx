@@ -181,15 +181,11 @@ export default function AppLayout({ title, children }) {
         visibility_type: VisibilityType.PRIVATE_ONLY,
         children: [],
       };
-      // Filter modelData to only include models where valid is true
-      const validModels = modelData.filter(elem => elem.valid === true);
+      const models = modelData
+        .filter(elem => !elem.archived)
+        .sort((a, b) => a.name.localeCompare(b.name));
 
-      // Sort validModels alphabetically by name
-      const sortedValidModels = validModels.sort((a, b) =>
-        a.name.localeCompare(b.name),
-      );
-
-      sortedValidModels.forEach(elem => {
+      models.forEach(elem => {
         let transformedElem = {};
         transformedElem.name = elem.name;
         transformedElem.href = route('model-run-history.modelname', elem.name);

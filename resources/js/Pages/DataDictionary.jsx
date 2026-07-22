@@ -66,7 +66,7 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'Feature Importance Plot',
-        def: 'A visual showing which features influenced predictions the most.',
+        def: 'A visual showing which features influenced predictions the most. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.',
       },
       {
         term: 'Feature Selection',
@@ -82,7 +82,7 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'SHAP (Shapley Additive Explanations)',
-        def: "A method for explaining a model's predictions by showing how much each feature contributed to a particular prediction.",
+        def: "A method for explaining a model's predictions by showing how much each feature contributed to a particular prediction. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.",
       },
     ],
   },
@@ -365,14 +365,18 @@ export default function DataDictionary({ features = [] }) {
                             This will be a positive or negative decimal:
                             <ul className="list-disc pl-5">
                               <li>
-                                A positive value indicates that the feature
-                                being higher increases the student&apos;s
-                                support score
+                                A positive value means this feature is pushing
+                                the student&apos;s support score up (higher
+                                predicted need for support).
                               </li>
                               <li>
-                                A negative value indicates that this feature
-                                being higher decreases the student&apos;s
-                                support score
+                                A negative value means this feature is pushing
+                                the student&apos;s support score down (lower
+                                predicted need for support).
+                              </li>
+                              <li>
+                                The size of the value (how far from zero) shows
+                                how strong that contribution is.
                               </li>
                             </ul>
                           </td>

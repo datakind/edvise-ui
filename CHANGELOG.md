@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.0] - 2026-07-23
+
+### Fixed
+- Data Dictionary feature importance wording clarifies SHAP contribution direction, not feature value
+
 ## [1.5.0] - 2026-07-22
 
 ### Added

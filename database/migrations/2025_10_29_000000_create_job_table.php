@@ -38,9 +38,12 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
+     *
+     * Frozen: edvise-api/Alembic owns this table on shared Cloud SQL.
+     * A rollback must never drop API-owned data.
      */
     public function down(): void
     {
-        Schema::dropIfExists('job');
+        // Intentionally empty.
     }
 };

@@ -13,7 +13,6 @@ All data is stored in MySQL databases for dev/staging/prod, these are databases 
 | `users` | **edvise-ui** (Laravel) | Keep `AccountTable` in edvise-api in sync on any column change |
 | `job` | **edvise-api** (Alembic) | UI must not query MySQL `job`; use API for `model_run_id`. Do not add new Laravel `job` migrations |
 
-
 ### Greenfield database bootstrap
 
 1. Run API migrations first (`alembic upgrade head` in edvise-api).

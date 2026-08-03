@@ -38,6 +38,7 @@ function ModelResultsOverview({
   model_run_id: modelRunIdProp,
   runDetails: runDetailsProp,
   featureImportanceData: featureImportanceDataProp = [],
+  error = null,
 }) {
   const { institution } = usePage().props;
 
@@ -211,6 +212,11 @@ function ModelResultsOverview({
       <Head title="Model Results Overview" />
       <div className="font-[Helvetica Neue] mb-8 min-w-full">
         <PageHeading>Model Results Overview</PageHeading>
+        {error ? (
+          <div className="mx-8 mb-4 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            {error}
+          </div>
+        ) : null}
         <div className="my-6">
           <button
             onClick={handleExportData}
@@ -669,6 +675,7 @@ ModelResultsOverview.propTypes = {
   model_run_id: PropTypes.string,
   runDetails: PropTypes.object,
   featureImportanceData: PropTypes.arrayOf(PropTypes.object),
+  error: PropTypes.string,
 };
 
 export default ModelResultsOverview;

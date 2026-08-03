@@ -31,7 +31,10 @@ class ApiController extends Controller
     // Temporarily disabled for rapid development with real API
     public function isLocalRequest()
     {
-        // Temporarily return false to use real API in local development
+        // Temporarily return false to use real API in local development.
+        // Local mocks (including model_run_id on runs / getRunDetails) are only
+        // reached when this returns true — leave them in place for when the
+        // APP_ENV=LOCAL branch below is re-enabled.
         return false;
 
         // Original logic (uncomment when done with rapid development):

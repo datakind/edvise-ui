@@ -31,6 +31,13 @@ class ModelResultsOverviewController extends Controller
         $runDetails = $this->responseData($runDetailsResp);
         $model_run_id = is_array($runDetails) ? ($runDetails['model_run_id'] ?? null) : null;
 
+        $error = null;
+        if ($runDetails === null) {
+            $error = 'Could not load run details from the API';
+        } elseif (! $model_run_id) {
+            $error = 'model_run_id unavailable from API for this run';
+        }
+
         $featureImportanceData = [];
         if ($model_run_id) {
             $fiResp = $api->getFeatureImportance($request, $inst_id, $model_run_id);
@@ -46,6 +53,7 @@ class ModelResultsOverviewController extends Controller
             'model_run_id' => $model_run_id,
             'runDetails' => $runDetails,
             'featureImportanceData' => $featureImportanceData,
+            'error' => $error,
         ]);
     }
 

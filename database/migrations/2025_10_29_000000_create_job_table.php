@@ -7,10 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Bootstrap `job` for local/legacy envs only.
+     * Going forward, edvise-api (Alembic) owns job DDL on shared Cloud SQL.
+     * Do not add new Laravel migrations that alter this table.
      */
     public function up(): void
     {
+        if (Schema::hasTable('job')) {
+            return;
+        }
+
         Schema::create('job', function (Blueprint $table) {
             $table->id(); // bigint primary key, auto_increment
             $table->char('model_id', 32)->index(); // Foreign key to models table

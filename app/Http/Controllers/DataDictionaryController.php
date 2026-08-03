@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -76,7 +75,7 @@ class DataDictionaryController extends Controller
 
         $mostRecentRun = $runs[0];
         $run_id = $mostRecentRun['run_id'] ?? null;
-        $model_run_id = $mostRecentRun['model_run_id'] ?? (is_string($run_id) || is_int($run_id) ? Job::find($run_id)?->model_run_id : null);
+        $model_run_id = $mostRecentRun['model_run_id'] ?? null;
         Log::info('DataDictionary: most recent run', ['run_id' => $run_id, 'model_run_id' => $model_run_id]);
 
         $features = [];

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Local/SQLite bootstrap model only. Production UI must not query `job`;
+ * use API run endpoints for model_run_id (DDL owned by edvise-api / Alembic).
+ */
 class Job extends Model
 {
     use HasFactory;
@@ -45,38 +48,4 @@ class Job extends Model
         'output_valid' => 'boolean',
         'triggered_at' => 'datetime',
     ];
-
-    /**
-     * Get the most recent valid model_run_id for a given model_id
-     *
-     * @param  string  $modelId  The model UUID
-     * @return string|null The model_run_id or null if not found
-     */
-    public static function getMostRecentModelRunId(string $modelId): ?string
-    {
-        $job = self::where('model_id', $modelId)
-            ->where('completed', true)
-            ->where('output_valid', true)
-            ->whereNotNull('model_run_id')
-            ->orderBy('triggered_at', 'desc')
-            ->first();
-
-        return $job?->model_run_id;
-    }
-
-    /**
-     * Get all valid jobs for a model
-     *
-     * @param  string  $modelId  The model UUID
-     * @return Collection
-     */
-    public static function getValidJobsForModel(string $modelId)
-    {
-        return self::where('model_id', $modelId)
-            ->where('completed', true)
-            ->where('output_valid', true)
-            ->whereNotNull('model_run_id')
-            ->orderBy('triggered_at', 'desc')
-            ->get();
-    }
 }

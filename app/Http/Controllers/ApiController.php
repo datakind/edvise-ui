@@ -31,7 +31,10 @@ class ApiController extends Controller
     // Temporarily disabled for rapid development with real API
     public function isLocalRequest()
     {
-        // Temporarily return false to use real API in local development
+        // Temporarily return false to use real API in local development.
+        // Local mocks (including model_run_id on runs / getRunDetails) are only
+        // reached when this returns true — leave them in place for when the
+        // APP_ENV=LOCAL branch below is re-enabled.
         return false;
 
         // Original logic (uncomment when done with rapid development):
@@ -525,7 +528,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -771,6 +774,8 @@ class ApiController extends Controller
                     'output_filename' => 'model_results_123.csv',
                     'output_file_link' => 'https://example.com/download/model_results_123.csv',
                     'output_valid' => true,
+                    'model_run_id' => 'mock-model-run-123',
+                    'model_version' => '1',
                 ], 200);
             }
         }
@@ -913,7 +918,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.

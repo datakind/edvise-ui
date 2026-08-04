@@ -7,7 +7,6 @@ use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModelResultsOverviewController;
-use App\Http\Controllers\ModelRunIdController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -208,9 +207,6 @@ Route::middleware('auth.app')->get(
     '/model-results-overview/{run_id}/{modelName}',
     [ModelResultsOverviewController::class, 'show']
 )->name('model-results-overview');
-
-Route::get('/get-model-run-id-by-job/{job_run_id}', [ModelRunIdController::class, 'getByJob']);
-Route::get('/get-model-run-id/{inst_id}', [ModelRunIdController::class, 'getByInst']);
 
 // Admin invite management routes
 Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function () {

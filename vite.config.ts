@@ -7,7 +7,7 @@ export default defineConfig({
   base: process.env.BASE_URL || '',
   plugins: [
     laravel({
-      input: 'resources/js/app.jsx',
+      input: ['resources/js/app.jsx', 'resources/css/app.css'],
       refresh: true,
     }),
     tailwindcss(),

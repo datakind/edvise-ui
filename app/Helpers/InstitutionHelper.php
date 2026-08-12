@@ -103,9 +103,9 @@ class InstitutionHelper
     }
 
     // Set the institution (full attributes). Only DataKinders may set it (they choose via Set Institution page).
-    public static function actAsInstitution(Request $request, string $access_type, string $inst_id): string
+    public static function actAsInstitution(Request $request, string $inst_id): string
     {
-        if ($access_type !== 'DATAKINDER') {
+        if ($request->user()->access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution.';
         }
         if ($inst_id === '') {

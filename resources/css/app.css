@@ -287,7 +287,8 @@ input[type='password'],
 input[type='url'],
 input[type='tel'],
 input[type='number'],
-select {
+select,
+button[aria-haspopup='listbox'] {
   @apply box-border h-12 w-full rounded-full border-2 border-solid bg-white px-5 text-base text-black transition-all placeholder:text-gray-500;
   border-color: theme('colors.input.border');
   &:focus {
@@ -295,7 +296,8 @@ select {
     background-color: theme('colors.input.focusBg');
     outline: none;
   }
-  &:disabled {
+  &:disabled,
+  &[data-disabled] {
     border-color: theme('colors.input.border');
     background-color: theme('colors.input.disabledBg');
     color: theme('colors.input.disabledText');
@@ -325,7 +327,8 @@ select.input-error {
   border-color: theme('colors.input.error');
 }
 
-select {
+select,
+button[aria-haspopup='listbox'] {
   @apply appearance-none pr-10;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.75rem center;

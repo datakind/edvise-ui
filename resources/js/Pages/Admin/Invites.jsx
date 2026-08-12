@@ -6,6 +6,7 @@ import InputError from '@/Components/Modals/InputError';
 import InputLabel from '@/Components/Fields/InputLabel';
 import TextInput from '@/Components/Fields/TextInput';
 import axios from 'axios';
+import { fetchAllInstitutions } from '@/utils/institutions';
 
 export default function Invites({ invites, filters = {} }) {
   const {
@@ -25,21 +26,16 @@ export default function Invites({ invites, filters = {} }) {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
-  const [institutions, setInstitutions] = useState({});
-  const [loadingInstitutions, setLoadingInstitutions] = useState(false);
+  const [institutions, setInstitutions] = useState([]);
+  const [loadingInstitutions, setLoadingInstitutions] = useState(true);
   const [perPage, setPerPage] = useState(
     filters.per_page ? String(filters.per_page) : '20',
   );
 
   useEffect(() => {
-    // Fetch all institutions when component mounts
-    setLoadingInstitutions(true);
-    axios
-      .get('/view-all-institutions-api')
-      .then(res => {
-        let institutionMap = {};
-        res.data.forEach(inst => (institutionMap[inst.name] = inst.inst_id));
-        setInstitutions(institutionMap);
+    fetchAllInstitutions()
+      .then(list => {
+        setInstitutions(list);
         setLoadingInstitutions(false);
       })
       .catch(err => {

@@ -3,9 +3,8 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import InputError from '@/Components/Modals/InputError';
-import InputLabel from '@/Components/Fields/InputLabel';
 import TextInput from '@/Components/Fields/TextInput';
-import axios from 'axios';
+import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 import { fetchAllInstitutions } from '@/utils/institutions';
 
 export default function Invites({ invites, filters = {} }) {
@@ -113,8 +112,14 @@ export default function Invites({ invites, filters = {} }) {
 
   const submit = e => {
     e.preventDefault();
+    e.target.classList.add('was-validated');
+    if (!e.target.checkValidity()) {
+      e.target.querySelector(':invalid')?.focus();
+      return;
+    }
     post(route('admin.invites.create'), {
       onSuccess: () => {
+        e.target.classList.remove('was-validated');
         reset();
         setShowCreateForm(false);
       },
@@ -215,10 +220,12 @@ export default function Invites({ invites, filters = {} }) {
                   <h3 className="mb-4 text-lg font-medium text-gray-900">
                     Create New Invite
                   </h3>
-                  <form onSubmit={submit}>
+                  <form noValidate onSubmit={submit}>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div>
-                        <InputLabel htmlFor="email" value="Email" />
+                      <div className="form-field flex flex-col">
+                        <label className="form-label" htmlFor="email">
+                          Email
+                        </label>
                         <TextInput
                           id="email"
                           type="email"
@@ -226,17 +233,37 @@ export default function Invites({ invites, filters = {} }) {
                           value={data.email}
                           onChange={e => setData('email', e.target.value)}
                           required
+                          aria-describedby="email_error"
                         />
+                        <p id="email_error" className="form-field-error">
+                          <ExclamationCircleIcon
+                            className="size-4 shrink-0"
+                            aria-hidden="true"
+                          />
+                          Please enter a valid email.
+                        </p>
                         <InputError message={errors.email} className="mt-2" />
                       </div>
 
-                      <div>
-                        <InputLabel htmlFor="role" value="Role" />
+                      <div className="form-field flex flex-col">
+                        <label className="form-label" htmlFor="role">
+                          Role
+                        </label>
                         <select
                           id="role"
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full"
                           value={data.role}
-                          onChange={e => setData('role', e.target.value)}
+                          onChange={e => {
+                            const role = e.target.value;
+                            setData(data => ({
+                              ...data,
+                              role,
+                              institution_id:
+                                role === 'DATAKINDER'
+                                  ? ''
+                                  : data.institution_id,
+                            }));
+                          }}
                         >
                           <option value="MODEL_OWNER">Model Owner</option>
                           <option value="DATAKINDER">Datakinder</option>
@@ -244,46 +271,56 @@ export default function Invites({ invites, filters = {} }) {
                         <InputError message={errors.role} className="mt-2" />
                       </div>
 
-                      <div>
-                        <InputLabel
-                          htmlFor="institution_id"
-                          value="Institution (Optional)"
-                        />
+                      <div className="form-field flex flex-col">
+                        <label className="form-label" htmlFor="institution_id">
+                          {data.role === 'MODEL_OWNER'
+                            ? 'Institution'
+                            : 'Institution (Optional)'}
+                        </label>
                         <select
                           id="institution_id"
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full"
                           value={data.institution_id}
                           onChange={e =>
                             setData('institution_id', e.target.value)
                           }
                           disabled={loadingInstitutions}
+                          required={data.role === 'MODEL_OWNER'}
+                          aria-describedby="institution_id_error"
                         >
                           <option value="">
                             {loadingInstitutions
                               ? 'Loading institutions...'
-                              : 'Select an institution (optional)'}
+                              : data.role === 'MODEL_OWNER'
+                                ? 'Select an institution'
+                                : 'Select an institution (optional)'}
                           </option>
-                          {Object.entries(institutions)
-                            .sort(([nameA], [nameB]) =>
-                              nameA.localeCompare(nameB),
-                            )
-                            .map(([name, inst_id]) => (
-                              <option key={inst_id} value={inst_id}>
-                                {name}
-                              </option>
-                            ))}
+                          {institutions.map(inst => (
+                            <option key={inst.inst_id} value={inst.inst_id}>
+                              {inst.name}
+                            </option>
+                          ))}
                         </select>
+                        <p
+                          id="institution_id_error"
+                          className="form-field-error"
+                        >
+                          <ExclamationCircleIcon
+                            className="size-4 shrink-0"
+                            aria-hidden="true"
+                          />
+                          Please select an institution.
+                        </p>
                         <InputError
                           message={errors.institution_id}
                           className="mt-2"
                         />
                       </div>
 
-                      <div>
-                        <InputLabel
-                          htmlFor="expires_in_days"
-                          value="Expires In (Days)"
-                        />
+                      <div className="form-field flex flex-col">
+                        <label className="form-label" htmlFor="expires_in_days">
+                          Expires In (Days)
+                        </label>
                         <TextInput
                           id="expires_in_days"
                           type="number"
@@ -369,9 +406,10 @@ export default function Invites({ invites, filters = {} }) {
                             <div>{invite.email}</div>
                             {invite.institution_id && (
                               <div className="text-xs font-normal text-gray-400">
-                                {Object.entries(institutions).find(
-                                  ([, id]) => id === invite.institution_id,
-                                )?.[0] || invite.institution_id}
+                                {institutions.find(
+                                  inst =>
+                                    inst.inst_id === invite.institution_id,
+                                )?.name || invite.institution_id}
                               </div>
                             )}
                           </div>

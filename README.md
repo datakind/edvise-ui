@@ -98,17 +98,19 @@ NOTE: for dev and staging, email verification is turned off. Email verification 
 
 ## Other Notes
 
-### Frameworks Used
+### Stack
 
-the Edvise is built on:
-
-- Laravel Framework. [Documentation](https://laravel.com/docs)
-
-- Inertiajs. [Documentation](https://inertiajs.com)
-
-- Reactjs. [Documentation](https://reactjs.org/docs/getting-started.html)
-
-- Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
+| Purpose | Tool | Link |
+|---------|------|------|
+| App framework (PHP) | Laravel | https://laravel.com |
+| Auth & app scaffolding | Laravel Jetstream | https://jetstream.laravel.com |
+| Server-driven SPA bridge | Inertia.js | https://inertiajs.com |
+| UI components | React | https://react.dev |
+| Styling | Tailwind CSS | https://tailwindcss.com |
+| Frontend build | Vite | https://vite.dev |
+| Named routes in JS | Ziggy | https://github.com/tighten/ziggy |
+| Backend API | edvise-api | https://github.com/datakind/edvise-api |
+| ORM / DB access | Eloquent (Laravel) | https://laravel.com/docs/eloquent |
 
 ### Notes on files and locations of interest
 

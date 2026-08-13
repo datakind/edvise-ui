@@ -5,6 +5,7 @@ import axios from 'axios';
 import useTypedPage from '@/Hooks/useTypedPage';
 import Dropdown from '@/Components/Fields/Dropdown';
 import AppFooter from '@/Components/AppFooter';
+import Banner from '@/Components/Banner';
 import '../../css/landing.css';
 import {
   Disclosure,
@@ -154,11 +155,9 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, children }) {
   const { auth, jetstream } = useTypedPage().props;
-  const { institution } = usePage().props;
+  const { institution, act_as } = usePage().props;
   const hasInstId = institution?.inst_id;
   const user = auth.user;
-  const userIsDatakinder =
-    auth.user != null ? auth.user.access_type == 'DATAKINDER' : false;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [navAboveLine, setNavAboveLine] = useState(navigationAboveLine);
 
@@ -240,7 +239,7 @@ export default function AppLayout({ title, children }) {
 
       return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
         (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-        (!userIsDatakinder &&
+        (user?.access_type != 'DATAKINDER' &&
           item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
         <></>
       ) : (
@@ -282,7 +281,7 @@ export default function AppLayout({ title, children }) {
                       !subItem.visibility_type ||
                       (subItem.visibility_type ===
                         VisibilityType.DATAKIND_ONLY &&
-                        userIsDatakinder) ||
+                        user?.access_type == 'DATAKINDER') ||
                       (subItem.visibility_type ===
                         VisibilityType.PRIVATE_ONLY &&
                         user) ||
@@ -333,156 +332,168 @@ export default function AppLayout({ title, children }) {
   }
 
   return (
-    <div className="flex flex-row bg-[#EEF2F6]">
-      <header className="shrink-0">
-        <nav className="app-nav flex min-h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
-          <div className="flex flex-col justify-between">
-            <ul role="list" className="flex flex-1 flex-col gap-y-6">
-              <li
-                className="flex w-full shrink-0 flex-col items-start pt-8"
-                key="logo"
-              >
-                <a href={route('app-home')} className="block w-full">
-                  <img
-                    className="max-w-full pb-2"
-                    src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
-                    alt="Edvise Logo"
-                  />
-                  {institution?.name && (
-                    <p className="text-sm font-medium text-[#637381]">
-                      {institution.name}
-                    </p>
-                  )}
-                </a>
-              </li>
-              <li key="navigation">
-                <ul>
-                  {renderNav(navAboveLine)}
-                  <li key="divider" aria-hidden="true">
-                    <hr className="my-6 border-0 border-t border-[#dfe4ea]" />
-                  </li>
-                  {renderNav(navigationBelowLine)}
-                  {user ? (
-                    <li key="profile" className="flex hidden items-end">
-                      <div className="flex w-full items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50">
-                        <span className="sr-only">Your profile</span>
-                        <Dropdown>
-                          <Dropdown.Trigger>
-                            <button className="flex items-center gap-2 text-[#637381]">
-                              <UsersIcon
-                                aria-hidden="true"
-                                className="size-6 shrink-0"
-                              />
-                              {user.name}
-                              <ChevronDownIcon className="h-4 w-4" />
-                            </button>
-                          </Dropdown.Trigger>
-                          <Dropdown.Content>
-                            {/* <Dropdown.Link
+    <div className="app-layout">
+      {institution?.name && (
+        <Banner>
+          <a href={route('set-inst')}>
+            {institution?.name}
+            {act_as && (
+              <>
+                {' '}
+                - You are acting as{' '}
+                {act_as === 'MODEL_OWNER' ? 'Model Owner' : 'Viewer'}.
+              </>
+            )}
+          </a>
+        </Banner>
+      )}
+
+      <div className="app-layout-body">
+        <header className="shrink-0">
+          <nav className="app-nav flex h-full w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-white px-6 shadow-sm">
+            <div className="flex flex-col justify-between">
+              <ul role="list" className="flex flex-1 flex-col gap-y-6">
+                <li
+                  className="flex w-full shrink-0 flex-col items-start pt-8"
+                  key="logo"
+                >
+                  <a href={route('app-home')} className="block w-full">
+                    <img
+                      className="max-w-full pb-2"
+                      src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"
+                      alt="Edvise Logo"
+                    />
+                  </a>
+                </li>
+                <li key="navigation">
+                  <ul>
+                    {renderNav(navAboveLine)}
+                    <li key="divider" aria-hidden="true">
+                      <hr className="my-6 border-0 border-t border-[#dfe4ea]" />
+                    </li>
+                    {renderNav(navigationBelowLine)}
+                    {user ? (
+                      <li key="profile" className="flex hidden items-end">
+                        <div className="flex w-full items-end gap-x-4 px-6 py-3 pb-48 text-sm/6 font-semibold text-[#637381] hover:bg-gray-50">
+                          <span className="sr-only">Your profile</span>
+                          <Dropdown>
+                            <Dropdown.Trigger>
+                              <button className="flex items-center gap-2 text-[#637381]">
+                                <UsersIcon
+                                  aria-hidden="true"
+                                  className="size-6 shrink-0"
+                                />
+                                {user.name}
+                                <ChevronDownIcon className="h-4 w-4" />
+                              </button>
+                            </Dropdown.Trigger>
+                            <Dropdown.Content>
+                              {/* <Dropdown.Link
                               href={route('#', user.current_team)}
                             >
                               Team Settings
                             </Dropdown.Link> */}
-                            {jetstream.hasTeamFeatures && (
-                              <>
-                                {jetstream.canCreateTeams && (
-                                  <Dropdown.Link href={route('teams.create')}>
-                                    Create New Team
-                                  </Dropdown.Link>
-                                )}
-                                {user.all_teams.length > 1 && (
-                                  <>
-                                    <div className="border-t border-gray-200" />
-                                    <div className="block px-4 py-2 text-xs text-gray-400">
-                                      Switch Teams
-                                    </div>
-                                    {user.all_teams.map(team => (
-                                      <form
-                                        key={team.id}
-                                        onSubmit={e => {
-                                          e.preventDefault();
-                                          router.put(
-                                            route('current-team.update'),
-                                            { team_id: team.id },
-                                          );
-                                        }}
-                                      >
-                                        <Dropdown.Link as="button">
-                                          <div className="flex items-center">
-                                            {team.id ===
-                                              user.current_team_id && (
-                                              <svg
-                                                className="me-2 h-5 w-5 text-green-400"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth="1.5"
-                                                stroke="currentColor"
-                                              >
-                                                <path
-                                                  strokeLinecap="round"
-                                                  strokeLinejoin="round"
-                                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                />
-                                              </svg>
-                                            )}
-                                            <div>{team.name}</div>
-                                          </div>
-                                        </Dropdown.Link>
-                                      </form>
-                                    ))}
-                                  </>
-                                )}
-                              </>
-                            )}
-                          </Dropdown.Content>
-                        </Dropdown>
-                      </div>
-                    </li>
-                  ) : null}
-                </ul>
-              </li>
-            </ul>
-            {user ? (
-              <div></div>
-            ) : (
-              <div
-                className="flex items-center justify-between pt-6 pr-6 pb-6 pl-6"
-                id="login-register"
-              >
-                <a
-                  href={route('login')}
-                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
+                              {jetstream.hasTeamFeatures && (
+                                <>
+                                  {jetstream.canCreateTeams && (
+                                    <Dropdown.Link href={route('teams.create')}>
+                                      Create New Team
+                                    </Dropdown.Link>
+                                  )}
+                                  {user.all_teams.length > 1 && (
+                                    <>
+                                      <div className="border-t border-gray-200" />
+                                      <div className="block px-4 py-2 text-xs text-gray-400">
+                                        Switch Teams
+                                      </div>
+                                      {user.all_teams.map(team => (
+                                        <form
+                                          key={team.id}
+                                          onSubmit={e => {
+                                            e.preventDefault();
+                                            router.put(
+                                              route('current-team.update'),
+                                              { team_id: team.id },
+                                            );
+                                          }}
+                                        >
+                                          <Dropdown.Link as="button">
+                                            <div className="flex items-center">
+                                              {team.id ===
+                                                user.current_team_id && (
+                                                <svg
+                                                  className="me-2 h-5 w-5 text-green-400"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  fill="none"
+                                                  viewBox="0 0 24 24"
+                                                  strokeWidth="1.5"
+                                                  stroke="currentColor"
+                                                >
+                                                  <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                  />
+                                                </svg>
+                                              )}
+                                              <div>{team.name}</div>
+                                            </div>
+                                          </Dropdown.Link>
+                                        </form>
+                                      ))}
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </Dropdown.Content>
+                          </Dropdown>
+                        </div>
+                      </li>
+                    ) : null}
+                  </ul>
+                </li>
+              </ul>
+              {user ? (
+                <div></div>
+              ) : (
+                <div
+                  className="flex items-center justify-between pt-6 pr-6 pb-6 pl-6"
+                  id="login-register"
                 >
-                  Login
-                </a>
-                <div className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline">
-                  &middot;
+                  <a
+                    href={route('login')}
+                    className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
+                  >
+                    Login
+                  </a>
+                  <div className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline">
+                    &middot;
+                  </div>
+                  <a
+                    href={route('register')}
+                    className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
+                  >
+                    Register
+                  </a>
                 </div>
-                <a
-                  href={route('register')}
-                  className="flex rounded-md text-sm/12 font-semibold text-[#637381] hover:underline"
-                >
-                  Register
-                </a>
-              </div>
-            )}
-          </div>
-        </nav>
-      </header>
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col justify-between">
-        <main className="flex w-full flex-1 pt-12">{children}</main>
-        <AppFooter />
-        <a
-          href="https://form.asana.com/?k=tH5GL9JKLM1TasyZUoeGgw&d=6325821815997"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-secondary fixed right-10 bottom-12 z-50"
-          aria-label="Provide feedback"
-        >
-          <span className="text-sm font-medium">Feedback</span>
-        </a>
-        <CookieConsent />
+              )}
+            </div>
+          </nav>
+        </header>
+        <div className="flex min-w-0 flex-1 flex-col justify-between">
+          <main className="flex w-full flex-1 pt-12">{children}</main>
+          <AppFooter />
+          <a
+            href="https://form.asana.com/?k=tH5GL9JKLM1TasyZUoeGgw&d=6325821815997"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary fixed right-10 bottom-12 z-50"
+            aria-label="Provide feedback"
+          >
+            <span className="text-sm font-medium">Feedback</span>
+          </a>
+          <CookieConsent />
+        </div>
       </div>
     </div>
   );

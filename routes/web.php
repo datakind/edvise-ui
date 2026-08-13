@@ -174,7 +174,11 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('add-dk');
 
     Route::post('/set-inst-api/{inst}', function (Request $request, string $inst) {
-        $errStr = InstitutionHelper::actAsInstitution($request, $inst);
+        $errStr = InstitutionHelper::actAsInstitution(
+            $request,
+            $inst,
+            (string) $request->input('act_as', ''),
+        );
 
         if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);

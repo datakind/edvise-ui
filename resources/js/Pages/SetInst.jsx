@@ -23,7 +23,7 @@ function institutionType(inst) {
 }
 
 export default function SetInstitution() {
-  const { institution, set_inst_required_message } = usePage().props;
+  const { institution, act_as, set_inst_required_message } = usePage().props;
 
   const [institutions, setInstitutions] = useState([]);
   const [error, setError] = useState(null);
@@ -34,11 +34,16 @@ export default function SetInstitution() {
   const [setInstSuccess, setSetInstSuccess] = useState(null);
   const [settingInst, setSettingInst] = useState(false);
   const [setInstSubmitError, setSetInstSubmitError] = useState(null);
+  const [actAs, setActAs] = useState(act_as ?? '');
 
   useEffect(() => {
     const next = institution?.inst_id ?? '';
     setSelectedInstId(next);
   }, [institution?.inst_id]);
+
+  useEffect(() => {
+    setActAs(act_as ?? '');
+  }, [act_as]);
 
   useEffect(() => {
     axios
@@ -71,14 +76,15 @@ export default function SetInstitution() {
     setSetInstSubmitError(null);
     setSettingInst(true);
     return axios
-      .post('/set-inst-api/' + inst)
+      .post('/set-inst-api/' + inst, { act_as: actAs })
       .then(() => {
         setSettingInst(false);
         setSetInstSuccess(
-          `Successfully set institution to: ${selected?.name || 'Unknown'}`,
+          `Successfully set institution to: ${selected?.name || 'Unknown'}` +
+            (actAs ? ` (acting as ${actAs})` : ''),
         );
         router.reload({
-          only: ['institution', 'user', 'set_inst_required_message'],
+          only: ['institution', 'act_as', 'set_inst_required_message'],
         });
       })
       .catch(e => {
@@ -141,7 +147,7 @@ export default function SetInstitution() {
                   disabled={loading}
                 >
                   <div className="relative">
-                    <ListboxButton className="block w-full appearance-none rounded border border-gray-200 bg-gray-200 px-4 py-3 pr-8 text-left leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50">
+                    <ListboxButton className="text-left">
                       {selected ? (
                         <span className="flex items-baseline gap-2 truncate">
                           <span>{selected.name}</span>
@@ -158,15 +164,6 @@ export default function SetInstitution() {
                             : 'Choose an institution...'}
                         </span>
                       )}
-                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <svg
-                          className="h-4 w-4 fill-current"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                      </span>
                     </ListboxButton>
                     <ListboxOptions className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded border border-gray-200 bg-white py-1 shadow-lg focus:outline-none">
                       {institutions.map(inst => {
@@ -193,6 +190,29 @@ export default function SetInstitution() {
                 </Listbox>
                 <p className="mt-2 text-xs text-gray-600 italic">
                   Select the institution for the current Datakinder to use.
+                </p>
+              </div>
+            </div>
+            <div className="-mx-3 mb-6 flex justify-center">
+              <div className="mb-6 w-full px-3">
+                <label
+                  htmlFor="act_as"
+                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
+                >
+                  Act as Role
+                </label>
+                <select
+                  id="act_as"
+                  value={actAs}
+                  onChange={e => setActAs(e.target.value)}
+                >
+                  <option value="">Datakinder (no act-as)</option>
+                  <option value="MODEL_OWNER">Model Owner</option>
+                  <option value="VIEWER">Viewer</option>
+                </select>
+                <p className="form-hint">
+                  Choose the role to use for this session. Your account stays
+                  Datakinder.
                 </p>
               </div>
             </div>

@@ -102,8 +102,8 @@ class InstitutionHelper
         return null;
     }
 
-    // Set the institution (full attributes). Only DataKinders may set it (they choose via Set Institution page).
-    public static function actAsInstitution(Request $request, string $inst_id): string
+    // Set session institution (and optional act_as role). Only DataKinders; they choose via Set Institution.
+    public static function actAsInstitution(Request $request, string $inst_id, string $act_as = ''): string
     {
         if ($request->user()->access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution.';
@@ -113,6 +113,13 @@ class InstitutionHelper
         }
         $institution = self::fetchInstitutionById($request, $inst_id);
         session(['institution' => $institution ?? ['inst_id' => $inst_id]]);
+        if ($act_as === '') {
+            $request->session()->forget('act_as');
+        } else {
+            if (in_array($act_as, ['MODEL_OWNER', 'VIEWER'], true)) {
+                session(['act_as' => $act_as]);
+            }
+        }
 
         return '';
     }

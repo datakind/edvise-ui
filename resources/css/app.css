@@ -65,6 +65,34 @@ h1 {
   line-height: 60px;
 }
 
+.banner {
+  display: flex;
+  min-height: 2.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid #f79222;
+  background-color: #1e343f;
+  padding: 0.5rem 1.5rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #eef2f6;
+}
+
+.app-layout-body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
 [x-cloak] {
   display: none;
 }

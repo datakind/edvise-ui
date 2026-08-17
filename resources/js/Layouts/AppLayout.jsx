@@ -155,7 +155,7 @@ const navigationBelowLine = [
 // The title set in the page needs to match the name in the navigation map so that the highlighting works correctly.
 export default function AppLayout({ title, children }) {
   const { auth, jetstream } = useTypedPage().props;
-  const { institution, act_as } = usePage().props;
+  const { institution, institution_view } = usePage().props;
   const hasInstId = institution?.inst_id;
   const user = auth.user;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -336,14 +336,8 @@ export default function AppLayout({ title, children }) {
       {institution?.name && (
         <Banner>
           <a href={route('set-inst')}>
-            {institution?.name}
-            {act_as && (
-              <>
-                {' '}
-                - You are acting as{' '}
-                {act_as === 'MODEL_OWNER' ? 'Model Owner' : 'Viewer'}.
-              </>
-            )}
+            {institution.name}
+            {institution_view && <> — Institution view</>}
           </a>
         </Banner>
       )}

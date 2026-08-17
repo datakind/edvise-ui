@@ -177,7 +177,7 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
         $errStr = InstitutionHelper::actAsInstitution(
             $request,
             $inst,
-            (string) $request->input('act_as', ''),
+            $request->boolean('institution_view'),
         );
 
         if ($errStr != '') {

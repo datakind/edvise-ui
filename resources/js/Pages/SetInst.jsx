@@ -23,7 +23,8 @@ function institutionType(inst) {
 }
 
 export default function SetInstitution() {
-  const { institution, act_as, set_inst_required_message } = usePage().props;
+  const { institution, institution_view, set_inst_required_message } =
+    usePage().props;
 
   const [institutions, setInstitutions] = useState([]);
   const [error, setError] = useState(null);
@@ -34,7 +35,9 @@ export default function SetInstitution() {
   const [setInstSuccess, setSetInstSuccess] = useState(null);
   const [settingInst, setSettingInst] = useState(false);
   const [setInstSubmitError, setSetInstSubmitError] = useState(null);
-  const [actAs, setActAs] = useState(act_as ?? '');
+  const [institutionView, setInstitutionView] = useState(
+    Boolean(institution_view),
+  );
 
   useEffect(() => {
     const next = institution?.inst_id ?? '';
@@ -42,8 +45,8 @@ export default function SetInstitution() {
   }, [institution?.inst_id]);
 
   useEffect(() => {
-    setActAs(act_as ?? '');
-  }, [act_as]);
+    setInstitutionView(Boolean(institution_view));
+  }, [institution_view]);
 
   useEffect(() => {
     axios
@@ -76,15 +79,15 @@ export default function SetInstitution() {
     setSetInstSubmitError(null);
     setSettingInst(true);
     return axios
-      .post('/set-inst-api/' + inst, { act_as: actAs })
+      .post('/set-inst-api/' + inst, { institution_view: institutionView })
       .then(() => {
         setSettingInst(false);
         setSetInstSuccess(
           `Successfully set institution to: ${selected?.name || 'Unknown'}` +
-            (actAs ? ` (acting as ${actAs})` : ''),
+            (institutionView ? ' (institution view)' : ''),
         );
         router.reload({
-          only: ['institution', 'act_as', 'set_inst_required_message'],
+          only: ['institution', 'institution_view', 'set_inst_required_message'],
         });
       })
       .catch(e => {
@@ -109,7 +112,7 @@ export default function SetInstitution() {
             <Cog8ToothIcon aria-hidden="true" className="size-6 shrink-0" />
           }
           majorTitle="Admin Actions"
-          minorTitle="Act as Institution"
+          minorTitle="Set Institution"
         ></HeaderLabel>
 
         {!institution?.inst_id && (
@@ -196,24 +199,18 @@ export default function SetInstitution() {
             <div className="-mx-3 mb-6 flex justify-center">
               <div className="mb-6 w-full px-3">
                 <label
-                  htmlFor="act_as"
-                  className="mb-2 block text-xs font-bold tracking-wide text-gray-700 uppercase"
+                  htmlFor="institution_view"
+                  className="flex items-center gap-2"
                 >
-                  Act as Role
+                  <input
+                    id="institution_view"
+                    type="checkbox"
+                    checked={institutionView}
+                    onChange={e => setInstitutionView(e.target.checked)}
+                  />
+                  Institution view
                 </label>
-                <select
-                  id="act_as"
-                  value={actAs}
-                  onChange={e => setActAs(e.target.value)}
-                >
-                  <option value="">Datakinder (no act-as)</option>
-                  <option value="MODEL_OWNER">Model Owner</option>
-                  <option value="VIEWER">Viewer</option>
-                </select>
-                <p className="form-hint">
-                  Choose the role to use for this session. Your account stays
-                  Datakinder.
-                </p>
+                <p className="form-hint">View the app as this institution.</p>
               </div>
             </div>
           </div>

@@ -239,8 +239,8 @@ export default function AppLayout({ title, children }) {
 
       return (!user && item.visibility_type == VisibilityType.PRIVATE_ONLY) ||
         (user && item.visibility_type == VisibilityType.PUBLIC_ONLY) ||
-        (user?.access_type != 'DATAKINDER' &&
-          item.visibility_type == VisibilityType.DATAKIND_ONLY) ? (
+        (item.visibility_type == VisibilityType.DATAKIND_ONLY &&
+          (user?.access_type != 'DATAKINDER' || institution_view)) ? (
         <></>
       ) : (
         <li key={item.name}>
@@ -281,7 +281,8 @@ export default function AppLayout({ title, children }) {
                       !subItem.visibility_type ||
                       (subItem.visibility_type ===
                         VisibilityType.DATAKIND_ONLY &&
-                        user?.access_type == 'DATAKINDER') ||
+                        user?.access_type == 'DATAKINDER' &&
+                        !institution_view) ||
                       (subItem.visibility_type ===
                         VisibilityType.PRIVATE_ONLY &&
                         user) ||

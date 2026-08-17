@@ -23,8 +23,7 @@ function institutionType(inst) {
 }
 
 export default function SetInstitution() {
-  const { institution, institution_view, set_inst_required_message } =
-    usePage().props;
+  const { institution, set_inst_required_message } = usePage().props;
 
   const [institutions, setInstitutions] = useState([]);
   const [error, setError] = useState(null);
@@ -35,18 +34,11 @@ export default function SetInstitution() {
   const [setInstSuccess, setSetInstSuccess] = useState(null);
   const [settingInst, setSettingInst] = useState(false);
   const [setInstSubmitError, setSetInstSubmitError] = useState(null);
-  const [institutionView, setInstitutionView] = useState(
-    Boolean(institution_view),
-  );
 
   useEffect(() => {
     const next = institution?.inst_id ?? '';
     setSelectedInstId(next);
   }, [institution?.inst_id]);
-
-  useEffect(() => {
-    setInstitutionView(Boolean(institution_view));
-  }, [institution_view]);
 
   useEffect(() => {
     axios
@@ -79,15 +71,14 @@ export default function SetInstitution() {
     setSetInstSubmitError(null);
     setSettingInst(true);
     return axios
-      .post('/set-inst-api/' + inst, { institution_view: institutionView })
+      .post('/set-inst-api/' + inst)
       .then(() => {
         setSettingInst(false);
         setSetInstSuccess(
-          `Successfully set institution to: ${selected?.name || 'Unknown'}` +
-            (institutionView ? ' (institution view)' : ''),
+          `Successfully set institution to: ${selected?.name || 'Unknown'}`,
         );
         router.reload({
-          only: ['institution', 'institution_view', 'set_inst_required_message'],
+          only: ['institution', 'set_inst_required_message'],
         });
       })
       .catch(e => {
@@ -194,23 +185,6 @@ export default function SetInstitution() {
                 <p className="mt-2 text-xs text-gray-600 italic">
                   Select the institution for the current Datakinder to use.
                 </p>
-              </div>
-            </div>
-            <div className="-mx-3 mb-6 flex justify-center">
-              <div className="mb-6 w-full px-3">
-                <label
-                  htmlFor="institution_view"
-                  className="flex items-center gap-2"
-                >
-                  <input
-                    id="institution_view"
-                    type="checkbox"
-                    checked={institutionView}
-                    onChange={e => setInstitutionView(e.target.checked)}
-                  />
-                  Institution view
-                </label>
-                <p className="form-hint">View the app as this institution.</p>
               </div>
             </div>
           </div>

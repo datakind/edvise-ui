@@ -160,6 +160,7 @@ export default function AppLayout({ title, children }) {
   const user = auth.user;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [navAboveLine, setNavAboveLine] = useState(navigationAboveLine);
+  const [togglingInstitutionView, setTogglingInstitutionView] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -334,12 +335,28 @@ export default function AppLayout({ title, children }) {
 
   return (
     <div className="app-layout">
-      {institution?.name && (
+      {user?.access_type == 'DATAKINDER' && institution?.name && (
         <Banner>
-          <a href={route('set-inst')}>
-            {institution.name}
-            {institution_view && <> — Institution view</>}
-          </a>
+          <a href={route('set-inst')}>{institution.name}</a>
+          <label>
+            <input
+              className="mr-2"
+              type="checkbox"
+              checked={Boolean(institution_view)}
+              disabled={togglingInstitutionView}
+              onChange={e => {
+                const on = e.target.checked;
+                setTogglingInstitutionView(true);
+                axios
+                  .post('/institution-view-api', { institution_view: on })
+                  .then(() =>
+                    router.reload({ only: ['institution_view'] }),
+                  )
+                  .finally(() => setTogglingInstitutionView(false));
+              }}
+            />
+            Institution view
+          </label>
         </Banner>
       )}
 

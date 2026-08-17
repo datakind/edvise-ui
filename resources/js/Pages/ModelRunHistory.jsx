@@ -12,7 +12,7 @@ import SecondaryButton from '@/Components/Buttons/SecondaryButton';
 import { formatModelName } from '@/utils/stringUtils';
 
 export default function ModelRunHistory({ modelname }) {
-  const { auth } = usePage().props;
+  const { auth, institution_view } = usePage().props;
   const userIsDatakinder = auth.user?.access_type === 'DATAKINDER';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -192,7 +192,7 @@ export default function ModelRunHistory({ modelname }) {
                       <div className="flex font-bold">
                         This model does not have any predictions available yet.
                       </div>
-                      {userIsDatakinder && (
+                      {userIsDatakinder && !institution_view && (
                         <>
                           <div className="flex">Click below to begin one.</div>
                           <a
@@ -260,7 +260,7 @@ export default function ModelRunHistory({ modelname }) {
                               )}
                             </td>
                             <td>
-                              {userIsDatakinder && (
+                              {userIsDatakinder && !institution_view && (
                                 <button
                                   type="button"
                                   className="cursor-pointer border-0 bg-transparent p-0"

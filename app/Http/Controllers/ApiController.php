@@ -176,10 +176,6 @@ class ApiController extends Controller
 
     public function viewAllInstitutions(Request $request)
     {
-        if (ApiController::isLocalRequest()) {
-            return response()->json([['inst_id' => '1d7c75c33eda42949c6675ea8af97b55', 'name' => 'University of South Foo', 'state' => 'NY', 'pdp_id' => '12345'], ['inst_id' => '5301a352c03d4a39beec16c5668c4700', 'name' => 'Bar Community College', 'state' => 'CA']], 200);
-        }
-
         return ApiController::constructDatakinderRequest($request, '/institutions', 'GET', /* No POST body */ null);
     }
 
@@ -188,18 +184,6 @@ class ApiController extends Controller
      */
     public function getCurrentInstitutionDetails(Request $request)
     {
-        if (ApiController::isLocalRequest()) {
-            return response()->json([
-                'inst_id' => (string) ($request->attributes->get('inst_id') ?? ''),
-                'name' => 'Mock University',
-                'state' => 'NY',
-                'pdp_id' => '12345',
-                'edvise_id' => null,
-                'legacy_id' => null,
-                'retention_days' => null,
-            ], 200);
-        }
-
         $resp = ApiController::constructInstRequest($request, '', 'GET', null);
         if ($resp instanceof JsonResponse) {
             return $resp;

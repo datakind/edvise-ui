@@ -390,7 +390,21 @@ class ApiController extends Controller
             return response()->json(['name' => 'foo_file.csv', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
         }
 
-        return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
+        return response()->stream(function () use ($request, $filename) {
+            while (ob_get_level() > 0) {
+                ob_end_flush();
+            }
+            echo str_repeat(' ', 4096);
+            flush();
+
+            $resp = ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
+            echo $resp instanceof \Illuminate\Http\JsonResponse ? $resp->getContent() : $resp->body();
+            flush();
+        }, 200, [
+            'Content-Type' => 'application/json',
+            'X-Accel-Buffering' => 'no',
+            'Cache-Control' => 'no-cache',
+        ]);
     }
 
     // This shows all output data.

@@ -577,9 +577,17 @@ export default function FileUpload() {
                     {},
                     { timeout: 0 },
                   )
-                  .then(() => {
+                  .then(res => {
+                    if (
+                      res.data &&
+                      typeof res.data === 'object' &&
+                      res.data.error != null
+                    ) {
+                      localValidationResults[filenameConstructed] =
+                        '[Validation] ' + String(res.data.error);
+                      return;
+                    }
                     localValidationResults[filenameConstructed] = 'ok';
-                    return;
                   })
                   .catch(e => {
                     localValidationResults[filenameConstructed] =

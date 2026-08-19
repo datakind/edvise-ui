@@ -349,9 +349,7 @@ export default function AppLayout({ title, children }) {
                 setTogglingInstitutionView(true);
                 axios
                   .post('/institution-view-api', { institution_view: on })
-                  .then(() =>
-                    router.reload({ only: ['institution_view'] }),
-                  )
+                  .then(() => router.reload({ only: ['institution_view'] }))
                   .finally(() => setTogglingInstitutionView(false));
               }}
             />

@@ -192,18 +192,14 @@ class ApiController extends Controller
         return response()->json($resp->json(), $resp->status());
     }
 
-    private static function isValidateUploadRequest(string $urlPiece): bool
-    {
-        return str_starts_with($urlPiece, '/input/validate-upload');
-    }
-
     /**
      * HTTP client timeout (seconds) when proxying institution requests to BACKEND_URL.
      * Validate-upload needs a long wait for large CSV processing; other paths stay short.
      */
     private static function institutionBackendTimeoutSeconds(string $urlPiece): int
     {
-        if (self::isValidateUploadRequest($urlPiece)) {
+        $isValidateUpload = str_starts_with($urlPiece, '/input/validate-upload');
+        if ($isValidateUpload) {
             $seconds = config('services.backend.http_validate_timeout_seconds');
 
             return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
@@ -269,30 +265,6 @@ class ApiController extends Controller
         }
 
         return $resp;
-    }
-
-    // Browser-facing proxy; long-running backend calls stream a keepalive before the wait.
-    public function constructInstRequestForBrowser(Request $request, string $url_piece, string $method, $req_body)
-    {
-        if (! self::isValidateUploadRequest($url_piece)) {
-            return ApiController::constructInstRequest($request, $url_piece, $method, $req_body);
-        }
-
-        return response()->stream(function () use ($request, $url_piece, $method, $req_body) {
-            while (ob_get_level() > 0) {
-                ob_end_flush();
-            }
-            echo str_repeat(' ', 4096);
-            flush();
-
-            $resp = ApiController::constructInstRequest($request, $url_piece, $method, $req_body);
-            echo $resp instanceof \Illuminate\Http\JsonResponse ? $resp->getContent() : $resp->body();
-            flush();
-        }, 200, [
-            'Content-Type' => 'application/json',
-            'X-Accel-Buffering' => 'no',
-            'Cache-Control' => 'no-cache',
-        ]);
     }
 
     public function EditInstApi(Request $request)
@@ -418,7 +390,7 @@ class ApiController extends Controller
             return response()->json(['name' => 'foo_file.csv', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
         }
 
-        return ApiController::constructInstRequestForBrowser($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
+        return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
     }
 
     // This shows all output data.

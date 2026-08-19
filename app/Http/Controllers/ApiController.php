@@ -286,7 +286,7 @@ class ApiController extends Controller
             flush();
 
             $resp = ApiController::constructInstRequest($request, $url_piece, $method, $req_body);
-            echo $resp instanceof \Illuminate\Http\JsonResponse ? $resp->getContent() : $resp->body();
+            echo $resp instanceof JsonResponse ? $resp->getContent() : $resp->body();
             flush();
         }, 200, [
             'Content-Type' => 'application/json',

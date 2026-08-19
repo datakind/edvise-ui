@@ -11,6 +11,7 @@ import axios from 'axios';
 import { Cog8ToothIcon } from '@heroicons/react/24/outline';
 import Alert from '@/Components/Alert';
 import HeaderLabel from '@/Components/HeaderLabel';
+import { fetchAllInstitutions } from '@/utils/institutions';
 
 function institutionType(inst) {
   return (
@@ -41,12 +42,9 @@ export default function SetInstitution() {
   }, [institution?.inst_id]);
 
   useEffect(() => {
-    axios
-      .get('/view-all-institutions-api')
-      .then(res => {
-        setInstitutions(
-          [...res.data].sort((a, b) => a.name.localeCompare(b.name)),
-        );
+    fetchAllInstitutions()
+      .then(list => {
+        setInstitutions(list);
         setLoading(false);
       })
       .catch(err => {

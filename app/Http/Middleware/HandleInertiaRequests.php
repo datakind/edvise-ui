@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'user' => fn () => $request->user(),
             'institution' => fn () => $request->user() ? ($request->attributes->get('institution') ?? $request->session()->get('institution')) : null,
+            'institution_view' => fn () => $request->user() ? (bool) $request->session()->get('institution_view') : null,
             'set_inst_required_message' => InstitutionHelper::SET_INST_REQUIRED_MESSAGE,
         ]);
     }

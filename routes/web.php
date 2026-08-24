@@ -174,14 +174,26 @@ Route::middleware(['auth', 'datakinder', 'terms.accepted'])->group(function () {
     })->name('add-dk');
 
     Route::post('/set-inst-api/{inst}', function (Request $request, string $inst) {
-        $access_str = Auth::user()->access_type ?? '';
-        $errStr = InstitutionHelper::setInst($request, $access_str, $inst);
+        $errStr = InstitutionHelper::actAsInstitution($request, $inst);
 
         if ($errStr != '') {
             return response()->json(['error' => $errStr], 400);
         }
 
         return $inst;
+    });
+
+    Route::post('/institution-view-api', function (Request $request) {
+        $errStr = InstitutionHelper::setInstitutionView(
+            $request,
+            $request->boolean('institution_view'),
+        );
+
+        if ($errStr != '') {
+            return response()->json(['error' => $errStr], 400);
+        }
+
+        return response()->json(['ok' => true]);
     });
 });
 

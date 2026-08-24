@@ -413,6 +413,26 @@ export default function DataDictionary({ features = [] }) {
                       </svg>
                     </div>
                   </div>
+                  <p className="my-4 text-base font-light">
+                    Download your Original Feature Value Table{' '}
+                    <a
+                      className="text-link font-medium underline"
+                      download="original_feature_value_table.csv"
+                      href={`data:text/csv;charset=utf-8,${encodeURIComponent(
+                        ['FEATURE NAME,DESCRIPTION']
+                          .concat(
+                            filteredAndSortedFeatures.map(
+                              feature =>
+                                `"${toTitleCase(feature.readable_feature_name ?? '').replace(/"/g, '""')}","${(feature.short_feature_desc ?? '').replace(/"/g, '""')}"`,
+                            ),
+                          )
+                          .join('\n'),
+                      )}`}
+                    >
+                      here
+                    </a>
+                    .
+                  </p>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse border border-[#e5e7eb]">
                       <thead>

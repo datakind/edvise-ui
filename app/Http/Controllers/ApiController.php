@@ -6,6 +6,7 @@ use App\Models\DataDictionary;
 use App\Traits\UsesApi;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use TokenHelper;
 use UserHelper;
@@ -26,6 +27,25 @@ class ApiController extends Controller
     // For printline debugging the following example added in the function will output to console in the 'php artisan serve' pane.
     // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     // $out->writeln("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1");
+
+    /**
+     * Ends the local session when the backend rejects our JWT, so the browser can
+     * re-authenticate instead of surfacing a credentials error. The backend sets
+     * WWW-Authenticate: Bearer only for a bad or expired token, never for the 401s
+     * it returns for insufficient permissions.
+     */
+    private static function expiredCredentialsResponse(Request $request, $resp): ?JsonResponse
+    {
+        if ($resp->status() != 401 || ! str_contains($resp->header('WWW-Authenticate'), 'Bearer')) {
+            return null;
+        }
+
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['error' => 'Your session has expired. Please log in again.'], 419);
+    }
 
     // For local requests, mock out backend calls.
     // Temporarily disabled for rapid development with real API
@@ -82,6 +102,9 @@ class ApiController extends Controller
         }
 
         if ($resp->status() != 200) {
+            if ($expired = self::expiredCredentialsResponse($request, $resp)) {
+                return $expired;
+            }
             $errMsg = json_decode($resp->body());
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());
@@ -260,6 +283,9 @@ class ApiController extends Controller
         }
 
         if ($resp->status() != 200) {
+            if ($expired = self::expiredCredentialsResponse($request, $resp)) {
+                return $expired;
+            }
             $errMsg = json_decode($resp->body());
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());

@@ -1,4 +1,4 @@
-# SST Frontend
+# Edvise UI
 
 ## Databases
 
@@ -11,7 +11,7 @@ All data is stored in MySQL databases for dev/staging/prod, these are databases 
 | Table | DDL owner | Notes |
 |-------|-----------|-------|
 | `users` | **edvise-ui** (Laravel) | Keep `AccountTable` in edvise-api in sync on any column change |
-| `job` | **edvise-api** (Alembic, Phase 1+) | UI reads only until Phase 1.5; do not add new Laravel `job` migrations |
+| `job` | **edvise-api** (Alembic) | UI must not query MySQL `job`; use API for `model_run_id`. Do not add new Laravel `job` migrations |
 
 ### Greenfield database bootstrap
 
@@ -98,17 +98,19 @@ NOTE: for dev and staging, email verification is turned off. Email verification 
 
 ## Other Notes
 
-### Frameworks Used
+### Stack
 
-the Edvise is built on:
-
-- Laravel Framework. [Documentation](https://laravel.com/docs)
-
-- Inertiajs. [Documentation](https://inertiajs.com)
-
-- Reactjs. [Documentation](https://reactjs.org/docs/getting-started.html)
-
-- Tailwindcss. [Documentation](https://v2.tailwindcss.com/docs)
+| Purpose | Tool | Link |
+|---------|------|------|
+| App framework (PHP) | Laravel | https://laravel.com |
+| Auth & app scaffolding | Laravel Jetstream | https://jetstream.laravel.com |
+| Server-driven SPA bridge | Inertia.js | https://inertiajs.com |
+| UI components | React | https://react.dev |
+| Styling | Tailwind CSS | https://tailwindcss.com |
+| Frontend build | Vite | https://vite.dev |
+| Named routes in JS | Ziggy | https://github.com/tighten/ziggy |
+| Backend API | edvise-api | https://github.com/datakind/edvise-api |
+| ORM / DB access | Eloquent (Laravel) | https://laravel.com/docs/eloquent |
 
 ### Notes on files and locations of interest
 

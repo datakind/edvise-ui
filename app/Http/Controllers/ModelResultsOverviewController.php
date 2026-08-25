@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,13 +25,18 @@ class ModelResultsOverviewController extends Controller
             ]);
         }
 
-        $job = Job::find($run_id);
-        $model_run_id = $job?->model_run_id;
-
         $api = app(ApiController::class);
 
         $runDetailsResp = $api->getRunDetails($request, $inst_id, $modelName, $run_id);
         $runDetails = $this->responseData($runDetailsResp);
+        $model_run_id = is_array($runDetails) ? ($runDetails['model_run_id'] ?? null) : null;
+
+        $error = null;
+        if ($runDetails === null) {
+            $error = 'Could not load run details from the API';
+        } elseif (! $model_run_id) {
+            $error = 'model_run_id unavailable from API for this run';
+        }
 
         $featureImportanceData = [];
         if ($model_run_id) {
@@ -49,6 +53,7 @@ class ModelResultsOverviewController extends Controller
             'model_run_id' => $model_run_id,
             'runDetails' => $runDetails,
             'featureImportanceData' => $featureImportanceData,
+            'error' => $error,
         ]);
     }
 

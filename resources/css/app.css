@@ -65,6 +65,39 @@ h1 {
   line-height: 60px;
 }
 
+.banner {
+  display: flex;
+  min-height: 2.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  border-bottom: 3px solid #f79222;
+  background-color: #1e343f;
+  padding: 0.5rem 1.5rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  a,
+  a:hover {
+    color: white;
+  }
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #eef2f6;
+}
+
+.app-layout-body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
 [x-cloak] {
   display: none;
 }
@@ -280,14 +313,17 @@ input[type='text'].mapboxgl-ctrl-geocoder--input[placeholder='Search'] {
   @apply text-accordion-body mt-1;
 }
 
-input[type='text'],
-input[type='search'],
-input[type='email'],
-input[type='password'],
-input[type='url'],
-input[type='tel'],
-input[type='number'],
-select {
+:is(
+  input[type='text'],
+  input[type='search'],
+  input[type='email'],
+  input[type='password'],
+  input[type='url'],
+  input[type='tel'],
+  input[type='number'],
+  select,
+  button[aria-haspopup='listbox']
+) {
   @apply box-border h-12 w-full rounded-full border-2 border-solid bg-white px-5 text-base text-black transition-all placeholder:text-gray-500;
   border-color: theme('colors.input.border');
   &:focus {
@@ -295,37 +331,23 @@ select {
     background-color: theme('colors.input.focusBg');
     outline: none;
   }
-  &:disabled {
+  &:disabled,
+  &[data-disabled] {
     border-color: theme('colors.input.border');
     background-color: theme('colors.input.disabledBg');
     color: theme('colors.input.disabledText');
     @apply cursor-not-allowed;
   }
+  &.input-success {
+    border-color: theme('colors.input.success');
+  }
+  &.input-error {
+    border-color: theme('colors.input.error');
+  }
 }
 
-input[type='text'].input-success,
-input[type='search'].input-success,
-input[type='email'].input-success,
-input[type='password'].input-success,
-input[type='url'].input-success,
-input[type='tel'].input-success,
-input[type='number'].input-success,
-select.input-success {
-  border-color: theme('colors.input.success');
-}
-
-input[type='text'].input-error,
-input[type='search'].input-error,
-input[type='email'].input-error,
-input[type='password'].input-error,
-input[type='url'].input-error,
-input[type='tel'].input-error,
-input[type='number'].input-error,
-select.input-error {
-  border-color: theme('colors.input.error');
-}
-
-select {
+select,
+button[aria-haspopup='listbox'] {
   @apply appearance-none pr-10;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.75rem center;
@@ -375,8 +397,13 @@ form.was-validated
     input[type='password'],
     input[type='url'],
     input[type='tel'],
-    input[type='number']
-  ):invalid,
+    input[type='number'],
+    select
+  ):invalid {
+  border-color: theme('colors.input.error');
+  outline: none;
+}
+
 form.was-validated
   :is(
     input[type='text'],
@@ -386,13 +413,11 @@ form.was-validated
     input[type='url'],
     input[type='tel'],
     input[type='number']
-  ):invalid:focus {
-  border-color: theme('colors.input.error');
+  ):invalid {
   background-color: #fff;
   @apply pr-12;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23FB2C36'%3e%3cpath fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z' clip-rule='evenodd'/%3e%3c/svg%3e");
   background-position: right 0.75rem center;
   background-repeat: no-repeat;
   background-size: 1.25rem 1.25rem;
-  outline: none;
 }

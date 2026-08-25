@@ -31,7 +31,10 @@ class ApiController extends Controller
     // Temporarily disabled for rapid development with real API
     public function isLocalRequest()
     {
-        // Temporarily return false to use real API in local development
+        // Temporarily return false to use real API in local development.
+        // Local mocks (including model_run_id on runs / getRunDetails) are only
+        // reached when this returns true — leave them in place for when the
+        // APP_ENV=LOCAL branch below is re-enabled.
         return false;
 
         // Original logic (uncomment when done with rapid development):
@@ -173,10 +176,6 @@ class ApiController extends Controller
 
     public function viewAllInstitutions(Request $request)
     {
-        if (ApiController::isLocalRequest()) {
-            return response()->json([['inst_id' => '1d7c75c33eda42949c6675ea8af97b55', 'name' => 'University of South Foo', 'state' => 'NY', 'pdp_id' => '12345'], ['inst_id' => '5301a352c03d4a39beec16c5668c4700', 'name' => 'Bar Community College', 'state' => 'CA']], 200);
-        }
-
         return ApiController::constructDatakinderRequest($request, '/institutions', 'GET', /* No POST body */ null);
     }
 
@@ -185,18 +184,6 @@ class ApiController extends Controller
      */
     public function getCurrentInstitutionDetails(Request $request)
     {
-        if (ApiController::isLocalRequest()) {
-            return response()->json([
-                'inst_id' => (string) ($request->attributes->get('inst_id') ?? ''),
-                'name' => 'Mock University',
-                'state' => 'NY',
-                'pdp_id' => '12345',
-                'edvise_id' => null,
-                'legacy_id' => null,
-                'retention_days' => null,
-            ], 200);
-        }
-
         $resp = ApiController::constructInstRequest($request, '', 'GET', null);
         if ($resp instanceof JsonResponse) {
             return $resp;
@@ -205,14 +192,18 @@ class ApiController extends Controller
         return response()->json($resp->json(), $resp->status());
     }
 
+    private static function isValidateUploadRequest(string $urlPiece): bool
+    {
+        return str_starts_with($urlPiece, '/input/validate-upload');
+    }
+
     /**
      * HTTP client timeout (seconds) when proxying institution requests to BACKEND_URL.
      * Validate-upload needs a long wait for large CSV processing; other paths stay short.
      */
     private static function institutionBackendTimeoutSeconds(string $urlPiece): int
     {
-        $isValidateUpload = str_starts_with($urlPiece, '/input/validate-upload');
-        if ($isValidateUpload) {
+        if (self::isValidateUploadRequest($urlPiece)) {
             $seconds = config('services.backend.http_validate_timeout_seconds');
 
             return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
@@ -278,6 +269,30 @@ class ApiController extends Controller
         }
 
         return $resp;
+    }
+
+    // Browser-facing proxy; long-running backend calls stream a keepalive before the wait.
+    public function constructInstRequestForBrowser(Request $request, string $url_piece, string $method, $req_body)
+    {
+        if (! self::isValidateUploadRequest($url_piece)) {
+            return ApiController::constructInstRequest($request, $url_piece, $method, $req_body);
+        }
+
+        return response()->stream(function () use ($request, $url_piece, $method, $req_body) {
+            while (ob_get_level() > 0) {
+                ob_end_flush();
+            }
+            echo str_repeat(' ', 4096);
+            flush();
+
+            $resp = ApiController::constructInstRequest($request, $url_piece, $method, $req_body);
+            echo $resp instanceof JsonResponse ? $resp->getContent() : $resp->body();
+            flush();
+        }, 200, [
+            'Content-Type' => 'application/json',
+            'X-Accel-Buffering' => 'no',
+            'Cache-Control' => 'no-cache',
+        ]);
     }
 
     public function EditInstApi(Request $request)
@@ -403,7 +418,7 @@ class ApiController extends Controller
             return response()->json(['name' => 'foo_file.csv', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
         }
 
-        return ApiController::constructInstRequest($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
+        return ApiController::constructInstRequestForBrowser($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
     }
 
     // This shows all output data.
@@ -525,7 +540,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -771,6 +786,8 @@ class ApiController extends Controller
                     'output_filename' => 'model_results_123.csv',
                     'output_file_link' => 'https://example.com/download/model_results_123.csv',
                     'output_valid' => true,
+                    'model_run_id' => 'mock-model-run-123',
+                    'model_version' => '1',
                 ], 200);
             }
         }
@@ -913,7 +930,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.

@@ -3,9 +3,10 @@
 ## [1.7.0] - 2026-08-24
 
 ### Added
-- Custom 404 page
+- Data Dictionary feature value table can be downloaded as CSV
 - Institution required when creating invites for the MODEL_OWNER role
 - Institution view for DataKinders (banner toggle; DataKinder-only nav hidden while viewing as an institution)
+- Custom 404 page
 
 ### Changed
 - Data Dictionary and Model Results use the API `model_run_id` instead of the local MySQL job table

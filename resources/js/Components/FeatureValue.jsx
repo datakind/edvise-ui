@@ -35,7 +35,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
           url: error.config?.url,
         });
         setError(
-          `Failed to load feature importance data: ${error.response?.status || error.message}`,
+          `Failed to load indicator importance data: ${error.response?.status || error.message}`,
         );
       } finally {
         setLoading(false);
@@ -51,7 +51,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
       <div className="mb-8 rounded-2xl bg-white p-6 shadow">
         <div className="flex items-center justify-center py-8">
           <div className="text-lg text-gray-600">
-            Loading feature importance data...
+            Loading indicator importance data...
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
       <div className="mb-8 rounded-2xl bg-white p-6 shadow">
         <div className="flex items-center justify-center py-8">
           <div className="text-lg text-gray-600">
-            No feature importance data available
+            No indicator importance data available
           </div>
         </div>
       </div>
@@ -87,9 +87,9 @@ export default function FeatureValue({ model_run_id, inst_id }) {
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Left column: heading and description */}
         <div className="mb-4 w-full md:mb-0 md:w-1/4">
-          <H2 className="mb-2">Original Feature Value Table</H2>
+          <H2 className="mb-2">Original Indicator Value Table</H2>
           <div className="mb-4 text-base text-black">
-            The following chart shows how all features are weighted in the
+            The following chart shows how all indicators are weighted in the
             model.
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
                     scope="col"
                     className="pt-6 pb-2 pl-6 text-xs font-medium text-[#6B7280]"
                   >
-                    FEATURE NAME
+                    INDICATOR NAME
                   </th>
                   <th
                     scope="col"
@@ -115,7 +115,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
                     scope="col"
                     className="pt-6 pr-6 pb-2 text-left text-xs font-medium text-[#6B7280]"
                   >
-                    OVERALL FEATURE IMPORTANCE
+                    OVERALL INDICATOR IMPORTANCE
                   </th>
                 </tr>
               </thead>
@@ -146,7 +146,7 @@ export default function FeatureValue({ model_run_id, inst_id }) {
                               .charAt(0)
                               .toUpperCase() +
                             feature.readable_feature_name.slice(1)
-                          : 'Unknown Feature'}
+                          : 'Unknown Indicator'}
                         <div className="text-sm font-light text-[#696969]">
                           {feature.short_feature_desc}
                         </div>

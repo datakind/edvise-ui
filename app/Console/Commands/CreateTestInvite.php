@@ -28,7 +28,7 @@ class CreateTestInvite extends Command
     {
         $email = $this->argument('email');
         $role = $this->option('role');
-        $days = $this->option('days');
+        $days = (int) $this->option('days');
 
         $invite = Invite::create([
             'email' => $email,

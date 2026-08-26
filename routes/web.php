@@ -97,6 +97,7 @@ Route::middleware('auth.app.invite')->group(function () {
     Route::get('/file-upload', fn () => Inertia::render('FileUpload'))->name('file-upload');
     Route::get('/model-run-history/{modelname}', fn ($modelname) => Inertia::render('ModelRunHistory', ['modelname' => $modelname]))->name('model-run-history.modelname');
     Route::get('/model-run-history', fn () => Inertia::render('ModelRunHistory'))->name('model-run-history');
+    Route::get('/archived-models', fn () => Inertia::render('ArchivedModels'))->name('archived-models');
 });
 
 // App home and main app routes (auth + terms + verified)

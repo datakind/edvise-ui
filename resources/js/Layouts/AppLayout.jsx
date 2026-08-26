@@ -190,8 +190,17 @@ export default function AppLayout({ title, children }) {
         transformedElem.name = elem.name;
         transformedElem.href = route('model-run-history.modelname', elem.name);
         transformedElem.visibility_type = VisibilityType.PRIVATE_ONLY;
+        transformedElem.is_model = true;
         item.children.push(transformedElem);
       });
+
+      if (modelData.some(elem => elem.archived)) {
+        item.children.push({
+          name: 'Archived Models',
+          href: route('archived-models'),
+          visibility_type: VisibilityType.PRIVATE_ONLY,
+        });
+      }
     }
     return item;
   }
@@ -300,7 +309,7 @@ export default function AppLayout({ title, children }) {
                           ? { 'data-current': '' }
                           : {})}
                       >
-                        {item.name === 'Model Results'
+                        {subItem.is_model
                           ? formatModelName(subItem.name)
                           : subItem.name}
                       </DisclosureButton>

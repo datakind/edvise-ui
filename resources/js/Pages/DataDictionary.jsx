@@ -29,11 +29,11 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'Collinearity / Multicollinearity',
-        def: 'When two or more features (variables) in a dataset are strongly related, which can confuse a model.',
+        def: 'When two or more indicators (variables) in a dataset are strongly related, which can confuse a model.',
       },
       {
         term: 'Variance Inflation Factor (VIF)',
-        def: 'A number that tells how much multicollinearity exists among features; higher values mean more redundancy.',
+        def: 'A number that tells how much multicollinearity exists among indicators; higher values mean more redundancy.',
       },
       {
         term: 'Low variance threshold',
@@ -65,12 +65,12 @@ const MODEL_CARD_SECTIONS = [
         def: 'Turning raw data into meaningful inputs ("features") that the model can learn from.',
       },
       {
-        term: 'Feature Importance Plot',
-        def: 'A visual showing which features influenced predictions the most. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.',
-      },
-      {
         term: 'Feature Selection',
         def: 'Choosing the most useful features and removing redundant or irrelevant ones.',
+      },
+      {
+        term: 'Indicator Importance Plot',
+        def: 'A visual showing which indicators influenced predictions the most. A positive value means this indicator is pushing the student’s support score up (higher predicted need for support). A negative value means this indicator is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.',
       },
       {
         term: 'Model Interpretability',
@@ -82,7 +82,7 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'SHAP (Shapley Additive Explanations)',
-        def: "A method for explaining a model's predictions by showing how much each feature contributed to a particular prediction. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.",
+        def: "A method for explaining a model's predictions by showing how much each indicator contributed to a particular prediction. A positive value means this indicator is pushing the student’s support score up (higher predicted need for support). A negative value means this indicator is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.",
       },
     ],
   },
@@ -244,7 +244,7 @@ export default function DataDictionary({ features = [] }) {
             <TabGroup className="data-dictionary-tabs">
               <TabList>
                 <Tab>Output Data Format</Tab>
-                <Tab>Original Feature Value Table</Tab>
+                <Tab>Original Indicator Value Table</Tab>
                 <Tab>Data Science Terminology</Tab>
               </TabList>
               {/* Original Feature Value Table Section */}
@@ -254,7 +254,7 @@ export default function DataDictionary({ features = [] }) {
                     <p>
                       The model results output file is a CSV, with each row
                       representing a student and providing insights into support
-                      needs and contributing features. The file contains the
+                      needs and contributing indicators. The file contains the
                       following columns:
                     </p>
                   </div>
@@ -326,14 +326,16 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             There are five columns that provide the top 5
-                            features impacting the support score for each
+                            indicators impacting the support score for each
                             student, in order of decreasing importance for the
-                            student (the most important feature is at the top).
+                            student (the most important indicator is at the
+                            top).
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The values will be strings describing the features.
-                            For a more detailed understanding of each feature,
-                            please see &ldquo;about this model.&rdquo;
+                            The values will be strings describing the
+                            indicators. For a more detailed understanding of
+                            each indicator, please see &ldquo;about this
+                            model.&rdquo;
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
@@ -341,12 +343,13 @@ export default function DataDictionary({ features = [] }) {
                             Feature Value (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The value of the specified feature for the student.
+                            The value of the specified indicator for the
+                            student.
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             This depends on the range of possibilities for the
-                            feature: some are categorical (i.e. major) and some
-                            are numerical (i.e. GPA).
+                            indicator: some are categorical (i.e. major) and
+                            some are numerical (i.e. GPA).
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
@@ -354,23 +357,23 @@ export default function DataDictionary({ features = [] }) {
                             Feature Importance (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The degree to which this particular feature impacts
-                            the student&apos;s support score. Statistically,
-                            this is the feature&apos;s SHAP value for the
-                            student. In interpreting it, simply compare this
-                            number to other feature importance values to
-                            understand the relative impact.
+                            The degree to which this particular indicator
+                            impacts the student&apos;s support score.
+                            Statistically, this is the indicator&apos;s SHAP
+                            value for the student. In interpreting it, simply
+                            compare this number to other indicator importance
+                            values to understand the relative impact.
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             This will be a positive or negative decimal:
                             <ul className="list-disc pl-5">
                               <li>
-                                A positive value means this feature is pushing
+                                A positive value means this indicator is pushing
                                 the student&apos;s support score up (higher
                                 predicted need for support).
                               </li>
                               <li>
-                                A negative value means this feature is pushing
+                                A negative value means this indicator is pushing
                                 the student&apos;s support score down (lower
                                 predicted need for support).
                               </li>
@@ -385,8 +388,8 @@ export default function DataDictionary({ features = [] }) {
                     </table>
                   </div>
                   <p className="text-base font-light">
-                    This chart provides more context on all features utilized by
-                    the model.
+                    This chart provides more context on all indicators utilized
+                    by the model.
                   </p>
                 </TabPanel>
                 <TabPanel>
@@ -414,12 +417,12 @@ export default function DataDictionary({ features = [] }) {
                     </div>
                   </div>
                   <p className="my-4 text-base font-light">
-                    Download your Original Feature Value Table{' '}
+                    Download your Original Indicator Value Table{' '}
                     <a
                       className="text-link font-medium underline"
-                      download="original_feature_value_table.csv"
+                      download="original_indicator_value_table.csv"
                       href={`data:text/csv;charset=utf-8,${encodeURIComponent(
-                        ['FEATURE NAME,DESCRIPTION']
+                        ['INDICATOR NAME,DESCRIPTION']
                           .concat(
                             filteredAndSortedFeatures.map(
                               feature =>
@@ -443,7 +446,7 @@ export default function DataDictionary({ features = [] }) {
                             onClick={() => handleSort('readable_feature_name')}
                           >
                             <div className="flex items-center gap-2">
-                              FEATURE NAME
+                              INDICATOR NAME
                               <svg
                                 className="h-4 w-4"
                                 fill="none"

@@ -490,17 +490,6 @@ class ApiController extends Controller
     // Gets list of models for a given institution
     public function getModels(Request $request)
     {
-
-        if (ApiController::isLocalRequest()) {
-
-            return response()->json([
-                ['m_id' => 'e4862c62829440d8ab4c9c298f02f620', 'name' => 'oldest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => true, 'deleted' => false],
-                ['m_id' => 'e4862c62829440d8ab4c9c298f02f619', 'name' => 'latest_enrollment_model', 'created_by' => $request->user()->id, 'valid' => true, 'deleted' => false],
-                ['m_id' => 'e4862c62829440d8ab4c9c298f02f621', 'name' => 'invlaid_enrollment_model', 'created_by' => $request->user()->id, 'valid' => false, 'deleted' => false],
-
-            ], 200);
-        }
-
         return ApiController::constructInstRequest($request, '/models', 'GET', null);
     }
 

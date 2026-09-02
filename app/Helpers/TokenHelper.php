@@ -2,37 +2,35 @@
 
 namespace App\Helpers;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class TokenHelper
 {
+    /** Mint a replacement once the current token is this close to its own expiry. */
+    private const REFRESH_LEEWAY_SECONDS = 60;
+
     // Get the Backend API token for that user, saving it in the session or regenerating if it is close to expiration.
     // The return is an array of two elements, the token, and an error message if any.
     public static function getToken(Request $request)
     {
         $backend_tok = $request->session()->get('api_jwt');
-        $tok_timestamp = $request->session()->get('api_jwt_created_at');
-        $carbon_now = Carbon::now();
-        $current_timestamp = $carbon_now->timestamp;
 
-        if (! $request->session()->has('api_jwt')) {
-            return TokenHelper::makeTokenAPICall($request, $current_timestamp);
-        }
+        // Schedule the refresh off the token's own exp claim rather than a local clock, so
+        // this cannot drift from the backend's ACCESS_TOKEN_EXPIRE_MINUTES. The signature is
+        // not verifiable here (no shared secret) and is not trusted — the backend checks it.
+        $payload = explode('.', (string) $backend_tok)[1] ?? '';
+        $exp = json_decode(base64_decode(strtr($payload, '-_', '+/')) ?: '{}', true)['exp'] ?? null;
 
-        $start = new Carbon($tok_timestamp);
-        $time_difference_in_minutes = $carbon_now->diffInMinutes($start);
-
-        // If the delta between the old creation timestamp and now is greater than the expiration less 5 min, recalculate the jwt.
-        if ($time_difference_in_minutes > config('services.backend.timeout_less_five')) {
-            return TokenHelper::makeTokenAPICall($request, $current_timestamp);
+        // A missing or unreadable exp means we cannot tell how long the token is good for.
+        if ($exp === null || $exp - time() < self::REFRESH_LEEWAY_SECONDS) {
+            return TokenHelper::makeTokenAPICall($request);
         }
 
         return [$backend_tok, ''];
     }
 
-    public static function makeTokenAPICall(Request $request, int $current_timestamp)
+    public static function makeTokenAPICall(Request $request)
     {
         $headers = [
             'X-API-KEY' => config('services.backend.api_key'),
@@ -50,7 +48,6 @@ class TokenHelper
         $tok = json_decode($token_response)->access_token;
 
         session(['api_jwt' => $tok]);
-        session(['api_jwt_created_at' => $current_timestamp]);
 
         return [$tok, ''];
     }

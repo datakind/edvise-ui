@@ -48,7 +48,6 @@ return [
     'backend' => [
         'url' => env('BACKEND_URL', ''),
         'api_key' => env('BACKEND_API_KEY', ''),
-        'timeout_less_five' => (int) env('BACKEND_TIMEOUT_LESS_FIVE', 115),
         'http_default_timeout_seconds' => (int) env('BACKEND_HTTP_DEFAULT_TIMEOUT_SECONDS', 30),
         'http_validate_timeout_seconds' => (int) env('BACKEND_HTTP_VALIDATE_TIMEOUT_SECONDS', 300),
     ],

@@ -634,7 +634,7 @@ class ApiController extends Controller
         return ApiController::constructInstRequest($request, $externalUrl, 'DELETE', null);
     }
 
-    public function archiveModel(Request $request, string $model_name)
+    public function archiveModel(Request $request, string $model_name): JsonResponse|HttpClientResponse
     {
         return ApiController::constructInstRequest(
             $request,

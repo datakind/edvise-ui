@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +11,7 @@ use Illuminate\Support\Str;
 
 class Invite extends Model
 {
+    /** @use HasFactory<Factory<static>> */
     use HasFactory;
 
     protected $fillable = [
@@ -69,6 +72,8 @@ class Invite extends Model
 
     /**
      * Get the user who sent this invite
+     *
+     * @return BelongsTo<User, $this>
      */
     public function invitedBy(): BelongsTo
     {
@@ -78,7 +83,10 @@ class Invite extends Model
     /**
      * Scope for valid invites
      */
-    public function scopeValid($query)
+    /**
+     * @param  Builder<Invite>  $query
+     */
+    public function scopeValid(Builder $query): mixed
     {
         return $query->where('is_used', false)
             ->where('expires_at', '>', now());
@@ -87,7 +95,10 @@ class Invite extends Model
     /**
      * Scope for expired invites
      */
-    public function scopeExpired($query)
+    /**
+     * @param  Builder<Invite>  $query
+     */
+    public function scopeExpired(Builder $query): mixed
     {
         return $query->where('expires_at', '<=', now());
     }
@@ -95,7 +106,10 @@ class Invite extends Model
     /**
      * Scope for unused invites
      */
-    public function scopeUnused($query)
+    /**
+     * @param  Builder<Invite>  $query
+     */
+    public function scopeUnused(Builder $query): mixed
     {
         return $query->where('is_used', false);
     }

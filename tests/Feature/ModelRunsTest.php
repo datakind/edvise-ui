@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -12,17 +10,6 @@ use Tests\TestCase;
 class ModelRunsTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function createApplication(): Application
-    {
-        $app = require __DIR__.'/../../bootstrap/app.php';
-        $app->make(Kernel::class)->bootstrap();
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite.database', ':memory:');
-        $app['config']->set('database.connections.sqlite.foreign_key_constraints', false);
-
-        return $app;
-    }
 
     public function test_model_runs_survives_created_by_user_missing_from_local_users(): void
     {

@@ -113,7 +113,7 @@ export default function InterpretChart() {
             </svg>
 
             <div className="px-2 text-center text-xs text-gray-500">
-              Lighter dots show <b>lower</b> student feature values
+              Lighter dots show <b>lower</b> student indicator values
             </div>
           </div>
           {/* Right side */}
@@ -135,7 +135,7 @@ export default function InterpretChart() {
             </svg>
 
             <div className="px-2 text-center text-xs text-gray-500">
-              Darker dots show <b>higher</b> student feature values
+              Darker dots show <b>higher</b> student indicator values
             </div>
           </div>
         </div>

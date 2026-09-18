@@ -17,6 +17,18 @@ window._ = _;
 // Set timeout to 120 seconds (120000 milliseconds)
 (window as any).axios.defaults.timeout = 120000;
 
+// 419 means the server ended our session because the backend rejected its credentials.
+// Send the user to log in rather than letting pages render an auth error.
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 419) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  },
+);
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

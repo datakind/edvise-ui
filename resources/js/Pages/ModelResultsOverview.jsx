@@ -293,25 +293,25 @@ function ModelResultsOverview({
                         </div>
                         <ul className="ml-5 list-disc">
                           <li>
-                            Charts show the features that have the most
+                            Charts show the indicators that have the most
                             influence on this cohort of students&apos; support
                             scores.
                           </li>
                           <li>
-                            Features are sorted from top to bottom in order of
+                            Indicators are sorted from top to bottom in order of
                             importance.
                           </li>
                           <li>Each dot represents a student record.</li>
                           <li>
                             The relation between dot distribution and color
-                            tells you how each feature affects student support
+                            tells you how each indicator affects student support
                             needs.
                             <ul className="ml-5 list-disc">
                               <li>
                                 For example, if darker dots are all clustered
                                 further to the right, that means students with a
-                                higher value for that feature are more likely to
-                                need support.
+                                higher value for that indicator are more likely
+                                to need support.
                               </li>
                             </ul>
                           </li>
@@ -328,7 +328,7 @@ function ModelResultsOverview({
                             scope="col"
                             className="w-1/3 p-2 text-sm text-xs font-bold text-black"
                           >
-                            Click any of the feature names to learn more
+                            Click any of the indicator names to learn more
                           </th>
                           <th
                             className="w-2/3 p-2 text-center text-xs font-semibold text-[#3E3E3E]"
@@ -566,8 +566,8 @@ function ModelResultsOverview({
                   <hr className="mb-4 border-[#4F4F4F]" />
                   <div className="mb-4 text-sm text-[#4F4F4F]">
                     This box and whiskers plot shows the minimum, median,
-                    maximum, and quartile points for this feature in the student
-                    dataset.{' '}
+                    maximum, and quartile points for this indicator in the
+                    student dataset.{' '}
                   </div>
                   <div className="mb-16">
                     <BoxWhiskerPlot
@@ -589,12 +589,12 @@ function ModelResultsOverview({
                         <li>Each dot represents a student record.</li>
                         <li>
                           The relation between dot distribution and color tells
-                          you how each feature affects student support needs.
+                          you how each indicator affects student support needs.
                           <ul className="list-disc space-y-1 pl-5">
                             <li>
                               For example, if darker dots are all clustered
                               further to the right, that means students with a
-                              higher value for that feature are more likely to
+                              higher value for that indicator are more likely to
                               need support.
                             </li>
                           </ul>

@@ -169,7 +169,7 @@ export default function Shap({
                 ];
 
                 if (plotData.dataType !== 'Categorical') {
-                  tooltipLines.push(`Feature Value: ${featureVal}`);
+                  tooltipLines.push(`Indicator Value: ${featureVal}`);
                 }
 
                 tooltipLines.push(`Support Score: ${supportScore.toFixed(2)}`);
@@ -251,7 +251,7 @@ export default function Shap({
         />
       ) : (
         <div className="flex h-32 items-center justify-center text-gray-500">
-          No feature data available
+          No indicator data available
         </div>
       )}
     </div>

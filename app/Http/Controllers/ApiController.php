@@ -587,7 +587,7 @@ class ApiController extends Controller
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($output as $key => $run) {
                     $user_name = $run['created_by'];
-                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
                     $time = ApiController::convertDateToReadable($run['triggered_at']);
@@ -664,7 +664,7 @@ class ApiController extends Controller
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($batches as $key => $batch) {
                     $user_name = ($batch['updated_by'] == null) ? $batch['created_by'] : $batch['created_by'];
-                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
                     $time_in = ($batch['updated_at'] == null) ? $batch['created_at'] : $batch['updated_at'];
@@ -989,7 +989,7 @@ class ApiController extends Controller
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($output as $key => $run) {
                     $user_name = $run['created_by'];
-                    if ($user_id_map && $user_id_map[$user_name] != null) {
+                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
                     $time = ApiController::convertDateToReadable($run['triggered_at']);

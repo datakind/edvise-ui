@@ -39,7 +39,7 @@ class DataDictionaryController extends Controller
             ]);
         }
 
-        $validModels = collect($models)->filter(fn ($m) => ($m['valid'] ?? false) === true || ($m['valid'] ?? 0) === 1)->values();
+        $validModels = collect($models)->filter(fn ($m) => ! ($m['archived'] ?? false))->values();
         $modelNames = $validModels->pluck('name')->all();
         $validModel = $validModels->firstWhere('name', $request->query('model')) ?? $validModels->first();
         if (! $validModel) {

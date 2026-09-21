@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.8.0] - 2026-09-16
+
+### Added
+- Archive Model action on Model Run History (DataKinders, not in institution view)
+- Archived Models page under Model Results
+- Start Prediction step to select eligible academic terms
+- Model selector on the Indicator Glossary when an institution has more than one valid model
+
+### Changed
+- User-facing “feature” renamed to “indicator” (ML glossary terms and CSV headers unchanged)
+- Data Dictionary copy
+- Indicator Glossary tab hidden when no model is selected
+- Indicator Glossary model list uses archived instead of the removed API `valid` field
+- Larastan raised to level 5
+
+### Fixed
+- Expired backend JWT now refreshes and redirects to login
+- Feedback form link
+- Model Results no longer 500s when a run’s creator is missing from the local users table
+
 ## [1.7.0] - 2026-08-24
 
 ### Added

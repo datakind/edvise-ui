@@ -3,6 +3,7 @@ import { Head, router, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
+import Spinner from '@/Components/Spinner';
 import { toTitleCase } from '../utils/stringUtils';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
 import {
@@ -177,6 +178,7 @@ export default function DataDictionary({
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [loading, setLoading] = useState(false);
 
   const filteredAndSortedFeatures = (Array.isArray(features) ? features : [])
     .filter(
@@ -391,8 +393,13 @@ export default function DataDictionary({
                         aria-label="Model"
                         className="mb-4 ml-4 w-64 rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
                         value={selectedModel.name}
+                        disabled={loading}
                         onChange={e =>
-                          router.reload({ data: { model: e.target.value } })
+                          router.reload({
+                            data: { model: e.target.value },
+                            onStart: () => setLoading(true),
+                            onFinish: () => setLoading(false),
+                          })
                         }
                       >
                         {models.map(m => (
@@ -443,63 +450,69 @@ export default function DataDictionary({
                       </a>
                       .
                     </p>
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border border-[#e5e7eb]">
-                        <thead>
-                          <tr className="bg-[#f9fafb]">
-                            <th
-                              scope="col"
-                              className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
-                              onClick={() =>
-                                handleSort('readable_feature_name')
-                              }
-                            >
-                              <div className="flex items-center gap-2">
-                                INDICATOR NAME
-                                <svg
-                                  className="h-4 w-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                                  />
-                                </svg>
-                              </div>
-                            </th>
-                            <th
-                              scope="col"
-                              className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
-                            >
-                              DESCRIPTION
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredAndSortedFeatures.map(feature => (
-                            <tr
-                              key={feature.readable_feature_name}
-                              className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                            >
-                              <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
-                                <div className="text-base font-medium text-black">
-                                  {toTitleCase(feature.readable_feature_name)}
+                    {loading ? (
+                      <div className="flex w-full justify-center py-3">
+                        <Spinner mainMsg="Loading indicators"></Spinner>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse border border-[#e5e7eb]">
+                          <thead>
+                            <tr className="bg-[#f9fafb]">
+                              <th
+                                scope="col"
+                                className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                                onClick={() =>
+                                  handleSort('readable_feature_name')
+                                }
+                              >
+                                <div className="flex items-center gap-2">
+                                  INDICATOR NAME
+                                  <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                                    />
+                                  </svg>
                                 </div>
-                              </td>
-                              <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
-                                <div className="text-base font-light text-[#696969]">
-                                  {feature.short_feature_desc}
-                                </div>
-                              </td>
+                              </th>
+                              <th
+                                scope="col"
+                                className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                              >
+                                DESCRIPTION
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                          </thead>
+                          <tbody>
+                            {filteredAndSortedFeatures.map(feature => (
+                              <tr
+                                key={feature.readable_feature_name}
+                                className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                              >
+                                <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
+                                  <div className="text-base font-medium text-black">
+                                    {toTitleCase(feature.readable_feature_name)}
+                                  </div>
+                                </td>
+                                <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
+                                  <div className="text-base font-light text-[#696969]">
+                                    {feature.short_feature_desc}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </TabPanel>
                 )}
                 <TabPanel>

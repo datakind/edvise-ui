@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import PropTypes from 'prop-types';
 import AppLayout from '@/Layouts/AppLayout';
 import PageHeading from '@/Components/PageHeading';
+import Spinner from '@/Components/Spinner';
 import { toTitleCase } from '../utils/stringUtils';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
 import {
@@ -29,11 +30,11 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'Collinearity / Multicollinearity',
-        def: 'When two or more features (variables) in a dataset are strongly related, which can confuse a model.',
+        def: 'When two or more indicators (variables) in a dataset are strongly related, which can confuse a model.',
       },
       {
         term: 'Variance Inflation Factor (VIF)',
-        def: 'A number that tells how much multicollinearity exists among features; higher values mean more redundancy.',
+        def: 'A number that tells how much multicollinearity exists among indicators; higher values mean more redundancy.',
       },
       {
         term: 'Low variance threshold',
@@ -65,12 +66,12 @@ const MODEL_CARD_SECTIONS = [
         def: 'Turning raw data into meaningful inputs ("features") that the model can learn from.',
       },
       {
-        term: 'Feature Importance Plot',
-        def: 'A visual showing which features influenced predictions the most. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.',
-      },
-      {
         term: 'Feature Selection',
         def: 'Choosing the most useful features and removing redundant or irrelevant ones.',
+      },
+      {
+        term: 'Indicator Importance Plot',
+        def: 'A visual showing which indicators influenced predictions the most. A positive value means this indicator is pushing the student’s support score up (higher predicted need for support). A negative value means this indicator is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.',
       },
       {
         term: 'Model Interpretability',
@@ -82,7 +83,7 @@ const MODEL_CARD_SECTIONS = [
       },
       {
         term: 'SHAP (Shapley Additive Explanations)',
-        def: "A method for explaining a model's predictions by showing how much each feature contributed to a particular prediction. A positive value means this feature is pushing the student’s support score up (higher predicted need for support). A negative value means this feature is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.",
+        def: "A method for explaining a model's predictions by showing how much each indicator contributed to a particular prediction. A positive value means this indicator is pushing the student’s support score up (higher predicted need for support). A negative value means this indicator is pushing the student’s support score down (lower predicted need for support). The size of the value (how far from zero) shows how strong that contribution is.",
       },
     ],
   },
@@ -168,11 +169,16 @@ const MODEL_CARD_SECTIONS = [
   },
 ];
 
-export default function DataDictionary({ features = [] }) {
+export default function DataDictionary({
+  features = [],
+  models = [],
+  selectedModel = null,
+}) {
   usePage().props; // shared props (e.g. institution) available if needed
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('readable_feature_name');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [loading, setLoading] = useState(false);
 
   const filteredAndSortedFeatures = (Array.isArray(features) ? features : [])
     .filter(
@@ -211,40 +217,28 @@ export default function DataDictionary({ features = [] }) {
         <PageHeading>Data Dictionary</PageHeading>
 
         <div className="shadow-card mx-auto max-w-5xl rounded-[40px] bg-white px-10 py-10 sm:px-12">
-          {/* Submission Data Requirements */}
           <div className="mb-10">
             <h2 className="text-heading mb-4 text-3xl font-light">
-              Submission Data Requirements
+              About the Data Dictionary
             </h2>
-            <p className="mb-4 text-xl font-light text-[#171717]">
-              DataKind receives de-identified &ldquo;Analysis Ready (AR)&rdquo;
-              files from the National Student Clearinghouse (NSC) using a
-              &ldquo;StudyID&rdquo; field. Users should upload files aligned
-              with{' '}
-              <a
-                href="https://www.studentclearinghouse.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-link font-medium underline"
-              >
-                AR file templates provided by NSC
-              </a>
-              .
+            <p>
+              This page explains the data that is available when you have a
+              model result in the app. <b>Understanding Your Results</b> lists
+              the column names of the output data, and how you should interpret
+              them. <b>Indicator Glossary</b> describes the indicators that each
+              specific model contains and how they are calculated.{' '}
+              <b>Data Science Terminology</b> defines specific language from the
+              Data Science domain that is used throughout the model
+              results.{' '}
             </p>
-            <div className="border-secondary bg-landing-light-blue border-l-4 py-3 pr-4 pl-4 text-xl font-light text-[#171717]">
-              <span className="font-semibold">Important:</span> If uploading a
-              StudyID file, the &ldquo;Student ID&rdquo; column must be deleted.
-              Only &ldquo;Study ID&rdquo; or &ldquo;Student GUID&rdquo; (both in
-              quotes) should be included in data uploaded to Edvise.
-            </div>
           </div>
 
           {/* Tabs */}
           <div className="mb-10">
             <TabGroup className="data-dictionary-tabs">
               <TabList>
-                <Tab>Output Data Format</Tab>
-                <Tab>Original Feature Value Table</Tab>
+                <Tab>Understanding Your Results</Tab>
+                {selectedModel && <Tab>Indicator Glossary</Tab>}
                 <Tab>Data Science Terminology</Tab>
               </TabList>
               {/* Original Feature Value Table Section */}
@@ -254,7 +248,7 @@ export default function DataDictionary({ features = [] }) {
                     <p>
                       The model results output file is a CSV, with each row
                       representing a student and providing insights into support
-                      needs and contributing features. The file contains the
+                      needs and contributing indicators. The file contains the
                       following columns:
                     </p>
                   </div>
@@ -326,14 +320,16 @@ export default function DataDictionary({ features = [] }) {
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             There are five columns that provide the top 5
-                            features impacting the support score for each
+                            indicators impacting the support score for each
                             student, in order of decreasing importance for the
-                            student (the most important feature is at the top).
+                            student (the most important indicator is at the
+                            top).
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The values will be strings describing the features.
-                            For a more detailed understanding of each feature,
-                            please see &ldquo;about this model.&rdquo;
+                            The values will be strings describing the
+                            indicators. For a more detailed understanding of
+                            each indicator, please see &ldquo;about this
+                            model.&rdquo;
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
@@ -341,12 +337,13 @@ export default function DataDictionary({ features = [] }) {
                             Feature Value (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The value of the specified feature for the student.
+                            The value of the specified indicator for the
+                            student.
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             This depends on the range of possibilities for the
-                            feature: some are categorical (i.e. major) and some
-                            are numerical (i.e. GPA).
+                            indicator: some are categorical (i.e. major) and
+                            some are numerical (i.e. GPA).
                           </td>
                         </tr>
                         <tr className="border-b border-[#e5e7eb]">
@@ -354,23 +351,23 @@ export default function DataDictionary({ features = [] }) {
                             Feature Importance (1-5)
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
-                            The degree to which this particular feature impacts
-                            the student&apos;s support score. Statistically,
-                            this is the feature&apos;s SHAP value for the
-                            student. In interpreting it, simply compare this
-                            number to other feature importance values to
-                            understand the relative impact.
+                            The degree to which this particular indicator
+                            impacts the student&apos;s support score.
+                            Statistically, this is the indicator&apos;s SHAP
+                            value for the student. In interpreting it, simply
+                            compare this number to other indicator importance
+                            values to understand the relative impact.
                           </td>
                           <td className="border border-[#e5e7eb] p-3 text-base font-light">
                             This will be a positive or negative decimal:
                             <ul className="list-disc pl-5">
                               <li>
-                                A positive value means this feature is pushing
+                                A positive value means this indicator is pushing
                                 the student&apos;s support score up (higher
                                 predicted need for support).
                               </li>
                               <li>
-                                A negative value means this feature is pushing
+                                A negative value means this indicator is pushing
                                 the student&apos;s support score down (lower
                                 predicted need for support).
                               </li>
@@ -385,110 +382,139 @@ export default function DataDictionary({ features = [] }) {
                     </table>
                   </div>
                   <p className="text-base font-light">
-                    This chart provides more context on all features utilized by
-                    the model.
+                    This chart provides more context on all indicators utilized
+                    by the model.
                   </p>
                 </TabPanel>
-                <TabPanel>
-                  <div className="relative ml-4 w-64">
-                    <input
-                      type="text"
-                      placeholder="Search"
-                      value={searchTerm}
-                      onChange={e => setSearchTerm(e.target.value)}
-                    />
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                      <svg
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                {selectedModel && (
+                  <TabPanel>
+                    {models.length > 1 && (
+                      <select
+                        aria-label="Model"
+                        className="mb-4 ml-4 w-64 rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
+                        value={selectedModel.name}
+                        disabled={loading}
+                        onChange={e =>
+                          router.reload({
+                            data: { model: e.target.value },
+                            onStart: () => setLoading(true),
+                            onFinish: () => setLoading(false),
+                          })
+                        }
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <p className="my-4 text-base font-light">
-                    Download your Original Feature Value Table{' '}
-                    <a
-                      className="text-link font-medium underline"
-                      download="original_feature_value_table.csv"
-                      href={`data:text/csv;charset=utf-8,${encodeURIComponent(
-                        ['FEATURE NAME,DESCRIPTION']
-                          .concat(
-                            filteredAndSortedFeatures.map(
-                              feature =>
-                                `"${toTitleCase(feature.readable_feature_name ?? '').replace(/"/g, '""')}","${(feature.short_feature_desc ?? '').replace(/"/g, '""')}"`,
-                            ),
-                          )
-                          .join('\n'),
-                      )}`}
-                    >
-                      here
-                    </a>
-                    .
-                  </p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-[#e5e7eb]">
-                      <thead>
-                        <tr className="bg-[#f9fafb]">
-                          <th
-                            scope="col"
-                            className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
-                            onClick={() => handleSort('readable_feature_name')}
-                          >
-                            <div className="flex items-center gap-2">
-                              FEATURE NAME
-                              <svg
-                                className="h-4 w-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                                />
-                              </svg>
-                            </div>
-                          </th>
-                          <th
-                            scope="col"
-                            className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
-                          >
-                            DESCRIPTION
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredAndSortedFeatures.map(feature => (
-                          <tr
-                            key={feature.readable_feature_name}
-                            className="border-b border-[#E5E7EB] align-top last:border-b-0"
-                          >
-                            <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
-                              <div className="text-base font-medium text-black">
-                                {toTitleCase(feature.readable_feature_name)}
-                              </div>
-                            </td>
-                            <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
-                              <div className="text-base font-light text-[#696969]">
-                                {feature.short_feature_desc}
-                              </div>
-                            </td>
-                          </tr>
+                        {models.map(m => (
+                          <option key={m}>{m}</option>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPanel>
+                      </select>
+                    )}
+                    <div className="relative ml-4 w-64">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg
+                          className="h-5 w-5 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="my-4 text-base font-light">
+                      Download your Indicator Glossary{' '}
+                      <a
+                        className="text-link font-medium underline"
+                        download="indicator_glossary.csv"
+                        href={`data:text/csv;charset=utf-8,${encodeURIComponent(
+                          ['INDICATOR NAME,DESCRIPTION']
+                            .concat(
+                              filteredAndSortedFeatures.map(
+                                feature =>
+                                  `"${toTitleCase(feature.readable_feature_name ?? '').replace(/"/g, '""')}","${(feature.short_feature_desc ?? '').replace(/"/g, '""')}"`,
+                              ),
+                            )
+                            .join('\n'),
+                        )}`}
+                      >
+                        here
+                      </a>
+                      .
+                    </p>
+                    {loading ? (
+                      <div className="flex w-full justify-center py-3">
+                        <Spinner mainMsg="Loading indicators"></Spinner>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse border border-[#e5e7eb]">
+                          <thead>
+                            <tr className="bg-[#f9fafb]">
+                              <th
+                                scope="col"
+                                className="cursor-pointer border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                                onClick={() =>
+                                  handleSort('readable_feature_name')
+                                }
+                              >
+                                <div className="flex items-center gap-2">
+                                  INDICATOR NAME
+                                  <svg
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                                    />
+                                  </svg>
+                                </div>
+                              </th>
+                              <th
+                                scope="col"
+                                className="border border-[#e5e7eb] p-3 text-left text-xs font-medium text-[#6B7280]"
+                              >
+                                DESCRIPTION
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredAndSortedFeatures.map(feature => (
+                              <tr
+                                key={feature.readable_feature_name}
+                                className="border-b border-[#E5E7EB] align-top last:border-b-0"
+                              >
+                                <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
+                                  <div className="text-base font-medium text-black">
+                                    {toTitleCase(feature.readable_feature_name)}
+                                  </div>
+                                </td>
+                                <td className="border border-[#e5e7eb] py-3 pr-4 pl-4">
+                                  <div className="text-base font-light text-[#696969]">
+                                    {feature.short_feature_desc}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </TabPanel>
+                )}
                 <TabPanel>
                   {/* Model Card Dictionary */}
                   <div>
@@ -546,4 +572,6 @@ export default function DataDictionary({ features = [] }) {
 
 DataDictionary.propTypes = {
   features: PropTypes.arrayOf(PropTypes.object),
+  models: PropTypes.arrayOf(PropTypes.string),
+  selectedModel: PropTypes.object,
 };

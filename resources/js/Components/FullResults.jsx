@@ -83,21 +83,22 @@ export default function FullResults() {
             <div className="text-sm text-[#637381]">
               <ul className="ml-5 list-disc">
                 <li>
-                  Charts show the features that have the most influence on this
-                  cohort of students&apos; support scores.
+                  Charts show the indicators that have the most influence on
+                  this cohort of students&apos; support scores.
                 </li>
                 <li>
-                  Features are sorted from top to bottom in order of importance.
+                  Indicators are sorted from top to bottom in order of
+                  importance.
                 </li>
                 <li>Each dot represents a student record.</li>
                 <li>
                   The relation between dot distribution and color tells you how
-                  each feature affects student support needs.
+                  each indicator affects student support needs.
                 </li>
                 <li>
                   For example, if darker dots are all clustered further to the
                   right, that means students with a higher value for that
-                  feature are more likely to need support.
+                  indicator are more likely to need support.
                 </li>
               </ul>
             </div>
@@ -107,9 +108,9 @@ export default function FullResults() {
               How to interpret chart colors
             </div>
             <div>
-              Lighter dots show lower student feature values
+              Lighter dots show lower student indicator values
               <br />
-              Darker dots show higher student feature values
+              Darker dots show higher student indicator values
             </div>
           </div>
         </div>
@@ -118,7 +119,7 @@ export default function FullResults() {
             <thead>
               <tr>
                 <th className="w-1/3 pb-2 text-xs font-semibold text-[#637381]">
-                  Click any of the feature names to learn more
+                  Click any of the indicator names to learn more
                 </th>
                 <th
                   className="w-2/3 pb-2 text-center text-xs font-semibold text-[#637381]"

@@ -62,7 +62,7 @@ var navigationAboveLine = [
       },
       {
         name: 'Start Prediction',
-        href: route('run-inference'),
+        href: route('start-prediction'),
         visibility_type: VisibilityType.DATAKIND_ONLY,
       },
       { name: 'Manage Uploads', href: route('manage-uploads') },
@@ -190,8 +190,17 @@ export default function AppLayout({ title, children }) {
         transformedElem.name = elem.name;
         transformedElem.href = route('model-run-history.modelname', elem.name);
         transformedElem.visibility_type = VisibilityType.PRIVATE_ONLY;
+        transformedElem.is_model = true;
         item.children.push(transformedElem);
       });
+
+      if (modelData.some(elem => elem.archived)) {
+        item.children.push({
+          name: 'Archived Models',
+          href: route('archived-models'),
+          visibility_type: VisibilityType.PRIVATE_ONLY,
+        });
+      }
     }
     return item;
   }
@@ -300,7 +309,7 @@ export default function AppLayout({ title, children }) {
                           ? { 'data-current': '' }
                           : {})}
                       >
-                        {item.name === 'Model Results'
+                        {subItem.is_model
                           ? formatModelName(subItem.name)
                           : subItem.name}
                       </DisclosureButton>
@@ -494,7 +503,7 @@ export default function AppLayout({ title, children }) {
           <main className="flex w-full flex-1 pt-12">{children}</main>
           <AppFooter />
           <a
-            href="https://form.asana.com/?k=tH5GL9JKLM1TasyZUoeGgw&d=6325821815997"
+            href="https://form.asana.com/?k=Vf_cGZUNTuZQTQ_TGbHPBw&d=6325821815997"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary fixed right-10 bottom-12 z-50"

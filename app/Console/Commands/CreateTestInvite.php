@@ -24,11 +24,11 @@ class CreateTestInvite extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $email = $this->argument('email');
         $role = $this->option('role');
-        $days = $this->option('days');
+        $days = (int) $this->option('days');
 
         $invite = Invite::create([
             'email' => $email,

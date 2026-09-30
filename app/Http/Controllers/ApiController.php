@@ -6,11 +6,13 @@ use App\Models\DataDictionary;
 use App\Traits\UsesApi;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use TokenHelper;
 use UserHelper;
@@ -684,7 +686,7 @@ class ApiController extends Controller
     }
 
     // Renders the EDA dashboard, or redirect to home if EDA is not available for the institution.
-    public function edaDashboard(Request $request)
+    public function edaDashboard(Request $request): RedirectResponse|InertiaResponse
     {
 
         $institution = $request->attributes->get('institution') ?? [];
@@ -696,10 +698,12 @@ class ApiController extends Controller
         $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
         if ($request->user() && $inst_id) {
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
-            if ($result !== null && $result->status() === 200) {
+            if ($result instanceof HttpClientResponse && $result->status() === 200) {
                 $output = $result->json();
-                $batches = $output['batches'] ?? [];
-                $validCount = collect($batches)->filter(fn ($b) => empty($b['deleted']))->count();
+                $batches = is_array($output) && isset($output['batches']) && is_array($output['batches'])
+                    ? $output['batches']
+                    : [];
+                $validCount = collect($batches)->filter(fn ($b) => is_array($b) && empty($b['deleted']))->count();
                 $hasBatches = $validCount > 0;
             }
         }

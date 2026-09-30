@@ -28,7 +28,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Edvise'),
-    'version' => json_decode(file_get_contents(base_path('package.json')), true, 512, JSON_THROW_ON_ERROR)['version'],
+    'version' => json_decode(file_get_contents(base_path('package.json')) ?: '', true, 512, JSON_THROW_ON_ERROR)['version'],
 
     /*
     |--------------------------------------------------------------------------

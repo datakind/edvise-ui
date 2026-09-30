@@ -19,7 +19,7 @@ class ModelRunsTest extends TestCase
             'inst_id' => 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         ]);
 
-        $jwtPayload = rtrim(strtr(base64_encode(json_encode(['exp' => time() + 3600])), '+/', '-_'), '=');
+        $jwtPayload = rtrim(strtr(base64_encode(json_encode(['exp' => time() + 3600], JSON_THROW_ON_ERROR)), '+/', '-_'), '=');
         $jwt = 'eyJhbGciOiJub25lIn0.'.$jwtPayload.'.x';
 
         Http::fake(function ($request) use ($known) {

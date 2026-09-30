@@ -1027,6 +1027,7 @@ class ApiController extends Controller
             \Log::info('Local request - Institution ID: '.$inst_id);
             // Mock data for local development - generate different data based on feature_name
             $featureName = $request->query('feature_name', 'test_feature');
+            $featureName = is_string($featureName) ? $featureName : 'test_feature';
 
             // Generate consistent but different mock data based on feature name
             $hash = crc32($featureName);

@@ -6,11 +6,11 @@ use App\Models\DataDictionary;
 use App\Traits\UsesApi;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use TokenHelper;
 use UserHelper;
@@ -683,29 +683,35 @@ class ApiController extends Controller
         return $result;
     }
 
-    /**
-     * Redirect to the appropriate app home: EDA dashboard if the user's institution
-     * has at least one valid (non-deleted) batch, otherwise the generic home page.
-     */
-    public function appHomeRedirect(Request $request): RedirectResponse
+    // Renders the EDA dashboard, or redirect to home if EDA is not available for the institution.
+    public function edaDashboard(Request $request)
     {
+
+        $institution = $request->attributes->get('institution') ?? [];
+        if (empty($institution['pdp_id'])) {
+            return redirect()->route('home');
+        }
+
         $hasBatches = false;
         $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
         if ($request->user() && $inst_id) {
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
-            if ($result->status() === 200) {
+            if ($result !== null && $result->status() === 200) {
                 $output = $result->json();
-                $batches = is_array($output) && isset($output['batches']) && is_array($output['batches'])
-                    ? $output['batches']
-                    : [];
-                $validCount = collect($batches)->filter(fn ($b) => is_array($b) && empty($b['deleted']))->count();
+                $batches = $output['batches'] ?? [];
+                $validCount = collect($batches)->filter(fn ($b) => empty($b['deleted']))->count();
                 $hasBatches = $validCount > 0;
             }
         }
 
-        return $hasBatches
-            ? redirect()->route('eda')
-            : redirect()->route('home');
+        if (! $hasBatches) {
+            return redirect()->route('home');
+        }
+
+        return Inertia::render('EdaDashboard', [
+            'batch_id' => $request->query('batch_id'),
+            'clear_cache' => $request->query('clear-cache') === '1',
+        ]);
     }
 
     // The below provided by DK.

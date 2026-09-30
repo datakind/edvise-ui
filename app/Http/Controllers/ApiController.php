@@ -70,7 +70,7 @@ class ApiController extends Controller
 
     // Constructs a query for Datakinder cases that does not retrieve institution info.
     /**
-     * @param  array<int|string, mixed>|null  $req_body
+     * @param  array<string, mixed>|null  $req_body
      */
     public function constructDatakinderRequest(Request $request, string $url_piece, string $method, ?array $req_body): JsonResponse|HttpClientResponse
     {
@@ -245,7 +245,7 @@ class ApiController extends Controller
 
     // Constructs a query with the BACKEND_URL+/institutions/<inst> prefix.
     /**
-     * @param  array<int|string, mixed>|null  $req_body
+     * @param  array<string, mixed>|null  $req_body
      */
     public function constructInstRequest(Request $request, string $url_piece, string $method, ?array $req_body): JsonResponse|HttpClientResponse
     {
@@ -309,7 +309,7 @@ class ApiController extends Controller
 
     // Browser-facing proxy; long-running backend calls stream a keepalive before the wait.
     /**
-     * @param  array<int|string, mixed>|null  $req_body
+     * @param  array<string, mixed>|null  $req_body
      */
     public function constructInstRequestForBrowser(Request $request, string $url_piece, string $method, ?array $req_body): JsonResponse|HttpClientResponse|StreamedResponse
     {

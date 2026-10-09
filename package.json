@@ -82,6 +82,9 @@
       "prettier-plugin-tailwindcss"
     ]
   },
+  "overrides": {
+    "postcss-selector-parser": "7.1.6"
+  },
   "allowScripts": {
     "core-js@3.49.0": true,
     "es5-ext@0.10.64": true,

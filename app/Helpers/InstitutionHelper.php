@@ -93,21 +93,16 @@ class InstitutionHelper
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $resp = Http::withHeaders($headers)->get(config('services.backend.url').'/institutions');
+        $resp = Http::withHeaders($headers)->get(config('services.backend.url').'/institutions/'.$inst_id);
         if ($resp->status() !== 200) {
             return null;
         }
-        $list = $resp->json();
-        if (! is_array($list)) {
+        $institution = $resp->json();
+        if (! is_array($institution) || array_is_list($institution)) {
             return null;
         }
-        foreach ($list as $inst) {
-            if (is_array($inst) && ($inst['inst_id'] ?? '') === $inst_id) {
-                return $inst;
-            }
-        }
 
-        return null;
+        return $institution;
     }
 
     // Set session institution. Only DataKinders; they choose via Set Institution.

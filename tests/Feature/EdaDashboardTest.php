@@ -68,6 +68,7 @@ class EdaDashboardTest extends TestCase
 
     private function fakeInstitution(string $instId, ?string $pdpId, bool $withBatch): void
     {
+        config(['services.backend.url' => 'http://backend.test']);
         Http::fake(function ($request) use ($instId, $pdpId, $withBatch) {
             if (str_ends_with($request->url(), '/institutions/'.$instId)) {
                 return Http::response([

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import InferenceTermSelector from '@/Components/InferenceTermSelector';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
-import Spinner from '@/Components/Spinner';
 
 export default function StartPrediction() {
+  const { auth } = usePage().props;
+  const showStudentCounts = auth.user?.access_type === 'DATAKINDER';
   const [triggeredRun, setTriggeredRun] = useState(false);
   const [result, setResult] = useState('');
 
@@ -15,10 +17,8 @@ export default function StartPrediction() {
   const [modelsList, setModelsList] = useState([]);
   const [batchName, setBatchName] = useState('');
   const [modelName, setModelName] = useState('');
-  const [terms, setTerms] = useState([]);
   const [selectedTerms, setSelectedTerms] = useState([]);
-  const [loadingTerms, setLoadingTerms] = useState(false);
-  const [termsReason, setTermsReason] = useState(null);
+  const [termsReady, setTermsReady] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
     axios
@@ -60,34 +60,6 @@ export default function StartPrediction() {
       });
   }, []);
 
-  useEffect(() => {
-    if (!batchName || !modelName) return;
-    let cancelled = false;
-    setLoadingTerms(true);
-    axios
-      .get('/eligible-inference-terms', {
-        params: { batch_name: batchName, model_name: modelName },
-      })
-      .then(res => {
-        if (cancelled) return;
-        setTerms(res.data.terms ?? []);
-        setSelectedTerms([]);
-        setTermsReason(res.data.status === 'invalid' ? res.data.reason : null);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setTerms([]);
-        setSelectedTerms([]);
-        setTermsReason('Could not load academic terms.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoadingTerms(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [batchName, modelName]);
-
   const triggerInference = event => {
     event.preventDefault();
     // TODO: enable some way to indicate if it is pdp or not? is that required.
@@ -99,14 +71,17 @@ export default function StartPrediction() {
       setError('No model set.');
       return;
     }
+    if (selectedTerms.length === 0) {
+      setError('Select at least one academic term.');
+      return;
+    }
     axios({
       method: 'post',
       url: '/start-prediction/' + event.target.elements.model_name.value,
       data: {
         batch_name: event.target.elements.batch_name.value,
         is_pdp: true,
-        // Omitted when nothing is checked, so the pipeline config decides.
-        term_filter: selectedTerms.length > 0 ? selectedTerms : null,
+        term_filter: selectedTerms,
       },
     })
       .then(res => {
@@ -226,54 +201,21 @@ export default function StartPrediction() {
               ))}
             </select>
           )}
-          {loadingTerms ? (
-            <div className="flex w-full justify-center py-3">
-              <Spinner mainMsg="Loading academic terms"></Spinner>
-            </div>
-          ) : terms.length > 0 ? (
-            <>
-              <div className="py-3 font-thin">
-                <span className="text-2xl">Step 3</span>
-                <br />
-                <span className="text-lg">
-                  Please select the academic terms to predict.
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-                {terms.map(t => (
-                  <label
-                    key={t.term_label}
-                    className="flex items-center gap-x-2 text-gray-700"
-                  >
-                    <input
-                      type="checkbox"
-                      name="academic_terms"
-                      value={t.term_label}
-                      checked={selectedTerms.includes(t.term_label)}
-                      onChange={e =>
-                        setSelectedTerms(prev =>
-                          e.target.checked
-                            ? [...prev, t.term_label]
-                            : prev.filter(x => x !== t.term_label),
-                        )
-                      }
-                      className="rounded border-gray-300"
-                    />
-                    <span className="capitalize">{t.term_label}</span>
-                    <span className="text-sm text-gray-500">
-                      ({t.valid_student_count} students)
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </>
-          ) : (
-            termsReason && (
-              <div className="py-3 text-gray-700">{termsReason}</div>
-            )
-          )}
+          <InferenceTermSelector
+            batchName={batchName}
+            modelName={modelName}
+            selectedTerms={selectedTerms}
+            onSelectedTermsChange={setSelectedTerms}
+            onReadyChange={setTermsReady}
+            showCounts={showStudentCounts}
+            stepLabel="Step 3"
+          />
           <div className="flex w-full items-end justify-end pt-12">
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary disabled:opacity-50"
+              disabled={!termsReady}
+            >
               Generate Predictions
             </button>
           </div>

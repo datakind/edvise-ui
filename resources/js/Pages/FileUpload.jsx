@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
 import ProgressBar from '@/Components/ProgressBar';
+import InferenceTermSelector from '@/Components/InferenceTermSelector';
 
 /**
  * Build a human-readable message from an axios error (Laravel `error`, FastAPI `detail`, etc.).
@@ -50,6 +51,8 @@ function formatAxiosErrorMessage(error) {
 }
 
 export default function FileUpload() {
+  const { auth } = usePage().props;
+  const showStudentCounts = auth.user?.access_type === 'DATAKINDER';
   // TODO: Change the state structure to handle multiple file status
   // TODO: Use buttons where static onclick changes are happenings and links otherwise.
   const [fileStatus, setFileStatus] = useState({});
@@ -61,6 +64,9 @@ export default function FileUpload() {
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
   const [modelsList, setModelsList] = useState([]);
+  const [modelName, setModelName] = useState('');
+  const [selectedTerms, setSelectedTerms] = useState([]);
+  const [termsReady, setTermsReady] = useState(false);
   const [predictionResults, setPredictionResults] = useState(null);
   /** Sum of loaded bytes per server-side file key during parallel PUTs to GCS. */
   const uploadLoadedByKeyRef = useRef({});
@@ -74,6 +80,7 @@ export default function FileUpload() {
       .get('/models-api')
       .then(res => {
         setModelsList(res.data);
+        setModelName(res.data[0]?.name ?? '');
       })
       .catch(() => {
         // TODO bubble out these errors
@@ -684,12 +691,19 @@ export default function FileUpload() {
       setPredictionResults(res);
       return;
     }
+    if (selectedTerms.length === 0) {
+      setPredictionResults({
+        error: 'Select at least one academic term.',
+      });
+      return;
+    }
     axios({
       method: 'post',
       url: '/start-prediction/' + event.target.elements.model_name.value,
       data: {
         batch_name: batchName,
         is_pdp: true,
+        term_filter: selectedTerms,
       },
     })
       .then(res => {
@@ -732,16 +746,27 @@ export default function FileUpload() {
             <select
               className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
               id="model_name"
+              value={modelName}
+              onChange={event => setModelName(event.target.value)}
             >
               {modelsList.map(m => (
                 <option key={m.name}>{m.name}</option>
               ))}
             </select>
           )}
+          <InferenceTermSelector
+            batchName={batchName}
+            modelName={modelName}
+            selectedTerms={selectedTerms}
+            onSelectedTermsChange={setSelectedTerms}
+            onReadyChange={setTermsReady}
+            showCounts={showStudentCounts}
+          />
           <div className="flex w-full items-end justify-end pt-12">
             <button
               type="submit"
-              className="font-normaltext-black mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2"
+              disabled={!termsReady}
+              className="font-normaltext-black mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2 disabled:opacity-50"
             >
               Generate Predictions
             </button>

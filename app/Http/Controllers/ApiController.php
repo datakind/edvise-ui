@@ -235,7 +235,10 @@ class ApiController extends Controller
      */
     private static function institutionBackendTimeoutSeconds(string $urlPiece): int
     {
-        if (self::isValidateUploadRequest($urlPiece)) {
+        if (
+            self::isValidateUploadRequest($urlPiece)
+            || str_starts_with($urlPiece, '/eligible-inference-terms')
+        ) {
             $seconds = config('services.backend.http_validate_timeout_seconds');
 
             return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;

@@ -71,7 +71,7 @@ export default function StartPrediction() {
       setError('No model set.');
       return;
     }
-    if (selectedTerms.length === 0) {
+    if (!termsReady || selectedTerms.length === 0) {
       setError('Select at least one academic term.');
       return;
     }

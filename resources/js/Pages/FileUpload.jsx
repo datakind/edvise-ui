@@ -691,7 +691,7 @@ export default function FileUpload() {
       setPredictionResults(res);
       return;
     }
-    if (selectedTerms.length === 0) {
+    if (!termsReady || selectedTerms.length === 0) {
       setPredictionResults({
         error: 'Select at least one academic term.',
       });

@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Spinner from '@/Components/Spinner';
+
+const requestKeyFor = (batchName, modelName) =>
+  `${batchName ?? ''}\0${modelName ?? ''}`;
+
+const studentCountLabel = count =>
+  count === 1 ? '1 student' : `${count} students`;
 
 export default function InferenceTermSelector({
   batchName,
@@ -14,20 +20,31 @@ export default function InferenceTermSelector({
   const [terms, setTerms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [reason, setReason] = useState(null);
+  const nextKey = requestKeyFor(batchName, modelName);
+  const [requestKey, setRequestKey] = useState(nextKey);
+  const onSelectedTermsChangeRef = useRef(onSelectedTermsChange);
+  const onReadyChangeRef = useRef(onReadyChange);
+  onSelectedTermsChangeRef.current = onSelectedTermsChange;
+  onReadyChangeRef.current = onReadyChange;
+
+  if (requestKey !== nextKey) {
+    setRequestKey(nextKey);
+    setTerms([]);
+    setReason(null);
+    setLoading(Boolean(batchName && modelName));
+  }
+
+  const waitingForThisRequest = loading || requestKey !== nextKey;
 
   useEffect(() => {
+    onSelectedTermsChangeRef.current([]);
+    onReadyChangeRef.current(false);
     if (!batchName || !modelName) {
-      setTerms([]);
-      setReason(null);
-      setLoading(false);
-      onSelectedTermsChange([]);
-      onReadyChange(false);
       return undefined;
     }
 
     let cancelled = false;
     setLoading(true);
-    onReadyChange(false);
     axios
       .get('/eligible-inference-terms', {
         params: { batch_name: batchName, model_name: modelName },
@@ -43,13 +60,11 @@ export default function InferenceTermSelector({
             : res.data?.reason ||
                 'No academic terms have eligible students and usable course rows.',
         );
-        onSelectedTermsChange([]);
       })
       .catch(() => {
         if (cancelled) return;
         setTerms([]);
         setReason('Could not load academic terms.');
-        onSelectedTermsChange([]);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -58,17 +73,24 @@ export default function InferenceTermSelector({
     return () => {
       cancelled = true;
     };
-  }, [batchName, modelName, onReadyChange, onSelectedTermsChange]);
+  }, [batchName, modelName]);
 
   useEffect(() => {
-    onReadyChange(!loading && terms.length > 0 && selectedTerms.length > 0);
-  }, [loading, terms.length, selectedTerms, onReadyChange]);
+    if (waitingForThisRequest) {
+      onReadyChangeRef.current(false);
+      return;
+    }
+    const available = new Set(terms.map(term => term.term_label));
+    onReadyChangeRef.current(
+      selectedTerms.some(label => available.has(label)),
+    );
+  }, [waitingForThisRequest, terms, selectedTerms]);
 
   if (!batchName || !modelName) {
     return null;
   }
 
-  if (loading) {
+  if (waitingForThisRequest) {
     return (
       <div className="flex w-full justify-center py-3">
         <Spinner mainMsg="Loading academic terms"></Spinner>
@@ -114,7 +136,7 @@ export default function InferenceTermSelector({
               <span className="capitalize">{term.term_label}</span>
               {showCounts ? (
                 <span className="text-sm text-gray-500">
-                  ({term.valid_student_count} students)
+                  ({studentCountLabel(term.valid_student_count)})
                 </span>
               ) : null}
             </label>

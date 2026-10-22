@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.1] - 2026-10-22
+
+### Security
+- Pin the production and build container images to PHP 8.4.27.
+
 ## [1.8.0] - 2026-09-16
 
 ### Added

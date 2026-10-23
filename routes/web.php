@@ -102,7 +102,7 @@ Route::middleware('auth.app.invite')->group(function () {
 
 // App home and main app routes (auth + terms + verified)
 Route::middleware('auth.app')->group(function () {
-    Route::get('/app-home', [ApiController::class, 'appHomeRedirect'])->name('app-home');
+    Route::get('/eda-dashboard', [ApiController::class, 'EdaDashboard'])->name('eda-dashboard');
     Route::get('/data-dictionary', [DataDictionaryController::class, 'show'])->name('data-dictionary');
     Route::get('/home', fn () => Inertia::render('Home'))->name('home');
     Route::post('/file-upload-api/{filename}', [ApiController::class, 'fileUploadApi']);
@@ -230,10 +230,3 @@ Route::middleware(['auth', 'invite.validated', 'datakinder'])->group(function ()
     Route::post('/admin/invites/{invite}/resend', [InviteController::class, 'resendInvite'])->name('admin.invites.resend');
     Route::delete('/admin/invites/{invite}', [InviteController::class, 'deleteInvite'])->name('admin.invites.delete');
 });
-
-Route::middleware('auth.app')->get('/eda', function (Request $request) {
-    return Inertia::render('EdaDashboard', [
-        'batch_id' => $request->query('batch_id'),
-        'clear_cache' => $request->query('clear-cache') === '1',
-    ]);
-})->name('eda');

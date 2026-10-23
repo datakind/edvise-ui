@@ -78,7 +78,7 @@ class DataDictionarySeeder extends Seeder
     private function parseComplexString(string $input): array
     {
         $pattern = '/(?<!\\\),(?=(?:[^"]*|"[^"]*")*$)/';
-        $result = preg_split($pattern, $input);
+        $result = preg_split($pattern, $input) ?: [];
         $result = array_map(function ($item) {
             return trim($item, '"');
         }, $result);

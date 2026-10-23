@@ -39,7 +39,7 @@ const VisibilityType = Object.freeze({
 var navigationAboveLine = [
   {
     name: 'Home',
-    href: route('app-home'),
+    href: route('eda-dashboard'),
     icon: HomeIcon,
     visibility_type: VisibilityType.BOTH,
   },
@@ -376,7 +376,7 @@ export default function AppLayout({ title, children }) {
                   className="flex w-full shrink-0 flex-col items-start pt-8"
                   key="logo"
                 >
-                  <a href={route('app-home')} className="block w-full">
+                  <a href={route('eda-dashboard')} className="block w-full">
                     <img
                       className="max-w-full pb-2"
                       src="https://storage.googleapis.com/staging-sst-01-staging-static/edvise-logo.svg"

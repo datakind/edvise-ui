@@ -4,6 +4,7 @@
 
 ### Security
 - Pin the production and build container images to PHP 8.4.27.
+- Update npm and Composer dependencies to resolve high and critical audit advisories (dompurify, axios, vite, follow-redirects, league/commonmark, symfony/http-foundation, among others).
 
 ## [1.8.0] - 2026-09-16
 

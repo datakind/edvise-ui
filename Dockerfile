@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 # Stage: builder — PHP + Node (Vite) + Composer
 # -----------------------------------------------------------------------------
-FROM php:8.4-cli-alpine AS builder
+FROM php:8.4.27-cli-alpine AS builder
 RUN apk add --no-cache nodejs npm curl git unzip \
     libzip-dev icu-dev oniguruma-dev linux-headers sqlite-dev $PHPIZE_DEPS \
     && docker-php-ext-configure intl \
@@ -40,7 +40,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-scripts
 # -----------------------------------------------------------------------------
 # Stage: runtime — PHP-FPM + Nginx + Supervisor
 # -----------------------------------------------------------------------------
-FROM php:8.4-fpm-alpine AS runtime
+FROM php:8.4.27-fpm-alpine AS runtime
 
 RUN apk add --no-cache \
     nginx \

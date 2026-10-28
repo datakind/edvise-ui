@@ -9,7 +9,6 @@ import {
   DocumentIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import DangerAlert from '@/Components/DangerAlert';
 import Steppers from '@/Components/Steppers';
 import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
@@ -350,11 +349,11 @@ export default function FileUpload() {
               id="files-show"
             >
               <div className="flex justify-center pb-6">
-                <DangerAlert
-                  className="flex"
-                  errDict={fileStatus}
+                <Alert
+                  variant="danger"
                   mainMsg="There were errors with your submission:"
-                ></DangerAlert>
+                  msgDict={fileStatus}
+                />
               </div>
 
               {validationButton(files, fileStatus)}

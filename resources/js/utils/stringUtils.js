@@ -3,24 +3,36 @@
  */
 
 /**
- * Formats model names by removing underscores and capitalizing words
- * @param {string} str - The input string (e.g., "midway_uni_graduation_4y_end_of_first_year")
- * @returns {string} - Formatted string (e.g., "Midway Uni Graduation 4Y End Of First Year")
+ * Formats model names by removing underscores and capitalizing words.
+ * Time-limit units and FT/PT are uppercased to match the domain model
+ * (e.g. 4.5Y, 3Y, FT, PT).
+ *
+ * @param {string} str - The input string (e.g., "graduation_in_3y_ft_4.5Y_pt_checkpoint_2_core_terms")
+ * @returns {string} - Formatted string (e.g., "Graduation In 3Y FT 4.5Y PT Checkpoint 2 Core Terms")
  */
 export const formatModelName = str => {
   if (!str || typeof str !== 'string') return '';
 
-  return str
-    .split('_')
-    .map(word => {
-      // Skip empty words
-      if (!word) return '';
+  // UC stores decimals as 4d5y; API usually returns 4.5Y already.
+  const decoded = str.replace(/(\d+)d(\d+)([yYmM])/g, '$1.$2$3');
 
-      // Handle special cases like "4y" -> "4Y"
-      if (/^\d+[a-z]$/i.test(word)) {
+  return decoded
+    .split('_')
+    .filter(Boolean)
+    .map(word => {
+      // Decimal time limit: 4.5y / 4.5Y → 4.5Y
+      if (/^\d+\.\d+[a-zA-Z]$/.test(word)) {
+        return word.slice(0, -1) + word.slice(-1).toUpperCase();
+      }
+      // Integer time limit: 3y → 3Y
+      if (/^\d+[a-zA-Z]$/.test(word)) {
         return word.toUpperCase();
       }
-      // Handle acronyms (all caps words)
+      // Enrollment intensity: ft / pt → FT / PT
+      if (/^(ft|pt)$/i.test(word)) {
+        return word.toUpperCase();
+      }
+      // Preserve all-caps acronyms
       if (/^[A-Z]+$/.test(word)) {
         return word;
       }

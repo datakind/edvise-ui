@@ -28,6 +28,6 @@ class DeleteApiTokenTest extends TestCase
 
         $response = $this->delete('/user/api-tokens/'.$token->id);
 
-        $this->assertCount(0, $user->fresh()->tokens);
+        $this->assertCount(0, $user->refresh()->tokens);
     }
 }

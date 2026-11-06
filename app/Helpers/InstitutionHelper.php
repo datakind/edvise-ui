@@ -63,7 +63,7 @@ class InstitutionHelper
         if (is_array($institution) && ($institution['inst_id'] ?? '') !== '') {
             return [$institution['inst_id'], ''];
         }
-        if ($request->user()->access_type === 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type === 'DATAKINDER') {
             return ['', self::SET_INST_REQUIRED_MESSAGE];
         }
         $inst = $request->user()->inst_id ?? '';
@@ -108,7 +108,7 @@ class InstitutionHelper
     // Set session institution. Only DataKinders; they choose via Set Institution.
     public static function actAsInstitution(Request $request, string $inst_id): string
     {
-        if ($request->user()->access_type !== 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution.';
         }
         if ($inst_id === '') {
@@ -124,7 +124,7 @@ class InstitutionHelper
     // Toggle institution view (hide DataKinder-only chrome). Only DataKinders.
     public static function setInstitutionView(Request $request, bool $institution_view): string
     {
-        if ($request->user()->access_type !== 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type !== 'DATAKINDER') {
             return 'User must be DATAKINDER access type to set institution view.';
         }
         if ($institution_view) {

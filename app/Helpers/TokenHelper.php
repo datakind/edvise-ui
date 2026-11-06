@@ -42,7 +42,7 @@ class TokenHelper
             'X-API-KEY' => config('services.backend.api_key'),
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
-            'ENDUSER' => $request->user()->email,
+            'ENDUSER' => ($request->user() ?? abort(401))->email,
         ];
         $url = config('services.backend.url').'/token-from-api-key';
         $token_response = Http::withHeaders($headers)->post($url);

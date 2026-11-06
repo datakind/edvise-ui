@@ -34,9 +34,9 @@ class DataDictionarySeeder extends Seeder
                     ]
                 );
             }
-            $this->command->info('Data dictionary seeded successfully.');
+            $this->command?->info('Data dictionary seeded successfully.');
         } else {
-            $this->command->error('No data to seed.');
+            $this->command?->error('No data to seed.');
         }
     }
 

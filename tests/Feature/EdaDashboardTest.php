@@ -12,14 +12,16 @@ class EdaDashboardTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private const INST_ID = '942d4b0e12e74d2a91879508ae3cef7c';
+
     public function test_pdp_school_user_sees_eda_dashboard(): void
     {
         $user = User::factory()->create([
             'accepted_terms' => true,
             'access_type' => 'MODEL_OWNER',
-            'inst_id' => '942d4b0e12e74d2a91879508ae3cef7c',
+            'inst_id' => self::INST_ID,
         ]);
-        $this->fakeInstitution($user->inst_id, 'pdp-1', true);
+        $this->fakeInstitution(self::INST_ID, 'pdp-1', true);
 
         $response = $this->actingAs($user)->withSession([
             'api_jwt' => $this->jwt(),
@@ -35,9 +37,9 @@ class EdaDashboardTest extends TestCase
         $user = User::factory()->create([
             'accepted_terms' => true,
             'access_type' => 'MODEL_OWNER',
-            'inst_id' => '942d4b0e12e74d2a91879508ae3cef7c',
+            'inst_id' => self::INST_ID,
         ]);
-        $this->fakeInstitution($user->inst_id, null, false);
+        $this->fakeInstitution(self::INST_ID, null, false);
 
         $response = $this->actingAs($user)->withSession([
             'api_jwt' => $this->jwt(),

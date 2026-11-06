@@ -81,7 +81,7 @@ class ApiController extends Controller
             return response()->json(['error' => $tokErr], 401);
         }
 
-        if ($request->user()->access_type != 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type != 'DATAKINDER') {
             return response()->json(['error' => 'Only datakinders can perform this action'], 401);
         }
 
@@ -392,7 +392,7 @@ class ApiController extends Controller
 
     public function createModelApi(Request $request): JsonResponse|HttpClientResponse
     {
-        if ($request->user()->access_type != 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type != 'DATAKINDER') {
             return response()->json(['error' => 'Only datakinders can perform this action'], 401);
         }
         if ($request->input('name') == null || $request->input('name') == '') {
@@ -428,7 +428,7 @@ class ApiController extends Controller
                 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
                 'file_names_to_ids' => [],
                 'name' => $request->input('name'),
-                'created_by' => $request->user()->id,
+                'created_by' => ($request->user() ?? abort(401))->id,
                 'deleted' => false,
                 'completed' => false,
                 'deletion_request_time' => null,
@@ -534,7 +534,7 @@ class ApiController extends Controller
         }
         $data = $file->body();
         $rows = array_map('str_getcsv', explode("\n", $data));
-        $header = array_shift($rows);
+        $header = array_map('strval', array_shift($rows));
         $jsonArray = [];
         foreach ($rows as $row) {
             if (count($row) == count($header)) {
@@ -576,7 +576,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
@@ -621,7 +621,7 @@ class ApiController extends Controller
     {
         \Log::info('deleteModelRun called with model_name: '.$model_name.', run_id: '.$run_id);
 
-        if ($request->user()->access_type != 'DATAKINDER') {
+        if (($request->user() ?? abort(401))->access_type != 'DATAKINDER') {
             return response()->json(['error' => 'Only datakinders can perform this action'], 401);
         }
 
@@ -986,7 +986,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => $request->user()->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.

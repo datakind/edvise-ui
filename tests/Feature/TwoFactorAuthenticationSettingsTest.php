@@ -23,8 +23,8 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $response = $this->post('/user/two-factor-authentication');
 
-        $this->assertNotNull($user->fresh()->two_factor_secret);
-        $this->assertCount(8, $user->fresh()->recoveryCodes());
+        $this->assertNotNull($user->refresh()->two_factor_secret);
+        $this->assertCount(8, $user->refresh()->recoveryCodes());
     }
 
     public function test_recovery_codes_can_be_regenerated(): void
@@ -40,12 +40,12 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
         $this->post('/user/two-factor-authentication');
         $this->post('/user/two-factor-recovery-codes');
 
-        $user = $user->fresh();
+        $oldCodes = $user->refresh()->recoveryCodes();
 
         $this->post('/user/two-factor-recovery-codes');
 
-        $this->assertCount(8, $user->recoveryCodes());
-        $this->assertCount(8, array_diff($user->recoveryCodes(), $user->fresh()->recoveryCodes()));
+        $this->assertCount(8, $oldCodes);
+        $this->assertCount(8, array_diff($oldCodes, $user->refresh()->recoveryCodes()));
     }
 
     public function test_two_factor_authentication_can_be_disabled(): void
@@ -60,10 +60,10 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $this->post('/user/two-factor-authentication');
 
-        $this->assertNotNull($user->fresh()->two_factor_secret);
+        $this->assertNotNull($user->refresh()->two_factor_secret);
 
         $this->delete('/user/two-factor-authentication');
 
-        $this->assertNull($user->fresh()->two_factor_secret);
+        $this->assertNull($user->refresh()->two_factor_secret);
     }
 }

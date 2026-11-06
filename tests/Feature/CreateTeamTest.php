@@ -18,7 +18,7 @@ class CreateTeamTest extends TestCase
             'name' => 'Test Team',
         ]);
 
-        $this->assertCount(2, $user->fresh()->ownedTeams);
-        $this->assertEquals('Test Team', $user->fresh()->ownedTeams()->firstWhere('name', 'Test Team')->name);
+        $this->assertCount(2, $user->refresh()->ownedTeams);
+        $this->assertEquals('Test Team', $user->refresh()->ownedTeams()->where('name', 'Test Team')->firstOrFail()->name);
     }
 }

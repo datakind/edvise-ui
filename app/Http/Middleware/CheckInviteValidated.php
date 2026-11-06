@@ -16,7 +16,8 @@ class CheckInviteValidated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && ! Auth::user()->invite_validated) {
+        $user = Auth::user();
+        if ($user && ! $user->invite_validated) {
             // User is logged in but not invite-validated
             Auth::logout();
 

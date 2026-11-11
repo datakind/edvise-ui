@@ -19,6 +19,9 @@ class DataDictionarySeeder extends Seeder
         $data = $this->getDataDictionary();
         if (! empty($data)) {
             foreach ($data as $item) {
+                if (! is_array($item)) {
+                    throw new \UnexpectedValueException('Unexpected data dictionary item');
+                }
                 DataDictionary::updateOrCreate(
                     [
                         'description' => $item[4],
@@ -54,10 +57,13 @@ class DataDictionarySeeder extends Seeder
             'Authorization' => $token->access,
             'Cache-Control' => 'no-cache',
         ];
-        $response = Http::withHeaders($headers)->get(config('services.dk_api_suite.url').'/'.$endpoint);
+        $response = Http::withHeaders($headers)->get(config()->string('services.dk_api_suite.url').'/'.$endpoint);
 
         if ($response->successful()) {
             $data = $response->json();
+            if (! is_array($data)) {
+                throw new \Exception('Unexpected data dictionary response: '.$response->body());
+            }
             foreach ($data as &$item) {
                 if (is_string($item)) {
                     $item = $this->parseComplexString($item);

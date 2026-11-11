@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InstitutionHelper;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class DataDictionaryController extends Controller
 {
     public function show(Request $request): InertiaResponse
     {
-        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
+        $inst_id = InstitutionHelper::requestInstId($request);
 
         Log::info('DataDictionary: inst_id', ['inst_id' => $inst_id]);
 
@@ -39,7 +40,7 @@ class DataDictionaryController extends Controller
             ]);
         }
 
-        $validModels = collect($models)->filter(fn ($m) => ! ($m['archived'] ?? false))->values();
+        $validModels = collect($models)->map(fn ($m) => is_array($m) ? $m : throw new \UnexpectedValueException('Unexpected model in backend response'))->filter(fn ($m) => ! ($m['archived'] ?? false))->values();
         $modelNames = $validModels->pluck('name')->all();
         $validModel = $validModels->firstWhere('name', $request->query('model')) ?? $validModels->first();
         if (! $validModel) {
@@ -64,7 +65,7 @@ class DataDictionaryController extends Controller
             ]);
         }
 
-        $runsResp = $api->modelRunsWithContext($request, $modelName);
+        $runsResp = $api->modelRunsWithContext($request, is_scalar($modelName) ? (string) $modelName : throw new \UnexpectedValueException('Unexpected model name in backend response'));
         $runs = $this->responseData($runsResp);
         Log::info('DataDictionary: runs', ['count' => is_array($runs) ? count($runs) : 0, 'raw_status' => $runsResp->status()]);
 
@@ -77,20 +78,23 @@ class DataDictionaryController extends Controller
             ]);
         }
 
-        $mostRecentRun = $runs[0];
+        $mostRecentRun = is_array($runs[0] ?? null) ? $runs[0] : [];
         $run_id = $mostRecentRun['run_id'] ?? null;
         $model_run_id = $mostRecentRun['model_run_id'] ?? null;
         Log::info('DataDictionary: most recent run', ['run_id' => $run_id, 'model_run_id' => $model_run_id]);
 
         $features = [];
         if ($model_run_id) {
-            $featuresResp = $api->getTopFeaturesWithContext($request, (string) $model_run_id);
+            $featuresResp = $api->getTopFeaturesWithContext($request, is_scalar($model_run_id) ? (string) $model_run_id : throw new \UnexpectedValueException('Unexpected model_run_id in backend response'));
             $rawFeatures = $this->responseData($featuresResp);
             if (is_array($rawFeatures)) {
                 $seen = [];
                 foreach ($rawFeatures as $feature) {
+                    if (! is_array($feature)) {
+                        throw new \UnexpectedValueException('Unexpected feature in backend response');
+                    }
                     $name = $feature['readable_feature_name'] ?? $feature['feature_readable_name'] ?? null;
-                    if ($name && ! isset($seen[$name])) {
+                    if ((is_int($name) || is_string($name)) && $name && ! isset($seen[$name])) {
                         $seen[$name] = true;
                         $features[] = $feature;
                     }
@@ -122,13 +126,17 @@ class DataDictionaryController extends Controller
                 return null;
             }
 
-            return $response->getData(true);
+            $data = $response->getData(true);
+
+            return is_array($data) ? $data : null;
         }
 
         if ($response->status() !== 200) {
             return null;
         }
 
-        return $response->json();
+        $data = $response->json();
+
+        return is_array($data) ? $data : null;
     }
 }

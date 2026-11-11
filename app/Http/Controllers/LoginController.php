@@ -23,7 +23,7 @@ class LoginController extends Controller
     public function redirectToGoogle(Request $request)
     {
         // Build redirect URL dynamically from current request base URL
-        $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
+        $redirectPath = config()->string('services.google.redirect_path', '/auth/google/callback');
         $redirectUrl = $request->root().$redirectPath;
 
         return $this->socialiteDriver('google', $redirectUrl)->redirect();
@@ -38,7 +38,7 @@ class LoginController extends Controller
     {
         try {
             // Build redirect URL dynamically from current request base URL
-            $redirectPath = config('services.google.redirect_path', '/auth/google/callback');
+            $redirectPath = config()->string('services.google.redirect_path', '/auth/google/callback');
             $redirectUrl = $request->root().$redirectPath;
 
             // Retrieve the user from Google
@@ -97,7 +97,7 @@ class LoginController extends Controller
     public function redirectToAzure(Request $request)
     {
         // Build redirect URL dynamically from current request base URL
-        $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
+        $redirectPath = config()->string('services.azure.redirect_path', '/auth/azure/callback');
         $redirectUrl = $request->root().$redirectPath;
 
         return $this->socialiteDriver('azure', $redirectUrl)->redirect();
@@ -112,7 +112,7 @@ class LoginController extends Controller
     {
         try {
             // Build redirect URL dynamically from current request base URL
-            $redirectPath = config('services.azure.redirect_path', '/auth/azure/callback');
+            $redirectPath = config()->string('services.azure.redirect_path', '/auth/azure/callback');
             $redirectUrl = $request->root().$redirectPath;
 
             // Retrieve the user from Azure

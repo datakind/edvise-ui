@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InstitutionHelper;
 use App\Models\DataDictionary;
 use App\Traits\UsesApi;
 use Illuminate\Http\Client\Response as HttpClientResponse;
@@ -72,7 +73,7 @@ class ApiController extends Controller
 
     // Constructs a query for Datakinder cases that does not retrieve institution info.
     /**
-     * @param  array<string, mixed>|null  $req_body
+     * @param  array<mixed>|null  $req_body
      */
     public function constructDatakinderRequest(Request $request, string $url_piece, string $method, ?array $req_body): JsonResponse|HttpClientResponse
     {
@@ -90,7 +91,7 @@ class ApiController extends Controller
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $url = config('services.backend.url').$url_piece;
+        $url = config()->string('services.backend.url').$url_piece;
         $resp = null;
         if ($method == 'GET') {
             $resp = Http::withHeaders($headers)->get($url);
@@ -114,12 +115,12 @@ class ApiController extends Controller
             if ($expired = self::expiredCredentialsResponse($request, $resp)) {
                 return $expired;
             }
-            $errMsg = json_decode($resp->body());
+            $errMsg = $resp->json();
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());
             }
 
-            return response()->json(['error' => $errMsg->detail], $resp->status());
+            return response()->json(['error' => is_array($errMsg) ? ($errMsg['detail'] ?? null) : null], $resp->status());
         }
 
         return $resp;
@@ -128,11 +129,17 @@ class ApiController extends Controller
     public function addDatakinderApi(Request $request): JsonResponse|HttpClientResponse
     {
         $emails_list = $request->input('emails');
-        if ($emails_list == null || count($emails_list) == 0) {
+        if ($emails_list == null) {
             return response()->json(['error' => 'At least one email required.'], 400);
+        }
+        if (! is_array($emails_list)) {
+            throw new \InvalidArgumentException('emails must be an array');
         }
 
         foreach ($emails_list as $email) {
+            if (! is_string($email)) {
+                throw new \InvalidArgumentException('emails must be strings');
+            }
             $res = UserHelper::checkEmailExists($email);
             if ($res != '') {
                 return response()->json(['error' => $email.' error: '.$res], 400);
@@ -151,7 +158,7 @@ class ApiController extends Controller
         if ($request->input('name') == null || $request->input('name') == '') {
             return response()->json(['error' => 'Name required.'], 400);
         }
-        if (! preg_match('/^[A-Za-z0-9&_ -]*$/', $request->input('name'))) {
+        if (! preg_match('/^[A-Za-z0-9&_ -]*$/', $request->string('name')->value())) {
             return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, & and spaces.'], 400);
         }
         $post_request_body = [
@@ -236,11 +243,11 @@ class ApiController extends Controller
     private static function institutionBackendTimeoutSeconds(string $urlPiece): int
     {
         if (self::isValidateUploadRequest($urlPiece)) {
-            $seconds = config('services.backend.http_validate_timeout_seconds');
+            $seconds = config()->integer('services.backend.http_validate_timeout_seconds');
 
             return $seconds >= 1 ? $seconds : self::BACKEND_VALIDATE_TIMEOUT_FALLBACK_SECONDS;
         }
-        $seconds = config('services.backend.http_default_timeout_seconds');
+        $seconds = config()->integer('services.backend.http_default_timeout_seconds');
 
         return $seconds >= 1 ? $seconds : self::BACKEND_DEFAULT_TIMEOUT_FALLBACK_SECONDS;
     }
@@ -253,7 +260,7 @@ class ApiController extends Controller
     {
         [$tok, $tokErr] = TokenHelper::GetToken($request);
 
-        \Log::info('constructInstRequest - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('constructInstRequest - Institution ID: '.InstitutionHelper::requestInstId($request));
         \Log::info('constructInstRequest - Token Error: '.$tokErr);
         \Log::info('constructInstRequest - URL piece: '.$url_piece);
         \Log::info('constructInstRequest - Method: '.$method);
@@ -269,7 +276,7 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        $url = config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$url_piece;
+        $url = config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$url_piece;
         \Log::info('constructInstRequest - Full URL being called: '.$url);
         \Log::info('constructInstRequest - Query parameters: '.json_encode($request->query()));
         $http = Http::withHeaders($headers)->timeout(self::institutionBackendTimeoutSeconds($url_piece));
@@ -298,12 +305,12 @@ class ApiController extends Controller
             if ($expired = self::expiredCredentialsResponse($request, $resp)) {
                 return $expired;
             }
-            $errMsg = json_decode($resp->body());
+            $errMsg = $resp->json();
             if ($errMsg == null) {
                 return response()->json(['error' => 'Error code: '.$resp->status()], $resp->status());
             }
 
-            return response()->json(['error' => $errMsg->detail], $resp->status());
+            return response()->json(['error' => is_array($errMsg) ? ($errMsg['detail'] ?? null) : null], $resp->status());
         }
 
         return $resp;
@@ -380,7 +387,7 @@ class ApiController extends Controller
 
         if (ApiController::isLocalRequest()) {
             return response()->json([
-                'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
+                'inst_id' => InstitutionHelper::requestInstId($request),
                 'name' => $request->input('name'),
                 'state' => $request->input('state'),
                 'pdp_id' => $request->input('pdp_id'),
@@ -398,7 +405,7 @@ class ApiController extends Controller
         if ($request->input('name') == null || $request->input('name') == '') {
             return response()->json(['error' => 'Name required.'], 400);
         }
-        if (! preg_match('/^[A-Za-z0-9_ -]*$/', $request->input('name'))) {
+        if (! preg_match('/^[A-Za-z0-9_ -]*$/', $request->string('name')->value())) {
             return response()->json(['error' => 'Name must only include alphanumeric characters, -, _, and spaces.'], 400);
         }
         $post_request_body = [
@@ -425,7 +432,7 @@ class ApiController extends Controller
 
             return response()->json([
                 'batch_id' => '1bc27bbe2a124dda983d156fafcca649',
-                'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
+                'inst_id' => InstitutionHelper::requestInstId($request),
                 'file_names_to_ids' => [],
                 'name' => $request->input('name'),
                 'created_by' => ($request->user() ?? abort(401))->id,
@@ -456,7 +463,7 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json(['name' => 'foo_file.csv', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
+            return response()->json(['name' => 'foo_file.csv', 'inst_id' => InstitutionHelper::requestInstId($request), 'file_types' => ['UNKNOWN'], 'source' => 'MANUAL_UPLOAD'], 200);
         }
 
         return ApiController::constructInstRequestForBrowser($request, '/input/validate-upload/'.urlencode($filename), 'POST', null);
@@ -576,30 +583,33 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => 'latest_enrollment_model', 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => InstitutionHelper::requestInstId($request), 'm_name' => 'latest_enrollment_model', 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
         // E.g. convert user uuid to name and convert the timestamp to human readable string.
         if ($result instanceof HttpClientResponse && $result->status() == 200) {
             $output = $result->json();
-            if ($output != null) {
+            if (is_array($output) && $output != []) {
                 $collected_user_ids = [];
                 foreach ($output as $run) {
+                    if (! is_array($run)) {
+                        throw new \UnexpectedValueException('Unexpected model run in backend response');
+                    }
                     array_push($collected_user_ids, $run['created_by']);
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($output as $key => $run) {
                     $user_name = $run['created_by'];
-                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
+                    if ($user_id_map && (is_int($user_name) || is_string($user_name)) && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
-                    $time = ApiController::convertDateToReadable($run['triggered_at']);
+                    $time = ApiController::convertDateToReadable(is_string($run['triggered_at']) ? $run['triggered_at'] : throw new \UnexpectedValueException('Unexpected triggered_at in backend response'));
                     $run['created_by'] = $user_name;
                     $run['triggered_at'] = $time;
                     // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                     if ($run['completed'] && $run['output_filename'] != null && $run['output_filename'] != '') {
-                        $download_url = ApiController::downloadInfData($request, $run['output_filename']);
+                        $download_url = ApiController::downloadInfData($request, is_string($run['output_filename']) ? $run['output_filename'] : throw new \UnexpectedValueException('Unexpected output_filename in backend response'));
                         if ($download_url instanceof HttpClientResponse && $download_url->status() == 200) {
                             $run['output_file_link'] = $download_url->json();
                         } else {
@@ -655,10 +665,13 @@ class ApiController extends Controller
         $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
         if ($result instanceof HttpClientResponse && $result->status() == 200) {
             $output = $result->json();
-            if ($output != null) {
-                $batches = $output['batches'];
+            if (is_array($output) && $output != []) {
+                $batches = is_array($output['batches']) ? $output['batches'] : throw new \UnexpectedValueException('Unexpected batches in backend response');
                 $collected_user_ids = [];
                 foreach ($batches as $batch) {
+                    if (! is_array($batch)) {
+                        throw new \UnexpectedValueException('Unexpected batch in backend response');
+                    }
                     if ($batch['updated_by'] == null) {
                         array_push($collected_user_ids, $batch['created_by']);
                     } else {
@@ -668,11 +681,11 @@ class ApiController extends Controller
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($batches as $key => $batch) {
                     $user_name = ($batch['updated_by'] == null) ? $batch['created_by'] : $batch['created_by'];
-                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
+                    if ($user_id_map && (is_int($user_name) || is_string($user_name)) && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
                     $time_in = ($batch['updated_at'] == null) ? $batch['created_at'] : $batch['updated_at'];
-                    $time = ApiController::convertDateToReadable($time_in);
+                    $time = ApiController::convertDateToReadable(is_string($time_in) ? $time_in : throw new \UnexpectedValueException('Unexpected batch timestamp in backend response'));
                     $batch['updated_by'] = $user_name;
                     $batch['updated_at'] = $time;
                     $batches[$key] = $batch;
@@ -691,13 +704,13 @@ class ApiController extends Controller
     public function edaDashboard(Request $request): RedirectResponse|InertiaResponse
     {
 
-        $institution = $request->attributes->get('institution') ?? [];
-        if (empty($institution['pdp_id'])) {
+        $institution = $request->attributes->get('institution');
+        if (! is_array($institution) || empty($institution['pdp_id'])) {
             return redirect()->route('home');
         }
 
         $hasBatches = false;
-        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
+        $inst_id = InstitutionHelper::requestInstId($request);
         if ($request->user() && $inst_id) {
             $result = ApiController::constructInstRequest($request, '/input', 'GET', null);
             if ($result instanceof HttpClientResponse && $result->status() === 200) {
@@ -731,7 +744,7 @@ class ApiController extends Controller
             'Cache-Control' => 'no-cache',
         ];
 
-        return Http::withHeaders($headers)->get(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').'/'.$endpoint.'?'.$query);
+        return Http::withHeaders($headers)->get(config()->string('services.dk_api_suite.url').'/'.config()->string('services.dk_api_suite.version').'/'.$endpoint.'?'.$query);
     }
 
     // Gets support overview data for a given run
@@ -813,7 +826,7 @@ class ApiController extends Controller
 
         $externalUrl = '/inference/support-overview/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -855,10 +868,10 @@ class ApiController extends Controller
         // Process the response to add output_file_link like modelRuns does
         if ($result instanceof HttpClientResponse && $result->status() == 200) {
             $output = $result->json();
-            if ($output != null) {
+            if (is_array($output) && $output != []) {
                 // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                 if ($output['completed'] && $output['output_filename'] != null && $output['output_filename'] != '') {
-                    $download_url = ApiController::downloadInfData($request, $output['output_filename']);
+                    $download_url = ApiController::downloadInfData($request, is_string($output['output_filename']) ? $output['output_filename'] : throw new \UnexpectedValueException('Unexpected output_filename in backend response'));
                     if ($download_url instanceof HttpClientResponse && $download_url->status() == 200) {
                         $output['output_file_link'] = $download_url->json();
                     } else {
@@ -880,7 +893,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/training/model-cards/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         $response = ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
 
@@ -976,7 +989,7 @@ class ApiController extends Controller
         \Log::info('Production request - Institution ID: '.$inst_id);
         $externalUrl = '/inference/top-features/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.$inst_id.$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -986,30 +999,33 @@ class ApiController extends Controller
     {
         if (ApiController::isLocalRequest()) {
 
-            return response()->json([['run_id' => '123', 'inst_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null, 'm_name' => $model_name, 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
+            return response()->json([['run_id' => '123', 'inst_id' => InstitutionHelper::requestInstId($request), 'm_name' => $model_name, 'created_by' => ($request->user() ?? abort(401))->name, 'triggered_at' => '02/02/2025 19:48:12', 'batch_name' => 'foo_batch', 'completed' => true, 'model_run_id' => 'mock-model-run-123', 'model_version' => '1', 'output_file_link' => 'https://www.google.com']], 200);
         }
         $result = ApiController::constructInstRequest($request, '/models/'.urlencode($model_name).'/runs', 'GET', null);
         // For simplicity, we can make the conversions here as the frontend doesn't want to or need to know the details.
         // E.g. convert user uuid to name and convert the timestamp to human readable string.
         if ($result instanceof HttpClientResponse && $result->status() == 200) {
             $output = $result->json();
-            if ($output != null) {
+            if (is_array($output) && $output != []) {
                 $collected_user_ids = [];
                 foreach ($output as $run) {
+                    if (! is_array($run)) {
+                        throw new \UnexpectedValueException('Unexpected model run in backend response');
+                    }
                     array_push($collected_user_ids, $run['created_by']);
                 }
                 $user_id_map = UserHelper::getNames($collected_user_ids);
                 foreach ($output as $key => $run) {
                     $user_name = $run['created_by'];
-                    if ($user_id_map && ($user_id_map[$user_name] ?? null) != null) {
+                    if ($user_id_map && (is_int($user_name) || is_string($user_name)) && ($user_id_map[$user_name] ?? null) != null) {
                         $user_name = $user_id_map[$user_name];
                     }
-                    $time = ApiController::convertDateToReadable($run['triggered_at']);
+                    $time = ApiController::convertDateToReadable(is_string($run['triggered_at']) ? $run['triggered_at'] : throw new \UnexpectedValueException('Unexpected triggered_at in backend response'));
                     $run['created_by'] = $user_name;
                     $run['triggered_at'] = $time;
                     // Note that completed indicates the run was completed, output_valid indicates whether a Datakinder has formally approved the file.
                     if ($run['completed'] && $run['output_filename'] != null && $run['output_filename'] != '') {
-                        $download_url = ApiController::downloadInfData($request, $run['output_filename']);
+                        $download_url = ApiController::downloadInfData($request, is_string($run['output_filename']) ? $run['output_filename'] : throw new \UnexpectedValueException('Unexpected output_filename in backend response'));
                         if ($download_url instanceof HttpClientResponse && $download_url->status() == 200) {
                             $run['output_file_link'] = $download_url->json();
                         } else {
@@ -1149,10 +1165,10 @@ class ApiController extends Controller
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/training/feature_importance/'.$run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1168,14 +1184,14 @@ class ApiController extends Controller
             return response()->json([
                 'message' => 'Batch deleted successfully',
                 'batch_id' => $batch_id,
-                'institution_id' => ($request->attributes->get('institution') ?? [])['inst_id'] ?? null,
+                'institution_id' => InstitutionHelper::requestInstId($request),
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/batch/'.$batch_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'DELETE', null);
     }
@@ -1204,10 +1220,10 @@ class ApiController extends Controller
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/training/feature_importance/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1227,10 +1243,10 @@ class ApiController extends Controller
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/training/confusion_matrix/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1271,10 +1287,10 @@ class ApiController extends Controller
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/training/roc_curve/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1333,10 +1349,10 @@ class ApiController extends Controller
             ], 200);
         }
 
-        \Log::info('Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+        \Log::info('Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
         $externalUrl = '/training/support-overview/'.$model_run_id;
         \Log::info('Production request - External API URL: '.$externalUrl);
-        \Log::info('Production request - Full external URL: '.config('services.backend.url').'/institutions/'.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null).$externalUrl);
+        \Log::info('Production request - Full external URL: '.config()->string('services.backend.url').'/institutions/'.InstitutionHelper::requestInstId($request).$externalUrl);
 
         return ApiController::constructInstRequest($request, $externalUrl, 'GET', null);
     }
@@ -1370,7 +1386,7 @@ class ApiController extends Controller
 
             // Handle production - use constructInstRequest
 
-            \Log::info('updateBatch - Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+            \Log::info('updateBatch - Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
             $externalUrl = '/batch/'.$batch_id;
             \Log::info('updateBatch - External API URL: '.$externalUrl);
 
@@ -1404,7 +1420,7 @@ class ApiController extends Controller
 
             \Log::info('getEdaData called with inst_id: '.$inst_id.', batch_id: '.$batch_id);
 
-            \Log::info('getEdaData - Production request - Institution ID: '.(($request->attributes->get('institution') ?? [])['inst_id'] ?? null));
+            \Log::info('getEdaData - Production request - Institution ID: '.InstitutionHelper::requestInstId($request));
             $externalUrl = '/batch/'.$batch_id.'/eda';
             \Log::info('getEdaData - External API URL: '.$externalUrl);
 

@@ -72,11 +72,10 @@ class InviteController extends Controller
      */
     public function showRegistrationForm(): InertiaResponse|RedirectResponse
     {
-        if (! session('valid_invite')) {
+        $invite = session('valid_invite');
+        if (! $invite instanceof Invite) {
             return redirect()->route('invite.validation');
         }
-
-        $invite = session('valid_invite');
 
         // Check if this is an SSO user by looking at the existing user record
         $existingUser = User::where('email', $invite->email)->first();
@@ -98,11 +97,10 @@ class InviteController extends Controller
     public function register(Request $request): RedirectResponse
     {
 
-        if (! session('valid_invite')) {
+        $invite = session('valid_invite');
+        if (! $invite instanceof Invite) {
             return redirect()->route('invite.validation');
         }
-
-        $invite = session('valid_invite');
 
         // Check if this is an SSO user by looking at existing user record or session
         $existingUser = User::where('email', $invite->email)->first();
@@ -129,7 +127,7 @@ class InviteController extends Controller
 
                 // Only update password if not an SSO user
                 if (! $isSsoUser) {
-                    $updateData['password'] = Hash::make($request->password);
+                    $updateData['password'] = Hash::make($request->string('password')->value());
                 }
 
                 $existingUser->update($updateData);
@@ -167,14 +165,14 @@ class InviteController extends Controller
 
         // Set password: required for non-SSO; use random placeholder for SSO (column is NOT NULL)
         if (! $isSsoUser) {
-            $userData['password'] = Hash::make($request->password);
+            $userData['password'] = Hash::make($request->string('password')->value());
         } else {
             $userData['password'] = Hash::make(Str::random(64));
         }
 
         // Add SSO provider IDs if available
-        if ($isSsoUser && session('sso_user_data')) {
-            $ssoData = session('sso_user_data');
+        $ssoData = session('sso_user_data');
+        if ($isSsoUser && is_array($ssoData) && $ssoData) {
             if (isset($ssoData['google_id'])) {
                 $userData['google_id'] = $ssoData['google_id'];
             }
@@ -227,7 +225,7 @@ class InviteController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'institution_id' => $request->institution_id,
-            'expires_at' => now()->addDays($request->expires_in_days ?? 7),
+            'expires_at' => now()->addDays(is_numeric($request->expires_in_days) ? (int) $request->expires_in_days : 7),
             'invited_by' => Auth::id(),
         ]);
 
@@ -259,7 +257,7 @@ class InviteController extends Controller
             $totalInvites = Invite::count();
             $perPage = max($totalInvites, 1);
         } else {
-            $perPage = (int) $perPageParam;
+            $perPage = is_numeric($perPageParam) ? (int) $perPageParam : 0;
             if ($perPage <= 0) {
                 $perPage = 20;
             }

@@ -14,6 +14,8 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\SocialiteServiceProvider;
 
+$package = json_decode(file_get_contents(base_path('package.json')) ?: '', true, 512, JSON_THROW_ON_ERROR);
+
 return [
 
     /*
@@ -28,7 +30,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Edvise'),
-    'version' => json_decode(file_get_contents(base_path('package.json')) ?: '', true, 512, JSON_THROW_ON_ERROR)['version'],
+    'version' => is_array($package) ? $package['version'] ?? null : null,
 
     /*
     |--------------------------------------------------------------------------

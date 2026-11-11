@@ -13,20 +13,22 @@ class TokenHelper
     // Get the Backend API token for that user, saving it in the session or regenerating if it is close to expiration.
     // The return is an array of two elements, the token, and an error message if any.
     /**
-     * @return array{0: mixed, 1: string}
+     * @return array{0: string, 1: string}
      */
     public static function getToken(Request $request): array
     {
         $backend_tok = $request->session()->get('api_jwt');
+        $backend_tok = is_string($backend_tok) ? $backend_tok : '';
 
         // Schedule the refresh off the token's own exp claim rather than a local clock, so
         // this cannot drift from the backend's ACCESS_TOKEN_EXPIRE_MINUTES. The signature is
         // not verifiable here (no shared secret) and is not trusted — the backend checks it.
-        $payload = explode('.', (string) $backend_tok)[1] ?? '';
-        $exp = json_decode(base64_decode(strtr($payload, '-_', '+/')) ?: '{}', true)['exp'] ?? null;
+        $payload = explode('.', $backend_tok)[1] ?? '';
+        $claims = json_decode(base64_decode(strtr($payload, '-_', '+/')) ?: '{}', true);
+        $exp = is_array($claims) ? ($claims['exp'] ?? null) : null;
 
         // A missing or unreadable exp means we cannot tell how long the token is good for.
-        if ($exp === null || $exp - time() < self::REFRESH_LEEWAY_SECONDS) {
+        if ($exp === null || (is_numeric($exp) ? $exp : throw new \UnexpectedValueException('Unexpected exp claim in API token')) - time() < self::REFRESH_LEEWAY_SECONDS) {
             return TokenHelper::makeTokenAPICall($request);
         }
 
@@ -34,24 +36,25 @@ class TokenHelper
     }
 
     /**
-     * @return array{0: mixed, 1: string}
+     * @return array{0: string, 1: string}
      */
     public static function makeTokenAPICall(Request $request): array
     {
         $headers = [
-            'X-API-KEY' => config('services.backend.api_key'),
+            'X-API-KEY' => config()->string('services.backend.api_key'),
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
             'ENDUSER' => ($request->user() ?? abort(401))->email,
         ];
-        $url = config('services.backend.url').'/token-from-api-key';
+        $url = config()->string('services.backend.url').'/token-from-api-key';
         $token_response = Http::withHeaders($headers)->post($url);
 
         if (! $token_response->ok()) {
             return ['', 'Invalid API Key'];
         }
 
-        $tok = json_decode($token_response)->access_token;
+        $tok = $token_response->json('access_token');
+        $tok = is_string($tok) ? $tok : '';
 
         session(['api_jwt' => $tok]);
 

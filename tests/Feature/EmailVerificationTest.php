@@ -47,6 +47,6 @@ class EmailVerificationTest extends TestCase
 
         $this->actingAs($user)->get($verificationUrl);
 
-        $this->assertFalse($user->fresh()->hasVerifiedEmail());
+        $this->assertFalse($user->refresh()->hasVerifiedEmail());
     }
 }

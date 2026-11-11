@@ -71,7 +71,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
+    ($request->user() ?? abort(401))->sendEmailVerificationNotification();
 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
@@ -143,7 +143,7 @@ Route::middleware(['auth'])->get('/terms/prompt', function () {
 })->name('terms.prompt');
 
 Route::middleware(['auth'])->post('/terms/accept', function () {
-    auth()->user()->update(['accepted_terms' => true]);
+    (auth()->user() ?? abort(401))->update(['accepted_terms' => true]);
 
     return redirect()->route('model-run-history');
 })->name('terms.accept');

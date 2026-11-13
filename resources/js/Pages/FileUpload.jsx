@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import AppLayout from '@/Layouts/AppLayout';
@@ -9,9 +9,7 @@ import {
   DocumentIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import DangerAlert from '@/Components/DangerAlert';
 import Steppers from '@/Components/Steppers';
-import classNames from 'classnames';
 import BigSuccessAlert from '@/Components/BigSuccessAlert';
 import Alert from '@/Components/Alert';
 import Spinner from '@/Components/Spinner';
@@ -57,11 +55,8 @@ export default function FileUpload() {
   const [currentStep, setCurrentStep] = useState(1);
   const [processing, setProcessing] = useState(false);
   const [batchCreationResult, setBatchCreationResult] = useState('');
-  const [startPrediction, setStartPrediction] = useState(false);
   const [validationResults, setValidationResults] = useState({});
   const [batchName, setBatchName] = useState('');
-  const [modelsList, setModelsList] = useState([]);
-  const [predictionResults, setPredictionResults] = useState(null);
   /** Sum of loaded bytes per server-side file key during parallel PUTs to GCS. */
   const uploadLoadedByKeyRef = useRef({});
   const [uploadAggregatePct, setUploadAggregatePct] = useState(0);
@@ -69,23 +64,10 @@ export default function FileUpload() {
   const [uploadPutsFinished, setUploadPutsFinished] = useState(0);
   const [uploadBatchFileCount, setUploadBatchFileCount] = useState(0);
 
-  useEffect(() => {
-    axios
-      .get('/models-api')
-      .then(res => {
-        setModelsList(res.data);
-      })
-      .catch(() => {
-        // TODO bubble out these errors
-        console.log('error with model fetch');
-      });
-  }, []);
-
   const steps = [
     { label: 'Upload data', step: 1 },
     { label: 'Data validation', step: 2 },
     { label: 'Save', step: 3 },
-    { label: 'Start prediction', step: 4 },
   ];
 
   const renderProcessing = () => {
@@ -108,33 +90,7 @@ export default function FileUpload() {
     );
   };
 
-  const renderPredictionResults = () => {
-    if (predictionResults == null) {
-      return <></>;
-    }
-    if (predictionResults['error']) {
-      let msg =
-        '[ERROR] Prediction trigger failed: ' + predictionResults['error'];
-      return (
-        <div className="flex flex-col pr-24 pl-24">
-          <Alert variant="danger" mainMsg={msg} />
-        </div>
-      );
-    }
-    return (
-      <div className="flex flex-col gap-y-24 pr-24 pl-24">
-        <BigSuccessAlert
-          mainMsg="Prediction initiated!"
-          msgDetails={
-            "You will get an email notifying you of the new dashboard results, once they're ready. " +
-            predictionResults['ok']
-          }
-        ></BigSuccessAlert>
-      </div>
-    );
-  };
-
-  const renderBatchCreationResults = (batchCreationResult, startPrediction) => {
+  const renderBatchCreationResults = batchCreationResult => {
     if (batchCreationResult == '') {
       return <></>;
     }
@@ -151,27 +107,11 @@ export default function FileUpload() {
         </div>
       );
     }
-    if (!startPrediction) {
-      return (
-        <div className="flex flex-col gap-y-24 pr-24 pl-24">
-          <BigSuccessAlert mainMsg="Batch creation successful!"></BigSuccessAlert>
-          <div className="flex w-full items-end justify-end">
-            <button
-              id="button_content"
-              onClick={() => setCurrentStep(4)}
-              className={classNames(
-                'opacity-100',
-                'mb-4 flex justify-center rounded-full bg-[#f79222] px-3 px-6 py-2 text-black',
-              )}
-            >
-              Start Prediction
-            </button>
-          </div>
-        </div>
-      );
-    }
-    setCurrentStep(4);
-    return <></>;
+    return (
+      <div className="flex flex-col gap-y-24 pr-24 pl-24">
+        <BigSuccessAlert mainMsg="Batch creation successful!"></BigSuccessAlert>
+      </div>
+    );
   };
 
   const renderValidationResults = validationResults => {
@@ -350,11 +290,11 @@ export default function FileUpload() {
               id="files-show"
             >
               <div className="flex justify-center pb-6">
-                <DangerAlert
-                  className="flex"
-                  errDict={fileStatus}
+                <Alert
+                  variant="danger"
                   mainMsg="There were errors with your submission:"
-                ></DangerAlert>
+                  msgDict={fileStatus}
+                />
               </div>
 
               {validationButton(files, fileStatus)}
@@ -456,8 +396,7 @@ export default function FileUpload() {
     }
   };
 
-  // Pass in startPrediction as a bool.
-  const createBatch = startPred => {
+  const createBatch = () => {
     setBatchCreationResult('');
     let batchConstructed = batchName;
     if (batchConstructed == '') {
@@ -487,7 +426,6 @@ export default function FileUpload() {
       .then(() => {
         setBatchName(batchConstructed);
         setBatchCreationResult('ok');
-        setStartPrediction(startPred);
       })
       .catch(e => {
         let err = '';
@@ -497,7 +435,6 @@ export default function FileUpload() {
           err = JSON.stringify(e);
         }
         setBatchCreationResult('Error: ' + err);
-        setStartPrediction(startPred);
       });
   };
 
@@ -645,108 +582,11 @@ export default function FileUpload() {
             Back
           </Link>
           <div className="-mr-24 flex">
-            <button
-              className="btn btn-primary mr-4"
-              onClick={() => {
-                // Also start the prediction so set it to true.
-                createBatch(true);
-              }}
-            >
-              Save and start prediction
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                // We don't start the prediction so set it to false.
-                createBatch(false);
-              }}
-            >
+            <button className="btn btn-primary" onClick={() => createBatch()}>
               Save
             </button>
           </div>
         </div>
-      </div>
-    );
-  };
-
-  const triggerPredictions = event => {
-    event.preventDefault();
-    // TODO: enable some way to indicate if it is pdp or not? is that required.
-    if (batchName == '') {
-      let res = {};
-      res['error'] = 'No batch set.';
-      setPredictionResults(res);
-      return;
-    }
-    if (event.target.elements.model_name.value == '') {
-      let res = {};
-      res['error'] = 'No model set.';
-      setPredictionResults(res);
-      return;
-    }
-    axios({
-      method: 'post',
-      url: '/start-prediction/' + event.target.elements.model_name.value,
-      data: {
-        batch_name: batchName,
-        is_pdp: true,
-      },
-    })
-      .then(res => {
-        let result = {};
-        result['ok'] = 'Run ID: ' + res.data.run_id;
-        setPredictionResults(result);
-      })
-      .catch(err => {
-        let res = {};
-        res['error'] = JSON.stringify(err);
-        setPredictionResults(res);
-      });
-    return;
-  };
-
-  const renderStartPrediction = () => {
-    return (
-      <div className="flex w-full flex-col items-center justify-center">
-        <div className="flex">
-          For the most up-to-date SST predictions we recommend starting a new
-          prediction for each semester.
-        </div>
-        <div className="flex pb-6">
-          Select the model that you would like to run a prediction on.
-        </div>
-        <form onSubmit={triggerPredictions}>
-          <div className="flex py-3 text-base font-light">
-            Please select a model:
-          </div>
-          {modelsList == undefined || modelsList.length == 0 ? (
-            <select
-              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-              id="model_name"
-            >
-              <option disabled value="">
-                No Models exist
-              </option>
-            </select>
-          ) : (
-            <select
-              className="mb-4 flex w-full rounded-full border border-gray-200 bg-white px-6 py-2 text-gray-700 focus:border-gray-500 focus:outline-none"
-              id="model_name"
-            >
-              {modelsList.map(m => (
-                <option key={m.name}>{m.name}</option>
-              ))}
-            </select>
-          )}
-          <div className="flex w-full items-end justify-end pt-12">
-            <button
-              type="submit"
-              className="font-normaltext-black mb-4 flex items-center justify-center rounded-full bg-[#f79222] px-3 py-2"
-            >
-              Generate Predictions
-            </button>
-          </div>
-        </form>
       </div>
     );
   };
@@ -799,24 +639,15 @@ export default function FileUpload() {
           className="pt-24 pb-12"
         />
 
-        {currentStep === 1
-          ? renderUpload(files, fileStatus)
-          : currentStep === 2
-            ? processing
-              ? renderProcessing()
-              : renderValidationResults(validationResults)
-            : currentStep === 3
-              ? batchCreationResult !== ''
-                ? renderBatchCreationResults(
-                    batchCreationResult,
-                    startPrediction,
-                  )
-                : renderSaveBatch()
-              : currentStep === 4
-                ? predictionResults != null
-                  ? renderPredictionResults()
-                  : renderStartPrediction()
-                : null}
+        {currentStep === 1 && renderUpload(files, fileStatus)}
+        {currentStep === 2 &&
+          (processing
+            ? renderProcessing()
+            : renderValidationResults(validationResults))}
+        {currentStep === 3 &&
+          (batchCreationResult !== ''
+            ? renderBatchCreationResults(batchCreationResult)
+            : renderSaveBatch())}
       </div>
     </AppLayout>
   );

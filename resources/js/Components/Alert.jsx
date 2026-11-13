@@ -52,6 +52,9 @@ export default function Alert({
   if (mainMsg == undefined || mainMsg == '') {
     return null;
   }
+  if (msgDict != undefined && Object.keys(msgDict).length == 0) {
+    return null;
+  }
 
   const v = VARIANTS[variant] ?? VARIANTS.info;
   const Icon = v.Icon;

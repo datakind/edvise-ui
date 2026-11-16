@@ -37,7 +37,7 @@ class DataDictionary extends Model
         // Assuming the array structure is:
         // [dataset, field_name, region_type, category, details, field_label]
 
-        $details = json_decode($data[4], true); // Parse the JSON string in the details element
+        $details = is_string($data[4]) ? json_decode($data[4], true) : null; // Parse the JSON string in the details element
 
         return self::create([
             'file_name' => $data[0] ?? null,

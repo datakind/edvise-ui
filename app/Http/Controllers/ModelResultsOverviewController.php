@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InstitutionHelper;
 use Illuminate\Http\Client\Response as HttpClientResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class ModelResultsOverviewController extends Controller
 {
     public function show(Request $request, string $run_id, string $modelName): InertiaResponse|JsonResponse
     {
-        $inst_id = ($request->attributes->get('institution') ?? [])['inst_id'] ?? null;
+        $inst_id = InstitutionHelper::requestInstId($request);
 
         if (! $inst_id) {
             return Inertia::render('ModelResultsOverview', [
@@ -40,7 +41,7 @@ class ModelResultsOverviewController extends Controller
 
         $featureImportanceData = [];
         if ($model_run_id) {
-            $fiResp = $api->getFeatureImportance($request, $inst_id, $model_run_id);
+            $fiResp = $api->getFeatureImportance($request, $inst_id, is_scalar($model_run_id) ? (string) $model_run_id : throw new \UnexpectedValueException('Unexpected model_run_id in backend response'));
             $featureImportanceData = $this->responseData($fiResp);
             if (! is_array($featureImportanceData)) {
                 $featureImportanceData = [];
@@ -71,13 +72,17 @@ class ModelResultsOverviewController extends Controller
                 return null;
             }
 
-            return $response->getData(true);
+            $data = $response->getData(true);
+
+            return is_array($data) ? $data : null;
         }
 
         if ($response->status() !== 200) {
             return null;
         }
 
-        return $response->json();
+        $data = $response->json();
+
+        return is_array($data) ? $data : null;
     }
 }

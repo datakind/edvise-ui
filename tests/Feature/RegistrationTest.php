@@ -16,7 +16,7 @@ class RegistrationTest extends TestCase
     /** Skip open-registration tests when the app uses invite-only registration. */
     private function skipIfInviteOnlyRegistration(): void
     {
-        $registerAction = optional(Route::getRoutes()->getByName('register'))->getActionName() ?? '';
+        $registerAction = Route::getRoutes()->getByName('register')?->getActionName() ?? '';
 
         if (str_contains($registerAction, 'InviteController')) {
             $this->markTestSkipped('Registration is invite-only in this application.');

@@ -11,15 +11,15 @@ trait UsesApi
     /**
      * Authenticates application to DK API Suite
      */
-    protected function authenticateDkApi(?string $token_id = null): mixed
+    protected function authenticateDkApi(?string $token_id = null): DkApiToken
     {
         $response = Http::withHeaders([
             'Cache-Control' => 'no-cache',
-            'subscription-key' => config('services.dk_api_suite.subscription_key'),
-        ])->get(config('services.dk_api_suite.url').'authenticate/get_jwt?api='.config('services.dk_api_suite.product'));
-        $body = json_decode($response->body());
+            'subscription-key' => config()->string('services.dk_api_suite.subscription_key'),
+        ])->get(config()->string('services.dk_api_suite.url').'authenticate/get_jwt?api='.config()->string('services.dk_api_suite.product'));
         $token = ! empty($token_id) ? (DkApiToken::find($token_id) ?? throw new \RuntimeException("DkApiToken {$token_id} not found")) : new DkApiToken;
-        $token->access = $body->access_token;
+        $access = $response->json('access_token');
+        $token->access = is_string($access) ? $access : throw new \RuntimeException('DK API Suite returned no access token');
         $token->type = 'access';
         $token->save();
 
@@ -33,9 +33,9 @@ trait UsesApi
     {
 
         if ($type == 'post') {
-            $response = Http::withToken($token)->post(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').$endpoint);
+            $response = Http::withToken($token)->post(config()->string('services.dk_api_suite.url').'/'.config()->string('services.dk_api_suite.version').$endpoint);
         } else {
-            $response = Http::withToken($token)->get(config('services.dk_api_suite.url').'/'.config('services.dk_api_suite.version').$endpoint);
+            $response = Http::withToken($token)->get(config()->string('services.dk_api_suite.url').'/'.config()->string('services.dk_api_suite.version').$endpoint);
         }
 
         return json_decode($response->body());

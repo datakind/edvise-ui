@@ -17,7 +17,7 @@ use Illuminate\Foundation\Application;
 */
 
 $app = new Application(
-    $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
+    is_string($_ENV['APP_BASE_PATH'] ?? null) ? $_ENV['APP_BASE_PATH'] : dirname(__DIR__)
 );
 
 /*
@@ -48,7 +48,7 @@ $app->singleton(
 
 // [START cloudrun_laravel_secret_manager_mount]
 /* Load settings from a mounted volume, if available. */
-$settings_dir = $_ENV['APP_SETTINGS_DIR'] ?? '/config';
+$settings_dir = is_string($_ENV['APP_SETTINGS_DIR'] ?? null) ? $_ENV['APP_SETTINGS_DIR'] : '/config';
 
 if (file_exists($settings_dir.'/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable($settings_dir);

@@ -12,6 +12,17 @@ class InstitutionHelper
     public const SET_INST_REQUIRED_MESSAGE = 'Datakinder must set an institution to proceed.';
 
     /**
+     * inst_id of the institution RequireInstitution middleware attached to the request, or null.
+     */
+    public static function requestInstId(Request $request): ?string
+    {
+        $institution = $request->attributes->get('institution');
+        $instId = is_array($institution) ? ($institution['inst_id'] ?? null) : null;
+
+        return is_scalar($instId) ? (string) $instId : null;
+    }
+
+    /**
      * Sync the authenticated user's inst_id and access_type from the backend (check-self).
      * Call once after login. Updates the user row and, for non-DATAKINDER, sets session institution.
      */
@@ -28,12 +39,12 @@ class InstitutionHelper
             'Authorization' => 'Bearer '.$tok,
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
-        ])->get(config('services.backend.url').'/check-self');
+        ])->get(config()->string('services.backend.url').'/check-self');
         if ($resp->status() !== 200 || (($resp['inst_id'] ?? '') === '' && ($resp['access_type'] ?? '') === '')) {
             return;
         }
-        $accessType = $resp['access_type'] ?? '';
-        $instIdFromApi = (string) ($resp['inst_id'] ?? '');
+        $accessType = is_string($resp['access_type'] ?? null) ? $resp['access_type'] : '';
+        $instIdFromApi = is_scalar($resp['inst_id'] ?? null) ? (string) $resp['inst_id'] : '';
         $update = ['access_type' => $accessType];
         if ($instIdFromApi !== '') {
             $update['inst_id'] = $instIdFromApi;
@@ -60,8 +71,9 @@ class InstitutionHelper
     public static function GetInstitution(Request $request): array
     {
         $institution = session('institution');
-        if (is_array($institution) && ($institution['inst_id'] ?? '') !== '') {
-            return [$institution['inst_id'], ''];
+        $sessionInstId = is_array($institution) ? ($institution['inst_id'] ?? '') : '';
+        if (is_scalar($sessionInstId) && $sessionInstId !== '') {
+            return [(string) $sessionInstId, ''];
         }
         if (($request->user() ?? abort(401))->access_type === 'DATAKINDER') {
             return ['', self::SET_INST_REQUIRED_MESSAGE];
@@ -80,7 +92,7 @@ class InstitutionHelper
     /**
      * Fetch full institution by inst_id from backend. Returns array or null.
      *
-     * @return array<string, mixed>|null
+     * @return array<mixed>|null
      */
     public static function fetchInstitutionById(Request $request, string $inst_id): ?array
     {
@@ -93,7 +105,7 @@ class InstitutionHelper
             'accept' => 'application/json',
             'Cache-Control' => 'no-cache',
         ];
-        $resp = Http::withHeaders($headers)->get(config('services.backend.url').'/institutions/'.$inst_id);
+        $resp = Http::withHeaders($headers)->get(config()->string('services.backend.url').'/institutions/'.$inst_id);
         if ($resp->status() !== 200) {
             return null;
         }

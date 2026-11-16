@@ -14,26 +14,26 @@ class LeaveTeamTest extends TestCase
     {
         $user = User::factory()->withPersonalTeam()->create();
 
-        $user->currentTeam->users()->attach(
+        $this->currentTeam($user)->users()->attach(
             $otherUser = User::factory()->create(),
             ['role' => 'admin']
         );
 
         $this->actingAs($otherUser);
 
-        $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id);
+        $response = $this->delete('/teams/'.$this->currentTeam($user)->id.'/members/'.$otherUser->id);
 
-        $this->assertCount(0, $user->currentTeam->fresh()->users);
+        $this->assertCount(0, $this->currentTeam($user)->refresh()->users);
     }
 
     public function test_team_owners_cant_leave_their_own_team(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-        $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'.$user->id);
+        $response = $this->delete('/teams/'.$this->currentTeam($user)->id.'/members/'.$user->id);
 
         $response->assertSessionHasErrorsIn('removeTeamMember', ['team']);
 
-        $this->assertNotNull($user->currentTeam->fresh());
+        $this->assertNotNull($this->currentTeam($user)->fresh());
     }
 }

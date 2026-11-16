@@ -14,11 +14,11 @@ class UpdateTeamNameTest extends TestCase
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-        $response = $this->put('/teams/'.$user->currentTeam->id, [
+        $response = $this->put('/teams/'.$this->currentTeam($user)->id, [
             'name' => 'Test Team',
         ]);
 
-        $this->assertCount(1, $user->fresh()->ownedTeams);
-        $this->assertEquals('Test Team', $user->currentTeam->fresh()->name);
+        $this->assertCount(1, $user->refresh()->ownedTeams);
+        $this->assertEquals('Test Team', $this->currentTeam($user)->refresh()->name);
     }
 }

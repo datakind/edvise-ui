@@ -23,14 +23,14 @@ class InviteTeamMemberTest extends TestCase
 
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-        $response = $this->post('/teams/'.$user->currentTeam->id.'/members', [
+        $response = $this->post('/teams/'.$this->currentTeam($user)->id.'/members', [
             'email' => 'test@example.com',
             'role' => 'admin',
         ]);
 
         Mail::assertSent(TeamInvitation::class);
 
-        $this->assertCount(1, $user->currentTeam->fresh()->teamInvitations);
+        $this->assertCount(1, $this->currentTeam($user)->refresh()->teamInvitations);
     }
 
     public function test_team_member_invitations_can_be_cancelled(): void
@@ -43,13 +43,13 @@ class InviteTeamMemberTest extends TestCase
 
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-        $invitation = $user->currentTeam->teamInvitations()->create([
+        $invitation = $this->currentTeam($user)->teamInvitations()->create([
             'email' => 'test@example.com',
             'role' => 'admin',
         ]);
 
         $response = $this->delete('/team-invitations/'.$invitation->id);
 
-        $this->assertCount(0, $user->currentTeam->fresh()->teamInvitations);
+        $this->assertCount(0, $this->currentTeam($user)->refresh()->teamInvitations);
     }
 }

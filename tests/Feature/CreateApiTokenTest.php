@@ -27,9 +27,9 @@ class CreateApiTokenTest extends TestCase
             ],
         ]);
 
-        $this->assertCount(1, $user->fresh()->tokens);
-        $this->assertEquals('Test Token', $user->fresh()->tokens->first()->name);
-        $this->assertTrue($user->fresh()->tokens->first()->can('read'));
-        $this->assertFalse($user->fresh()->tokens->first()->can('delete'));
+        $this->assertCount(1, $user->refresh()->tokens);
+        $this->assertEquals('Test Token', $user->refresh()->tokens->firstOrFail()->name);
+        $this->assertTrue($user->refresh()->tokens->firstOrFail()->can('read'));
+        $this->assertFalse($user->refresh()->tokens->firstOrFail()->can('delete'));
     }
 }

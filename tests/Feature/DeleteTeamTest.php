@@ -27,15 +27,15 @@ class DeleteTeamTest extends TestCase
         $response = $this->delete('/teams/'.$team->id);
 
         $this->assertNull($team->fresh());
-        $this->assertCount(0, $otherUser->fresh()->teams);
+        $this->assertCount(0, $otherUser->refresh()->teams);
     }
 
     public function test_personal_teams_cant_be_deleted(): void
     {
         $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-        $response = $this->delete('/teams/'.$user->currentTeam->id);
+        $response = $this->delete('/teams/'.$this->currentTeam($user)->id);
 
-        $this->assertNotNull($user->currentTeam->fresh());
+        $this->assertNotNull($this->currentTeam($user)->fresh());
     }
 }

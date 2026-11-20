@@ -705,7 +705,13 @@ class ApiController extends Controller
     {
 
         $institution = $request->attributes->get('institution');
-        if (! is_array($institution) || empty($institution['pdp_id'])) {
+        // EDA is available for PDP, native ES (edvise_id), and GenAI (genai_id) schools.
+        $hasEdaSchema = is_array($institution) && (
+            ! empty($institution['pdp_id'])
+            || ! empty($institution['edvise_id'])
+            || ! empty($institution['genai_id'])
+        );
+        if (! $hasEdaSchema) {
             return redirect()->route('home');
         }
 

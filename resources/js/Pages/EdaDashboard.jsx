@@ -806,7 +806,10 @@ export default function EdaDashboard({
             <div className="text-heading/80 flex flex-row items-center gap-6 text-right text-sm font-light">
               {batchInfo && (
                 <>
-                  <span>Showing analysis for: Batch {batchInfo.batch_id}</span>
+                  <span>
+                    Showing analysis for:{' '}
+                    {batchInfo.name || `Batch ${batchInfo.batch_id}`}
+                  </span>
                   <span className="italic">
                     {batchInfo.updated_at || batchInfo.created_at || ''}
                   </span>

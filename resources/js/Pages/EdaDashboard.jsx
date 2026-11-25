@@ -578,8 +578,35 @@ const raceByPellStatusOptions = data => {
     data: seriesData,
     legendData: data.series.map(s => s.name),
   });
+  const countAt = (s, i) => Number(s.data[i]) || 0;
+  const raceTotals = data.categories.map((_, i) =>
+    data.series.reduce((sum, s) => sum + countAt(s, i), 0),
+  );
+  const grandTotal = raceTotals.reduce((sum, n) => sum + n, 0);
+  const formatPct = (n, d) => {
+    if (!d) return '0%';
+    const pct = (n / d) * 100;
+    return pct > 0 && pct < 1 ? '<1%' : `${Math.round(pct)}%`;
+  };
   return {
     ...baseOption,
+    tooltip: {
+      trigger: 'item',
+      formatter: params => {
+        const count = Number(params.value) || 0;
+        const race = params.name;
+        const receiving =
+          params.seriesName === 'No'
+            ? 'not receiving Pell Grants'
+            : 'receiving Pell Grants';
+        return [
+          '<strong>Student Data</strong>',
+          `<strong>${count.toLocaleString()}</strong> students ${receiving}`,
+          `<strong>${formatPct(count, raceTotals[params.dataIndex])}</strong> of ${race} students`,
+          `<strong>${formatPct(count, grandTotal)}</strong> of total students`,
+        ].join('<br/>');
+      },
+    },
     xAxis: {
       ...baseOption.xAxis,
       axisLabel: {
